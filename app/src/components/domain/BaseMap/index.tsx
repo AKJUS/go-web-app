@@ -1,8 +1,5 @@
-import {
-    useContext,
-    useMemo,
-} from 'react';
-import { LanguageContext } from '@ifrc-go/ui/contexts';
+import { useMemo } from 'react';
+// import { LanguageContext } from '@ifrc-go/ui/contexts';
 import { ErrorBoundary } from '@sentry/react';
 import {
     isDefined,
@@ -104,10 +101,9 @@ function BaseMap(props: Props) {
         [countries],
     );
 
-    const {
-        currentLanguage,
-    } = useContext(LanguageContext);
+    // const { currentLanguage } = useContext(LanguageContext);
 
+    /*
     const adminLabelLayerOptions : Omit<SymbolLayer, 'id'> = useMemo(
         () => {
             // ar, es, fr
@@ -131,6 +127,7 @@ function BaseMap(props: Props) {
         },
         [currentLanguage],
     );
+    */
 
     return (
         <Map
@@ -147,18 +144,6 @@ function BaseMap(props: Props) {
                 sourceKey="composite"
                 managed={false}
             >
-                <MapLayer
-                    layerKey="admin-0-label"
-                    layerOptions={adminLabelLayerOptions}
-                />
-                <MapLayer
-                    layerKey="admin-0-label-non-independent"
-                    layerOptions={adminLabelLayerOptions}
-                />
-                <MapLayer
-                    layerKey="admin-0-label-priority"
-                    layerOptions={adminLabelLayerOptions}
-                />
                 {baseLayers}
             </MapSource>
             {!withoutLabel && (

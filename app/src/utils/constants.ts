@@ -175,7 +175,7 @@ export const REGION_ASIA = 2 satisfies Region;
 export const REGION_EUROPE = 3 satisfies Region;
 export const REGION_MENA = 4 satisfies Region;
 
-type CountryRecordTypeEnum = components<'read'>['schemas']['ApiCountryTypeEnumKey'];
+export type CountryRecordTypeEnum = components<'read'>['schemas']['ApiCountryTypeEnumKey'];
 // const COUNTRY_RECORD_TYPE_COUNTRY = 1 satisfies CountryRecordTypeEnum;
 // const COUNTRY_RECORD_TYPE_CLUSTER = 2 satisfies CountryRecordTypeEnum;
 export const COUNTRY_RECORD_TYPE_REGION = 3 satisfies CountryRecordTypeEnum;
