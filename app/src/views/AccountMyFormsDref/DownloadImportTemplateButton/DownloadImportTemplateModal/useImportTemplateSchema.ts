@@ -281,6 +281,9 @@ function useImportTemplateSchema() {
             national_society_actions: {
                 type: 'list',
                 label: 'National Society Actions',
+                // FIXME: This has not been hidden in the UI, but to make this
+                // consistent we can hide this
+                hiddenLabel: true,
                 keyFieldName: 'title',
                 optionsKey: 'national_society_actions',
                 description: 'Please indicate a description of the ongoing response with if possible: Branches involved, number of volunteers/staff involved in actions, assets deployed/distributed, number of people reach. Impact/added value of the NS in the response already ongoing.',
@@ -504,6 +507,7 @@ function useImportTemplateSchema() {
             planned_interventions: {
                 type: 'list',
                 label: 'Add the interventions that apply',
+                hiddenLabel: true,
                 optionsKey: 'planned_interventions',
                 keyFieldName: 'title',
                 children: {

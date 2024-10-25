@@ -56,6 +56,7 @@ interface ListField<
     // TODO: Make this more strict
     optionsKey: keyof OPTIONS_MAPPING;
     keyFieldName?: string;
+    hiddenLabel?: boolean;
     children: TemplateSchema<
         VALUE,
         OPTIONS_MAPPING
@@ -252,9 +253,9 @@ export function createImportTemplate<
 
     return [
         ...fields,
-        headingField,
+        !schema.hiddenLabel ? headingField : undefined,
         ...optionFields,
-    ];
+    ].filter(isDefined);
 }
 
 function addClientId(item: object): object {
