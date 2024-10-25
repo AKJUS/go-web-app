@@ -3,6 +3,7 @@ import {
     isTruthyString,
 } from '@togglecorp/fujs';
 import xlsx, {
+    type CellRichTextValue,
     type Row,
     type Style,
     type Workbook,
@@ -11,7 +12,6 @@ import xlsx, {
 
 import ifrcLogoFile from '#assets/icons/ifrc-square.png';
 import {
-    COLOR_LIGHT_GREY,
     COLOR_PRIMARY_BLUE,
     COLOR_PRIMARY_RED,
     COLOR_WHITE,
@@ -27,6 +27,9 @@ export function hexToArgb(hexStr: string, alphaStr = 'ff') {
 export const headerRowStyle: Partial<Style> = {
     font: {
         name: FONT_FAMILY_HEADER,
+        color: { argb: hexToArgb(COLOR_WHITE, '10') },
+        // FIXME: use constant
+        size: 14,
         bold: true,
     },
     fill: {
@@ -40,10 +43,13 @@ export const headerRowStyle: Partial<Style> = {
     },
 };
 
-const headingStyle: Partial<Style> = {
+const h1Style: Partial<Style> = {
     font: {
         name: FONT_FAMILY_HEADER,
         color: { argb: hexToArgb(COLOR_WHITE, '10') },
+        // FIXME: use constant
+        size: 12,
+        bold: true,
     },
     alignment: {
         horizontal: 'center',
@@ -56,10 +62,11 @@ const headingStyle: Partial<Style> = {
     },
 };
 
-const subHeadingStyle: Partial<Style> = {
+const h2Style: Partial<Style> = {
     font: {
         name: FONT_FAMILY_HEADER,
         color: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') },
+        bold: true,
     },
     alignment: {
         horizontal: 'center',
@@ -67,13 +74,42 @@ const subHeadingStyle: Partial<Style> = {
     },
 };
 
+const h3Style: Partial<Style> = {
+    font: {
+        name: FONT_FAMILY_HEADER,
+        color: { argb: hexToArgb(COLOR_PRIMARY_BLUE, '10') },
+        bold: true,
+    },
+    alignment: {
+        horizontal: 'center',
+        vertical: 'middle',
+    },
+};
+
+// TODO: Add this style to description
+
 const defaultCellStyle: Partial<Style> = {
     font: {
         name: 'Poppins',
     },
     alignment: {
         horizontal: 'left',
-        vertical: 'top',
+        vertical: 'middle',
+        wrapText: true,
+    },
+};
+
+const descriptionCellStyle: Partial<Style> = {
+    font: {
+        name: 'Poppins',
+        // FIXME: use constant
+        size: 10,
+        // FIXME: use constant
+        color: { argb: hexToArgb('#3f3f3f', '10') },
+    },
+    alignment: {
+        horizontal: 'left',
+        vertical: 'middle',
         wrapText: true,
     },
 };
@@ -81,7 +117,8 @@ const defaultCellStyle: Partial<Style> = {
 const alternateRowFill: Style['fill'] = {
     type: 'pattern',
     pattern: 'solid',
-    fgColor: { argb: hexToArgb(COLOR_LIGHT_GREY, '10') },
+    // FIXME: use constant
+    fgColor: { argb: hexToArgb('#f2f2f2', '10') },
 };
 
 export async function buildCoverWorksheetForDrefApplication(
@@ -106,6 +143,7 @@ export async function buildCoverWorksheetForDrefApplication(
             name: FONT_FAMILY_HEADER,
             family: 2,
             bold: true,
+            // FIXME: use constant
             size: 20,
             color: { argb: hexToArgb(COLOR_PRIMARY_RED) },
         },
@@ -122,6 +160,7 @@ export async function buildCoverWorksheetForDrefApplication(
     coverWorksheet.getCell('C4').style = {
         font: {
             bold: true,
+            // FIXME: use constant
             size: 18,
             name: FONT_FAMILY_HEADER,
             family: 2,
@@ -137,6 +176,7 @@ export async function buildCoverWorksheetForDrefApplication(
             vertical: 'middle',
         },
         font: {
+            // FIXME: use constant
             size: 12,
             name: FONT_FAMILY_HEADER,
             family: 2,
@@ -149,8 +189,8 @@ export function addRow(
     rowNum: number,
     outlineLevel: number,
     name: string,
-    label: string,
-    description?: string,
+    label: string | CellRichTextValue,
+    description?: string | CellRichTextValue,
     style: Partial<xlsx.Style> = defaultCellStyle,
 ) {
     const col = 1;
@@ -161,22 +201,56 @@ export function addRow(
     const labelCell = row.getCell(col);
     const valueCell = row.getCell(col + 1);
     const descriptionCell = row.getCell(col + 2);
-    descriptionCell.style = defaultCellStyle;
+    descriptionCell.style = descriptionCellStyle;
 
     labelCell.name = name;
     valueCell.name = name;
 
     labelCell.value = label;
-    if (isTruthyString(description)) {
+    if (
+        (typeof description === 'object' && description.richText.length > 0)
+        || (typeof description === 'string' && isTruthyString(description))
+    ) {
         descriptionCell.value = description;
     }
 
-    row.getCell(col).style = {
+    labelCell.style = {
         ...style,
         alignment: {
             ...style?.alignment,
             indent: outlineLevel * 2,
         },
+    };
+
+    labelCell.border = {
+        // FIXME: use constant
+        bottom: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+        // FIXME: use constant
+        top: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+        // FIXME: use constant
+        left: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+        // FIXME: use constant
+        right: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+    };
+    valueCell.border = {
+        // FIXME: use constant
+        bottom: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+        // FIXME: use constant
+        top: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+        // FIXME: use constant
+        left: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+        // FIXME: use constant
+        right: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+    };
+    descriptionCell.border = {
+        // FIXME: use constant
+        bottom: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+        // FIXME: use constant
+        top: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+        // FIXME: use constant
+        left: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
+        // FIXME: use constant
+        right: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
     };
 
     return row;
@@ -190,6 +264,13 @@ export function addHeadingRow(
     label: string,
     description?: string,
 ) {
+    let style = h3Style;
+    if (outlineLevel === 0) {
+        style = h1Style;
+    } else if (outlineLevel === 1) {
+        style = h2Style;
+    }
+
     return addRow(
         sheet,
         rowNum,
@@ -197,40 +278,40 @@ export function addHeadingRow(
         name,
         label,
         description,
-        outlineLevel === 0 ? headingStyle : subHeadingStyle,
+        style,
     );
 }
 
 export function addInputRow(
-    headingType: 'heading' | 'listHeading',
+    rowType: 'alt' | 'normal',
     sheet: Worksheet,
     rowNum: number,
     outlineLevel: number,
     name: string,
-    label: string,
-    description: string | undefined,
+    label: string | CellRichTextValue,
+    description: string | CellRichTextValue | undefined,
     dataValidation?: 'number' | 'integer' | 'date' | 'text',
 ): Row
 export function addInputRow(
-    headingType: 'heading' | 'listHeading',
+    rowType: 'alt' | 'normal',
     sheet: Worksheet,
     rowNum: number,
     outlineLevel: number,
     name: string,
-    label: string,
-    description: string | undefined,
+    label: string | CellRichTextValue,
+    description: string | CellRichTextValue | undefined,
     dataValidation?: 'list',
     optionKey?: string,
     optionsWorksheet?: Worksheet,
 ): Row
 export function addInputRow(
-    headingType: 'heading' | 'listHeading',
+    rowType: 'alt' | 'normal',
     sheet: Worksheet,
     rowNum: number,
     outlineLevel: number,
     name: string,
-    label: string,
-    description?: string,
+    label: string | CellRichTextValue,
+    description?: string | CellRichTextValue | undefined,
     dataValidation?: 'number' | 'integer' | 'date' | 'text' | 'list',
     optionKey?: string,
     optionsWorksheet?: Worksheet,
@@ -247,7 +328,7 @@ export function addInputRow(
 
     const inputCell = row.getCell(col + 1);
 
-    if (headingType === 'listHeading') {
+    if (rowType === 'alt') {
         const firstCell = row.getCell(col);
         firstCell.style = {
             ...firstCell.style,

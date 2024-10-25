@@ -13,6 +13,7 @@ import { stringValueSelector } from '@ifrc-go/ui/utils';
 import {
     isDefined,
     isNotDefined,
+    isTruthyString,
     listToGroupList,
     listToMap,
     mapToList,
@@ -139,7 +140,7 @@ async function generateTemplate(
     };
 
     const optionsWorksheet = workbook.addWorksheet('options');
-    // optionsWorksheet.state = 'veryHidden';
+    optionsWorksheet.state = 'veryHidden';
     const optionKeys = Object.keys(optionsMap) as (keyof (typeof optionsMap))[];
 
     optionsWorksheet.columns = optionKeys.map((key) => (
@@ -191,26 +192,26 @@ async function generateTemplate(
     tabGroupedTemplateActions.forEach(({ actions, worksheet }) => {
         let lastHeadingIndex = 0;
         actions.forEach((templateAction, i) => {
+            const row = i + ROW_OFFSET;
+
             if (templateAction.type === 'heading') {
                 addHeadingRow(
                     worksheet,
-                    i + ROW_OFFSET,
+                    row,
                     templateAction.outlineLevel,
                     String(templateAction.name),
                     templateAction.label,
                     templateAction.description,
                 );
-                worksheet.mergeCells(i + ROW_OFFSET, 1, i + ROW_OFFSET, 3);
+                worksheet.mergeCells(row, 1, row, 3);
                 lastHeadingIndex = i + 1;
             } else if (templateAction.type === 'input') {
-                // NOTE: Determines the headingType based on the index
-                // position relative to the last heading, list heading is for list section.
-                const headingType = (i - lastHeadingIndex) % 2 === 0 ? 'listHeading' : 'heading';
+                const rowType = (i - lastHeadingIndex) % 2 === 0 ? 'alt' : 'normal';
                 if (templateAction.dataValidation === 'list') {
                     addInputRow(
-                        headingType,
+                        rowType,
                         worksheet,
-                        i + ROW_OFFSET,
+                        row,
                         templateAction.outlineLevel,
                         String(templateAction.name),
                         templateAction.label,
@@ -220,23 +221,36 @@ async function generateTemplate(
                         optionsWorksheet,
                     );
                 } else if (templateAction.dataValidation === 'textArea') {
+                    // NOTE: Adding 4 new-lines to add height while also
+                    // supporting expand
+                    let { label } = templateAction;
+                    if (typeof label === 'string' && isTruthyString(label)) {
+                        label += '\n\n\n\n';
+                    } else if (typeof label === 'object' && label.richText.length > 0) {
+                        label = {
+                            ...label,
+                            richText: [
+                                ...label.richText,
+                                { text: '\n\n\n\n' },
+                            ],
+                        };
+                    }
+
                     addInputRow(
-                        headingType,
+                        rowType,
                         worksheet,
-                        i + ROW_OFFSET,
+                        row,
                         templateAction.outlineLevel,
                         String(templateAction.name),
-                        templateAction.label,
+                        label,
                         templateAction.description,
                         'text',
                     );
-                    const row = worksheet.getRow(i + ROW_OFFSET);
-                    row.height = 100;
                 } else {
                     addInputRow(
-                        headingType,
+                        rowType,
                         worksheet,
-                        i + ROW_OFFSET,
+                        row,
                         templateAction.outlineLevel,
                         String(templateAction.name),
                         templateAction.label,

@@ -7,6 +7,53 @@ import {
     mapToMap,
     randomString,
 } from '@togglecorp/fujs';
+import { type CellRichTextValue } from 'exceljs';
+
+function parseRichText(value: undefined): undefined;
+function parseRichText(value: string): string | CellRichTextValue
+function parseRichText(value: string | undefined): string | CellRichTextValue | undefined
+function parseRichText(value: string | undefined): string | CellRichTextValue | undefined {
+    if (isNotDefined(value)) {
+        return value;
+    }
+
+    const tagRegex = /(<\/?[bui]>)/;
+    const tokens = value.split(tagRegex);
+
+    if (tokens.length === 1) {
+        return value;
+    }
+
+    const richText:CellRichTextValue['richText'] = [];
+
+    const stack: string[] = [];
+
+    const openTagRegex = /(<[bui]>)/;
+    const closeTagRegex = /(<\/[bui]>)/;
+
+    tokens.forEach((token) => {
+        if (token.match(openTagRegex)) {
+            stack.push(token);
+            return;
+        }
+        if (token.match(closeTagRegex)) {
+            // TODO: Check correctness by checking closeTag with last openTag
+            stack.pop();
+            return;
+        }
+        richText.push({
+            font: {
+                bold: stack.includes('<b>'),
+                italic: stack.includes('<i>'),
+                underline: stack.includes('<u>'),
+            },
+            text: token,
+        });
+    });
+    // TODO: Check correctness to check that stack is empty
+
+    return { richText };
+}
 
 type ValidationType = string | number | boolean | 'textArea';
 type TypeToLiteral<T extends ValidationType> = T extends string
@@ -99,6 +146,7 @@ export type TemplateSchema<
             | SelectField<ExtractValidation<VALUE>, OPTIONS_MAPPING>)
     );
 
+// NOTE: Not adding richtext support on heading
 interface HeadingTemplateField {
     type: 'heading';
     name: string | number | boolean;
@@ -112,9 +160,9 @@ type ObjectKey = string | number | symbol;
 type InputTemplateField = {
     type: 'input';
     name: string | number | boolean;
-    label: string;
+    label: string | CellRichTextValue;
     outlineLevel: number;
-    description?: string;
+    description?: string | CellRichTextValue;
     headingBefore?: string;
 } & ({
     dataValidation: 'list';
@@ -188,8 +236,8 @@ export function createImportTemplate<
         const field = {
             type: 'input',
             name: fieldName,
-            label: schema.label,
-            description: schema.description,
+            label: parseRichText(schema.label),
+            description: parseRichText(schema.description),
             dataValidation: (schema.validation === 'number' || schema.validation === 'date' || schema.validation === 'integer' || schema.validation === 'textArea')
                 ? schema.validation
                 : undefined,
@@ -204,8 +252,8 @@ export function createImportTemplate<
         const field = {
             type: 'input',
             name: fieldName,
-            label: schema.label,
-            description: schema.description,
+            label: parseRichText(schema.label),
+            description: parseRichText(schema.description),
             outlineLevel,
             dataValidation: 'list',
             optionsKey: schema.optionsKey,
