@@ -7,6 +7,40 @@ import useNationalSociety from '#hooks/domain/useNationalSociety';
 import { type TemplateSchema } from '#utils/importTemplate';
 import { type DrefRequestBody } from '#views/DrefApplicationForm/schema';
 
+const nationalSocietyActionsDescMap: Record<string, string> = {
+    shelter_housing_and_settlements: 'Actions related to immediate shelter needs and the recovery of housing for displaced or affected populations. It includes emergency shelter provisions, housing repairs, and support for longer-term settlement planning.',
+    livelihoods_and_basic_needs: 'Providing basic survival needs like food, clothing, and essential household items, as well as restoring livelihoods (e.g., farming, small businesses) to help affected communities regain economic stability.',
+    multi_purpose_cash: 'Providing cash assistance that can be used flexibly by households to meet their most urgent needs, such as food, shelter, healthcare, or other expenses.',
+    health: 'Healthcare services for affected communities, including medical assistance, mental health and psychosocial support, and the prevention of disease outbreaks.\n\nBackground on affected / not-affected health service delivery, supply chain, and logistics, and what different actors (hospitals, clinics, government, partners, etc…) are doing to support the health-related needs.\n\nCommon types of infectious diseases in the area / prone in that particular crisis.\n\nHow affected peopla re reacting and coping (positive and/or negative coping strategies), and what is the availability and accessibility of MHPSS services and mental health institutions.',
+    water_sanitation_and_hygiene: 'Provision of clean water, adequate sanitation, and hygiene support to prevent waterborne diseases and ensure healthy living conditions.',
+    protection_gender_and_inclusion: 'Protection of vulnerable groups, including women, children, older people, people with disabilities, minority groups, etc. It ensures gender-sensitive approaches and promotes inclusivity in emergency response efforts.',
+    education: 'Actions related to ensuring that children and youth have access to education, even in emergencies. This includes temporary learning spaces, educational materials, and efforts to keep the youth engaged in learning during crises.',
+    migration_and_displacement: 'Supporting displaced individuals and communities, including refugees, migrants, and internally displaced persons. This sector looks at safe, dignified solutions and addresses the unique needs of those on the move.',
+    risk_reduction_climate_adaptation_and_recovery: 'Efforts to reduce the impact of future disasters through risk reduction strategies, climate change adaptation measures, and recovery planning to help communities become more resilient.',
+    community_engagement_and_accountability: 'Ensuring affected communities are actively engaged in decision-making processes and have access to accurate information. It promotes transparency, feedback mechanisms, and accountability to those being assisted.',
+    environment_sustainability: 'Ensuring that response activities are environmentally sustainable, minimising harm to the environment and integrating green practices into recovery and rehabilitation efforts.',
+    coordination: 'Collaboration with other humanitarian actors, government agencies, and partners to ensure a coherent and effective response. Coordination helps avoid duplication of efforts and ensures resources are used efficiently.',
+    national_society_readiness: 'Relates to the preparedness of the National Society to respond effectively to emergencies. This includes staff readiness, operational capacity, and logistical preparations.',
+    assessment: 'Refers to conducting rapid needs assessments to gather essential data on the impact of the event and the specific needs of affected populations. Assessments guide the development of an appropriate response.',
+    resource_mobilization: 'Securing the necessary financial, material, and human resources to support emergency response efforts, including fundraising, partnerships, and donations.',
+    activation_of_contingency_plans: 'Putting pre-established emergency plans into action when a disaster occurs. Contingency plans outline specific steps to be taken in response to different scenarios.',
+    national_society_eoc: 'Activation of the National Society\'s Emergency Operations Centre, which coordinates response activities, manages resources, and monitors the evolving situation during emergencies.',
+    other: 'This section captures any other actions that do not fit into the above sectors but are critical to the emergency response. Be specific when describing these additional needs.',
+};
+const needsIdentifiedDescMap: Record<string, string> = {
+    shelter_housing_and_settlements: 'Immediate shelter needs and the recovery of housing for displaced or affected populations. It includes emergency shelter provisions, housing repairs, and support for longer-term settlement planning.\n\n# houses and infrastructure damaged, type/condition of damage (total, severe, partial), availability of public facilities – evacuation shelters, schools, etc. nearby and how are they used.',
+    livelihoods_and_basic_needs: 'Basic survival needs like food, clothing, and essential household items, as well as restoring livelihoods (e.g., farming, small businesses) to help affected communities regain economic stability.',
+    multi_purpose_cash_grants: 'Needs and gaps related to providing cash assistance that can be used flexibly by households to meet their most urgent needs, such as food, shelter, healthcare, or other expenses.',
+    health: 'Needs and gaps related to healthcare services for affected communities, including medical assistance, mental health and psychosocial support, and the prevention of disease outbreaks.',
+    water_sanitation_and_hygiene: 'Gaps related to the provision of clean water, adequate sanitation, and hygiene support to prevent waterborne diseases and ensure healthy living conditions.',
+    protection_gender_and_inclusion: 'Needs and gaps related to protection of vulnerable groups, including women, children, older people, people with disabilities, minority groups, etc.',
+    education: 'Gaps in providing children and youth with access to education, even in emergencies. This includes disruption of the education system, insufficient temporary learning spaces, educational materials, and efforts to keep students engaged in learning during crises.',
+    migration_and_displacement: 'Needs and gaps related to supporting displaced individuals and communities, including refugees, migrants, and internally displaced persons.',
+    risk_reduction_climate_adaptation_and_recovery: 'Needs and gaps relate to the efforts to reduce the impact of future disasters through risk reduction strategies, climate change adaptation measures, and recovery planning to help communities become more resilient.',
+    community_engagement_and_accountability: 'Needs and gaps in efforts to actively engaged in decision-making processes and have access to accurate information. Need for transparency, feedback mechanisms, and accountability to those being assisted.',
+    environment_sustainability: 'Needs and gaps related to ensuring that response activities are environmentally sustainable, minimising harm to the environment and integrating green practices into recovery and rehabilitation efforts.',
+};
+
 function useImportTemplateSchema() {
     const nationalSocieties = useNationalSociety();
     const countries = useCountry();
@@ -71,10 +105,18 @@ function useImportTemplateSchema() {
             { key: 'risk__4', label: 'Risk #5' },
         ],
         national_society_actions: dref_national_society_action_title?.map(
-            ({ key, value }) => ({ key, label: value }),
+            ({ key, value }) => ({
+                key,
+                label: value,
+                description: nationalSocietyActionsDescMap[key],
+            }),
         ) ?? [],
         needs_identified: dref_identified_need_title?.map(
-            ({ key, value }) => ({ key, label: value }),
+            ({ key, value }) => ({
+                key,
+                label: value,
+                description: needsIdentifiedDescMap[key],
+            }),
         ) ?? [],
     }), [
         countries,
@@ -381,7 +423,7 @@ function useImportTemplateSchema() {
                             type: 'input',
                             validation: 'textArea',
                             label: '<b>Description</b>',
-                            // FIXME: Add dynamic description
+                            description: '<ins>national_society_actions.description</ins>',
                             // FIXME: Does this need to be left aligned?
                         },
                     },
@@ -466,7 +508,7 @@ function useImportTemplateSchema() {
                             type: 'input',
                             validation: 'textArea',
                             label: '<b>Description</b>',
-                            // FIXME: Add dynamic description
+                            description: '<ins>needs_identified.description</ins>',
                             // FIXME: Does this need to be left aligned?
                         },
                     },
@@ -710,6 +752,9 @@ function useImportTemplateSchema() {
                         indicators: {
                             type: 'list',
                             label: 'Indicators',
+                            // FIXME: This has not been hidden in the UI, but to make this
+                            // consistent we can hide this
+                            hiddenLabel: true,
                             optionsKey: 'planned_interventions_indicators',
                             children: {
                                 type: 'object',
@@ -827,6 +872,7 @@ function useImportTemplateSchema() {
 
             ns_request_date: {
                 headingBefore: 'Operational Timeframes',
+                hiddenLabel: true,
                 type: 'input',
                 validation: 'date',
                 label: 'Date of National Society Application',

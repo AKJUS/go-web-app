@@ -66,8 +66,11 @@ function typeOfDrefKeySelector(option: { key: TypeOfDrefEnum }) {
 async function generateTemplate(
     templateActions: TemplateField[],
     optionsMap: ReturnType<typeof useImportTemplateSchema>['optionsMap'],
+
+    // FIXME: we should be able to remove these.
     drefTypeLabelMap: Record<TypeOfDrefEnum, string> | undefined,
     typeOfDref: TypeOfDrefEnum,
+
     callback: () => void,
 ) {
     const workbook = new xlsx.Workbook();
@@ -223,15 +226,16 @@ async function generateTemplate(
                 } else if (templateAction.dataValidation === 'textArea') {
                     // NOTE: Adding 4 new-lines to add height while also
                     // supporting expand
+                    const newLines = '\n\n\n\n';
                     let { label } = templateAction;
                     if (typeof label === 'string' && isTruthyString(label)) {
-                        label += '\n\n\n\n';
+                        label += newLines;
                     } else if (typeof label === 'object' && label.richText.length > 0) {
                         label = {
                             ...label,
                             richText: [
                                 ...label.richText,
-                                { text: '\n\n\n\n' },
+                                { text: newLines },
                             ],
                         };
                     }

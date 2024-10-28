@@ -9,15 +9,31 @@ import {
 } from '@togglecorp/fujs';
 import { type CellRichTextValue } from 'exceljs';
 
-function parseRichText(value: undefined): undefined;
-function parseRichText(value: string): string | CellRichTextValue
-function parseRichText(value: string | undefined): string | CellRichTextValue | undefined
-function parseRichText(value: string | undefined): string | CellRichTextValue | undefined {
+function parseRichText(
+    value: undefined,
+    optionsMap: TemplateFieldOptionsMapping,
+    context: { field: string, key: string }[],
+): undefined;
+function parseRichText(
+    value: string,
+    optionsMap: TemplateFieldOptionsMapping,
+    context: { field: string, key: string }[],
+): string | CellRichTextValue
+function parseRichText(
+    value: string | undefined,
+    optionsMap: TemplateFieldOptionsMapping,
+    context: { field: string, key: string }[],
+): string | CellRichTextValue | undefined
+function parseRichText(
+    value: string | undefined,
+    optionsMap: TemplateFieldOptionsMapping,
+    context: { field: string, key: string }[],
+): string | CellRichTextValue | undefined {
     if (isNotDefined(value)) {
         return value;
     }
 
-    const tagRegex = /(<\/?[bui]>)/;
+    const tagRegex = /(<\/?(?:b|u|i|ins)>)/;
     const tokens = value.split(tagRegex);
 
     if (tokens.length === 1) {
@@ -28,8 +44,8 @@ function parseRichText(value: string | undefined): string | CellRichTextValue | 
 
     const stack: string[] = [];
 
-    const openTagRegex = /(<[bui]>)/;
-    const closeTagRegex = /(<\/[bui]>)/;
+    const openTagRegex = /(<(?:b|u|i|ins)>)/;
+    const closeTagRegex = /(<\/(?:b|u|i|ins)>)/;
 
     tokens.forEach((token) => {
         if (token.match(openTagRegex)) {
@@ -41,14 +57,29 @@ function parseRichText(value: string | undefined): string | CellRichTextValue | 
             stack.pop();
             return;
         }
-        richText.push({
-            font: {
-                bold: stack.includes('<b>'),
-                italic: stack.includes('<i>'),
-                underline: stack.includes('<u>'),
-            },
-            text: token,
-        });
+        if (stack.includes('<ins>')) {
+            const [optionField, valueField] = token.split('.');
+            const currOptions = context.find((item) => item.field === optionField);
+            const selectedOption = currOptions
+                ? optionsMap[optionField]?.find(
+                    (option) => String(option.key) === currOptions?.key,
+                )
+                : undefined;
+
+            richText.push({
+                // FIXME: Need to add mechanism to identify if we have error for mapping
+                text: selectedOption?.[valueField as 'description'] ?? '',
+            });
+        } else {
+            richText.push({
+                font: {
+                    bold: stack.includes('<b>'),
+                    italic: stack.includes('<i>'),
+                    underline: stack.includes('<u>'),
+                },
+                text: token,
+            });
+        }
     });
     // TODO: Check correctness to check that stack is empty
 
@@ -123,6 +154,7 @@ interface ObjectField<VALUE, OPTIONS_MAPPING extends TemplateFieldOptionsMapping
 export interface TemplateOptionItem<T extends ValidationType> {
     key: T;
     label: string;
+    description?: string;
 }
 
 export interface TemplateFieldOptionsMapping {
@@ -153,6 +185,7 @@ interface HeadingTemplateField {
     label: string;
     outlineLevel: number;
     description?: string;
+    context: { field: string, key: string }[],
 }
 
 type ObjectKey = string | number | symbol;
@@ -164,6 +197,7 @@ type InputTemplateField = {
     outlineLevel: number;
     description?: string | CellRichTextValue;
     headingBefore?: string;
+    context: { field: string, key: string }[],
 } & ({
     dataValidation: 'list';
     optionsKey: ObjectKey;
@@ -194,6 +228,7 @@ export function createImportTemplate<
     optionsMap: OPTIONS_MAPPING,
     fieldName: string | undefined = undefined,
     outlineLevel = -1,
+    context: { field: string, key: string }[] = [],
 ): TemplateField[] {
     if (schema.type === 'object') {
         return [
@@ -207,6 +242,7 @@ export function createImportTemplate<
                         optionsMap,
                         getCombinedKey(key, fieldName),
                         outlineLevel + 1,
+                        context,
                     );
 
                     return newFields;
@@ -226,9 +262,10 @@ export function createImportTemplate<
     if (isDefined(schema.headingBefore)) {
         fields.push({
             type: 'heading',
-            name: getCombinedKey('headingBefore', fieldName),
+            name: getCombinedKey('heading_before', fieldName),
             label: schema.headingBefore,
             outlineLevel,
+            context,
         } satisfies HeadingTemplateField);
     }
 
@@ -236,12 +273,13 @@ export function createImportTemplate<
         const field = {
             type: 'input',
             name: fieldName,
-            label: parseRichText(schema.label),
-            description: parseRichText(schema.description),
+            label: parseRichText(schema.label, optionsMap, context),
+            description: parseRichText(schema.description, optionsMap, context),
             dataValidation: (schema.validation === 'number' || schema.validation === 'date' || schema.validation === 'integer' || schema.validation === 'textArea')
                 ? schema.validation
                 : undefined,
             outlineLevel,
+            context,
         } satisfies InputTemplateField;
 
         fields.push(field);
@@ -252,11 +290,12 @@ export function createImportTemplate<
         const field = {
             type: 'input',
             name: fieldName,
-            label: parseRichText(schema.label),
-            description: parseRichText(schema.description),
+            label: parseRichText(schema.label, optionsMap, context),
+            description: parseRichText(schema.description, optionsMap, context),
             outlineLevel,
             dataValidation: 'list',
             optionsKey: schema.optionsKey,
+            context,
         } satisfies InputTemplateField;
 
         fields.push(field);
@@ -269,28 +308,29 @@ export function createImportTemplate<
         label: schema.label,
         description: schema.description,
         outlineLevel,
+        context,
     } satisfies HeadingTemplateField;
 
-    // fields.push(headingField);
     const options = optionsMap[schema.optionsKey];
 
     const optionFields = options.flatMap((option) => {
         const subHeadingField = {
             type: 'heading',
-            // name: option.key,
             name: getCombinedKey(option.key, fieldName),
             label: option.label,
             outlineLevel: outlineLevel + 1,
-            // description: schema.description,
+            context,
         } satisfies HeadingTemplateField;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const combinedKey = getCombinedKey(option.key, fieldName);
         const newFields = createImportTemplate<any, OPTIONS_MAPPING>(
             schema.children,
             optionsMap,
             // undefined,
-            getCombinedKey(option.key, fieldName),
+            combinedKey,
             outlineLevel + 1,
+            [...context, { field: String(schema.optionsKey), key: String(option.key) }],
         );
 
         return [
