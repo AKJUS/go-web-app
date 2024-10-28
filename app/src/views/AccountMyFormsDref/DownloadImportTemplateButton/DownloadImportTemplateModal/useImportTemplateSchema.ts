@@ -871,8 +871,6 @@ function useImportTemplateSchema() {
             // TIMEFRAME AND CONTACTS
 
             ns_request_date: {
-                headingBefore: 'Operational Timeframes',
-                hiddenLabel: true,
                 type: 'input',
                 validation: 'date',
                 label: 'Date of National Society Application',

@@ -86,8 +86,6 @@ const h3Style: Partial<Style> = {
     },
 };
 
-// TODO: Add this style to description
-
 const defaultCellStyle: Partial<Style> = {
     font: {
         name: 'Poppins',

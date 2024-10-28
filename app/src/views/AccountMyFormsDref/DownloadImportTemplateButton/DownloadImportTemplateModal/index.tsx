@@ -226,14 +226,15 @@ async function generateTemplate(
                 } else if (templateAction.dataValidation === 'textArea') {
                     // NOTE: Adding 4 new-lines to add height while also
                     // supporting expand
-                    const newLines = '\n\n\n\n';
+                    const newLines = '\n\n';
                     let { label } = templateAction;
                     if (typeof label === 'string' && isTruthyString(label)) {
-                        label += newLines;
+                        label = newLines + label + newLines;
                     } else if (typeof label === 'object' && label.richText.length > 0) {
                         label = {
                             ...label,
                             richText: [
+                                { text: newLines },
                                 ...label.richText,
                                 { text: newLines },
                             ],
