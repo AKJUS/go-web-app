@@ -9,25 +9,25 @@ import {
 } from '@togglecorp/fujs';
 import { type CellRichTextValue } from 'exceljs';
 
-function parseRichText(
+export function parseRichText(
     value: undefined,
-    optionsMap: TemplateFieldOptionsMapping,
-    context: { field: string, key: string }[],
+    optionsMap?: TemplateFieldOptionsMapping,
+    context?: { field: string, key: string }[],
 ): undefined;
-function parseRichText(
+export function parseRichText(
     value: string,
-    optionsMap: TemplateFieldOptionsMapping,
-    context: { field: string, key: string }[],
+    optionsMap?: TemplateFieldOptionsMapping,
+    context?: { field: string, key: string }[],
 ): string | CellRichTextValue
-function parseRichText(
+export function parseRichText(
     value: string | undefined,
-    optionsMap: TemplateFieldOptionsMapping,
-    context: { field: string, key: string }[],
+    optionsMap?: TemplateFieldOptionsMapping,
+    context?: { field: string, key: string }[],
 ): string | CellRichTextValue | undefined
-function parseRichText(
+export function parseRichText(
     value: string | undefined,
-    optionsMap: TemplateFieldOptionsMapping,
-    context: { field: string, key: string }[],
+    optionsMap?: TemplateFieldOptionsMapping,
+    context?: { field: string, key: string }[],
 ): string | CellRichTextValue | undefined {
     if (isNotDefined(value)) {
         return value;
@@ -59,9 +59,9 @@ function parseRichText(
         }
         if (stack.includes('<ins>')) {
             const [optionField, valueField] = token.split('.');
-            const currOptions = context.find((item) => item.field === optionField);
+            const currOptions = context?.find((item) => item.field === optionField);
             const selectedOption = currOptions
-                ? optionsMap[optionField]?.find(
+                ? optionsMap?.[optionField]?.find(
                     (option) => String(option.key) === currOptions?.key,
                 )
                 : undefined;

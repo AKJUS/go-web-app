@@ -893,4 +893,6 @@ function useImportTemplateSchema() {
     };
 }
 
+export type OptionsMapping = ReturnType<typeof useImportTemplateSchema>['optionsMap']
+
 export default useImportTemplateSchema;
