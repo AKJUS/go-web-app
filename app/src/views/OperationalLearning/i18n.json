@@ -17,6 +17,9 @@
         "noSummariesAvailableForComponent": "No summaries available for components.",
         "extractCount": "{count} extract",
         "extractsCount": "{count} extracts",
-        "failedToCreateExport": "Failed to generate export."
+        "failedToCreateExport": "Failed to generate export.",
+        "disclaimerMessage": "This is an updated implementation of the Operational Learning project started by the DREF and PER teams at IFRC. The previous dashboard can be found {button}.",
+        "here": "here",
+        "beta": "beta"
     }
 }

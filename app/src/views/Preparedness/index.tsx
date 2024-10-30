@@ -83,11 +83,6 @@ export function Component() {
                 >
                     {strings.catalogueOfResources}
                 </NavigationTab>
-                <NavigationTab
-                    to="preparednessGlobalOperational"
-                >
-                    {strings.operationalLearning}
-                </NavigationTab>
             </NavigationTabList>
             <Outlet />
         </Page>

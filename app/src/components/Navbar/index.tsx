@@ -214,13 +214,6 @@ function Navbar(props: Props) {
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     type="link"
-                                    to="preparednessGlobalOperational"
-                                    variant="tertiary"
-                                >
-                                    {strings.userMenuOperationalLearning}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
                                     to="perProcessLayout"
                                     variant="secondary"
                                 >

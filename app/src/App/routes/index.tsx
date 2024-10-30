@@ -344,7 +344,6 @@ const preparednessIndex = customWrapRoute({
                 '#global-summary': 'global-summary',
                 '#global-performance': 'global-performance',
                 '#resources-catalogue': 'resources-catalogue',
-                '#operational-learning': 'operational-learning',
             },
         },
     },
@@ -392,21 +391,6 @@ const preparednessGlobalCatalogue = customWrapRoute({
     wrapperComponent: Auth,
     context: {
         title: 'Preparedness - Catalogue of Learning',
-        visibility: 'anything',
-    },
-});
-
-// FIXME: update name to `preparednessOperationalLearning`
-const preparednessGlobalOperational = customWrapRoute({
-    parent: preparednessLayout,
-    path: 'operational-learning',
-    component: {
-        render: () => import('#views/PreparednessOperationalLearning'),
-        props: {},
-    },
-    wrapperComponent: Auth,
-    context: {
-        title: 'Preparedness - Operational Learning',
         visibility: 'anything',
     },
 });
@@ -1186,6 +1170,22 @@ const perWorkPlanForm = customWrapRoute({
 });
 
 // Redirect Routes
+const preparednessOperationalLearning = customWrapRoute({
+    parent: preparednessLayout,
+    path: 'operational-learning',
+    component: {
+        eagerLoad: true,
+        render: Navigate,
+        props: {
+            to: operationalLearning.absolutePath,
+        },
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Operational Learning',
+        visibility: 'anything',
+    },
+});
 
 const wrappedRoutes = {
     fourHundredFour,
@@ -1214,7 +1214,6 @@ const wrappedRoutes = {
     preparednessGlobalSummary,
     preparednessGlobalPerformance,
     preparednessGlobalCatalogue,
-    preparednessGlobalOperational,
     preparednessIndex,
     perProcessFormIndex,
     globalThreeW,
@@ -1272,6 +1271,8 @@ const wrappedRoutes = {
     ...countryRoutes,
     ...surgeRoutes,
 
+    // Redirects
+    preparednessOperationalLearning,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));

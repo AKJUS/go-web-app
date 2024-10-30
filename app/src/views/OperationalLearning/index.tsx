@@ -10,17 +10,23 @@ import {
     DismissableListOutput,
     DismissableMultiListOutput,
     DismissableTextOutput,
+    Header,
     List,
+    Modal,
     Tab,
     TabList,
     TabPanel,
     Tabs,
     TextOutput,
 } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
+import {
+    useBooleanState,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
 import {
     hasSomeDefinedValue,
     numericIdSelector,
+    resolveToComponent,
     resolveToString,
     stringNameSelector,
     stringValueSelector,
@@ -55,6 +61,7 @@ import {
 
 import Filters, { type FilterValue } from './Filters';
 import KeyInsights from './KeyInsights';
+import PreparednessOperationalLearning from './PreparednessOperationalLearning';
 import Summary, { type Props as SummaryProps } from './Summary';
 
 import i18n from './i18n.json';
@@ -99,6 +106,14 @@ export function Component() {
     const [activeTab, setActiveTab] = useState<'sector' | 'component'>('sector');
     const [query, setQuery] = useState<QueryType>();
     const [filterPristine, setFilterPristine] = useState(true);
+
+    const [
+        showOldOpsLearningModal,
+        {
+            setTrue: setShowOldOpsLearningModalTrue,
+            setFalse: setShowOldOpsLearningModalFalse,
+        },
+    ] = useBooleanState(false);
 
     const {
         rawFilter,
@@ -279,9 +294,40 @@ export function Component() {
 
     return (
         <Page
-            heading={strings.operationalLearningHeading}
+            className={styles.operationalLearning}
+            heading={(
+                <Header
+                    headingLevel={1}
+                    heading={strings.operationalLearningHeading}
+                    actionsContainerClassName={styles.betaTag}
+                    actions={(
+                        <Chip
+                            className={styles.chip}
+                            name="betaTag"
+                            label={strings.beta}
+                            variant="tertiary"
+                        />
+                    )}
+                />
+            )}
             description={strings.operationalLearningHeadingDescription}
             mainSectionClassName={styles.mainSection}
+            infoContainerClassName={styles.disclaimer}
+            info={resolveToComponent(
+                strings.disclaimerMessage,
+                {
+                    button: (
+                        <Button
+                            className={styles.button}
+                            name={undefined}
+                            onClick={setShowOldOpsLearningModalTrue}
+                            variant="tertiary"
+                        >
+                            {strings.here}
+                        </Button>
+                    ),
+                },
+            )}
         >
             <Container
                 footerClassName={styles.footer}
@@ -486,6 +532,15 @@ export function Component() {
                     </Container>
                 </Tabs>
             </Container>
+            {showOldOpsLearningModal && (
+                <Modal
+                    heading={strings.operationalLearningHeading}
+                    onClose={setShowOldOpsLearningModalFalse}
+                    size="full"
+                >
+                    <PreparednessOperationalLearning />
+                </Modal>
+            )}
         </Page>
     );
 }
