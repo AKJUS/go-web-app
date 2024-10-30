@@ -53,6 +53,7 @@
         "vistPDCImageAlt": "Vist PDC",
         "visitUSAidImageAlt": "Visit US Aid",
         "visitSwissImageAlt": "Visit Swiss Confederation",
-        "visitGoWiki": "GO Wiki"
+        "visitGoWiki": "GO Wiki",
+        "goUIStorybook": "GO UI Storybook"
     }
 }
