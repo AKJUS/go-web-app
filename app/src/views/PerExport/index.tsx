@@ -36,6 +36,7 @@ import {
 } from '@togglecorp/fujs';
 
 import ifrcLogo from '#assets/icons/ifrc-square.png';
+import perLogo from '#assets/icons/per_logo.png';
 import {
     getFormattedComponentName,
     getPerAreaColor,
@@ -362,14 +363,16 @@ export function Component() {
                 <img
                     className={styles.ifrcLogo}
                     src={ifrcLogo}
-                    alt={strings.perImageLogoIFRCAlt}
+                    alt={strings.ifrcLogoIFRCAltText}
                 />
                 <Heading level={1} className={styles.countryName}>
-                    {perResponse?.country_details.name}
+                    {perResponse?.country_details.society_name}
                 </Heading>
-                <Heading level={1}>
-                    {strings.perExportTitle}
-                </Heading>
+                <img
+                    className={styles.perLogo}
+                    src={perLogo}
+                    alt={strings.perLogoAltText}
+                />
             </Container>
             {pending && (
                 <BlockLoading className={styles.pendingMessage} />
@@ -532,7 +535,7 @@ export function Component() {
                         <Heading
                             level={5}
                         >
-                            {strings.typeOfOperation}
+                            {strings.perAreas}
                         </Heading>
                         <div className={styles.separator} />
                         {perFormAreaResponse?.results?.map((perFormArea) => {

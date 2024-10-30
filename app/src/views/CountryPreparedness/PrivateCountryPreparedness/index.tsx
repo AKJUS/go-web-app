@@ -637,7 +637,7 @@ function PrivateCountryPreparedness() {
                             <Heading
                                 level={5}
                             >
-                                {strings.typeOfOperation}
+                                {strings.perAreas}
                             </Heading>
                             <div className={styles.separator} />
                             {perFormAreaResponse?.results?.map((perFormArea) => {

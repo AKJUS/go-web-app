@@ -28,7 +28,7 @@
         "lastUpdatedLabel": "Last update",
         "perExport": "Export",
         "upload": "Upload",
-        "typeOfOperation": "Type of Operation",
+        "perAreas": "PER Areas",
         "relevantDocumentHeader": "Relevant Documents",
         "uploadLimitDisclaimer": "Note: You can only upload upto 10 documents.",
         "perArea": "Area {areaNumber}: {title}"
