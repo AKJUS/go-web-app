@@ -136,8 +136,6 @@ function useImportTemplateSchema() {
             // OPERATION OVERVIEW
 
             national_society: {
-                // FIXME: We don't need this anymore?
-                // headingBefore: 'Essential Information',
                 type: 'select',
                 label: 'National society',
                 validation: 'number',
@@ -224,7 +222,6 @@ function useImportTemplateSchema() {
                 label: 'Did it affect the same population groups?',
                 optionsKey: '__boolean',
                 validation: 'boolean',
-                // FIXME: Cannot group the cells
                 description: (
                     'Indicate only if there was a similar event affecting the same area in the last 3 years.\n'
                     + 'Otherwise, leave the box empty.'
@@ -236,7 +233,6 @@ function useImportTemplateSchema() {
                 label: 'Did the National Society respond?',
                 optionsKey: '__boolean',
                 validation: 'boolean',
-                // FIXME: Cannot group the cells
                 description: (
                     'Indicate only if there was a similar event affecting the same area in the last 3 years.\n'
                     + 'Otherwise, leave the box empty.'
@@ -248,7 +244,6 @@ function useImportTemplateSchema() {
                 label: 'Did the National Society request funding from DREF for that event(s)?',
                 optionsKey: '__boolean',
                 validation: 'boolean',
-                // FIXME: Cannot group the cells
                 description: (
                     'Indicate only if there was a similar event affecting the same area in the last 3 years.\n'
                     + 'Otherwise, leave the box empty.'
@@ -259,14 +254,12 @@ function useImportTemplateSchema() {
                 type: 'input',
                 label: '<i>If yes, please specify which operations</i>',
                 validation: 'string',
-                // FIXME: Cannot group the cells
                 description: (
                     'Indicate only if there was a similar event affecting the same area in the last 3 years.\n'
                     + 'Otherwise, leave the box empty.'
                 ),
             },
 
-            // FIXME: remove this?
             dref_recurrent_text: {
                 type: 'input',
                 label: 'If you have answered yes to all questions above, justify why the use of DREF for a recurrent event, or how this event should not be considered recurrent',
@@ -292,10 +285,8 @@ function useImportTemplateSchema() {
             event_date: {
                 headingBefore: 'Description of the Event',
                 type: 'input',
-                // FIXME: Is this label change correct?
-                label: 'Date of the Event',
+                label: 'Date of the Event / Date when the trigger was met',
                 validation: 'date',
-                // FIXME: Not sure if this is correct
                 description: 'DD/MM/YYY',
             },
 
@@ -330,7 +321,6 @@ function useImportTemplateSchema() {
                 ),
             },
 
-            // FIXME: Added bold on "Comparative Analysis"
             event_scope: {
                 type: 'input',
                 validation: 'textArea',
@@ -359,9 +349,6 @@ function useImportTemplateSchema() {
             source_information: {
                 type: 'list',
                 label: 'Source Information',
-                // FIXME: description has been removed
-                // description: 'Add the links and the name of the sources, the
-                // name will be shown in the export, as an hyperlink.',
                 optionsKey: 'source_information',
                 children: {
                     type: 'object',
@@ -375,8 +362,6 @@ function useImportTemplateSchema() {
                             type: 'input',
                             validation: 'string',
                             label: 'Link',
-                            // FIXME: Cannot group the cells
-                            // FIXME: This will be visible on all the repetitions
                             description: 'Specify the names (up to 5) of the key information sources. If possible, provide links.\nThe names will be shown in the export as an hyperlink.',
                         },
                     },
@@ -398,24 +383,17 @@ function useImportTemplateSchema() {
                 type: 'input',
                 validation: 'date',
                 label: 'If yes, start date of National Society actions',
-                // FIXME: Not sure if this is correct
                 description: 'DD/MM/YYY',
             },
 
             national_society_actions: {
                 type: 'list',
                 label: 'National Society Actions',
-                // FIXME: This has not been hidden in the UI, but to make this
+                // NOTE: This has not been hidden in the shared template, but to make this
                 // consistent we can hide this
                 hiddenLabel: true,
                 keyFieldName: 'title',
                 optionsKey: 'national_society_actions',
-                // FIXME: description has been removed
-                // description: 'Please indicate a description of the ongoing
-                // response with if possible: Branches involved, number of
-                // volunteers/staff involved in actions, assets
-                // deployed/distributed, number of people reach. Impact/added
-                // value of the NS in the response already ongoing.',
                 children: {
                     type: 'object',
                     fields: {
@@ -424,7 +402,6 @@ function useImportTemplateSchema() {
                             validation: 'textArea',
                             label: '<b>Description</b>',
                             description: '<ins>national_society_actions.description</ins>',
-                            // FIXME: Does this need to be left aligned?
                         },
                     },
                 },
@@ -449,7 +426,6 @@ function useImportTemplateSchema() {
                 headingBefore: 'ICRC Actions Related To The Current Event',
                 type: 'input',
                 validation: 'textArea',
-                // FIXME: Is this label change correct?
                 label: 'Description',
                 description: 'Presence or not of ICRC in country, and support directly provided for this emergency response. Other programs and support provided outside of the scope of this emergency should not be indicated here.',
             },
@@ -489,13 +465,6 @@ function useImportTemplateSchema() {
                 ),
             },
 
-            // FIXME: remove this?
-            major_coordination_mechanism: {
-                type: 'input',
-                validation: 'string',
-                label: 'List coordination mechanisms/platform in place at local/district and national level. Indicate the lead authorities/agencies. How the National Society is involved/positioned in this coordination. Does the NS in any lead/co-lead role? Any identified gap/overlap in the coordination (e.g., sector missing…)?',
-            },
-
             needs_identified: {
                 type: 'list',
                 label: 'Needs (Gaps) Identified',
@@ -509,7 +478,6 @@ function useImportTemplateSchema() {
                             validation: 'textArea',
                             label: '<b>Description</b>',
                             description: '<ins>needs_identified.description</ins>',
-                            // FIXME: Does this need to be left aligned?
                         },
                     },
                 },
@@ -585,7 +553,6 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Targeted Population: <b>Women</b>',
                 description: '<i>Number, e.g. XX,XXX.</i>',
-                // FIXME: Does this need to be left aligned?
             },
 
             men: {
@@ -593,7 +560,6 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Targeted Population: <b>Men</b>',
                 description: '<i>Number, e.g. XX,XXX.</i>',
-                // FIXME: Does this need to be left aligned?
             },
 
             girls: {
@@ -601,7 +567,6 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Targeted Population: <b>Girls (under 18)</b>',
                 description: '<i>Number, e.g. XX,XXX.</i>',
-                // FIXME: Does this need to be left aligned?
             },
 
             boys: {
@@ -609,7 +574,6 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Targeted Population: <b>Boys (under 18)</b>',
                 description: '<i>Number, e.g. XX,XXX.</i>',
-                // FIXME: Does this need to be left aligned?
             },
 
             total_targeted_population: {
@@ -617,7 +581,6 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Targeted Population: <b>Total</b>',
                 description: '<i>Number, e.g. XX,XXX.</i>',
-                // FIXME: Does this need to be left aligned?
             },
 
             disability_people_per: {
@@ -625,7 +588,6 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Estimated Percentage: <b>People with Disability</b>',
                 description: '<i>Percentage, e.g. XX%.</i>',
-                // FIXME: Does this need to be left aligned?
             },
 
             people_per_urban: {
@@ -633,7 +595,6 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Estimated Percentage: <b>Urban</b>',
                 description: '<i>Percentage, e.g. XX%.</i>',
-                // FIXME: Does this need to be left aligned?
             },
 
             people_per_local: {
@@ -641,7 +602,6 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Estimated Percentage: <b>Rural</b>',
                 description: '<i>Percentage, e.g. XX%.</i>',
-                // FIXME: Does this need to be left aligned?
             },
 
             displaced_people: {
@@ -649,7 +609,6 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Estimated number of <b>People on the move</b> (if any)',
                 description: '<i>Percentage, e.g. XX%.</i>',
-                // FIXME: Does this need to be left aligned?
             },
 
             risk_security: {
@@ -663,15 +622,24 @@ function useImportTemplateSchema() {
                             type: 'input',
                             validation: 'string',
                             label: '<b>Risk</b>',
-                            // FIXME: Add dynamic description
-                            // FIXME: Does this need to be left aligned?
+                            description: (
+                                '<b>Identify up to 5 key potential risks or threats that could negatively impact the success of the operation.</b> These can range from environmental risks to social or logistical challenges.\n'
+                                + '\n'
+                                + '- What are the primary risks that could affect the operation’s implementation?\n'
+                                + '- Are there any context-specific risks that need to be considered?\n'
+                                + '- How might these risks impact the operation’s objectives, timeline, or resources?'
+                            ),
                         },
                         mitigation: {
                             type: 'input',
                             validation: 'string',
                             label: '<b>Mitigation action</b>',
-                            // FIXME: Add dynamic description
-                            // FIXME: Does this need to be left aligned?
+                            description: (
+                                '<b>Actions or strategies that will be implemented to reduce or manage the identified risks, ensuring the operation can proceed as planned.</b>\n'
+                                + '\n'
+                                + '- What specific measures or strategies will be put in place to mitigate the risks identified?\n'
+                                + '- Will contingency plans or additional resources be required to address these risks?'
+                            ),
                         },
                     },
                 },
@@ -703,11 +671,11 @@ function useImportTemplateSchema() {
                 type: 'input',
                 validation: 'number',
                 label: '<b>Requested Amount in CHF</b>',
-                // FIXME: Does this need to be left aligned?
             },
 
             planned_interventions: {
                 type: 'list',
+                // NOTE: This has been hidden in the shared template
                 label: 'Add the interventions that apply',
                 hiddenLabel: true,
                 optionsKey: 'planned_interventions',
@@ -720,16 +688,12 @@ function useImportTemplateSchema() {
                             validation: 'number',
                             label: '<b>Budget</b>',
                             description: 'Budget planned to be spent on the activities under this sector.',
-                            // FIXME: This will be visible on all repeated fields
-                            // FIXME: Does this need to be left aligned?
                         },
                         person_targeted: {
                             type: 'input',
                             validation: 'number',
                             label: '<b>Person targeted</b>',
                             description: 'Number of people planned to be reached through the activities under this sector.',
-                            // FIXME: This will be visible on all repeated fields
-                            // FIXME: Does this need to be left aligned?
                         },
                         description: {
                             type: 'input',
@@ -747,13 +711,12 @@ function useImportTemplateSchema() {
                                 + '<b>* Activity B</b>\n'
                                 + '<b>* Activity B</b>\n'
                             ),
-                            // FIXME: Does this need to be left aligned?
                         },
                         indicators: {
                             type: 'list',
                             label: 'Indicators',
-                            // FIXME: This has not been hidden in the UI, but to make this
-                            // consistent we can hide this
+                            // NOTE: This has not been hidden in the shared
+                            // template, but to make this consistent we can hide this
                             hiddenLabel: true,
                             optionsKey: 'planned_interventions_indicators',
                             children: {
@@ -763,7 +726,6 @@ function useImportTemplateSchema() {
                                         type: 'input',
                                         validation: 'string',
                                         label: 'Title',
-                                        // FIXME: Does this need to be left aligned?
                                         description: (
                                             'Start by choosing indicators from the IFRC indicator databank whenever possible. This makes it easier to compare and analyse results across all emergency operations.\n'
                                             + '\n'
@@ -773,15 +735,12 @@ function useImportTemplateSchema() {
                                             + '\n'
                                             + 'Consider the type of indicator unit. For example, it’s often simpler and clearer to track and report on the “number of people” rather than a “percentage of people.”'
                                         ),
-                                        // FIXME: This will be visible on all the repetitions
                                     },
                                     target: {
                                         type: 'input',
                                         validation: 'number',
                                         label: 'Target',
-                                        // FIXME: Does this need to be left aligned?
                                         description: 'For each indicator, set a target. This helps track progress and measure whether the operation is achieving its key objectives, making it easier to report results later on.',
-                                        // FIXME: This will be visible on all the repetitions
                                     },
                                 },
                             },
@@ -874,7 +833,6 @@ function useImportTemplateSchema() {
                 type: 'input',
                 validation: 'date',
                 label: 'Date of National Society Application',
-                // FIXME: Not sure if this is correct
                 description: 'DD/MM/YYY',
             },
 

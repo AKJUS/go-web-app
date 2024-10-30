@@ -10,8 +10,8 @@ import {
 import { type CellRichTextValue } from 'exceljs';
 
 import {
-    parsePseudoHtml,
     type ParsePlugin,
+    parsePseudoHtml,
 } from '#utils/richText';
 
 type ValidationType = string | number | boolean | 'textArea';
