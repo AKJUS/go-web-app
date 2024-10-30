@@ -528,7 +528,7 @@ export function Component() {
         {
             learnings: (
                 <Link
-                    to="preparednessGlobalOperational"
+                    to="operationalLearning"
                 >
                     {strings.learnings}
                 </Link>
