@@ -34,9 +34,9 @@ import {
 } from '#utils/domain/dref';
 import {
     getCombinedKey,
-    parseRichText,
     type TemplateField,
 } from '#utils/importTemplate';
+import { parsePseudoHtml } from '#utils/richText';
 import {
     actionsTabFields,
     eventDetailTabFields,
@@ -47,30 +47,12 @@ import {
 
 import { OptionsMapping } from './useImportTemplateSchema';
 
+// FIXME: move to utils
 function hexToArgb(hexStr: string, alphaStr = 'ff') {
     const hexWithoutHash = hexStr.substring(1);
 
     return `${alphaStr}${hexWithoutHash}`;
 }
-
-const headerRowStyle: Partial<Style> = {
-    font: {
-        name: FONT_FAMILY_HEADER,
-        color: { argb: hexToArgb(COLOR_WHITE, '10') },
-        // FIXME: use constant
-        size: 14,
-        bold: true,
-    },
-    fill: {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') },
-    },
-    alignment: {
-        vertical: 'middle',
-        horizontal: 'center',
-    },
-};
 
 const h1Style: Partial<Style> = {
     font: {
@@ -143,12 +125,14 @@ const descriptionCellStyle: Partial<Style> = {
     },
 };
 
-const alternateRowFill: Style['fill'] = {
-    type: 'pattern',
-    pattern: 'solid',
-    // FIXME: use constant
-    fgColor: { argb: hexToArgb('#f2f2f2', '10') },
-};
+const alternateRowStyle = {
+    fill: {
+        type: 'pattern',
+        pattern: 'solid',
+        // FIXME: use constant
+        fgColor: { argb: hexToArgb('#f2f2f2', '10') },
+    },
+} as const satisfies Partial<Style>;
 
 function addRow(
     sheet: xlsx.Worksheet,
@@ -159,15 +143,13 @@ function addRow(
     description?: string | CellRichTextValue,
     style: Partial<xlsx.Style> = defaultCellStyle,
 ) {
-    const col = 1;
-
     const row = sheet.getRow(rowNum);
     row.outlineLevel = outlineLevel;
 
+    const col = 1;
     const labelCell = row.getCell(col);
     const valueCell = row.getCell(col + 1);
     const descriptionCell = row.getCell(col + 2);
-    descriptionCell.style = descriptionCellStyle;
 
     labelCell.name = name;
     valueCell.name = name;
@@ -187,6 +169,19 @@ function addRow(
             indent: outlineLevel * 2,
         },
     };
+    valueCell.style = style;
+    descriptionCell.style = {
+        ...style,
+        ...descriptionCellStyle,
+        font: {
+            ...style.font,
+            ...descriptionCellStyle.font,
+        },
+        alignment: {
+            ...style.alignment,
+            ...descriptionCellStyle.alignment,
+        },
+    };
 
     const cellBorder: Style['border'] = {
         // FIXME: use constant
@@ -198,7 +193,6 @@ function addRow(
         // FIXME: use constant
         right: { style: 'thin', color: { argb: hexToArgb('#bfbfbf', '10') } },
     };
-
     labelCell.border = cellBorder;
     valueCell.border = cellBorder;
     descriptionCell.border = cellBorder;
@@ -282,25 +276,28 @@ export function addInputRow(
         const firstCell = row.getCell(col);
         firstCell.style = {
             ...firstCell.style,
+            ...alternateRowStyle,
             fill: {
                 ...firstCell.style?.fill,
-                ...alternateRowFill,
+                ...alternateRowStyle.fill,
             },
         };
         const secondCell = row.getCell(col + 1);
         secondCell.style = {
             ...secondCell.style,
+            ...alternateRowStyle,
             fill: {
                 ...secondCell.style?.fill,
-                ...alternateRowFill,
+                ...alternateRowStyle.fill,
             },
         };
         const thirdCell = row.getCell(col + 2);
         thirdCell.style = {
             ...thirdCell.style,
+            ...alternateRowStyle,
             fill: {
                 ...thirdCell.style?.fill,
-                ...alternateRowFill,
+                ...alternateRowStyle.fill,
             },
         };
     }
@@ -361,7 +358,7 @@ export function addInputRow(
     return row;
 }
 
-export async function buildCoverWorksheetForDrefApplication(
+async function generateCoverWorksheet(
     coverWorksheet: Worksheet,
     workbook: Workbook,
 ) {
@@ -371,7 +368,7 @@ export async function buildCoverWorksheetForDrefApplication(
         value: string,
     ) {
         // eslint-disable-next-line no-param-reassign
-        coverWorksheet.getCell(row).value = parseRichText(value);
+        coverWorksheet.getCell(row).value = parsePseudoHtml(value);
         coverWorksheet.mergeCells(`${row}:${col}`);
         // eslint-disable-next-line no-param-reassign
         return coverWorksheet.getCell(`${row}:${col}`);
@@ -506,29 +503,11 @@ export async function buildCoverWorksheetForDrefApplication(
     });
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export async function generateTemplate(
+async function generateOtherWorksheets(
     templateActions: TemplateField[],
-    optionsMap: OptionsMapping,
-
-    // FIXME: we should be able to remove these.
-    drefTypeLabelMap: Record<TypeOfDrefEnum, string> | undefined,
-    typeOfDref: TypeOfDrefEnum,
-
-    callback: () => void,
+    optionsWorksheet: Worksheet,
+    workbook: Workbook,
 ) {
-    const workbook = new xlsx.Workbook();
-    const now = new Date();
-    workbook.created = now;
-
-    const typeOfDrefLabel = drefTypeLabelMap?.[typeOfDref ?? DREF_TYPE_RESPONSE] ?? '';
-
-    const coverWorksheet = workbook.addWorksheet(
-        'DREF Import',
-        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
-    );
-    await buildCoverWorksheetForDrefApplication(coverWorksheet, workbook);
-
     const fieldNameToTabNameMap: Record<string, string> = {
         ...listToMap(
             overviewTabFields,
@@ -557,70 +536,15 @@ export async function generateTemplate(
         ),
     };
 
-    const overviewWorksheet = workbook.addWorksheet(
-        SHEET_OPERATION_OVERVIEW,
-        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
-    );
-    const eventDetailsWorksheet = workbook.addWorksheet(
-        SHEET_EVENT_DETAIL,
-        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
-    );
-    const actionsNeedsWorksheet = workbook.addWorksheet(
-        SHEET_ACTIONS_NEEDS,
-        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
-    );
-    const operationWorksheet = workbook.addWorksheet(
-        SHEET_OPERATION,
-        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
-    );
-    const timeframeAndContactsWorksheet = workbook.addWorksheet(
-        SHEET_TIMEFRAMES_AND_CONTACTS,
-        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
-    );
-
-    const sheetMap: Record<DrefSheetName, xlsx.Worksheet> = {
-        [SHEET_OPERATION_OVERVIEW]: overviewWorksheet,
-        [SHEET_EVENT_DETAIL]: eventDetailsWorksheet,
-        [SHEET_ACTIONS_NEEDS]: actionsNeedsWorksheet,
-        [SHEET_OPERATION]: operationWorksheet,
-        [SHEET_TIMEFRAMES_AND_CONTACTS]: timeframeAndContactsWorksheet,
-    };
-
-    const optionsWorksheet = workbook.addWorksheet('options');
-    optionsWorksheet.state = 'veryHidden';
-    const optionKeys = Object.keys(optionsMap) as (keyof (typeof optionsMap))[];
-
-    optionsWorksheet.columns = optionKeys.map((key) => (
-        { header: key, key }
-    ));
-
-    optionKeys.forEach((key) => {
-        const options = optionsMap[key];
-
-        if (isDefined(options)) {
-            const column = optionsWorksheet.getColumnKey(key);
-
-            options.forEach((option, i) => {
-                const cell = optionsWorksheet.getCell(i + 2, column.number);
-                cell.name = getCombinedKey(option.key, key);
-                cell.value = option.label;
-            });
-        }
-    });
-
-    function groupTemplateActionsByTab() {
-        return listToGroupList(
+    const tabGroupedTemplateActions = mapToList(
+        listToGroupList(
             templateActions,
             (templateAction) => {
                 // FIXME: We should instead use a helper function to get the fieldName
                 const fieldName = String(templateAction.name).split('__')[0];
                 return fieldNameToTabNameMap[fieldName];
             },
-        );
-    }
-
-    const tabGroupedTemplateActions = mapToList(
-        groupTemplateActionsByTab(),
+        ),
         (actions, tabName) => {
             const worksheet = workbook.getWorksheet(tabName);
             if (isNotDefined(worksheet)) {
@@ -710,7 +634,93 @@ export async function generateTemplate(
             }
         });
     });
+}
 
+async function generateOptionsWorksheet(
+    optionsWorksheet: Worksheet,
+    optionsMap: OptionsMapping,
+) {
+    // eslint-disable-next-line no-param-reassign
+    optionsWorksheet.state = 'veryHidden';
+    const optionKeys = Object.keys(optionsMap) as (keyof OptionsMapping)[];
+    // eslint-disable-next-line no-param-reassign
+    optionsWorksheet.columns = optionKeys.map((key) => (
+        { header: key, key }
+    ));
+
+    optionKeys.forEach((key) => {
+        const options = optionsMap[key];
+
+        if (isDefined(options)) {
+            const column = optionsWorksheet.getColumnKey(key);
+
+            options.forEach((option, i) => {
+                const cell = optionsWorksheet.getCell(i + 2, column.number);
+                cell.name = getCombinedKey(option.key, key);
+                cell.value = option.label;
+            });
+        }
+    });
+}
+
+export async function generateTemplate(
+    templateActions: TemplateField[],
+    optionsMap: OptionsMapping,
+
+    // FIXME: we should be able to remove these.
+    drefTypeLabelMap: Record<TypeOfDrefEnum, string> | undefined,
+    typeOfDref: TypeOfDrefEnum,
+
+    callback: () => void,
+) {
+    const workbook = new xlsx.Workbook();
+    const now = new Date();
+    workbook.created = now;
+
+    const coverWorksheet = workbook.addWorksheet(
+        'DREF Import',
+        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
+    );
+    const overviewWorksheet = workbook.addWorksheet(
+        SHEET_OPERATION_OVERVIEW,
+        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
+    );
+    const eventDetailsWorksheet = workbook.addWorksheet(
+        SHEET_EVENT_DETAIL,
+        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
+    );
+    const actionsNeedsWorksheet = workbook.addWorksheet(
+        SHEET_ACTIONS_NEEDS,
+        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
+    );
+    const operationWorksheet = workbook.addWorksheet(
+        SHEET_OPERATION,
+        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
+    );
+    const timeframeAndContactsWorksheet = workbook.addWorksheet(
+        SHEET_TIMEFRAMES_AND_CONTACTS,
+        { properties: { tabColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') } } },
+    );
+
+    const optionsWorksheet = workbook.addWorksheet('options');
+
+    await generateCoverWorksheet(coverWorksheet, workbook);
+
+    await generateOptionsWorksheet(optionsWorksheet, optionsMap);
+
+    await generateOtherWorksheets(
+        templateActions,
+        optionsWorksheet,
+        workbook,
+    );
+
+    const sheetMap: Record<DrefSheetName, xlsx.Worksheet> = {
+        [SHEET_OPERATION_OVERVIEW]: overviewWorksheet,
+        [SHEET_EVENT_DETAIL]: eventDetailsWorksheet,
+        [SHEET_ACTIONS_NEEDS]: actionsNeedsWorksheet,
+        [SHEET_OPERATION]: operationWorksheet,
+        [SHEET_TIMEFRAMES_AND_CONTACTS]: timeframeAndContactsWorksheet,
+    };
     Object.values(sheetMap).forEach(
         (sheet) => {
             const worksheet = sheet;
@@ -741,12 +751,30 @@ export async function generateTemplate(
             worksheet.getRow(1).eachCell(
                 (cell) => {
                     // eslint-disable-next-line no-param-reassign
-                    cell.style = headerRowStyle;
+                    cell.style = {
+                        font: {
+                            name: FONT_FAMILY_HEADER,
+                            color: { argb: hexToArgb(COLOR_WHITE, '10') },
+                            // FIXME: use constant
+                            size: 14,
+                            bold: true,
+                        },
+                        fill: {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: hexToArgb(COLOR_PRIMARY_RED, '10') },
+                        },
+                        alignment: {
+                            vertical: 'middle',
+                            horizontal: 'center',
+                        },
+                    };
                 },
             );
         },
     );
 
+    const typeOfDrefLabel = drefTypeLabelMap?.[typeOfDref ?? DREF_TYPE_RESPONSE] ?? '';
     const templateFileName = `DREF_Application_${typeOfDrefLabel}_import_template_${now.toLocaleString()}.xlsx`;
 
     await workbook.xlsx.writeBuffer().then(

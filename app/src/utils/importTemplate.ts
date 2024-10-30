@@ -9,82 +9,10 @@ import {
 } from '@togglecorp/fujs';
 import { type CellRichTextValue } from 'exceljs';
 
-export function parseRichText(
-    value: undefined,
-    optionsMap?: TemplateFieldOptionsMapping,
-    context?: { field: string, key: string }[],
-): undefined;
-export function parseRichText(
-    value: string,
-    optionsMap?: TemplateFieldOptionsMapping,
-    context?: { field: string, key: string }[],
-): string | CellRichTextValue
-export function parseRichText(
-    value: string | undefined,
-    optionsMap?: TemplateFieldOptionsMapping,
-    context?: { field: string, key: string }[],
-): string | CellRichTextValue | undefined
-export function parseRichText(
-    value: string | undefined,
-    optionsMap?: TemplateFieldOptionsMapping,
-    context?: { field: string, key: string }[],
-): string | CellRichTextValue | undefined {
-    if (isNotDefined(value)) {
-        return value;
-    }
-
-    const tagRegex = /(<\/?(?:b|u|i|ins)>)/;
-    const tokens = value.split(tagRegex);
-
-    if (tokens.length === 1) {
-        return value;
-    }
-
-    const richText:CellRichTextValue['richText'] = [];
-
-    const stack: string[] = [];
-
-    const openTagRegex = /(<(?:b|u|i|ins)>)/;
-    const closeTagRegex = /(<\/(?:b|u|i|ins)>)/;
-
-    tokens.forEach((token) => {
-        if (token.match(openTagRegex)) {
-            stack.push(token);
-            return;
-        }
-        if (token.match(closeTagRegex)) {
-            // TODO: Check correctness by checking closeTag with last openTag
-            stack.pop();
-            return;
-        }
-        if (stack.includes('<ins>')) {
-            const [optionField, valueField] = token.split('.');
-            const currOptions = context?.find((item) => item.field === optionField);
-            const selectedOption = currOptions
-                ? optionsMap?.[optionField]?.find(
-                    (option) => String(option.key) === currOptions?.key,
-                )
-                : undefined;
-
-            richText.push({
-                // FIXME: Need to add mechanism to identify if we have error for mapping
-                text: selectedOption?.[valueField as 'description'] ?? '',
-            });
-        } else {
-            richText.push({
-                font: {
-                    bold: stack.includes('<b>'),
-                    italic: stack.includes('<i>'),
-                    underline: stack.includes('<u>'),
-                },
-                text: token,
-            });
-        }
-    });
-    // TODO: Check correctness to check that stack is empty
-
-    return { richText };
-}
+import {
+    parsePseudoHtml,
+    type ParsePlugin,
+} from '#utils/richText';
 
 type ValidationType = string | number | boolean | 'textArea';
 type TypeToLiteral<T extends ValidationType> = T extends string
@@ -219,7 +147,30 @@ export function getCombinedKey(
 
 export type TemplateField = HeadingTemplateField | InputTemplateField;
 
-// TODO: add test
+function createInsPlugin(
+    optionsMap: TemplateFieldOptionsMapping,
+    context: { field: string, key: string }[],
+): ParsePlugin {
+    return {
+        tag: 'ins',
+        transformer: (token, richText) => {
+            const [optionField, valueField] = token.split('.');
+            const currOptions = context?.find((item) => item.field === optionField);
+            const selectedOption = currOptions
+                ? optionsMap?.[optionField]?.find(
+                    (option) => String(option.key) === currOptions?.key,
+                )
+                : undefined;
+
+            return {
+                ...richText,
+                // FIXME: Need to add mechanism to identify if we have error for mapping
+                text: selectedOption?.[valueField as 'description'] ?? '',
+            };
+        },
+    };
+}
+
 export function createImportTemplate<
     TEMPLATE_SCHEMA,
     OPTIONS_MAPPING extends TemplateFieldOptionsMapping
@@ -269,12 +220,14 @@ export function createImportTemplate<
         } satisfies HeadingTemplateField);
     }
 
+    const insPlugin = createInsPlugin(optionsMap, context);
+
     if (schema.type === 'input') {
         const field = {
             type: 'input',
             name: fieldName,
-            label: parseRichText(schema.label, optionsMap, context),
-            description: parseRichText(schema.description, optionsMap, context),
+            label: parsePseudoHtml(schema.label, [insPlugin]),
+            description: parsePseudoHtml(schema.description, [insPlugin]),
             dataValidation: (schema.validation === 'number' || schema.validation === 'date' || schema.validation === 'integer' || schema.validation === 'textArea')
                 ? schema.validation
                 : undefined,
@@ -290,8 +243,8 @@ export function createImportTemplate<
         const field = {
             type: 'input',
             name: fieldName,
-            label: parseRichText(schema.label, optionsMap, context),
-            description: parseRichText(schema.description, optionsMap, context),
+            label: parsePseudoHtml(schema.label, [insPlugin]),
+            description: parsePseudoHtml(schema.description, [insPlugin]),
             outlineLevel,
             dataValidation: 'list',
             optionsKey: schema.optionsKey,
@@ -322,8 +275,8 @@ export function createImportTemplate<
             context,
         } satisfies HeadingTemplateField;
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const combinedKey = getCombinedKey(option.key, fieldName);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const newFields = createImportTemplate<any, OPTIONS_MAPPING>(
             schema.children,
             optionsMap,
@@ -350,7 +303,6 @@ function addClientId(item: object): object {
     return { ...item, clientId: randomString() };
 }
 
-// TODO: add test
 export function getValueFromImportTemplate<
     TEMPLATE_SCHEMA,
     OPTIONS_MAPPING extends TemplateFieldOptionsMapping,
@@ -437,6 +389,7 @@ export function getValueFromImportTemplate<
     return listValue;
 }
 
+/*
 type TemplateName = 'dref-application' | 'dref-operational-update' | 'dref-final-report';
 
 export interface ImportTemplateDescription<FormFields> {
@@ -448,7 +401,6 @@ export interface ImportTemplateDescription<FormFields> {
     fieldNameToTabNameMap: Record<string, string>,
 }
 
-/*
 function isValidTemplate(templateName: unknown): templateName is TemplateName {
     const templateNameMap: Record<TemplateName, boolean> = {
         'dref-application': true,
