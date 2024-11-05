@@ -124,6 +124,7 @@ function DrefImportModal(props: Props) {
                         {
                             variant: 'danger',
                             description: strings.drefImportFailedDescription,
+                            debugMessage: 'Length of worksheet sbould be exactly 5.',
                         },
                     );
 
