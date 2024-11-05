@@ -95,7 +95,7 @@ function LayerOptions(props: Props) {
             <div className={styles.exposedAreaInputWrapper}>
                 <Switch
                     // FIXME: use strings
-                    label="Exposed area"
+                    label="Exposed area to tropical storm or cyclone strength wind"
                     name="showExposedArea"
                     value={value.showExposedArea}
                     onChange={setFieldValue}
