@@ -7,6 +7,12 @@ import {
     mapToMap,
     randomString,
 } from '@togglecorp/fujs';
+import { type CellRichTextValue } from 'exceljs';
+
+import {
+    type ParsePlugin,
+    parsePseudoHtml,
+} from '#utils/richText';
 
 type ValidationType = string | number | boolean | 'textArea';
 type TypeToLiteral<T extends ValidationType> = T extends string
@@ -56,6 +62,7 @@ interface ListField<
     // TODO: Make this more strict
     optionsKey: keyof OPTIONS_MAPPING;
     keyFieldName?: string;
+    hiddenLabel?: boolean;
     children: TemplateSchema<
         VALUE,
         OPTIONS_MAPPING
@@ -75,6 +82,7 @@ interface ObjectField<VALUE, OPTIONS_MAPPING extends TemplateFieldOptionsMapping
 export interface TemplateOptionItem<T extends ValidationType> {
     key: T;
     label: string;
+    description?: string;
 }
 
 export interface TemplateFieldOptionsMapping {
@@ -98,12 +106,14 @@ export type TemplateSchema<
             | SelectField<ExtractValidation<VALUE>, OPTIONS_MAPPING>)
     );
 
+// NOTE: Not adding richtext support on heading
 interface HeadingTemplateField {
     type: 'heading';
     name: string | number | boolean;
     label: string;
     outlineLevel: number;
     description?: string;
+    context: { field: string, key: string }[],
 }
 
 type ObjectKey = string | number | symbol;
@@ -111,10 +121,11 @@ type ObjectKey = string | number | symbol;
 type InputTemplateField = {
     type: 'input';
     name: string | number | boolean;
-    label: string;
+    label: string | CellRichTextValue;
     outlineLevel: number;
-    description?: string;
+    description?: string | CellRichTextValue;
     headingBefore?: string;
+    context: { field: string, key: string }[],
 } & ({
     dataValidation: 'list';
     optionsKey: ObjectKey;
@@ -136,7 +147,30 @@ export function getCombinedKey(
 
 export type TemplateField = HeadingTemplateField | InputTemplateField;
 
-// TODO: add test
+function createInsPlugin(
+    optionsMap: TemplateFieldOptionsMapping,
+    context: { field: string, key: string }[],
+): ParsePlugin {
+    return {
+        tag: 'ins',
+        transformer: (token, richText) => {
+            const [optionField, valueField] = token.split('.');
+            const currOptions = context?.find((item) => item.field === optionField);
+            const selectedOption = currOptions
+                ? optionsMap?.[optionField]?.find(
+                    (option) => String(option.key) === currOptions?.key,
+                )
+                : undefined;
+
+            return {
+                ...richText,
+                // FIXME: Need to add mechanism to identify if we have error for mapping
+                text: selectedOption?.[valueField as 'description'] ?? '',
+            };
+        },
+    };
+}
+
 export function createImportTemplate<
     TEMPLATE_SCHEMA,
     OPTIONS_MAPPING extends TemplateFieldOptionsMapping
@@ -145,6 +179,7 @@ export function createImportTemplate<
     optionsMap: OPTIONS_MAPPING,
     fieldName: string | undefined = undefined,
     outlineLevel = -1,
+    context: { field: string, key: string }[] = [],
 ): TemplateField[] {
     if (schema.type === 'object') {
         return [
@@ -158,6 +193,7 @@ export function createImportTemplate<
                         optionsMap,
                         getCombinedKey(key, fieldName),
                         outlineLevel + 1,
+                        context,
                     );
 
                     return newFields;
@@ -177,22 +213,26 @@ export function createImportTemplate<
     if (isDefined(schema.headingBefore)) {
         fields.push({
             type: 'heading',
-            name: getCombinedKey('headingBefore', fieldName),
+            name: getCombinedKey('heading_before', fieldName),
             label: schema.headingBefore,
             outlineLevel,
+            context,
         } satisfies HeadingTemplateField);
     }
+
+    const insPlugin = createInsPlugin(optionsMap, context);
 
     if (schema.type === 'input') {
         const field = {
             type: 'input',
             name: fieldName,
-            label: schema.label,
-            description: schema.description,
+            label: parsePseudoHtml(schema.label, [insPlugin]),
+            description: parsePseudoHtml(schema.description, [insPlugin]),
             dataValidation: (schema.validation === 'number' || schema.validation === 'date' || schema.validation === 'integer' || schema.validation === 'textArea')
                 ? schema.validation
                 : undefined,
             outlineLevel,
+            context,
         } satisfies InputTemplateField;
 
         fields.push(field);
@@ -203,11 +243,12 @@ export function createImportTemplate<
         const field = {
             type: 'input',
             name: fieldName,
-            label: schema.label,
-            description: schema.description,
+            label: parsePseudoHtml(schema.label, [insPlugin]),
+            description: parsePseudoHtml(schema.description, [insPlugin]),
             outlineLevel,
             dataValidation: 'list',
             optionsKey: schema.optionsKey,
+            context,
         } satisfies InputTemplateField;
 
         fields.push(field);
@@ -220,28 +261,29 @@ export function createImportTemplate<
         label: schema.label,
         description: schema.description,
         outlineLevel,
+        context,
     } satisfies HeadingTemplateField;
 
-    // fields.push(headingField);
     const options = optionsMap[schema.optionsKey];
 
     const optionFields = options.flatMap((option) => {
         const subHeadingField = {
             type: 'heading',
-            // name: option.key,
             name: getCombinedKey(option.key, fieldName),
             label: option.label,
             outlineLevel: outlineLevel + 1,
-            // description: schema.description,
+            context,
         } satisfies HeadingTemplateField;
 
+        const combinedKey = getCombinedKey(option.key, fieldName);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const newFields = createImportTemplate<any, OPTIONS_MAPPING>(
             schema.children,
             optionsMap,
             // undefined,
-            getCombinedKey(option.key, fieldName),
+            combinedKey,
             outlineLevel + 1,
+            [...context, { field: String(schema.optionsKey), key: String(option.key) }],
         );
 
         return [
@@ -252,16 +294,15 @@ export function createImportTemplate<
 
     return [
         ...fields,
-        headingField,
+        !schema.hiddenLabel ? headingField : undefined,
         ...optionFields,
-    ];
+    ].filter(isDefined);
 }
 
 function addClientId(item: object): object {
     return { ...item, clientId: randomString() };
 }
 
-// TODO: add test
 export function getValueFromImportTemplate<
     TEMPLATE_SCHEMA,
     OPTIONS_MAPPING extends TemplateFieldOptionsMapping,
@@ -348,6 +389,7 @@ export function getValueFromImportTemplate<
     return listValue;
 }
 
+/*
 type TemplateName = 'dref-application' | 'dref-operational-update' | 'dref-final-report';
 
 export interface ImportTemplateDescription<FormFields> {
@@ -359,7 +401,6 @@ export interface ImportTemplateDescription<FormFields> {
     fieldNameToTabNameMap: Record<string, string>,
 }
 
-/*
 function isValidTemplate(templateName: unknown): templateName is TemplateName {
     const templateNameMap: Record<TemplateName, boolean> = {
         'dref-application': true,
