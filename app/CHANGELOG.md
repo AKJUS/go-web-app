@@ -1,5 +1,17 @@
 # go-web-app
 
+## 7.6.2
+
+### Patch Changes
+
+- 4fa6a36: Updated PER terminology and add PER logo in PER PDF export
+- 813e93f: Add link to GO UI storybook in resources page
+- 20dfeb3: Update DREF import template
+  - Update guidance
+  - Improve template stylings
+  - Update message in error popup when import fails
+- 8a18ad8: Add beta tag, URL redirect, and link to old dashboard on Ops Learning
+
 ## 7.6.1
 
 ### Patch Changes
