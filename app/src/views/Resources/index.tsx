@@ -111,6 +111,13 @@ export function Component() {
                     >
                         {strings.ifrcStrategicDirection}
                     </Link>
+                    <Link
+                        href="https://66557be6b68dacbf0a96db23-zctxglhsnk.chromatic.com/"
+                        external
+                        withLinkIcon
+                    >
+                        {strings.goUIStorybook}
+                    </Link>
                 </Container>
                 <div />
             </Container>

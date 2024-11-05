@@ -30,6 +30,11 @@
             height: 6rem;
         }
 
+        .per-logo {
+            width: 5rem;
+            height: 5rem;
+        }
+
         .country-name {
             display: flex;
             text-align: center;

@@ -10,6 +10,7 @@ import {
     DismissableListOutput,
     DismissableMultiListOutput,
     DismissableTextOutput,
+    Header,
     List,
     Tab,
     TabList,
@@ -21,6 +22,7 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     hasSomeDefinedValue,
     numericIdSelector,
+    resolveToComponent,
     resolveToString,
     stringNameSelector,
     stringValueSelector,
@@ -36,6 +38,7 @@ import Papa from 'papaparse';
 
 import ExportButton from '#components/domain/ExportButton';
 import { type RegionOption } from '#components/domain/RegionSelectInput';
+import Link from '#components/Link';
 import Page from '#components/Page';
 import { type components } from '#generated/types';
 import useCountry, { Country } from '#hooks/domain/useCountry';
@@ -61,7 +64,7 @@ import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 type SummaryStatusEnum = components<'read'>['schemas']['OpsLearningSummaryStatusEnum'];
-
+const opsLearningDashboardURL = 'https://app.powerbi.com/view?r=eyJrIjoiMTM4Y2ZhZGEtNGZmMS00ODZhLWFjZjQtMTE2ZTIyYTI0ODc4IiwidCI6ImEyYjUzYmU1LTczNGUtNGU2Yy1hYjBkLWQxODRmNjBmZDkxNyIsImMiOjh9&pageName=ReportSectionfa0be9512521e929ae4a';
 const SUMMARY_STATUS_PENDING = 1 satisfies SummaryStatusEnum;
 const SUMMARY_STATUS_STARTED = 2 satisfies SummaryStatusEnum;
 const SUMMARY_STATUS_SUCCESS = 3 satisfies SummaryStatusEnum;
@@ -279,9 +282,39 @@ export function Component() {
 
     return (
         <Page
-            heading={strings.operationalLearningHeading}
+            className={styles.operationalLearning}
+            heading={(
+                <Header
+                    headingLevel={1}
+                    heading={strings.operationalLearningHeading}
+                    actionsContainerClassName={styles.betaTag}
+                    actions={(
+                        <Chip
+                            className={styles.chip}
+                            name="betaTag"
+                            label={strings.beta}
+                            variant="tertiary"
+                        />
+                    )}
+                />
+            )}
             description={strings.operationalLearningHeadingDescription}
             mainSectionClassName={styles.mainSection}
+            infoContainerClassName={styles.disclaimer}
+            info={resolveToComponent(
+                strings.disclaimerMessage,
+                {
+                    link: (
+                        <Link
+                            href={opsLearningDashboardURL}
+                            external
+                            variant="tertiary"
+                        >
+                            {strings.here}
+                        </Link>
+                    ),
+                },
+            )}
         >
             <Container
                 footerClassName={styles.footer}
