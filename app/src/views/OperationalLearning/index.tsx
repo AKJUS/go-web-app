@@ -12,17 +12,13 @@ import {
     DismissableTextOutput,
     Header,
     List,
-    Modal,
     Tab,
     TabList,
     TabPanel,
     Tabs,
     TextOutput,
 } from '@ifrc-go/ui';
-import {
-    useBooleanState,
-    useTranslation,
-} from '@ifrc-go/ui/hooks';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     hasSomeDefinedValue,
     numericIdSelector,
@@ -42,6 +38,7 @@ import Papa from 'papaparse';
 
 import ExportButton from '#components/domain/ExportButton';
 import { type RegionOption } from '#components/domain/RegionSelectInput';
+import Link from '#components/Link';
 import Page from '#components/Page';
 import { type components } from '#generated/types';
 import useCountry, { Country } from '#hooks/domain/useCountry';
@@ -61,14 +58,13 @@ import {
 
 import Filters, { type FilterValue } from './Filters';
 import KeyInsights from './KeyInsights';
-import PreparednessOperationalLearning from './PreparednessOperationalLearning';
 import Summary, { type Props as SummaryProps } from './Summary';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 type SummaryStatusEnum = components<'read'>['schemas']['OpsLearningSummaryStatusEnum'];
-
+const opsLearningDashboardURL = 'https://app.powerbi.com/view?r=eyJrIjoiMTM4Y2ZhZGEtNGZmMS00ODZhLWFjZjQtMTE2ZTIyYTI0ODc4IiwidCI6ImEyYjUzYmU1LTczNGUtNGU2Yy1hYjBkLWQxODRmNjBmZDkxNyIsImMiOjh9&pageName=ReportSectionfa0be9512521e929ae4a';
 const SUMMARY_STATUS_PENDING = 1 satisfies SummaryStatusEnum;
 const SUMMARY_STATUS_STARTED = 2 satisfies SummaryStatusEnum;
 const SUMMARY_STATUS_SUCCESS = 3 satisfies SummaryStatusEnum;
@@ -106,14 +102,6 @@ export function Component() {
     const [activeTab, setActiveTab] = useState<'sector' | 'component'>('sector');
     const [query, setQuery] = useState<QueryType>();
     const [filterPristine, setFilterPristine] = useState(true);
-
-    const [
-        showOldOpsLearningModal,
-        {
-            setTrue: setShowOldOpsLearningModalTrue,
-            setFalse: setShowOldOpsLearningModalFalse,
-        },
-    ] = useBooleanState(false);
 
     const {
         rawFilter,
@@ -316,15 +304,14 @@ export function Component() {
             info={resolveToComponent(
                 strings.disclaimerMessage,
                 {
-                    button: (
-                        <Button
-                            className={styles.button}
-                            name={undefined}
-                            onClick={setShowOldOpsLearningModalTrue}
+                    link: (
+                        <Link
+                            href={opsLearningDashboardURL}
+                            external
                             variant="tertiary"
                         >
                             {strings.here}
-                        </Button>
+                        </Link>
                     ),
                 },
             )}
@@ -532,15 +519,6 @@ export function Component() {
                     </Container>
                 </Tabs>
             </Container>
-            {showOldOpsLearningModal && (
-                <Modal
-                    heading={strings.operationalLearningHeading}
-                    onClose={setShowOldOpsLearningModalFalse}
-                    size="full"
-                >
-                    <PreparednessOperationalLearning />
-                </Modal>
-            )}
         </Page>
     );
 }

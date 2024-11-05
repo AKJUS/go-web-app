@@ -18,7 +18,7 @@
         "extractCount": "{count} extract",
         "extractsCount": "{count} extracts",
         "failedToCreateExport": "Failed to generate export.",
-        "disclaimerMessage": "This is an updated implementation of the Operational Learning project started by the DREF and PER teams at IFRC. The previous dashboard can be found {button}.",
+        "disclaimerMessage": "This is an updated implementation of the Operational Learning project started by the DREF and PER teams at IFRC. The previous dashboard can be found {link}.",
         "here": "here",
         "beta": "beta"
     }
