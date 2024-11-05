@@ -3,7 +3,7 @@
     "strings": {
         "eventStartOnLabel": "Started on",
         "eventMoreDetailsLink": "More Details",
-        "eventSourceLabel": "Source",
+        "eventSourceLabel": "Forecast provider",
         "eventDeathLabel": "Estimated deaths",
         "eventDisplacedLabel": "Estimated number of people displaced",
         "eventPopulationLabel": "Population exposed",
