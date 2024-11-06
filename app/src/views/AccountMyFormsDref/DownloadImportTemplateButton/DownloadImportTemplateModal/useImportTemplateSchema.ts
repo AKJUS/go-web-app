@@ -608,7 +608,7 @@ function useImportTemplateSchema() {
                 type: 'input',
                 validation: 'number',
                 label: 'Estimated number of <b>People on the move</b> (if any)',
-                description: '<i>Percentage, e.g. XX%.</i>',
+                description: '<i>Number, e.g. XX,XXX.</i>',
             },
 
             risk_security: {
@@ -671,6 +671,7 @@ function useImportTemplateSchema() {
                 type: 'input',
                 validation: 'number',
                 label: '<b>Requested Amount in CHF</b>',
+                description: 'General funding requested to fund the interventions.',
             },
 
             planned_interventions: {

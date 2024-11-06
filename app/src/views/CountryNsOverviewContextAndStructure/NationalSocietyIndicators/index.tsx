@@ -41,6 +41,10 @@ interface YearPopupProps {
 function YearPopup(props: YearPopupProps) {
     const { year } = props;
 
+    if (isNotDefined(year)) {
+        return null;
+    }
+
     return (
         <InfoPopup
             description={(
@@ -131,13 +135,6 @@ function NationalSocietyIndicators(props: Props) {
         fdrs_volunteer_total,
         founded_date,
     } = databankResponse;
-
-    const youthValue = sumSafe([
-        fdrs_volunteer_age_6_12,
-        fdrs_volunteer_age_13_17,
-        fdrs_volunteer_age_18_29,
-        fdrs_staff_age_18_29,
-    ]);
 
     const volunteerDisaggregation = [
         {
@@ -239,6 +236,16 @@ function NationalSocietyIndicators(props: Props) {
     const totalStaffDisaggregation = sumSafe([totalMaleStaff, totalFemaleStaff]);
     const maxStaffInDisaggregation = maxSafe([maxMaleStaff, maxFemaleStaff]);
 
+    let youthValue = sumSafe([
+        fdrs_volunteer_age_6_12,
+        fdrs_volunteer_age_13_17,
+        fdrs_volunteer_age_18_29,
+        fdrs_staff_age_18_29,
+    ]);
+    if (isDefined(totalVolunteerDisaggregation) || isDefined(totalStaffDisaggregation)) {
+        youthValue = youthValue ?? 0;
+    }
+
     return (
         <Container
             className={styles.nationalSocietyIndicators}
@@ -287,14 +294,15 @@ function NationalSocietyIndicators(props: Props) {
                 label={strings.nationalSocietyTrainedInFirstAidLabel}
                 value={fdrs_trained_in_first_aid}
                 valueType="number"
-                description={<YearPopup year={fdrs_trained_in_first_aid_data_year} />}
+                description={(isDefined(fdrs_trained_in_first_aid)
+                    && <YearPopup year={fdrs_trained_in_first_aid_data_year} />)}
                 strongValue
             />
             <TextOutput
                 label={strings.nationalSocietyIncomeLabel}
                 value={fdrs_income}
                 valueType="number"
-                description={<YearPopup year={fdrs_income_data_year} />}
+                description={isDefined(fdrs_income) && <YearPopup year={fdrs_income_data_year} />}
                 strongValue
             />
             <TextOutput
@@ -303,17 +311,20 @@ function NationalSocietyIndicators(props: Props) {
                 valueType="number"
                 strongValue
                 descriptionClassName={styles.infoContainer}
-                description={(
+                description={isDefined(fdrs_volunteer_total) && (
                     <>
                         <YearPopup year={fdrs_income_data_year} />
-                        <Button
-                            name={undefined}
-                            onClick={setShowVolunteerDisaggregationTrue}
-                            variant="tertiary"
-                            title="Show disaggregation"
-                        >
-                            <HumanResourcesIcon className={styles.disaggregationIcon} />
-                        </Button>
+                        {isDefined(totalVolunteerDisaggregation) && (
+                            <Button
+                                name={undefined}
+                                onClick={setShowVolunteerDisaggregationTrue}
+                                variant="tertiary"
+                                // FIXME: use strings
+                                title="Show disaggregation"
+                            >
+                                <HumanResourcesIcon className={styles.disaggregationIcon} />
+                            </Button>
+                        )}
                     </>
                 )}
             />
@@ -321,20 +332,22 @@ function NationalSocietyIndicators(props: Props) {
                 label={strings.nationalSocietyYouthLabel}
                 value={youthValue}
                 valueType="number"
-                description={<YearPopup year={fdrs_volunteer_data_year} />}
+                description={isDefined(youthValue) && <YearPopup year={fdrs_volunteer_data_year} />}
                 strongValue
             />
             <TextOutput
                 label={strings.nationalSocietyExpendituresLabel}
                 value={fdrs_expenditures}
-                description={<YearPopup year={fdrs_expenditures_data_year} />}
+                description={(isDefined(fdrs_expenditures)
+                    && <YearPopup year={fdrs_expenditures_data_year} />)}
                 valueType="number"
                 strongValue
             />
             <TextOutput
                 label={strings.nationalSocietyBranchesLabel}
                 value={fdrs_branches}
-                description={<YearPopup year={fdrs_branches_data_year} />}
+                description={(isDefined(fdrs_branches)
+                    && <YearPopup year={fdrs_branches_data_year} />)}
                 valueType="number"
                 strongValue
             />
@@ -344,17 +357,20 @@ function NationalSocietyIndicators(props: Props) {
                 valueType="number"
                 strongValue
                 descriptionClassName={styles.infoContainer}
-                description={(
+                description={isDefined(fdrs_staff_total) && (
                     <>
                         <YearPopup year={fdrs_staff_data_year} />
-                        <Button
-                            name={undefined}
-                            onClick={setShowStaffDisaggregationTrue}
-                            variant="tertiary"
-                            title="Show disaggregation"
-                        >
-                            <HumanResourcesIcon className={styles.disaggregationIcon} />
-                        </Button>
+                        {isDefined(totalStaffDisaggregation) && (
+                            <Button
+                                name={undefined}
+                                onClick={setShowStaffDisaggregationTrue}
+                                variant="tertiary"
+                                // FIXME: use strings
+                                title="Show disaggregation"
+                            >
+                                <HumanResourcesIcon className={styles.disaggregationIcon} />
+                            </Button>
+                        )}
                     </>
                 )}
             />
@@ -421,6 +437,7 @@ function NationalSocietyIndicators(props: Props) {
                                             className={styles.maleDisaggregation}
                                             value={volunteer.male}
                                             totalValue={maxVolunteerInDisaggregation}
+                                            color="var(--go-ui-color-primary-blue)"
                                         >
                                             <Tooltip
                                                 title={strings.volunteerTooltipMaleLabel}
@@ -453,6 +470,7 @@ function NationalSocietyIndicators(props: Props) {
                                             className={styles.femaleDisaggregation}
                                             value={volunteer.female}
                                             totalValue={maxVolunteerInDisaggregation}
+                                            color="var(--go-ui-color-primary-red)"
                                         >
                                             <Tooltip
                                                 title={strings.volunteerTooltipFemaleLabel}
@@ -547,7 +565,7 @@ function NationalSocietyIndicators(props: Props) {
                                         <NumberOutput
                                             className={styles.malePercentage}
                                             value={getPercentage(
-                                                staff.male,
+                                                staff.male ?? 0,
                                                 totalStaffDisaggregation,
                                             )}
                                             suffix="%"
@@ -616,7 +634,7 @@ function NationalSocietyIndicators(props: Props) {
                                         <NumberOutput
                                             className={styles.femalePercentage}
                                             value={getPercentage(
-                                                staff.female,
+                                                staff.female ?? 0,
                                                 totalStaffDisaggregation,
                                             )}
                                             suffix="%"
