@@ -1,5 +1,19 @@
 # go-web-app
 
+## 7.6.3
+
+### Patch Changes
+
+- 7bbf3d2: Update key insights disclaimer text in Ops. Learning
+- 0e40681: Update FDRS data in Country / Context and Structure / NS indicators
+
+  - Add separate icon for each field for data year
+  - Use separate icon for disaggregation
+  - Update descriptions on dref import template (more details on _Missing / to be implemented_ section in https://github.com/IFRCGo/go-web-app/pull/1434#issuecomment-2459034932)
+
+- Updated dependencies [801ec3c]
+  - @ifrc-go/ui@1.2.1
+
 ## 7.6.2
 
 ### Patch Changes

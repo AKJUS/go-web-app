@@ -1,5 +1,11 @@
 # @ifrc-go/ui
 
+## 1.2.1
+
+### Patch Changes
+
+- 801ec3c: Add _primary red_ as fallback color for ProgressBar
+
 ## 1.2.0
 
 ### Minor Changes
@@ -22,7 +28,8 @@
 ## 1.1.6
 
 ### Patch Changes
-  Updated @ifrc-go/icons to v2.0.1
+
+Updated @ifrc-go/icons to v2.0.1
 
 ## 1.1.5
 
