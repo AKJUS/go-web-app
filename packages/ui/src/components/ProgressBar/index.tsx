@@ -27,7 +27,7 @@ function ProgressBar(props: Props) {
         value: valueUnsafe,
         showPercentageInTitle,
         children,
-        color,
+        color = 'var(--go-ui-color-primary-red)',
     } = props;
 
     const value = isDefined(valueUnsafe)
