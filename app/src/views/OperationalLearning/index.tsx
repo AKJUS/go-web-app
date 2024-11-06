@@ -3,6 +3,7 @@ import {
     useMemo,
     useState,
 } from 'react';
+import { InfoIcon } from '@ifrc-go/icons';
 import {
     Button,
     Chip,
@@ -62,7 +63,6 @@ import Summary, { type Props as SummaryProps } from './Summary';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
-import { InfoIcon } from '@ifrc-go/icons';
 
 type SummaryStatusEnum = components<'read'>['schemas']['OpsLearningSummaryStatusEnum'];
 const opsLearningDashboardURL = 'https://app.powerbi.com/view?r=eyJrIjoiMTM4Y2ZhZGEtNGZmMS00ODZhLWFjZjQtMTE2ZTIyYTI0ODc4IiwidCI6ImEyYjUzYmU1LTczNGUtNGU2Yy1hYjBkLWQxODRmNjBmZDkxNyIsImMiOjh9&pageName=ReportSectionfa0be9512521e929ae4a';

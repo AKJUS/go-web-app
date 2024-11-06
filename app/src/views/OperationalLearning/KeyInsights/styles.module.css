@@ -6,17 +6,24 @@
     }
 
     .disclaimer-text {
-        max-width: var(--go-ui-width-content-max);
+        grid-column: 1 / -1;
         text-transform: uppercase;
         color: var(--go-ui-color-text-light);
+
+        .methodology-link {
+            text-transform: uppercase;
+        }
     }
 
-    .methodology-link {
-        text-transform: uppercase;
-    }
+    .report-issue-link-container {
+        display: flex;
+        justify-content: flex-end;
+        grid-column: 1 / -1;
 
-    .report-issue-link {
-        color: var(--go-ui-color-negative);
+        .report-issue-link {
+            flex-shrink: 0;
+            color: var(--go-ui-color-negative);
+        }
     }
 
     .actions {
