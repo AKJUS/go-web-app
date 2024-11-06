@@ -69,8 +69,8 @@ export function Component() {
                     strongLabel
                 />
                 <TextOutput
-                    value={strings.communityBasedSpecificationsVolumeValue}
-                    label={strings.communityBasedSpecificationsVolumeLabel}
+                    value={strings.communityBasedSpecificationsVolumeLabel}
+                    label={strings.communityBasedSpecificationsVolumeValue}
                     strongLabel
                 />
                 <TextOutput
