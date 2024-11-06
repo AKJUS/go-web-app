@@ -54,3 +54,4 @@ COPY --from=nginx-build /code/build /code/build
 
 ENV SOURCE_DIRECTORY=/code/build/
 ENV DESTINATION_DIRECTORY=/usr/share/nginx/html/
+ENV OVERWRITE_DESTINATION=true
