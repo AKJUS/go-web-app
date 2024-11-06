@@ -1,5 +1,4 @@
 .operational-learning {
-
     .beta-tag {
         font-size: var(--go-ui-font-size-sm);
     }
@@ -58,14 +57,20 @@
         }
     }
 
-    .disclaimer {
-        display: inline;
-        padding-top: var(--go-ui-spacing-lg);
-        font-style: italic;
+    .old-dashboard-info {
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+        color: var(--go-ui-color-text-light);
+        gap: var(--go-ui-spacing-xs);
 
-        .button {
+        .icon {
+            flex-shrink: 0;
+            font-size: var(--go-ui-height-icon-multiplier);
+        }
+
+        .info-text {
             display: inline;
-            font-style: italic;
         }
     }
 }

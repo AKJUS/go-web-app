@@ -3,6 +3,7 @@ import {
     useMemo,
     useState,
 } from 'react';
+import { InfoIcon } from '@ifrc-go/icons';
 import {
     Button,
     Chip,
@@ -300,20 +301,28 @@ export function Component() {
             )}
             description={strings.operationalLearningHeadingDescription}
             mainSectionClassName={styles.mainSection}
-            infoContainerClassName={styles.disclaimer}
-            info={resolveToComponent(
-                strings.disclaimerMessage,
-                {
-                    link: (
-                        <Link
-                            href={opsLearningDashboardURL}
-                            external
-                            variant="tertiary"
-                        >
-                            {strings.here}
-                        </Link>
-                    ),
-                },
+            infoContainerClassName={styles.oldDashboardInfo}
+            info={(
+                <>
+                    <InfoIcon className={styles.icon} />
+                    <div className={styles.infoText}>
+                        {resolveToComponent(
+                            strings.disclaimerMessage,
+                            {
+                                link: (
+                                    <Link
+                                        href={opsLearningDashboardURL}
+                                        external
+                                        variant="tertiary"
+                                        withLinkIcon
+                                    >
+                                        {strings.here}
+                                    </Link>
+                                ),
+                            },
+                        )}
+                    </div>
+                </>
             )}
         >
             <Container
@@ -486,9 +495,7 @@ export function Component() {
                             />
                         )}
                     >
-                        <TabPanel
-                            name="sector"
-                        >
+                        <TabPanel name="sector">
                             <List
                                 className={styles.summaryList}
                                 data={opsLearningSummaryResponse?.sectors}
@@ -501,9 +508,7 @@ export function Component() {
                                 filtered={false}
                             />
                         </TabPanel>
-                        <TabPanel
-                            name="component"
-                        >
+                        <TabPanel name="component">
                             <List
                                 className={styles.summaryList}
                                 data={opsLearningSummaryResponse?.components}
