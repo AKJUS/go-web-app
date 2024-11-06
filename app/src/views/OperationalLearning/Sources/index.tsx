@@ -3,8 +3,8 @@ import { CopyLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     Container,
-    List,
     Pager,
+    RawList,
 } from '@ifrc-go/ui';
 import {
     useBooleanState,
@@ -23,7 +23,6 @@ import AllExtractsModal from './AllExtractsModal';
 import Emergency from './Emergency';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 // FIXME: move this to utils
 // NOTE: this may be slower on the long run
@@ -35,17 +34,19 @@ export function isChildNull(children: any) {
 type AppealDocumentResponse = GoApiResponse<'/api/v2/appeal_document/'>;
 type AppealDocument = NonNullable<AppealDocumentResponse['results']>[number];
 
-type Props = {
+const PAGE_SIZE = 10;
+
+interface Props {
+    className?: string;
     summaryType: 'sector' | 'component' | 'insight';
     summaryId: number;
 }
-
-const PAGE_SIZE = 10;
 
 function Sources(props: Props) {
     const {
         summaryId,
         summaryType,
+        className,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -99,30 +100,31 @@ function Sources(props: Props) {
 
     return (
         <Container
-            className={styles.sources}
+            className={className}
             footerContent={isChildNull(pager) ? undefined : pager}
-            childrenContainerClassName={styles.content}
+            contentViewType="vertical"
+            footerIcons={(
+                <Button
+                    name="viewAll"
+                    variant="secondary"
+                    icons={<CopyLineIcon />}
+                    onClick={setShowExtractsModalTrue}
+                >
+                    {strings.viewAllExtracts}
+                </Button>
+            )}
+            emptyMessage={strings.noSources}
+            errored={isDefined(appealDocumentError)}
+            pending={appealDocumentPending}
+            filtered={false}
+            compactMessage
         >
-            <List
-                className={styles.appealList}
+            <RawList
                 data={appealDocumentResponse?.results}
                 renderer={Emergency}
                 keySelector={numericIdSelector}
                 rendererParams={appealRendererParams}
-                emptyMessage={strings.noSources}
-                errored={isDefined(appealDocumentError)}
-                pending={appealDocumentPending}
-                filtered={false}
-                compact
             />
-            <Button
-                name="viewAll"
-                variant="secondary"
-                icons={<CopyLineIcon />}
-                onClick={setShowExtractsModalTrue}
-            >
-                {strings.viewAllExtracts}
-            </Button>
             {showExtractsModal && (
                 <AllExtractsModal
                     summaryType={summaryType}

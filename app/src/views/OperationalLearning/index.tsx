@@ -62,6 +62,7 @@ import Summary, { type Props as SummaryProps } from './Summary';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
+import { InfoIcon } from '@ifrc-go/icons';
 
 type SummaryStatusEnum = components<'read'>['schemas']['OpsLearningSummaryStatusEnum'];
 const opsLearningDashboardURL = 'https://app.powerbi.com/view?r=eyJrIjoiMTM4Y2ZhZGEtNGZmMS00ODZhLWFjZjQtMTE2ZTIyYTI0ODc4IiwidCI6ImEyYjUzYmU1LTczNGUtNGU2Yy1hYjBkLWQxODRmNjBmZDkxNyIsImMiOjh9&pageName=ReportSectionfa0be9512521e929ae4a';
@@ -300,20 +301,28 @@ export function Component() {
             )}
             description={strings.operationalLearningHeadingDescription}
             mainSectionClassName={styles.mainSection}
-            infoContainerClassName={styles.disclaimer}
-            info={resolveToComponent(
-                strings.disclaimerMessage,
-                {
-                    link: (
-                        <Link
-                            href={opsLearningDashboardURL}
-                            external
-                            variant="tertiary"
-                        >
-                            {strings.here}
-                        </Link>
-                    ),
-                },
+            infoContainerClassName={styles.oldDashboardInfo}
+            info={(
+                <>
+                    <InfoIcon className={styles.icon} />
+                    <div className={styles.infoText}>
+                        {resolveToComponent(
+                            strings.disclaimerMessage,
+                            {
+                                link: (
+                                    <Link
+                                        href={opsLearningDashboardURL}
+                                        external
+                                        variant="tertiary"
+                                        withLinkIcon
+                                    >
+                                        {strings.here}
+                                    </Link>
+                                ),
+                            },
+                        )}
+                    </div>
+                </>
             )}
         >
             <Container
@@ -486,9 +495,7 @@ export function Component() {
                             />
                         )}
                     >
-                        <TabPanel
-                            name="sector"
-                        >
+                        <TabPanel name="sector">
                             <List
                                 className={styles.summaryList}
                                 data={opsLearningSummaryResponse?.sectors}
@@ -501,9 +508,7 @@ export function Component() {
                                 filtered={false}
                             />
                         </TabPanel>
-                        <TabPanel
-                            name="component"
-                        >
+                        <TabPanel name="component">
                             <List
                                 className={styles.summaryList}
                                 data={opsLearningSummaryResponse?.components}
