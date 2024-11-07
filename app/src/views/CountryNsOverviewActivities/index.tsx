@@ -92,6 +92,7 @@ function filterProjects(projectList: Project[], filters: Partial<Record<ProjectK
     ));
 }
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);

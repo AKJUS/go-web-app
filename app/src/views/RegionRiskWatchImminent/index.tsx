@@ -8,6 +8,7 @@ import { RegionOutletContext } from '#utils/outletContext';
 import styles from './styles.module.css';
 
 // TODO: Add historic data chart
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { regionResponse } = useOutletContext<RegionOutletContext>();

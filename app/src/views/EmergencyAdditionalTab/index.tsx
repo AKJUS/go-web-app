@@ -18,6 +18,7 @@ interface Props {
     infoPageId?: number;
 }
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component(props: Props) {
     const urlParams = useParams<{ tabId: string }>();

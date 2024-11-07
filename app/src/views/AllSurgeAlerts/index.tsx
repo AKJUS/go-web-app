@@ -67,6 +67,7 @@ function getMolnixKeywords(molnixTags: SurgeListItem['molnix_tags']) {
         .filter((tag) => !['Nosuitable', 'NotSurge', 'OpsChange'].includes(tag))
         .join(', ');
 }
+/** @knipignore */
 
 export function Component() {
     const strings = useTranslation(i18n);

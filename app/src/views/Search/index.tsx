@@ -58,6 +58,7 @@ function isListTypeResult(
 
 const feedbackLink = 'https://forms.office.com/e/wFQsu0V7Zb';
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const [activeView, setActiveView] = useState<SearchResponseKeys | undefined>();

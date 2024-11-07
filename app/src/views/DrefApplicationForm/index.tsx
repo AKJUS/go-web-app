@@ -119,6 +119,7 @@ function getNextStep(current: TabKeys, direction: 1 | -1, typeOfDref: TypeOfDref
     }
     return undefined;
 }
+/** @knipignore */
 
 export function Component() {
     const { drefId } = useParams<{ drefId: string }>();

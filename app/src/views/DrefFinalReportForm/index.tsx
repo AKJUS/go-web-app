@@ -92,6 +92,7 @@ function getNextStep(current: TabKeys, direction: 1 | -1) {
     }
     return undefined;
 }
+/** @knipignore */
 
 export function Component() {
     const { finalReportId } = useParams<{ finalReportId: string }>();

@@ -149,6 +149,7 @@ function getNextStep(
     return undefined;
 }
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { fieldReportId } = useParams<{ fieldReportId: string }>();
