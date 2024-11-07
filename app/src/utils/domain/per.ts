@@ -43,7 +43,7 @@ export function getFormattedComponentName(component: PerComponent): string {
     return `${prefix}: ${title}`;
 }
 
-export const PER_FALLBACK_COLOR = 'var(--go-ui-color-gray-40)';
+const PER_FALLBACK_COLOR = 'var(--go-ui-color-gray-40)';
 
 export type PerRatingValue = 0 | 1 | 2 | 3 | 4 | 5;
 const PER_RATING_VALUE_NOT_REVIEWED = 0 satisfies PerRatingValue;
@@ -93,11 +93,6 @@ export function getPerAreaColor(value: number | undefined) {
     }
     return PER_FALLBACK_COLOR;
 }
-export function perAreaColorSelector(item: {
-    value: number | undefined;
-}) {
-    return getPerAreaColor(item.value);
-}
 
 type PerBenchmarkId = 1 | 2 | 5;
 const PER_BENCHMARK_YES = 1 satisfies PerBenchmarkId;
@@ -110,7 +105,7 @@ const perBenchmarkColorMap: Record<PerBenchmarkId, string> = {
     [PER_BENCHMARK_PARTIALLY_EXISTS]: 'var(--go-ui-color-dark-blue-10)',
 };
 
-export function getPerBenchmarkColor(id: number | undefined) {
+function getPerBenchmarkColor(id: number | undefined) {
     return perBenchmarkColorMap[id as PerBenchmarkId] ?? PER_FALLBACK_COLOR;
 }
 export function perBenchmarkColorSelector(item: {

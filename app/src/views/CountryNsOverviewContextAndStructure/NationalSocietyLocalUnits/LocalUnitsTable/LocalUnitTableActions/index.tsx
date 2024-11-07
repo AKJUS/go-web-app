@@ -14,7 +14,6 @@ import {
 import DropdownMenuItem from '#components/DropdownMenuItem';
 import { environment } from '#config';
 import usePermissions from '#hooks/domain/usePermissions';
-import { type GoApiResponse } from '#utils/restRequest';
 
 import LocalUnitDeleteButton from '../../LocalUnitDeleteButton';
 import LocalUnitsFormModal from '../../LocalUnitsFormModal';
@@ -29,8 +28,6 @@ export interface Props {
     isValidated: boolean;
     onActionSuccess: () => void;
 }
-
-export type LocalUnitValidateResponsePostBody = GoApiResponse<'/api/v2/local-units/{id}/'>;
 
 function LocalUnitsTableActions(props: Props) {
     const {

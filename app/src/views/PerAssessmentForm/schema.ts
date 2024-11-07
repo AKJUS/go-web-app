@@ -9,7 +9,7 @@ import { type GoApiResponse } from '#utils/restRequest';
 
 type AssessmentRequestBody = GoApiResponse<'/api/v2/per-assessment/{id}/', 'PATCH'>;
 
-export type AssessmentFormFields = PurgeNull<AssessmentRequestBody>
+type AssessmentFormFields = PurgeNull<AssessmentRequestBody>
 
 type AreaResponse = NonNullable<AssessmentFormFields['area_responses']>[number];
 type ComponentResponse = NonNullable<AreaResponse['component_responses']>[number];

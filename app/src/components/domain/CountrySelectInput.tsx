@@ -9,8 +9,6 @@ import {
 
 import useCountry, { Country } from '#hooks/domain/useCountry';
 
-export type CountryOption = Country;
-
 type Props<NAME> = SelectInputProps<
     number,
     NAME,

@@ -25,11 +25,11 @@ import { resolveUrl } from '#utils/resolveUrl';
 
 type Maybe<T> = T | null | undefined;
 
-export interface UrlParams {
+interface UrlParams {
     [key: string]: Maybe<string | number | boolean | (string | number | boolean)[]>;
 }
 
-export function prepareUrlParams(params: UrlParams): string {
+function prepareUrlParams(params: UrlParams): string {
     const finalParams: UrlParams = {
         ...params,
         format: 'csv',
@@ -55,7 +55,7 @@ export function prepareUrlParams(params: UrlParams): string {
         .join('&');
 }
 
-export const prepareUrl = (url: string, apiType = 'go') => {
+const prepareUrl = (url: string, apiType = 'go') => {
     if (isFalsyString(url)) {
         return '';
     }

@@ -26,8 +26,8 @@ import i18n from './i18n.json';
 
 // FIXME: move this to utils
 // NOTE: this may be slower on the long run
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, react-refresh/only-export-components
-export function isChildNull(children: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isChildNull(children: any) {
     return !ReactDOMServer.renderToStaticMarkup(children);
 }
 

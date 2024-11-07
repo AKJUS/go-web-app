@@ -221,7 +221,7 @@ export function getPrioritizedIpcData(data: IpcData) {
     return uniqueData;
 }
 
-export function getAverageIpcData(uniqueData: IpcData) {
+function getAverageIpcData(uniqueData: IpcData) {
     const monthGroupedIpcData = listToGroupList(
         uniqueData,
         (datum) => datum.month,
@@ -444,19 +444,6 @@ export function hazardTypeKeySelector(option: HazardTypeOption) {
 export function hazardTypeLabelSelector(option: HazardTypeOption) {
     return option.hazard_type_display;
 }
-
-export const defaultApplicableHazards: Record<HazardType, boolean> = {
-    EQ: false,
-    FL: false,
-    TC: false,
-    EP: false,
-    FI: false,
-    SS: false,
-    DR: false,
-    TS: false,
-    CD: false,
-    WF: false,
-};
 
 export const applicableHazardsByRiskMetric: Record<RiskMetric, HazardType[]> = {
     exposure: ['TC', 'FL', 'FI'],

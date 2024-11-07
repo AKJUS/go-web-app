@@ -48,7 +48,7 @@ jobs:
       - name: Lint JS
         run: yarn lint:js
 
-      - name: build  UI library
+      - name: Build
         run: yarn build
 
       - uses: actions/upload-artifact@v4
@@ -60,6 +60,9 @@ jobs:
     name: Run tests
     environment: 'test'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     needs: [ui]
     steps:
       - uses: actions/checkout@v4
@@ -75,15 +78,16 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        working-directory: app
 
       - name: Run test
         run: yarn test
-        working-directory: app
 
   translation:
     name: Identify error with translation files
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     needs: [ui]
     steps:
       - uses: actions/checkout@v4
@@ -99,11 +103,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        working-directory: app
 
       - name: Identify error with translation files
         run: yarn lint:translation
-        working-directory: app
 
   unimported:
     name: Identify unused files
@@ -116,22 +118,22 @@ jobs:
           node-version: 20
           cache: 'yarn'
 
-      - uses: actions/download-artifact@v4
-        with:
-          name: ui-build
-          path: packages/ui/dist
+      - name: Install dependencies
+        run: yarn initialize:type
+        working-directory: app
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        working-directory: app
 
       - name: Identify unused files
         run: yarn lint:unused
-        working-directory: app
 
   lint:
     name: Lint JS
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     needs: [ui]
     steps:
       - uses: actions/checkout@v4
@@ -147,15 +149,16 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        working-directory: app
 
       - name: Lint JS
         run: yarn lint:js
-        working-directory: app
 
   lint-css:
     name: Lint CSS
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     needs: [ui]
     steps:
       - uses: actions/checkout@v4
@@ -171,11 +174,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        working-directory: app
 
       - name: Lint CSS
         run: yarn lint:css
-        working-directory: app
 
   # FIXME: Identify a way to generate schema before we run typecheck
   # typecheck:
@@ -196,8 +197,11 @@ jobs:
   build:
     name: Build GO Web App
     environment: 'test'
-    needs: [lint, lint-css, test, ui]
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    needs: [lint, lint-css, test, ui]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -212,11 +216,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        working-directory: app
 
       - name: Build
         run: yarn build
-        working-directory: app
 
   validate_helm:
     name: Validate Helm

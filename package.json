@@ -10,6 +10,7 @@
     "private": true,
     "scripts": {
         "postinstall": "patch-package",
+        "lint:unused": "knip --tags=-knipignore",
         "build:ui": "yarn workspace @ifrc-go/ui build",
         "build": "yarn build:ui && yarn workspace go-web-app build",
         "start:ui": "yarn workspace @ifrc-go/ui start",
@@ -21,6 +22,7 @@
         "chromatic": "yarn workspace go-ui-storybook chromatic"
     },
     "devDependencies": {
+        "knip": "^5.36.3",
         "patch-package": "^8.0.0",
         "postinstall-postinstall": "^2.1.0"
     },

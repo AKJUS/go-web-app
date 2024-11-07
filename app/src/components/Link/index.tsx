@@ -113,7 +113,7 @@ Omit<{
     spacing?: ButtonFeatureProps['spacing'];
 }, OMISSION>
 
-export type InternalLinkProps = {
+type InternalLinkProps = {
     external?: never;
     to: keyof WrappedRoutes | undefined | null;
     urlParams?: UrlParams;

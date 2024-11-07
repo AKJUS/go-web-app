@@ -20,7 +20,7 @@ export type NationalSociety = Omit<Country, 'society_name'> & {
     society_name: string;
 };
 
-export function isValidNationalSociety(country: PartialCountry): country is NationalSociety {
+function isValidNationalSociety(country: PartialCountry): country is NationalSociety {
     return (
         isValidCountry(country)
         && isTruthyString(country.society_name)

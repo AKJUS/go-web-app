@@ -9,7 +9,6 @@ import type {
     FillLayer,
     Layout,
     LineLayer,
-    SymbolLayer,
     SymbolLayout,
 } from 'mapbox-gl';
 
@@ -74,7 +73,7 @@ const severityColorStyle: Expression = [
 ];
 
 export const geojsonSourceOptions: mapboxgl.GeoJSONSourceRaw = { type: 'geojson' };
-export const hazardTypeColorPaint: CirclePaint['circle-color'] = [
+const hazardTypeColorPaint: CirclePaint['circle-color'] = [
     'match',
     ['get', 'hazard_type'],
     ...mapToList(hazardTypeToColorMap, (value, key) => [key, value]).flat(),
@@ -123,11 +122,6 @@ export const invisibleFillLayer: Omit<FillLayer, 'id'> = {
 
 export const invisibleLineLayer: Omit<LineLayer, 'id'> = {
     type: 'line',
-    layout: invisibleLayout,
-};
-
-export const invisibleSymbolLayer: Omit<SymbolLayer, 'id'> = {
-    type: 'symbol',
     layout: invisibleLayout,
 };
 

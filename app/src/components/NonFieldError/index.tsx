@@ -16,7 +16,7 @@ import {
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-export interface Props<T> {
+interface Props<T> {
     className?: string;
     error?: Error<T>;
     withFallbackError?: boolean;

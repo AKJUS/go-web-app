@@ -11,16 +11,12 @@ import {
     undefinedValue,
 } from '@togglecorp/toggle-form';
 
-import {
-    type GoApiBody,
-    type GoApiResponse,
-} from '#utils/restRequest';
+import { type GoApiBody } from '#utils/restRequest';
 
 type FormContext = RefObject<boolean>;
 
-export type PerOverviewResponse = GoApiResponse<'/api/v2/per-overview/{id}/'>;
 export type PerOverviewRequestBody = GoApiBody<'/api/v2/per-overview/{id}/', 'PATCH'>;
-export type PerOverviewFormFields = Omit<
+type PerOverviewFormFields = Omit<
     PerOverviewRequestBody,
     'id'
     | 'country_details'
