@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1-labs
+
 FROM node:18-bullseye AS runtime
 
 RUN apt-get update -y \
@@ -12,11 +14,8 @@ RUN git config --global --add safe.directory /code
 # ------------------------------------------------------------------------------------
 FROM runtime AS nginx-build
 
-# TODO: Add cache with packages.json
-# This is not working, will need @samshara help to configure this
-# COPY package.json yarn.lock /code/
-# COPY app/package.json /code/app/
-COPY . /code
+# NOTE: --parents is not yet available in stable syntax, using docker/dockerfile:1-labs
+COPY --parents package.json yarn.lock ./**/package.json /code/
 
 RUN yarn install --frozen-lockfile --network-concurrency 2
 
@@ -37,10 +36,9 @@ ENV APP_SENTRY_REPLAYS_SESSION_SAMPLE_RATE=${APP_SENTRY_REPLAYS_SESSION_SAMPLE_R
 ARG APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE=
 ENV APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE=${APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE}
 
+COPY . /code/
 
-RUN yarn build \
-    && cd app \
-    && yarn build
+RUN yarn build
 
 # ------------------------------------------------------------------------------------
 FROM nginx:1 AS nginx-serve
@@ -48,10 +46,11 @@ FROM nginx:1 AS nginx-serve
 LABEL maintainer="IFRC"
 LABEL org.opencontainers.image.source="https://github.com/IFRCGo/go-web-app"
 
-COPY ./nginx-serve/apply-helm-config.sh /docker-entrypoint.d/
+COPY ./nginx-serve/apply-config.sh /docker-entrypoint.d/
 COPY ./nginx-serve/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=nginx-build /code/build /code/build
 
-ENV SOURCE_DIRECTORY=/code/build/
-ENV DESTINATION_DIRECTORY=/usr/share/nginx/html/
-ENV OVERWRITE_DESTINATION=true
+# NOTE: Used by apply-config.sh
+ENV APPLY_CONFIG__SOURCE_DIRECTORY=/code/build/
+ENV APPLY_CONFIG__DESTINATION_DIRECTORY=/usr/share/nginx/html/
+ENV APPLY_CONFIG__OVERWRITE_DESTINATION=true

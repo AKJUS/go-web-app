@@ -3,6 +3,8 @@ import { defineConfig, Schema } from '@julr/vite-plugin-validate-env';
 export default defineConfig({
     APP_TITLE: Schema.string(),
     APP_ENVIRONMENT: (key, value) => {
+        // NOTE: APP_ENVIRONMENT_PLACEHOLDER is meant to be used with image builds
+        // The value will be later replaced with the actual value
         const regex = /^production|staging|testing|alpha-\d+|development|APP_ENVIRONMENT_PLACEHOLDER$/;
         const valid = !!value && (value.match(regex) !== null);
         if (!valid) {

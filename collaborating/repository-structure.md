@@ -47,3 +47,9 @@ The `packages/go-ui-storybook` directory contains the stories for the IFRC GO UI
 
 - **`src/stories/`**: Houses all the UI component stories.
 - **`.storybook/`**: Contains the configuration for Storybook.
+
+### `nginx-serve` Directory
+
+The `nginx-serve` directory contains nginx config and helm charts to run the web application.
+
+> NOTE: We need to add more information later.
