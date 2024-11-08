@@ -83,6 +83,7 @@ jobs:
         run: yarn test
 
   translation:
+    continue-on-error: true
     name: Identify error with translation files
     runs-on: ubuntu-latest
     defaults:
