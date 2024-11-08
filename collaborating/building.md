@@ -6,15 +6,15 @@ To build different components of the IFRC GO project, use the following commands
 
 **IFRC GO Web Application**
   ```bash
-  yarn build
+  pnpm build
   ```
 
 **IFRC GO UI Library**
   ```bash
-  yarn build:ui
+  pnpm build:ui
   ```
 
 **UI Library Storybook**
   ```bash
-  yarn build-storybook
+  pnpm build-storybook
   ```

@@ -2,7 +2,7 @@
     "$schema": "https://unpkg.com/knip@5/schema.json",
     // TODO: We need to also run knip in other workspaces
     "ignoreWorkspaces": [
-        // TODO: need to fix issue with yarn commands that categorized as
+        // TODO: need to fix issue with pnpm commands that categorized as
         // unlisted binaries on github workflows before un-ignoring
         // https://github.com/webpro-nl/knip/issues/433
         // https://github.com/webpro-nl/knip/issues/735
@@ -29,9 +29,7 @@
                 "eslint-plugin-react-refresh",
                 "eslint-plugin-simple-import-sort",
                 // We are using this with dotenv and cross-var so we are getting a false positive
-                "openapi-typescript",
-                // We need this for postinstall on yarn so we are getting a false positive
-                "postinstall-postinstall"
+                "openapi-typescript"
             ],
             "entry": [
                 "scripts/translatte/main.ts",

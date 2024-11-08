@@ -21,7 +21,7 @@
         "start": "vite build --watch",
         "lint:js": "eslint src",
         "lint:css": "stylelint \"./src/**/*.css\"",
-        "lint": "yarn lint:js && yarn lint:css"
+        "lint": "pnpm lint:js && pnpm lint:css"
     },
     "files": [
         "dist/*"

@@ -10,12 +10,12 @@ Configuration for ESLint can be found in the [eslint.config.js](../app/eslint.co
 
 To lint your code
 ```bash
-yarn lint:js
+pnpm lint:js
 ```
 
 To automatically fix fixable errors
 ```bash
-yarn lint:js --fix
+pnpm lint:js --fix
 ```
 
 ### Stylelint
@@ -24,19 +24,19 @@ Configuration for Stylelint is located in the [stylelint.config.cjs](../app/styl
 
 To lint your CSS files
 ```bash
-yarn lint:css
+pnpm lint:css
 ```
 
 To automatically fix fixable errors
 ```bash
-yarn lint:css --fix
+pnpm lint:css --fix
 ```
 
 ### Fixing Lint Errors
 
 To fix auto-fixable errors in both ESLint and Stylelint
 ```bash
-yarn lint:fix
+pnpm lint:fix
 ```
 
 ### Type Checking
@@ -46,16 +46,16 @@ yarn lint:fix
 
 To generate the TypeScript types for API endpoints
 ```bash
-yarn generate:type
+pnpm generate:type
 ```
 To verify and enforce TypeScript type constraints
 ```bash
-yarn typecheck
+pnpm typecheck
 ```
 
 ### Linting Translation Files
 
 To check for errors in translation files
 ```bash
-yarn lint:translation
+pnpm lint:translation
 ```
