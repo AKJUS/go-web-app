@@ -410,7 +410,6 @@ export function Component() {
                 spacing="comfortable"
             >
                 <NonFieldError error={componentResponseError} />
-                { }
                 {prioritizationResponse?.prioritized_action_responses?.map((componentResponse) => (
                     <PrioritizedActionInput
                         key={componentResponse.component}
