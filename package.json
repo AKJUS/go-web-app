@@ -11,24 +11,19 @@
     "scripts": {
         "postinstall": "patch-package",
         "lint:unused": "knip --tags=-knipignore",
-        "build:ui": "pnpm workspace @ifrc-go/ui build",
-        "build": "pnpm build:ui && pnpm workspace go-web-app build",
-        "start:ui": "pnpm workspace @ifrc-go/ui start",
-        "start:app": "pnpm build:ui && pnpm workspace go-web-app start",
-        "generate:type": "pnpm workspace go-web-app generate:type",
-        "preview": "pnpm workspace go-web-app preview",
-        "storybook": "pnpm workspace go-ui-storybook storybook",
-        "build-storybook": "pnpm workspace go-ui-storybook build-storybook",
-        "chromatic": "pnpm workspace go-ui-storybook chromatic"
+        "build:ui": "pnpm -F @ifrc-go/ui build",
+        "start:ui": "pnpm -F @ifrc-go/ui start",
+        "build": "pnpm build:ui && pnpm -F go-web-app build",
+        "start:app": "pnpm build:ui && pnpm -F go-web-app start",
+        "generate:type": "pnpm -F go-web-app generate:type",
+        "preview": "pnpm -F go-web-app preview",
+        "storybook": "pnpm -F go-ui-storybook storybook",
+        "build-storybook": "pnpm -F go-ui-storybook build-storybook",
+        "chromatic": "pnpm -F go-ui-storybook chromatic"
     },
     "devDependencies": {
         "knip": "^5.36.3",
         "patch-package": "^8.0.0"
     },
-    "workspaces": [
-        "app",
-        "packages/ui",
-        "packages/go-ui-storybook"
-    ],
     "packageManager": "pnpm@8.6.0+sha1.71f9126a20cd3d00fa47c188f956918858180e54"
 }

@@ -31,25 +31,27 @@ jobs:
         working-directory: packages/ui
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
-
-      - name: Install dependencies on UI library
-        run: yarn install --frozen-lockfile
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Typecheck
-        run: yarn typecheck
+        run: pnpm typecheck
 
       - name: Lint CSS
-        run: yarn lint:css
+        run: pnpm lint:css
 
       - name: Lint JS
-        run: yarn lint:js
+        run: pnpm lint:js
 
       - name: Build
-        run: yarn build
+        run: pnpm build
 
       - uses: actions/upload-artifact@v4
         with:
@@ -66,21 +68,23 @@ jobs:
     needs: [ui]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
 
       - uses: actions/download-artifact@v4
         with:
           name: ui-build
           path: packages/ui/dist
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Run test
-        run: yarn test
+        run: pnpm test
 
   translation:
     continue-on-error: true
@@ -92,21 +96,23 @@ jobs:
     needs: [ui]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
 
       - uses: actions/download-artifact@v4
         with:
           name: ui-build
           path: packages/ui/dist
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Identify error with translation files
-        run: yarn lint:translation
+        run: pnpm lint:translation
 
   unimported:
     name: Identify unused files
@@ -114,20 +120,22 @@ jobs:
     needs: [ui]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
-
+          cache: 'pnpm'
       - name: Install dependencies
-        run: yarn initialize:type
+        run: pnpm install
+
+      - name: Initialize types
+        run: pnpm initialize:type
         working-directory: app
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Identify unused files
-        run: yarn lint:unused
+        run: pnpm lint:unused
 
   lint:
     name: Lint JS
@@ -138,21 +146,23 @@ jobs:
     needs: [ui]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
 
       - uses: actions/download-artifact@v4
         with:
           name: ui-build
           path: packages/ui/dist
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Lint JS
-        run: yarn lint:js
+        run: pnpm lint:js
 
   lint-css:
     name: Lint CSS
@@ -163,21 +173,23 @@ jobs:
     needs: [ui]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
 
       - uses: actions/download-artifact@v4
         with:
           name: ui-build
           path: packages/ui/dist
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Lint CSS
-        run: yarn lint:css
+        run: pnpm lint:css
 
   # FIXME: Identify a way to generate schema before we run typecheck
   # typecheck:
@@ -185,16 +197,18 @@ jobs:
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-node@v4
+  #     - name: Install pnpm
+  #       uses: pnpm/action-setup@v4
+  #     - name: Install Node.js
+  #       uses: actions/setup-node@v4
   #       with:
   #         node-version: 20
-  #         cache: 'yarn'
-
+  #         cache: 'pnpm'
   #     - name: Install dependencies
-  #       run: yarn install --frozen-lockfile
-
+  #       run: pnpm install
+  #
   #     - name: Typecheck
-  #       run: yarn typecheck
+  #       run: pnpm typecheck
   build:
     name: Build GO Web App
     environment: 'test'
@@ -205,21 +219,23 @@ jobs:
     needs: [lint, lint-css, test, ui]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
 
       - uses: actions/download-artifact@v4
         with:
           name: ui-build
           path: packages/ui/dist
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Build
-        run: yarn build
+        run: pnpm build
 
   validate_helm:
     name: Validate Helm
