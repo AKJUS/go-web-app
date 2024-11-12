@@ -118,7 +118,6 @@ yargs(hideBin(process.argv))
             });
         },
         async (argv) => {
-            console.warn(argv);
             await applyMigrations(
                 currentDir,
                 argv.SOURCE_FILE as string,
