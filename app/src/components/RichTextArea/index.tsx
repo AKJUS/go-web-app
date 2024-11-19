@@ -36,7 +36,7 @@ type InheritedProps<T> = Omit<InputContainerProps, 'input'> & {
         name: T,
     ) => void;
 }
-export interface Props<T extends string | undefined> extends InheritedProps<T> {
+interface Props<T extends string | undefined> extends InheritedProps<T> {
     inputElementRef?: React.RefObject<HTMLInputElement>;
     inputClassName?: string;
     placeholder?: string;

@@ -21,8 +21,8 @@ import OCACListItem from './OCACListItem';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-export type CapacityItem = NonNullable<NonNullable<CountryOutletContext['countryResponse']>['capacity']>[number];
-export type AssessmentTypeEnum = components<'read'>['schemas']['AssessmentTypeEnum'];
+type CapacityItem = NonNullable<NonNullable<CountryOutletContext['countryResponse']>['capacity']>[number];
+type AssessmentTypeEnum = components<'read'>['schemas']['AssessmentTypeEnum'];
 
 const TYPE_BOCA = 1 satisfies AssessmentTypeEnum;
 const TYPE_OCAC = 0 satisfies AssessmentTypeEnum;

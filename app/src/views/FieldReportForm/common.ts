@@ -66,7 +66,7 @@ type ActionTakenListMember = ReturnType<ActionTakenListSchema['member']>;
 type ActionTakenSchema = ObjectSchema<NonNullable<PartialFormValue['actions_taken']>[number], PartialFormValue>;
 type ActionTakenField = ReturnType<ActionTakenSchema['fields']>;
 
-export function getReportType(
+function getReportType(
     status: FieldReportStatusEnum | undefined,
     is_covid_report: boolean | undefined,
     dtype: number | undefined,

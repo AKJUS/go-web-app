@@ -33,6 +33,7 @@ import styles from './styles.module.css';
 type FieldReportResponse = GoApiResponse<'/api/v2/field-report/'>;
 type FieldReportListItem = NonNullable<FieldReportResponse['results']>[number];
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const userMe = useUserMe();

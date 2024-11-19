@@ -20,7 +20,7 @@ git checkout -b feature/new-feature-a develop
 
 Add your changes, ensuring they follow code style guidelines. Run linting, perform type checking, and ensure the build passes.
 
-Run `yarn changeset` in the root of the repository and describe your changes. The resulting files should be committed as they will be used during release.
+Run `pnpm changeset` in the root of the repository and describe your changes. The resulting files should be committed as they will be used during release.
 
 >[!NOTE]\
 >Review the [Changesets documentation](./release.md#changesets) and the [versioning guidelines](./release.md#versioning-guidelines-for-ifrc-go-project) for more details.

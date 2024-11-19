@@ -78,6 +78,7 @@ function Scale(props: ScaleProps) {
     );
 }
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { regionId } = useParams<{ regionId: string }>();

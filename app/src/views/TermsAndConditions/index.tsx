@@ -24,6 +24,7 @@ import styles from './styles.module.css';
 
 type TitlesOptionKey = 'data-provenance' | 'user-registration' | 'unauthorised-users'| 'compliance-of-user-owner' | 'liability-of-ifrc' | 'protection-personal-data' | 'privileges-and-immunities' | 'final-provisions';
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);

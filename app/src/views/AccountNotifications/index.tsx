@@ -22,6 +22,7 @@ import styles from './styles.module.css';
 
 type OperationsResponse = GoApiResponse<'/api/v2/event/'>;
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);

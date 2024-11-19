@@ -20,7 +20,7 @@ type AppealTypeOption = NonNullable<GlobalEnumsResponse['api_appeal_type']>[numb
 const appealTypeKeySelector = (option: AppealTypeOption) => option.key;
 const appealTypeLabelSelector = (option: AppealTypeOption) => option.value;
 
-export interface FilterValue {
+interface FilterValue {
     appeal?: 0 | 1 | 2 | 3 | undefined;
     district?: number[] | undefined;
     displacement?: number | undefined;

@@ -3,7 +3,6 @@ const {
     APP_ENVIRONMENT,
     APP_API_ENDPOINT,
     APP_ADMIN_URL,
-    APP_SHOW_ENV_BANNER,
     APP_MAPBOX_ACCESS_TOKEN,
     APP_TINY_API_KEY,
     APP_RISK_API_ENDPOINT,
@@ -28,7 +27,6 @@ export const appRepositoryUrl = APP_REPOSITORY_URL;
 export const api = APP_API_ENDPOINT;
 export const adminUrl = APP_ADMIN_URL ?? api;
 export const mbtoken = APP_MAPBOX_ACCESS_TOKEN;
-export const showEnvBanner = APP_SHOW_ENV_BANNER;
 export const riskApi = APP_RISK_API_ENDPOINT;
 export const tinyApiKey = APP_TINY_API_KEY;
 export const sentryAppDsn = APP_SENTRY_DSN;

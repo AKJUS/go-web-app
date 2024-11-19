@@ -2,7 +2,6 @@ import type {
     CircleLayer,
     CirclePaint,
     FillLayer,
-    SymbolLayer,
 } from 'mapbox-gl';
 
 import {
@@ -21,15 +20,6 @@ export const COLOR_MIXED_RESPONSE = COLOR_BLUE;
 export const RESPONSE_LEVEL_WITHOUT_IFRC_RESPONSE = 0;
 export const RESPONSE_LEVEL_WITH_IFRC_RESPONSE = 1;
 export const RESPONSE_LEVEL_MIXED_RESPONSE = 2;
-
-export const adminLabelLayerOptions : Omit<SymbolLayer, 'id'> = {
-    type: 'symbol',
-    layout: {
-        'text-offset': [
-            0, 1,
-        ],
-    },
-};
 
 export const adminFillLayerOptions: Omit<FillLayer, 'id'> = {
     type: 'fill',

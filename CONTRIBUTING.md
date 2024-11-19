@@ -105,7 +105,7 @@ Below are the steps to guide you through preparing your local environment for th
 To begin, ensure you have network access. Then, you'll need the following
 1. [Git](https://git-scm.com/)
 2. [Node.JS](https://nodejs.org/en/) version >=18 / 20+
-3. [Yarn 1](https://classic.yarnpkg.com/en/)
+3. [Pnpm](https://pnpm.io/)
 4. Alternatively, you can use [Docker](https://www.docker.com/) to build the application.
 
 ### Local development
@@ -118,7 +118,7 @@ To begin, ensure you have network access. Then, you'll need the following
   ```
 2. Install the dependencies
   ```bash
-  yarn install
+  pnpm install
   ```
 3. Copy `app/.env.example` to `app/.env` and update the variables
   ```bash
@@ -126,7 +126,7 @@ To begin, ensure you have network access. Then, you'll need the following
   ```
 4. Start the development server
   ```bash
-  yarn start:app
+  pnpm start:app
   ```
 > [!NOTE]\
 > To work on a specific development task, ensure you have the backend setup appropriately and configured properly.
@@ -141,7 +141,7 @@ To begin, ensure you have network access. Then, you'll need the following
   # Stage all changes
   git add .
   # Create a changeset (if changes will affect versioning, like new features or bug fixes)
-  yarn changeset
+  pnpm changeset
 
   # Commit your changes with a message
   git commit -m "some message"
@@ -162,11 +162,11 @@ To begin, ensure you have network access. Then, you'll need the following
 
 1. To build the application for production
   ```bash
-  yarn build
+  pnpm build
   ```
 2. To locally preview the production build
   ```bash
-  yarn preview
+  pnpm preview
   ```
 
 ### CLI Commands
@@ -176,14 +176,14 @@ This repository contains several scripts and commands for performing tasks. The 
 <details>
   <summary>Commands for Running & Building the Web Application</summary>
 
-- `yarn start:app` runs the Local Development Server, listening by default on `http://localhost:3000/`.
-- `yarn build` builds the Application in Production mode. The output is by default within the `build` folder.
+- `pnpm start:app` runs the Local Development Server, listening by default on `http://localhost:3000/`.
+- `pnpm build` builds the Application in Production mode. The output is by default within the `build` folder.
   - This is used for Deployments (Preview & Production).
-- `yarn preview` previews the production build of the Application.
-- `yarn generate:type` generates the Typescript types for the API using `openapi-typescript`. The output is by default within the `generated` folder within the `app` workspace.
-- `yarn storybook` starts Storybook's local server for the `@ifrc-go/ui` components library, listening by default on `http://localhost:6006/`.
-- `yarn storybook:build` builds Storybook as a static web application for publishing.
-- `yarn build:ui` builds the `@ifrc-go/ui` components library. To reflect any new changes in the components library we must ensure that it is built beforehand.
+- `pnpm preview` previews the production build of the Application.
+- `pnpm generate:type` generates the Typescript types for the API using `openapi-typescript`. The output is by default within the `generated` folder within the `app` workspace.
+- `pnpm storybook` starts Storybook's local server for the `@ifrc-go/ui` components library, listening by default on `http://localhost:6006/`.
+- `pnpm storybook:build` builds Storybook as a static web application for publishing.
+- `pnpm build:ui` builds the `@ifrc-go/ui` components library. To reflect any new changes in the components library we must ensure that it is built beforehand.
 
 </details>
 
@@ -191,7 +191,7 @@ This repository contains several scripts and commands for performing tasks. The 
   <summary>Commands for Maintenance Tasks</summary>
 Execute the following commands within the `app` workspace.
 
-- `yarn lint` runs the linter for all the css, js, ts, and translation files.
-  - `yarn turbo lint:fix` attempts to fix any linting errors for css, js and ts files.
-- `yarn translatte:generate` generates translation migration file.
+- `pnpm lint` runs the linter for all the css, js, ts, and translation files.
+  - `pnpm turbo lint:fix` attempts to fix any linting errors for css, js and ts files.
+- `pnpm translatte:generate` generates translation migration file.
 </details>

@@ -5,7 +5,7 @@
 We use [Vitest](https://vitest.dev/) for running unit tests. To run the unit tests, navigate to the `app` folder and run the following command:
 
 ```bash
-yarn test
+pnpm test
 ```
 
 ### End-to-End Testing with Playwright
@@ -19,17 +19,17 @@ To run the Playwright tests, use the following commands:
 
 - To run the tests
   ```bash
-  yarn playwright test
+  pnpm playwright test
   ```
 
 - To run the tests in UI mode
   ```bash
-  yarn playwright test --ui
+  pnpm playwright test --ui
   ```
 
 - To run the tests in headed mode
   ```bash
-  yarn playwright test --headed
+  pnpm playwright test --headed
   ```
 
 For more information on running and debugging tests, refer to the [Playwright documentation](https://playwright.dev/docs/running-tests).

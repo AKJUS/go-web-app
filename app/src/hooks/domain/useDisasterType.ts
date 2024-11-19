@@ -7,7 +7,7 @@ import { isTruthyString } from '@togglecorp/fujs';
 
 import DomainContext, { DisasterTypes } from '#contexts/domain';
 
-export type PartialDisasterType = NonNullable<DisasterTypes['results']>[number];
+type PartialDisasterType = NonNullable<DisasterTypes['results']>[number];
 
 export type DisasterType = Omit<
     PartialDisasterType,
@@ -16,7 +16,7 @@ export type DisasterType = Omit<
     name: string,
 };
 
-export function isValidDisasterType(type: PartialDisasterType): type is DisasterType {
+function isValidDisasterType(type: PartialDisasterType): type is DisasterType {
     return isTruthyString(type.name);
 }
 

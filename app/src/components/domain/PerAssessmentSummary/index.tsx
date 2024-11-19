@@ -34,7 +34,7 @@ import styles from './styles.module.css';
 type PerOptionsResponse = GoApiResponse<'/api/v2/per-options/'>;
 type AssessmentRequestBody = GoApiResponse<'/api/v2/per-assessment/{id}/', 'PATCH'>;
 
-export type PartialAssessment = PartialForm<
+type PartialAssessment = PartialForm<
     AssessmentRequestBody,
     'area' | 'component' | 'question'
 >;

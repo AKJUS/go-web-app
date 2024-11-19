@@ -41,7 +41,7 @@ In the IFRC GO project, we follow [SemVer](https://semver.org/) (Semantic Versio
 3. Verify that changesets have been created.
 4. Update the version by running
    ```bash
-   yarn changeset version
+   pnpm changeset version
    ```
    This command consumes all changesets and updates the version according to semantic versioning. It also writes changelog entries for each consumed changeset. Review the changelog entries and version changes for packages. Make any necessary adjustments to the changelogs.
 
@@ -57,10 +57,10 @@ In the IFRC GO project, we follow [SemVer](https://semver.org/) (Semantic Versio
 >  Make sure you have the necessary permissions to push to the develop branch. If you don't have the credentials, push to a different branch and send a PR targeting the develop branch.
 7. Generate a git tag for the current version of all packages
    ```bash
-   yarn changeset tag
+   pnpm changeset tag
    ```
 > [!IMPORTANT]\
-> Ensure all existing tags are fetched from the remote repository before generating new tags with `yarn changeset tag`. This can be done using `git fetch --tags` to ensure you have the latest tags in your local repository, which helps avoid potential conflicts or issues with tag generation.
+> Ensure all existing tags are fetched from the remote repository before generating new tags with `pnpm changeset tag`. This can be done using `git fetch --tags` to ensure you have the latest tags in your local repository, which helps avoid potential conflicts or issues with tag generation.
 
 8. Push the generated tags to the origin
    ```bash
@@ -89,7 +89,7 @@ To release the IFRC Go UI to [NPM](https://www.npmjs.com/) using [changesets](ht
 
 4. Update the Version
    ```bash
-   yarn changeset version
+   pnpm changeset version
    ```
 5. Commit Version Update
    ```bash
@@ -109,7 +109,7 @@ To release the IFRC Go UI to [NPM](https://www.npmjs.com/) using [changesets](ht
 >Ensure you have the appropriate rights to publish the package.
 8. Publish the Package
    ```bash
-   yarn changeset publish
+   pnpm changeset publish
    ```
 9. Push Tags to origin
    ```bash

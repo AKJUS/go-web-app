@@ -97,6 +97,7 @@ const perComponentKeySelector = (option: PerComponent) => option.id;
 const disasterTypeKeySelector = (type: DisasterType) => type.id;
 const disasterTypeLabelSelector = (type: DisasterType) => type.name ?? '?';
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);

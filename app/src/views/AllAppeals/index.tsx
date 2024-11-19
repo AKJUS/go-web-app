@@ -58,6 +58,7 @@ const appealKeySelector = (option: AppealListItem) => option.id;
 const appealTypeKeySelector = (option: AppealTypeOption) => option.key;
 const appealTypeLabelSelector = (option: AppealTypeOption) => option.value;
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);

@@ -8,7 +8,7 @@ import { type GoApiBody } from '#utils/restRequest';
 export type PrioritizationRequestBody = GoApiBody<'/api/v2/per-prioritization/{id}/', 'PATCH'>;
 
 type ComponentResponse = NonNullable<PrioritizationRequestBody['prioritized_action_responses']>[number];
-export type PrioritizationFormFields = Omit<PrioritizationRequestBody, 'id' | 'prioritized_action_responses'> & ({
+type PrioritizationFormFields = Omit<PrioritizationRequestBody, 'id' | 'prioritized_action_responses'> & ({
     prioritized_action_responses: Omit<ComponentResponse, 'component_details'>[];
 });
 export type PartialPrioritization = PartialForm<PrioritizationFormFields, 'component'>

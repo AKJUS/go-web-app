@@ -200,7 +200,7 @@ function addRow(
     return row;
 }
 
-export function addHeadingRow(
+function addHeadingRow(
     sheet: xlsx.Worksheet,
     rowNum: number,
     outlineLevel: number,
@@ -226,7 +226,7 @@ export function addHeadingRow(
     );
 }
 
-export function addInputRow(
+function addInputRow(
     rowType: 'alt' | 'normal',
     sheet: Worksheet,
     rowNum: number,
@@ -236,7 +236,7 @@ export function addInputRow(
     description: string | CellRichTextValue | undefined,
     dataValidation?: 'number' | 'integer' | 'date' | 'text',
 ): Row
-export function addInputRow(
+function addInputRow(
     rowType: 'alt' | 'normal',
     sheet: Worksheet,
     rowNum: number,
@@ -248,7 +248,7 @@ export function addInputRow(
     optionKey?: string,
     optionsWorksheet?: Worksheet,
 ): Row
-export function addInputRow(
+function addInputRow(
     rowType: 'alt' | 'normal',
     sheet: Worksheet,
     rowNum: number,
@@ -370,7 +370,6 @@ async function generateCoverWorksheet(
         // eslint-disable-next-line no-param-reassign
         coverWorksheet.getCell(row).value = parsePseudoHtml(value);
         coverWorksheet.mergeCells(`${row}:${col}`);
-        // eslint-disable-next-line no-param-reassign
         return coverWorksheet.getCell(`${row}:${col}`);
     }
 
@@ -663,6 +662,7 @@ async function generateOptionsWorksheet(
     });
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export async function generateTemplate(
     templateActions: TemplateField[],
     optionsMap: OptionsMapping,

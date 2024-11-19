@@ -7,6 +7,8 @@ RUN apt-get update -y \
         git bash g++ make \
     && rm -rf /var/lib/apt/lists/*
 
+RUN npm install -g pnpm
+
 WORKDIR /code
 
 RUN git config --global --add safe.directory /code
@@ -15,9 +17,9 @@ RUN git config --global --add safe.directory /code
 FROM runtime AS nginx-build
 
 # NOTE: --parents is not yet available in stable syntax, using docker/dockerfile:1-labs
-COPY --parents package.json yarn.lock ./**/package.json /code/
+COPY --parents package.json pnpm-lock.yaml ./**/package.json /code/
 
-RUN yarn install --frozen-lockfile --network-concurrency 2
+RUN pnpm install
 
 # Dynamic configs. Can be changed with containers. (Placeholder values)
 ENV APP_TITLE=APP_TITLE_PLACEHOLDER
@@ -38,7 +40,7 @@ ENV APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE=${APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE
 
 COPY . /code/
 
-RUN yarn build
+RUN pnpm build
 
 # ------------------------------------------------------------------------------------
 FROM nginx:1 AS nginx-serve

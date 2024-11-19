@@ -119,8 +119,8 @@ function getNextStep(current: TabKeys, direction: 1 | -1, typeOfDref: TypeOfDref
     }
     return undefined;
 }
+/** @knipignore */
 
-// eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { drefId } = useParams<{ drefId: string }>();
 

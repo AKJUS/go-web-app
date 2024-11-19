@@ -67,6 +67,7 @@ const colorMap: Record<DisasterCategory, string> = {
     [DISASTER_CATEGORY_RED]: styles.red,
 };
 
+/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { opsUpdateId } = useParams<{ opsUpdateId: string }>();
@@ -147,7 +148,7 @@ export function Component() {
 
     const sortedPlannedInterventions = useMemo(
         () => filteredPlannedIntervention?.sort(
-            // eslint-disable-next-line max-len
+
             (a, b) => plannedInterventionOrder[a.title] - plannedInterventionOrder[b.title],
         ),
         [filteredPlannedIntervention],
@@ -155,7 +156,7 @@ export function Component() {
 
     const sortedIdentifiedNeedsAndGaps = useMemo(
         () => filteredIdentifiedNeedsAndGaps?.sort(
-            // eslint-disable-next-line max-len
+
             (a, b) => identifiedNeedsAndGapsOrder[a.title] - identifiedNeedsAndGapsOrder[b.title],
         ),
         [filteredIdentifiedNeedsAndGaps],
@@ -163,7 +164,7 @@ export function Component() {
 
     const sortedNsActions = useMemo(
         () => filteredNsActions?.sort((a, b) => (
-            // eslint-disable-next-line max-len
+
             nsActionsOrder[a.title] - nsActionsOrder[b.title]
         )),
         [filteredNsActions],

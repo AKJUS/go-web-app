@@ -2,7 +2,6 @@ import type {
     CircleLayer,
     CirclePaint,
     FillLayer,
-    SymbolLayer,
 } from 'mapbox-gl';
 
 import {
@@ -24,15 +23,6 @@ const COLOR_DEFAULT = COLOR_BLACK;
 const SURGE_TYPE_ERU = 0;
 const SURGE_TYPE_PERSONNEL = 1;
 const SURGE_TYPE_ERU_AND_PERSONNEL = 2;
-
-export const adminLabelLayerOptions : Omit<SymbolLayer, 'id'> = {
-    type: 'symbol',
-    layout: {
-        'text-offset': [
-            0, 1,
-        ],
-    },
-};
 
 export const adminFillLayerOptions: Omit<FillLayer, 'id'> = {
     type: 'fill',

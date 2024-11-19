@@ -34,10 +34,6 @@ export type FilterValue = Partial<{
     appealSearchText: string;
 }>
 
-export type FilterLabel = Partial<{
-    [key in keyof FilterValue]: string;
-}>
-
 interface Props {
     value: FilterValue;
     onChange: (...value: EntriesAsList<FilterValue>) => void;
