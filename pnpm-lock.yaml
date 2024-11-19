@@ -4,6 +4,23 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@togglecorp/re-map@0.2.0-beta-6':
+    hash: wwl62qrbjaqz37xbxuqg4ecwfa
+    path: patches/@togglecorp__re-map@0.2.0-beta-6.patch
+  '@turf/bbox@6.5.0':
+    hash: xk3vqr4ybwpgzxhosz73ljzolq
+    path: patches/@turf__bbox@6.5.0.patch
+  '@turf/buffer@6.5.0':
+    hash: qgcl6y2zanon55w4x6blptmnwy
+    path: patches/@turf__buffer@6.5.0.patch
+  openapi-typescript@6.5.5:
+    hash: ixkbnaoffcyjijtrrhtjknjz2e
+    path: patches/openapi-typescript@6.5.5.patch
+  vite-plugin-webfont-dl@3.9.4:
+    hash: qrd52rbblgiboqss7iy4xraulq
+    path: patches/vite-plugin-webfont-dl@3.9.4.patch
+
 importers:
 
   .:
@@ -11,9 +28,6 @@ importers:
       knip:
         specifier: ^5.36.3
         version: 5.36.3(@types/node@20.14.11)(typescript@5.6.3)
-      patch-package:
-        specifier: ^8.0.0
-        version: 8.0.0
 
   app:
     dependencies:
@@ -37,7 +51,7 @@ importers:
         version: 2.1.1
       '@togglecorp/re-map':
         specifier: ^0.2.0-beta-6
-        version: 0.2.0-beta-6(@mapbox/mapbox-gl-draw@1.2.0)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0)
+        version: 0.2.0-beta-6(patch_hash=wwl62qrbjaqz37xbxuqg4ecwfa)(@mapbox/mapbox-gl-draw@1.2.0)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0)
       '@togglecorp/toggle-form':
         specifier: ^2.0.4
         version: 2.0.4(react-dom@18.2.0)(react@18.2.0)
@@ -46,10 +60,10 @@ importers:
         version: 1.0.0-beta.3(react-dom@18.2.0)(react@18.2.0)
       '@turf/bbox':
         specifier: ^6.5.0
-        version: 6.5.0
+        version: 6.5.0(patch_hash=xk3vqr4ybwpgzxhosz73ljzolq)
       '@turf/buffer':
         specifier: ^6.5.0
-        version: 6.5.0
+        version: 6.5.0(patch_hash=qgcl6y2zanon55w4x6blptmnwy)
       exceljs:
         specifier: ^4.3.0
         version: 4.3.0
@@ -176,10 +190,7 @@ importers:
         version: 9.18.3
       openapi-typescript:
         specifier: 6.5.5
-        version: 6.5.5
-      patch-package:
-        specifier: ^7.0.0
-        version: 7.0.0
+        version: 6.5.5(patch_hash=ixkbnaoffcyjijtrrhtjknjz2e)
       postcss:
         specifier: ^8.3.0
         version: 8.3.0
@@ -239,7 +250,7 @@ importers:
         version: 4.2.0(typescript@5.5.3)(vite@5.0.10)
       vite-plugin-webfont-dl:
         specifier: ^3.9.4
-        version: 3.9.4(vite@5.0.10)
+        version: 3.9.4(patch_hash=qrd52rbblgiboqss7iy4xraulq)(vite@5.0.10)
       vite-tsconfig-paths:
         specifier: ^4.2.2
         version: 4.2.3(typescript@5.5.3)(vite@5.0.10)
@@ -4756,7 +4767,7 @@ packages:
       '@babel/runtime-corejs3': 7.26.0
     dev: false
 
-  /@togglecorp/re-map@0.2.0-beta-6(@mapbox/mapbox-gl-draw@1.2.0)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0):
+  /@togglecorp/re-map@0.2.0-beta-6(patch_hash=wwl62qrbjaqz37xbxuqg4ecwfa)(@mapbox/mapbox-gl-draw@1.2.0)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-BjFK4/u+a388HdCwtq6FEtl/j8Bz0/dVK1YhM2owFFNt17kU7xZBpLkH1tfXjBPHROqo+6HM9P9GRk4+pNMkbA==}
     peerDependencies:
       '@mapbox/mapbox-gl-draw': ^1.2.0
@@ -4774,6 +4785,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
+    patched: true
 
   /@togglecorp/toggle-form@2.0.4(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-+EzRzXK/PKlisu44yARpxOkoeowz+0oKk2Rl3CdhxtBfTVfzG28aHAklDTubTBssS8hneGBTav2aInCqmwChfg==}
@@ -4799,17 +4811,18 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@turf/bbox@6.5.0:
+  /@turf/bbox@6.5.0(patch_hash=xk3vqr4ybwpgzxhosz73ljzolq):
     resolution: {integrity: sha512-RBbLaao5hXTYyyg577iuMtDB8ehxMlUqHEJiMs8jT1GHkFhr6sYre3lmLsPeYEi/ZKj5TP5tt7fkzNdJ4GIVyw==}
     dependencies:
       '@turf/helpers': 6.5.0
       '@turf/meta': 6.5.0
     dev: false
+    patched: true
 
-  /@turf/buffer@6.5.0:
+  /@turf/buffer@6.5.0(patch_hash=qgcl6y2zanon55w4x6blptmnwy):
     resolution: {integrity: sha512-qeX4N6+PPWbKqp1AVkBVWFerGjMYMUyencwfnkCesoznU6qvfugFHNAngNqIBVnJjZ5n8IFyOf+akcxnrt9sNg==}
     dependencies:
-      '@turf/bbox': 6.5.0
+      '@turf/bbox': 6.5.0(patch_hash=xk3vqr4ybwpgzxhosz73ljzolq)
       '@turf/center': 6.5.0
       '@turf/helpers': 6.5.0
       '@turf/meta': 6.5.0
@@ -4817,11 +4830,12 @@ packages:
       d3-geo: 1.7.1
       turf-jsts: 1.2.3
     dev: false
+    patched: true
 
   /@turf/center@6.5.0:
     resolution: {integrity: sha512-T8KtMTfSATWcAX088rEDKjyvQCBkUsLnK/Txb6/8WUXIeOZyHu42G7MkdkHRoHtwieLdduDdmPLFyTdG5/e7ZQ==}
     dependencies:
-      '@turf/bbox': 6.5.0
+      '@turf/bbox': 6.5.0(patch_hash=xk3vqr4ybwpgzxhosz73ljzolq)
       '@turf/helpers': 6.5.0
     dev: false
 
@@ -5509,10 +5523,6 @@ packages:
       '@types/emscripten': 1.39.13
       tslib: 1.14.1
 
-  /@yarnpkg/lockfile@1.1.0:
-    resolution: {integrity: sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==}
-    dev: true
-
   /JSV@4.0.2:
     resolution: {integrity: sha512-ZJ6wx9xaKJ3yFUhq5/sk82PJMuUyLk277I8mQeyDgCTjGdjWJIvPfaU5LIXaMuaN2UO1X3kZH4+lgphublZUHw==}
     dev: false
@@ -5913,11 +5923,6 @@ packages:
 
   /asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
-    dev: true
-
-  /at-least-node@1.0.0:
-    resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
-    engines: {node: '>= 4.0.0'}
     dev: true
 
   /autoprefixer@10.4.16(postcss@8.3.0):
@@ -7008,6 +7013,7 @@ packages:
   /ci-info@3.9.0:
     resolution: {integrity: sha512-NIxF55hv4nSqQswkAeiOi1r83xy8JldOFDTWiug55KBu9Jnblncd2U6ViHmYgHf01TPZS77NJBhBMKdWj9HQMQ==}
     engines: {node: '>=8'}
+    dev: false
 
   /citty@0.1.6:
     resolution: {integrity: sha512-tskPPKEs8D2KPafUypv2gxwJP8h/OaJmC82QQGGDQcHvXX43xF2VDACcJVmZ0EuSxkpO9Kc4MlrA3q0+FG58AQ==}
@@ -8782,12 +8788,6 @@ packages:
       pkg-dir: 4.2.0
     dev: false
 
-  /find-yarn-workspace-root@2.0.0:
-    resolution: {integrity: sha512-1IMnbjt4KzsQfnhnzNd8wUEgXZ44IzZaZmnLYx7D5FZlaHt2gW20Cri8Q+E/t5tIj4+epTBub+2Zxu/vNILzqQ==}
-    dependencies:
-      micromatch: 4.0.7
-    dev: true
-
   /flat-cache@3.2.0:
     resolution: {integrity: sha512-CYcENa+FtcUKLmhhqyctpclsq7QF38pKjZHsGNiSQF5r4FtoKDWabFDl3hzaEQMvT1LHEysw5twgLvpYYb4vbw==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -8920,16 +8920,6 @@ packages:
       jsonfile: 4.0.0
       universalify: 0.1.2
     dev: false
-
-  /fs-extra@9.1.0:
-    resolution: {integrity: sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==}
-    engines: {node: '>=10'}
-    dependencies:
-      at-least-node: 1.0.0
-      graceful-fs: 4.2.11
-      jsonfile: 6.1.0
-      universalify: 2.0.1
-    dev: true
 
   /fs-minipass@2.1.0:
     resolution: {integrity: sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==}
@@ -10024,16 +10014,6 @@ packages:
   /json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
 
-  /json-stable-stringify@1.1.1:
-    resolution: {integrity: sha512-SU/971Kt5qVQfJpyDveVhQ/vya+5hvrjClFOcr8c0Fq5aODJjMwutrOfCU+eCnVD5gpx1Q3fEqkyom77zH1iIg==}
-    engines: {node: '>= 0.4'}
-    dependencies:
-      call-bind: 1.0.7
-      isarray: 2.0.5
-      jsonify: 0.0.1
-      object-keys: 1.1.1
-    dev: true
-
   /json-stringify-safe@5.0.1:
     resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
     dev: true
@@ -10065,10 +10045,6 @@ packages:
       universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
-
-  /jsonify@0.0.1:
-    resolution: {integrity: sha512-2/Ki0GcmuqSrgFyelQq9M05y7PS0mEwuIzrf3f1fPqkVDVRvZrPZtVSMHxdgo8Aq0sxAOb/cr2aqqA3LeWHVPg==}
-    dev: true
 
   /jsonlint-lines@1.7.1:
     resolution: {integrity: sha512-Xp9w20GzfOiwabOqi3bH4Gnx85WFwpaWebmaspaDwX9fBISlEnKYoMtIR9bu6OGFIKzt50BRVyXLxRKDZXQ8Hg==}
@@ -10120,12 +10096,6 @@ packages:
   /kind-of@6.0.3:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
-
-  /klaw-sync@6.0.0:
-    resolution: {integrity: sha512-nIeuVSzdCCs6TDPTqI8w1Yre34sSq7AkZ4B3sfOBbI2CgVSB4Du4aLQijFU2+lhAFCwt9+42Hel6lQNIv6AntQ==}
-    dependencies:
-      graceful-fs: 4.2.11
-    dev: true
 
   /kleur@3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
@@ -10981,14 +10951,6 @@ packages:
       mimic-function: 5.0.1
     dev: true
 
-  /open@7.4.2:
-    resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
-    engines: {node: '>=8'}
-    dependencies:
-      is-docker: 2.2.1
-      is-wsl: 2.2.0
-    dev: true
-
   /open@8.4.2:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
@@ -10998,7 +10960,7 @@ packages:
       is-wsl: 2.2.0
     dev: true
 
-  /openapi-typescript@6.5.5:
+  /openapi-typescript@6.5.5(patch_hash=ixkbnaoffcyjijtrrhtjknjz2e):
     resolution: {integrity: sha512-pMsA8GrMQKtNOPPjKnJbDotA2UpKsIcTHecMw2Bl3M/2eWTVs8zAYBm/cgaE9Qz5GrcVCDIru9GQX/P9vxtUFg==}
     hasBin: true
     dependencies:
@@ -11009,6 +10971,7 @@ packages:
       undici: 5.28.4
       yargs-parser: 21.1.1
     dev: true
+    patched: true
 
   /option-t@20.3.1:
     resolution: {integrity: sha512-umjR1qtje0FD7AJbPmrzaaYCmHkh9yWDWUfRtcN8P3o5pv/JYaAVsXu0t3sRj2/Ogcp6Q9jrGRKBWX5DyiQFMQ==}
@@ -11169,49 +11132,6 @@ packages:
   /parseurl@1.3.3:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==}
     engines: {node: '>= 0.8'}
-    dev: true
-
-  /patch-package@7.0.0:
-    resolution: {integrity: sha512-eYunHbnnB2ghjTNc5iL1Uo7TsGMuXk0vibX3RFcE/CdVdXzmdbMsG/4K4IgoSuIkLTI5oHrMQk4+NkFqSed0BQ==}
-    engines: {node: '>=14', npm: '>5'}
-    hasBin: true
-    dependencies:
-      '@yarnpkg/lockfile': 1.1.0
-      chalk: 4.1.2
-      ci-info: 3.9.0
-      cross-spawn: 7.0.3
-      find-yarn-workspace-root: 2.0.0
-      fs-extra: 9.1.0
-      klaw-sync: 6.0.0
-      minimist: 1.2.8
-      open: 7.4.2
-      rimraf: 2.7.1
-      semver: 5.7.2
-      slash: 2.0.0
-      tmp: 0.0.33
-      yaml: 2.4.5
-    dev: true
-
-  /patch-package@8.0.0:
-    resolution: {integrity: sha512-da8BVIhzjtgScwDJ2TtKsfT5JFWz1hYoBl9rUQ1f38MC2HwnEIkK8VN3dKMKcP7P7bvvgzNDbfNHtx3MsQb5vA==}
-    engines: {node: '>=14', npm: '>5'}
-    hasBin: true
-    dependencies:
-      '@yarnpkg/lockfile': 1.1.0
-      chalk: 4.1.2
-      ci-info: 3.9.0
-      cross-spawn: 7.0.3
-      find-yarn-workspace-root: 2.0.0
-      fs-extra: 9.1.0
-      json-stable-stringify: 1.1.1
-      klaw-sync: 6.0.0
-      minimist: 1.2.8
-      open: 7.4.2
-      rimraf: 2.7.1
-      semver: 7.6.3
-      slash: 2.0.0
-      tmp: 0.0.33
-      yaml: 2.4.5
     dev: true
 
   /path-browserify@1.0.1:
@@ -12824,11 +12744,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /slash@2.0.0:
-    resolution: {integrity: sha512-ZYKh3Wh2z1PpEXWr0MpSBZ0V6mZHAQfYevttO11c51CaWjGTaadiKZ+wVt1PbMlDV5qhMFslpZCemhwOK7C89A==}
-    engines: {node: '>=6'}
-    dev: true
-
   /slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
@@ -14263,7 +14178,7 @@ packages:
       - typescript
     dev: true
 
-  /vite-plugin-webfont-dl@3.9.4(vite@5.0.10):
+  /vite-plugin-webfont-dl@3.9.4(patch_hash=qrd52rbblgiboqss7iy4xraulq)(vite@5.0.10):
     resolution: {integrity: sha512-QaGElPV9EhwQHukQu2jjhWVMTi0Y5xK2hLswdCgzIl//Abv0qqsX2yCnUjFE5YPIepuWD3aCoFR2Fx+ywYQYmQ==}
     peerDependencies:
       vite: ^2 || ^3 || ^4 || ^5
@@ -14276,6 +14191,7 @@ packages:
     transitivePeerDependencies:
       - debug
     dev: true
+    patched: true
 
   /vite-tsconfig-paths@4.2.3(typescript@5.5.3)(vite@5.0.10):
     resolution: {integrity: sha512-xVsA2xe6QSlzBujtWF8q2NYexh7PAUYfzJ4C8Axpe/7d2pcERYxuxGgph9F4f0iQO36g5tyGq6eBUYIssdUrVw==}
@@ -14732,12 +14648,6 @@ packages:
 
   /yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
-    dev: true
-
-  /yaml@2.4.5:
-    resolution: {integrity: sha512-aBx2bnqDzVOyNKfsysjA2ms5ZlnjSAW2eG3/L5G/CSujfjLJTJsEw1bGw8kCf04KodQWk1pxlGnZ56CRxiawmg==}
-    engines: {node: '>= 14'}
-    hasBin: true
     dev: true
 
   /yargs-parser@18.1.3:

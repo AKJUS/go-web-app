@@ -1,7 +1,7 @@
-diff --git a/node_modules/openapi-typescript/dist/index.js b/node_modules/openapi-typescript/dist/index.js
-index 716afaa..497d0ac 100644
---- a/node_modules/openapi-typescript/dist/index.js
-+++ b/node_modules/openapi-typescript/dist/index.js
+diff --git a/dist/index.js b/dist/index.js
+index 716afaa50ea30a433178843def931d6d1c4fbe33..28c9250a19081e0569b1de30662510eef90cd8e9 100644
+--- a/dist/index.js
++++ b/dist/index.js
 @@ -89,9 +89,19 @@ async function openapiTS(schema, options = {}) {
      if (options.inject)
          output.push(options.inject);
@@ -41,10 +41,10 @@ index 716afaa..497d0ac 100644
      }
      if (output.join("\n").includes("OneOf")) {
          output.splice(1, 0, "/** OneOf type helpers */", "type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };", "type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;", "type OneOf<T extends any[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;", "");
-diff --git a/node_modules/openapi-typescript/dist/load.js b/node_modules/openapi-typescript/dist/load.js
-index aea4fe0..426fdd8 100644
---- a/node_modules/openapi-typescript/dist/load.js
-+++ b/node_modules/openapi-typescript/dist/load.js
+diff --git a/dist/load.js b/dist/load.js
+index aea4fe09436722e0c2d1fb272b1e067c17a9af60..69bb601d8d6bcf022acad9f5e9b0221b230d376b 100644
+--- a/dist/load.js
++++ b/dist/load.js
 @@ -67,8 +67,7 @@ export default async function load(schema, options) {
              return options.schemas;
          }
@@ -78,10 +78,10 @@ index aea4fe0..426fdd8 100644
              const contents = fs.readFileSync(schema, "utf8");
              if (ext === ".yaml" || ext === ".yml") {
                  options.schemas[schemaID] = {
-diff --git a/node_modules/openapi-typescript/dist/transform/request-body-object.js b/node_modules/openapi-typescript/dist/transform/request-body-object.js
-index 33c24be..453a060 100644
---- a/node_modules/openapi-typescript/dist/transform/request-body-object.js
-+++ b/node_modules/openapi-typescript/dist/transform/request-body-object.js
+diff --git a/dist/transform/request-body-object.js b/dist/transform/request-body-object.js
+index 33c24bea962dfa595dc0aa474d7826f5e3cfb7c8..5645d67d675a18a44d5565c360a5ac4f846d1b12 100644
+--- a/dist/transform/request-body-object.js
++++ b/dist/transform/request-body-object.js
 @@ -20,13 +20,13 @@ export default function transformRequestBodyObject(requestBodyObject, { path, ct
          if ("$ref" in mediaTypeObject) {
              output.push(indent(`${key}: ${transformSchemaObject(mediaTypeObject, {
@@ -98,10 +98,10 @@ index 33c24be..453a060 100644
              });
              output.push(indent(`${key}: ${mediaType};`, indentLv));
          }
-diff --git a/node_modules/openapi-typescript/dist/transform/response-object.js b/node_modules/openapi-typescript/dist/transform/response-object.js
-index b0e1c20..1f739a8 100644
---- a/node_modules/openapi-typescript/dist/transform/response-object.js
-+++ b/node_modules/openapi-typescript/dist/transform/response-object.js
+diff --git a/dist/transform/response-object.js b/dist/transform/response-object.js
+index b0e1c203a3d2030dd40b5435419dfc6a360dc546..a4fb5b6b226618efc707568c028abe3558a57800 100644
+--- a/dist/transform/response-object.js
++++ b/dist/transform/response-object.js
 @@ -23,7 +23,7 @@ export default function transformResponseObject(responseObject, { path, ctx }) {
                      key = tsOptionalProperty(key);
                  output.push(indent(`${key}: ${transformHeaderObject(headerObject, {
@@ -120,10 +120,10 @@ index b0e1c20..1f739a8 100644
              })};`, indentLv));
          }
          indentLv--;
-diff --git a/node_modules/openapi-typescript/dist/transform/schema-object.js b/node_modules/openapi-typescript/dist/transform/schema-object.js
-index 15f144c..25e853c 100644
---- a/node_modules/openapi-typescript/dist/transform/schema-object.js
-+++ b/node_modules/openapi-typescript/dist/transform/schema-object.js
+diff --git a/dist/transform/schema-object.js b/dist/transform/schema-object.js
+index 15f144cc7258250559139582ff57f4bb5816aae3..9597ee66f76071a292327abd1f004410e0ea620a 100644
+--- a/dist/transform/schema-object.js
++++ b/dist/transform/schema-object.js
 @@ -21,13 +21,29 @@ export function defaultSchemaObjectTransform(schemaObject, { path, ctx }) {
          return ctx.immutableTypes ? tsReadonly(finalType) : finalType;
      }
@@ -155,10 +155,10 @@ index 15f144c..25e853c 100644
      if (schemaObject.const !== null && schemaObject.const !== undefined) {
          return transformSchemaObject(escStr(schemaObject.const), {
              path,
-diff --git a/node_modules/openapi-typescript/dist/types.d.ts b/node_modules/openapi-typescript/dist/types.d.ts
-index 9b28fc0..732a789 100644
---- a/node_modules/openapi-typescript/dist/types.d.ts
-+++ b/node_modules/openapi-typescript/dist/types.d.ts
+diff --git a/dist/types.d.ts b/dist/types.d.ts
+index 9b28fc0323dae76ae04f5fcfb1e2529650d3444e..732a78968f75de19b914f9cf6015d6e9676f5073 100644
+--- a/dist/types.d.ts
++++ b/dist/types.d.ts
 @@ -380,6 +380,7 @@ export interface GlobalContext {
      silent: boolean;
      supportArrayLength: boolean;

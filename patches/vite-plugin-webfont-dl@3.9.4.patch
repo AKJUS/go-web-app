@@ -1,7 +1,7 @@
-diff --git a/node_modules/vite-plugin-webfont-dl/dist/index.js b/node_modules/vite-plugin-webfont-dl/dist/index.js
-index b70ccbf..9177d9d 100644
---- a/node_modules/vite-plugin-webfont-dl/dist/index.js
-+++ b/node_modules/vite-plugin-webfont-dl/dist/index.js
+diff --git a/dist/index.js b/dist/index.js
+index b70ccbf6e16a69a56c1ebb77455d0f50dfcbd2e8..9177d9d63e474843a12be8702d6d08d653f25864 100644
+--- a/dist/index.js
++++ b/dist/index.js
 @@ -6,7 +6,7 @@ $1</head>`)}injectAsync(e,t,s){return e.replace(/([ \t]*)<\/head>/,`$1$1<link re
  $1$1<link rel="stylesheet" media="print" onload="this.onload=null;this.removeAttribute('media');" href="${t}${s}">
  $1</head>`)}injectSync(e,t,s){return e.replace(/([ \t]*)<\/head>/,`$1$1<link rel="preload" as="style" href="${t}${s}">

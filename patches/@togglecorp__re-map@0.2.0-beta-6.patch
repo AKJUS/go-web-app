@@ -1,7 +1,7 @@
-diff --git a/node_modules/@togglecorp/re-map/build/esm/MapImage.js b/node_modules/@togglecorp/re-map/build/esm/MapImage.js
-index cb8fa49..6638e25 100644
---- a/node_modules/@togglecorp/re-map/build/esm/MapImage.js
-+++ b/node_modules/@togglecorp/re-map/build/esm/MapImage.js
+diff --git a/build/esm/MapImage.js b/build/esm/MapImage.js
+index cb8fa497e2873bda36fcfd3c4f9600fb14cc2838..6638e250a389f5d5240239eed4f3666919594012 100644
+--- a/build/esm/MapImage.js
++++ b/build/esm/MapImage.js
 @@ -29,11 +29,6 @@ function MapImage(props) {
      if (!map || !mapStyle || !initialUrl && !initialImage) {
        return undefined;

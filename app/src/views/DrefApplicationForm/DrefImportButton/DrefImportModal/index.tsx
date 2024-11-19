@@ -69,6 +69,14 @@ function getValueFromCellValue(cellValue: CellValue) {
         return cellValue.hyperlink;
     }
 
+    if (isNotDefined(cellValue.result)) {
+        return undefined;
+    }
+
+    if (typeof cellValue.result === 'object' && 'error' in cellValue.result) {
+        return undefined;
+    }
+
     // Formula result
     return getValueFromCellValue(cellValue.result);
 }

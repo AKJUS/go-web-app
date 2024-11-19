@@ -9,7 +9,6 @@
     },
     "private": true,
     "scripts": {
-        "postinstall": "patch-package",
         "lint:unused": "knip --tags=-knipignore",
         "build:ui": "pnpm -F @ifrc-go/ui build",
         "start:ui": "pnpm -F @ifrc-go/ui start",
@@ -22,8 +21,16 @@
         "chromatic": "pnpm -F go-ui-storybook chromatic"
     },
     "devDependencies": {
-        "knip": "^5.36.3",
-        "patch-package": "^8.0.0"
+        "knip": "^5.36.3"
     },
-    "packageManager": "pnpm@8.6.0+sha1.71f9126a20cd3d00fa47c188f956918858180e54"
+    "packageManager": "pnpm@8.6.0+sha1.71f9126a20cd3d00fa47c188f956918858180e54",
+    "pnpm": {
+        "patchedDependencies": {
+            "@togglecorp/re-map@0.2.0-beta-6": "patches/@togglecorp__re-map@0.2.0-beta-6.patch",
+            "openapi-typescript@6.5.5": "patches/openapi-typescript@6.5.5.patch",
+            "@turf/buffer@6.5.0": "patches/@turf__buffer@6.5.0.patch",
+            "vite-plugin-webfont-dl@3.9.4": "patches/vite-plugin-webfont-dl@3.9.4.patch",
+            "@turf/bbox@6.5.0": "patches/@turf__bbox@6.5.0.patch"
+        }
+    }
 }
