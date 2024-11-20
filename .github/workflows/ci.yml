@@ -116,7 +116,7 @@ jobs:
 
   translation-migrations:
     continue-on-error: true
-    name: Identify if translation migrations are missed
+    name: Identify if translation migrations need to be generated
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -139,8 +139,12 @@ jobs:
           name: ui-build
           path: packages/ui/dist
 
-      - name: Identify if migrations can be generated
-        run: ! pnpm generate:migration
+      - name: Identify if translation migrations need to be generated
+        run: |
+          if pnpm translatte:generate; then
+            # The step should fail if generation is possible
+            exit 1
+          fi
 
   unused:
     name: Identify unused files
