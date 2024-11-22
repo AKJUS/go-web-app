@@ -40,7 +40,7 @@
         "@ifrc-go/icons": "^2.0.1",
         "@ifrc-go/ui": "^1.2.1",
         "@sentry/react": "^7.81.1",
-        "@tinymce/tinymce-react": "^4.3.0",
+        "@tinymce/tinymce-react": "^5.1.1",
         "@togglecorp/fujs": "^2.1.1",
         "@togglecorp/re-map": "^0.3.0",
         "@togglecorp/toggle-form": "^2.0.4",
