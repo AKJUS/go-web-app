@@ -100,7 +100,7 @@ export interface RiskEventDetailProps<EVENT, EXPOSURE> {
 type Footprint = GeoJSON.FeatureCollection<GeoJSON.Geometry, RiskLayerProperties> | undefined;
 
 // FIXME: read this from common type
-export type ImminentEventSource = 'pdc' | 'wfpAdam' | 'gdacs' | 'meteoSwiss';
+type ImminentEventSource = 'pdc' | 'wfpAdam' | 'gdacs' | 'meteoSwiss';
 
 interface Props<EVENT, EXPOSURE, KEY extends string | number> {
     source: ImminentEventSource;

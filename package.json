@@ -9,6 +9,7 @@
     },
     "private": true,
     "scripts": {
+        "preinstall": "npx only-allow pnpm",
         "lint:unused": "knip --tags=-knipignore",
         "build:ui": "pnpm -F @ifrc-go/ui build",
         "start:ui": "pnpm -F @ifrc-go/ui start",
@@ -19,6 +20,10 @@
         "storybook": "pnpm -F go-ui-storybook storybook",
         "build-storybook": "pnpm -F go-ui-storybook build-storybook",
         "chromatic": "pnpm -F go-ui-storybook chromatic"
+    },
+    "engines": {
+        "node": "20",
+        "pnpm": "8.6.0"
     },
     "devDependencies": {
         "@changesets/cli": "^2.27.10",
