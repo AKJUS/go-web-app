@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1-labs
 
-FROM node:18-bullseye AS runtime
+# -------------------------- Dev ---------------------------------------
+FROM node:18-bullseye AS dev
 
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
@@ -9,17 +10,23 @@ RUN apt-get update -y \
 
 RUN npm install -g pnpm
 
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
 WORKDIR /code
 
 RUN git config --global --add safe.directory /code
 
-# ------------------------------------------------------------------------------------
-FROM runtime AS nginx-build
+# -------------------------- Nginx - Builder --------------------------------
+FROM dev AS nginx-build
 
 # NOTE: --parents is not yet available in stable syntax, using docker/dockerfile:1-labs
-COPY --parents package.json pnpm-lock.yaml ./**/package.json /code/
+COPY --parents package.json pnpm-lock.yaml pnpm-workspace.yaml ./**/package.json patches/ /code/
 
 RUN pnpm install
+
+COPY . /code/
 
 # Dynamic configs. Can be changed with containers. (Placeholder values)
 ENV APP_TITLE=APP_TITLE_PLACEHOLDER
@@ -38,11 +45,9 @@ ENV APP_SENTRY_REPLAYS_SESSION_SAMPLE_RATE=${APP_SENTRY_REPLAYS_SESSION_SAMPLE_R
 ARG APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE=
 ENV APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE=${APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE}
 
-COPY . /code/
-
 RUN pnpm build
 
-# ------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 FROM nginx:1 AS nginx-serve
 
 LABEL maintainer="IFRC"
