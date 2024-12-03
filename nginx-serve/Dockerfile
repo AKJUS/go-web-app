@@ -17,7 +17,7 @@ RUN git config --global --add safe.directory /code
 FROM runtime AS nginx-build
 
 # NOTE: --parents is not yet available in stable syntax, using docker/dockerfile:1-labs
-COPY --parents package.json pnpm-lock.yaml ./**/package.json /code/
+COPY --parents package.json pnpm-lock.yaml ./**/package.json patches/ /code/
 
 RUN pnpm install
 
