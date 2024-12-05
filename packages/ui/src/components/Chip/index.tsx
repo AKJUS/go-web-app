@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { CloseFillIcon } from '@ifrc-go/icons';
 import {
     _cs,
@@ -22,7 +22,7 @@ const chipVariantToClassNameMap: Record<ChipVariant, string> = {
 export interface Props<N> {
     className?: string;
     name: N;
-    label: string;
+    label: React.ReactNode;
     variant?: ChipVariant;
     onDelete?: (name: N, e: React.MouseEvent<HTMLButtonElement>) => void;
 }
