@@ -56,7 +56,7 @@ function isListTypeResult(
     return resultKey === 'regions' || resultKey === 'countries' || resultKey === 'district_province_response';
 }
 
-const feedbackLink = 'https://forms.office.com/e/wFQsu0V7Zb';
+const feedbackLink = 'https://forms.office.com/e/YEzYKfMwSB';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
