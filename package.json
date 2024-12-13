@@ -21,6 +21,7 @@
         "chromatic": "pnpm -F go-ui-storybook chromatic"
     },
     "devDependencies": {
+        "@changesets/cli": "^2.27.10",
         "knip": "^5.36.3"
     },
     "packageManager": "pnpm@8.6.0+sha1.71f9126a20cd3d00fa47c188f956918858180e54",
