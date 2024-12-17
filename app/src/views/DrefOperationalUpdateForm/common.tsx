@@ -12,7 +12,7 @@ import { type PartialOpsUpdate } from './schema';
 export type TypeOfDrefEnum = components<'read'>['schemas']['DrefDrefDrefTypeEnumKey'];
 
 // FIXME: use constants from common
-type TypeOfOnsetEnum = components<'read'>['schemas']['TypeValidatedEnum'];
+type TypeOfOnsetEnum = components<'read'>['schemas']['DrefDrefOnsetTypeEnumKey'];
 
 // export const ONSET_SLOW = 1 satisfies TypeOfOnsetEnum;
 export const ONSET_SUDDEN = 2 satisfies TypeOfOnsetEnum;

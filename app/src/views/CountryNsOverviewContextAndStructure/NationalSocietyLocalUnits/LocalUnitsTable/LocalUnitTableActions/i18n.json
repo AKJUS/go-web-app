@@ -1,7 +1,9 @@
 {
     "namespace": "countryNsOverviewContextAndStructure",
     "strings": {
-        "localUnitsEdit": "Edit",
-        "localUnitsView": "View"
+        "localUnitActionsEdit": "Edit",
+        "localUnitActionsView": "View",
+        "localUnitActionsDelete": "Delete",
+        "localUnitActionsLatestChangesFailureMessage": "Failed to get latest changes"
     }
 }

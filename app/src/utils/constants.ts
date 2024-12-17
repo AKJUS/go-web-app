@@ -109,7 +109,7 @@ export const DREF_TYPE_ASSESSMENT = 1 satisfies TypeOfDrefEnum;
 export const DREF_TYPE_RESPONSE = 2 satisfies TypeOfDrefEnum;
 export const DREF_TYPE_LOAN = 3 satisfies TypeOfDrefEnum;
 
-type TypeOfOnsetEnum = components<'read'>['schemas']['TypeValidatedEnum'];
+type TypeOfOnsetEnum = components<'read'>['schemas']['DrefDrefOnsetTypeEnumKey'];
 export const ONSET_SLOW = 1 satisfies TypeOfOnsetEnum;
 
 // Subscriptions
