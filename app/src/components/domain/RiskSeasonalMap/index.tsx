@@ -528,7 +528,15 @@ function RiskSeasonalMap(props: Props) {
                 ),
             ).filter(isDefined);
 
+            /*
             const maxPopulation = maxSafe(
+                populationListSafe.map(
+                    (item) => item.population_in_thousands,
+                ),
+            ) ?? 1;
+            */
+
+            const totalPopulation = sumSafe(
                 populationListSafe.map(
                     (item) => item.population_in_thousands,
                 ),
@@ -537,7 +545,7 @@ function RiskSeasonalMap(props: Props) {
             const populationFactorMap = listToMap(
                 populationListSafe,
                 (result) => result.iso3,
-                (result) => result.population_in_thousands / maxPopulation,
+                (result) => 1 - (result.population_in_thousands / totalPopulation) ** (1 / 4),
             );
 
             const populationMap = listToMap(
@@ -692,7 +700,7 @@ function RiskSeasonalMap(props: Props) {
                                     }
                                 }
 
-                                if (filters.riskMetric !== 'riskScore' && filters.includeCopingCapacity) {
+                                if (filters.riskMetric === 'riskScore' && filters.includeCopingCapacity) {
                                     const lccFactor = mappings?.lccFactor[
                                         item.country_details.iso3
                                     ];

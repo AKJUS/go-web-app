@@ -122,7 +122,7 @@ function Filters(props: Props) {
                     value={value.normalizeByPopulation}
                     onChange={handleChange}
                 />
-                {value.riskMetric !== 'riskScore' && (
+                {value.riskMetric === 'riskScore' && (
                     <Checkbox
                         name="includeCopingCapacity"
                         label={strings.riskCopingCapacity}
