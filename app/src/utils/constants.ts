@@ -1,3 +1,5 @@
+import { listToMap } from '@togglecorp/fujs';
+
 import { type components } from '#generated/types';
 
 export const defaultChartMargin = {
@@ -199,3 +201,10 @@ type SupportedByOrganizationType = components<'read'>['schemas']['PerSupportedBy
 export const NATIONAL_SOCIETY = 3 satisfies SupportedByOrganizationType;
 
 export const MAX_PAGE_LIMIT = 9999;
+
+export const monthKeyList = Array.from(Array(12).keys());
+export const multiMonthSelectDefaultValue = listToMap(
+    monthKeyList,
+    (key) => key,
+    () => false,
+);
