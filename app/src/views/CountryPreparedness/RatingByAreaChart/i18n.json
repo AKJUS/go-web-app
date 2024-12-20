@@ -1,6 +1,6 @@
 {
     "namespace": "countryPreparedness",
     "strings": {
-        "perArea": "Area {areaNumber}: {areaTitle}"
+        "ratingPerAreaLabel": "Area {areaNumber}: {areaTitle}"
     }
 }

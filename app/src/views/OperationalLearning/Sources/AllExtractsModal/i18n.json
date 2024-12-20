@@ -1,8 +1,8 @@
 {
-    "namespace": "viewAllExtracts",
+    "namespace": "operationalLearning",
     "strings": {
-        "heading": "Operational Learning Extracts",
-        "extractCount": "{count} extract",
-        "extractsCount": "{count} extracts"
+        "allExtractsModalHeading": "Operational Learning Extracts",
+        "allExtractsModalExtractCount": "{count} extract",
+        "allExtractsModalExtractsCount": "{count} extracts"
     }
 }

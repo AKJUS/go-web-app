@@ -72,7 +72,7 @@ function CountryNsCapacityStrengthening() {
             withHeaderBorder
             footerActions={!isEmpty && (
                 <TextOutput
-                    label={strings.moreDetails}
+                    label={strings.moreDetailsLabel}
                     value={(
                         <Link
                             variant="tertiary"
