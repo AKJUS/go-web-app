@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  '@togglecorp/re-map@0.2.0-beta-6':
+  '@togglecorp/re-map@0.3.0':
     hash: wwl62qrbjaqz37xbxuqg4ecwfa
-    path: patches/@togglecorp__re-map@0.2.0-beta-6.patch
+    path: patches/@togglecorp__re-map@0.3.0.patch
   '@turf/bbox@6.5.0':
     hash: xk3vqr4ybwpgzxhosz73ljzolq
     path: patches/@turf__bbox@6.5.0.patch
@@ -50,8 +50,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       '@togglecorp/re-map':
-        specifier: ^0.2.0-beta-6
-        version: 0.2.0-beta-6(patch_hash=wwl62qrbjaqz37xbxuqg4ecwfa)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^0.3.0
+        version: 0.3.0(patch_hash=wwl62qrbjaqz37xbxuqg4ecwfa)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0)
       '@togglecorp/toggle-form':
         specifier: ^2.0.4
         version: 2.0.4(react-dom@18.2.0)(react@18.2.0)
@@ -4710,16 +4710,12 @@ packages:
       '@babel/runtime-corejs3': 7.26.0
     dev: false
 
-  /@togglecorp/re-map@0.2.0-beta-6(patch_hash=wwl62qrbjaqz37xbxuqg4ecwfa)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-BjFK4/u+a388HdCwtq6FEtl/j8Bz0/dVK1YhM2owFFNt17kU7xZBpLkH1tfXjBPHROqo+6HM9P9GRk4+pNMkbA==}
+  /@togglecorp/re-map@0.3.0(patch_hash=wwl62qrbjaqz37xbxuqg4ecwfa)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-tCohiZxUt5tkuAmzTz8qZu2foliPkj1ZyNnS3Z4He9ZDKOuGrZy0mwRe8QDDDTF+lIULD4gQMaQIENaWRls/Uw==}
     peerDependencies:
-      '@mapbox/mapbox-gl-draw': ^1.2.0
       mapbox-gl: ^1.13.0
       react: ^17.0.2
       react-dom: ^17.0.2
-    peerDependenciesMeta:
-      '@mapbox/mapbox-gl-draw':
-        optional: true
     dependencies:
       '@babel/runtime-corejs3': 7.26.0
       '@togglecorp/fujs': 2.1.1
