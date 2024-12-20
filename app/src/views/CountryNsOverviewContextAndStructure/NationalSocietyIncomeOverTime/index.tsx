@@ -140,7 +140,7 @@ function NationalSocietyIncomeOverTime(props: Props) {
                             withUnderline
                         >
                             {resolveToString(
-                                strings.sourceFDRS,
+                                strings.sourceFDRSLabel,
                                 { nationalSociety: countryResponse.society_name },
                             )}
                         </Link>

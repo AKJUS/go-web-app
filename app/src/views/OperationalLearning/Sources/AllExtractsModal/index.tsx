@@ -85,7 +85,7 @@ function AllExtractsModal(props: Props) {
     return (
         <Modal
             className={styles.modal}
-            heading={strings.heading}
+            heading={strings.allExtractsModalHeading}
             onClose={onCancel}
             pending={opsLearningPending}
             size="xl"
@@ -95,12 +95,12 @@ function AllExtractsModal(props: Props) {
                     name="extractsCount"
                     label={(opsLearningCount > 1) ? (
                         resolveToString(
-                            strings.extractsCount,
+                            strings.allExtractsModalExtractsCount,
                             { count: opsLearningCount },
                         )
                     ) : (
                         resolveToString(
-                            strings.extractCount,
+                            strings.allExtractsModalExtractCount,
                             { count: opsLearningCount },
                         )
                     )}

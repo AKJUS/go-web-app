@@ -54,19 +54,19 @@ function Filters(props: Props) {
         <>
             <DateInput
                 name="startDateAfter"
-                label={strings.appealsTableStartDateAfter}
+                label={strings.appealsStartDateAfter}
                 onChange={onChange}
                 value={value.startDateAfter}
             />
             <DateInput
                 name="startDateBefore"
-                label={strings.appealsTableStartDateBefore}
+                label={strings.appealsStartDateBefore}
                 onChange={onChange}
                 value={value.startDateBefore}
             />
             <SelectInput
-                placeholder={strings.appealsTableFilterTypePlaceholder}
-                label={strings.appealsTableType}
+                placeholder={strings.appealsFilterTypePlaceholder}
+                label={strings.appealsTypeLabel}
                 name="appeal"
                 value={value.appeal}
                 onChange={onChange}
@@ -75,8 +75,8 @@ function Filters(props: Props) {
                 options={appealTypeOptions}
             />
             <DisasterTypeSelectInput
-                placeholder={strings.appealsTableFilterDisastersPlaceholder}
-                label={strings.appealsTableDisastertype}
+                placeholder={strings.appealsFilterDisastersPlaceholder}
+                label={strings.appealsDisastertype}
                 name="displacement"
                 value={value.displacement}
                 onChange={onChange}

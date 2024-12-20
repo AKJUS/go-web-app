@@ -50,12 +50,12 @@ function Summary(props: Props) {
             heading={summaryTitle}
             headingDescription={(extractsCount > 1) ? (
                 resolveToString(
-                    strings.extractsCount,
+                    strings.summaryExtractsCount,
                     { count: extractsCount },
                 )
             ) : (
                 resolveToString(
-                    strings.extractCount,
+                    strings.summaryExtractCount,
                     { count: extractsCount },
                 )
             )}

@@ -267,7 +267,7 @@ function NationalSocietyIndicators(props: Props) {
             footerActions={isDefined(countryResponse?.fdrs)
                 && isDefined(countryResponse.society_name) && (
                 <TextOutput
-                    label={strings.source}
+                    label={strings.indicatorSourceLabel}
                     value={(
                         <Link
                             variant="tertiary"
@@ -276,7 +276,7 @@ function NationalSocietyIndicators(props: Props) {
                             withUnderline
                         >
                             {resolveToString(
-                                strings.sourceFDRS,
+                                strings.indicatorSourceFDRSLabel,
                                 { nationalSociety: countryResponse.society_name },
                             )}
                         </Link>

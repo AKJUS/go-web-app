@@ -66,7 +66,7 @@ function KeyInsights(props: Props) {
                         : <ArrowDownSmallFillIcon />
                     )}
                 >
-                    {isExpanded ? strings.closeSources : strings.seeSources}
+                    {isExpanded ? strings.keyInsightsCloseSources : strings.keyInsightsSeeSources}
                 </Button>
             )}
         >

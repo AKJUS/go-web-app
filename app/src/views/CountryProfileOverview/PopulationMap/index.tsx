@@ -312,7 +312,7 @@ function PopulatioMap(props: Props) {
             )}
             footerActions={(
                 <TextOutput
-                    label={strings.source}
+                    label={strings.populationMapSource}
                     value={(
                         <Link
                             variant="tertiary"
@@ -320,7 +320,7 @@ function PopulatioMap(props: Props) {
                             external
                             withUnderline
                         >
-                            {strings.worldBank}
+                            {strings.populationMapWorldBank}
                         </Link>
                     )}
                 />

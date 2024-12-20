@@ -51,7 +51,7 @@ function RatingByAreaChart(props: Props) {
         formAreaOptions,
         (option) => option.area_num ?? DEFAULT_INVALID_TEXT,
         (option) => resolveToString(
-            strings.perArea,
+            strings.ratingPerAreaLabel,
             {
                 areaNumber: option.area_num,
                 areaTitle: option.title,

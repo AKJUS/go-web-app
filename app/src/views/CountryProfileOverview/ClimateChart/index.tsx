@@ -201,7 +201,7 @@ function ClimateChart(props: Props) {
             withHeaderBorder
             footerActions={(
                 <TextOutput
-                    label={strings.source}
+                    label={strings.climateChartSource}
                     value={(
                         <Link
                             variant="tertiary"

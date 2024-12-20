@@ -32,7 +32,7 @@ function DrefImportButton(props: Props) {
                 name={undefined}
                 onClick={setShowImportModalTrue}
             >
-                {strings.drefImportButton}
+                {strings.importLabel}
             </Button>
             {showImportModal && (
                 <DrefImportModal
