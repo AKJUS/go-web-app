@@ -39,7 +39,6 @@
     "dependencies": {
         "@ifrc-go/icons": "^2.0.1",
         "@ifrc-go/ui": "^1.2.1",
-        "@mapbox/mapbox-gl-draw": "^1.2.0",
         "@sentry/react": "^7.81.1",
         "@tinymce/tinymce-react": "^4.3.0",
         "@togglecorp/fujs": "^2.1.1",
