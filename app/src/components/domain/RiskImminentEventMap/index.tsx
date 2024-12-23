@@ -103,6 +103,8 @@ type Footprint = GeoJSON.FeatureCollection<GeoJSON.Geometry, RiskLayerProperties
 type ImminentEventSource = 'pdc' | 'wfpAdam' | 'gdacs' | 'meteoSwiss';
 
 interface Props<EVENT, EXPOSURE, KEY extends string | number> {
+    // FIXME: use props for configuration rather than
+    // passing source here
     source: ImminentEventSource;
     events: EVENT[] | undefined;
     keySelector: (event: EVENT) => KEY;
