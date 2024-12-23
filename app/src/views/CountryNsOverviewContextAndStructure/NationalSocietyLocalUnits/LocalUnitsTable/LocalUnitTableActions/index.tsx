@@ -27,6 +27,7 @@ export interface Props {
     localUnitId: number;
     isValidated: boolean;
     onActionSuccess: () => void;
+    hasAddEditLocalUnitPermission: boolean;
 }
 
 function LocalUnitsTableActions(props: Props) {
@@ -36,6 +37,7 @@ function LocalUnitsTableActions(props: Props) {
         localUnitId,
         isValidated,
         onActionSuccess,
+        hasAddEditLocalUnitPermission,
     } = props;
 
     const { isCountryAdmin, isSuperUser } = usePermissions();
@@ -86,7 +88,6 @@ function LocalUnitsTableActions(props: Props) {
                             type="button"
                             name={localUnitId}
                             onClick={handleViewLocalUnitClick}
-                            disabled={!hasValidatePermission}
                         >
                             {strings.localUnitsView}
                         </DropdownMenuItem>
@@ -94,7 +95,7 @@ function LocalUnitsTableActions(props: Props) {
                             type="button"
                             name={localUnitId}
                             onClick={handleEditLocalUnitClick}
-                            disabled={!hasValidatePermission}
+                            disabled={!hasAddEditLocalUnitPermission}
                         >
                             {strings.localUnitsEdit}
                         </DropdownMenuItem>

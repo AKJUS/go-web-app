@@ -2,6 +2,6 @@
     "namespace": "operationalLearning",
     "strings": {
         "source": "Source",
-        "dateOfLearning": "Date of Learning"
+        "dateOfOperation": "Date of Operation"
     }
 }

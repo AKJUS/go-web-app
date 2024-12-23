@@ -44,8 +44,8 @@ importers:
         specifier: ^7.81.1
         version: 7.81.1(react@18.2.0)
       '@tinymce/tinymce-react':
-        specifier: ^4.3.0
-        version: 4.3.0(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^5.1.1
+        version: 5.1.1(react-dom@18.2.0)(react@18.2.0)
       '@togglecorp/fujs':
         specifier: ^2.1.1
         version: 2.1.1
@@ -4692,8 +4692,8 @@ packages:
     dependencies:
       '@testing-library/dom': 9.3.4
 
-  /@tinymce/tinymce-react@4.3.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-iB4cUsYfcJL4NGuKhqCGYuTmFTje3nPxyPv1HxprTsp/YMGuuiiSNWrv3zwI31QX5Cn8qeq9MrMDnbxuRugHyg==}
+  /@tinymce/tinymce-react@5.1.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-DQ0wpvnf/9z8RsOEAmrWZ1DN1PKqcQHfU+DpM3llLze7FHmxVtzuN8O+FYh0oAAF4stzAXwiCIVacfqjMwRieQ==}
     peerDependencies:
       react: ^18.0.0 || ^17.0.1 || ^16.7.0
       react-dom: ^18.0.0 || ^17.0.1 || ^16.7.0
