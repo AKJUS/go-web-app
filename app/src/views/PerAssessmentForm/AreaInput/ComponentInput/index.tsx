@@ -187,14 +187,14 @@ function ComponentInput(props: Props) {
                 )}
                 key={component.id}
                 heading={getComponentTitle(component)}
-                childrenContainerClassName={styles.questionList}
-                headerDescription={component.description}
                 headingClassName={styles.heading}
                 withInternalPadding
                 withoutWrapInHeading
                 spacing="comfortable"
                 headingDescriptionContainerClassName={styles.statusSelectionContainer}
-            />
+            >
+                {component.description}
+            </Container>
         );
     }
 
@@ -203,10 +203,10 @@ function ComponentInput(props: Props) {
             className={_cs(styles.componentInput, className)}
             key={component.id}
             heading={getComponentTitle(component)}
-            childrenContainerClassName={styles.questionList}
             withHeaderBorder
             headerDescription={component.description}
-            headingDescriptionContainerClassName={styles.statusSelectionContainer}
+            headingClassName={styles.heading}
+            headingContainerClassName={styles.headingContainer}
             headingDescription={(
                 <SelectInput
                     readOnly={readOnly}
@@ -227,7 +227,7 @@ function ComponentInput(props: Props) {
             showExpandButtonAtBottom
             initiallyExpanded
             contentViewType="vertical"
-            spacing="relaxed"
+            spacing="comfortable"
         >
             <NonFieldError error={error} />
             <NonFieldError error={questionInputError} />
