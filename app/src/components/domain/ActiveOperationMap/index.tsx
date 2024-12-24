@@ -53,7 +53,7 @@ import type {
 } from '#utils/restRequest';
 import { useRequest } from '#utils/restRequest';
 
-import GlobalMap, { AdminZeroFeatureProperties } from '../GlobalMap';
+import GlobalMap, { type AdminZeroFeatureProperties } from '../GlobalMap';
 import {
     APPEAL_TYPE_DREF,
     APPEAL_TYPE_EAP,

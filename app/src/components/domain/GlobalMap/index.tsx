@@ -6,19 +6,19 @@ import {
 import { LanguageContext } from '@ifrc-go/ui/contexts';
 import { MapLayer } from '@togglecorp/re-map';
 import {
-    Expression,
-    FillLayer,
-    FillPaint,
-    LineLayer,
-    LngLatLike,
-    MapboxGeoJSONFeature,
-    SymbolLayer,
+    type Expression,
+    type FillLayer,
+    type FillPaint,
+    type LineLayer,
+    type LngLatLike,
+    type MapboxGeoJSONFeature,
+    type SymbolLayer,
 } from 'mapbox-gl';
 
 import BaseMap, { type Props as BaseMapProps } from '#components/domain/BaseMap';
 import {
     COLOR_BLACK,
-    CountryRecordTypeEnum,
+    type CountryRecordTypeEnum,
 } from '#utils/constants';
 
 export interface AdminZeroFeatureProperties {
