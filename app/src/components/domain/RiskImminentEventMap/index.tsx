@@ -469,7 +469,7 @@ function RiskImminentEventMap<
                         padding={DEFAULT_MAP_PADDING}
                     />
                 )}
-            </GlobalMap>
+            </BaseMap>
             <Container
                 heading={sidePanelHeading}
                 className={styles.sidePanel}

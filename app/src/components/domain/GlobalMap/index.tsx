@@ -212,10 +212,12 @@ function GlobalMap(props: Props) {
                         layerKey="admin-0-label-priority"
                         layerOptions={adminLabelLayerOptions}
                     />
+                    {/*
                     <MapLayer
-                        layerKey="admin-0-boundary-mask"
+                        layerKey="admin-0-boundary"
                         layerOptions={adminZeroLineLayerOptions}
                     />
+                    */}
                     <MapLayer
                         layerKey="admin-0-boundary-disputed"
                         layerOptions={adminZeroLineLayerOptions}
@@ -227,12 +229,6 @@ function GlobalMap(props: Props) {
                             onClick={onClick ? handleClick : undefined}
                         />
                     )}
-                    {/*
-                    <MapLayer
-                        layerKey="admin-0-boundary"
-                        layerOptions={adminZeroLineLayerOptions}
-                    />
-                    */}
                 </>
             )}
         />
