@@ -29,6 +29,7 @@ import type {
     SymbolLayer,
 } from 'mapbox-gl';
 
+import BaseMap from '#components/domain/BaseMap';
 import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import { type components } from '#generated/riskTypes';
 import useDebouncedValue from '#hooks/useDebouncedValue';
@@ -38,7 +39,6 @@ import {
     DURATION_MAP_ZOOM,
 } from '#utils/constants';
 
-import GlobalMap from '../GlobalMap';
 import LayerOptions, { type LayerOptionsValue } from './LayerOptions';
 import {
     activeHazardPointLayer,
@@ -347,7 +347,7 @@ function RiskImminentEventMap<
 
     return (
         <div className={styles.riskImminentEventMap}>
-            <GlobalMap
+            <BaseMap
                 mapOptions={{ bounds }}
             >
                 <MapContainerWithDisclaimer

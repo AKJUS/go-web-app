@@ -114,11 +114,15 @@ function GlobalMap(props: Props) {
     const fillSortKey = useMemo<number | Expression>(() => [
         'match',
         ['get', 'iso3'],
+        // NOTE: Hovered geoarea should be at the top
         hoveredCountryIso3 ?? '???',
         2,
+        // NOTE: After that, we should have geoarea that is 100%
+        // included in another geoarea
         ...(overlappedDisputedCountriesIso3.filter(
             (iso3) => !(iso3 === hoveredCountryIso3),
         ).flatMap((iso3) => [iso3, 1])),
+        // NOTE: Everything else should be after that
         0,
     ], [hoveredCountryIso3]);
 
