@@ -337,6 +337,7 @@ function CountryThreeWNationalSocietyProjectsMap(props: Props) {
         <div className={_cs(styles.map, className)}>
             <div className={styles.mapWithLegend}>
                 <GlobalMap
+                    // FIXME: We should use CountryMap instead
                     onAdminZeroFillClick={handleCountryClick}
                 >
                     <MapContainerWithDisclaimer

@@ -519,6 +519,7 @@ export function Component(props: BaseProps) {
                     contentViewType="vertical"
                 >
                     <GlobalMap
+                        // FIXME: We should use CountryMap instead
                         onAdminZeroFillClick={handleCountryClick}
                     >
                         <MapContainerWithDisclaimer

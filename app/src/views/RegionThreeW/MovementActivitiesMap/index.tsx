@@ -106,7 +106,7 @@ function MovementActivitiesMap(props: Props) {
     const strings = useTranslation(i18n);
     const { regionResponse } = useOutletContext<RegionOutletContext>();
 
-    const countryBounds = useMemo(() => (
+    const regionBounds = useMemo(() => (
         regionResponse ? getBbox(regionResponse.bbox) : undefined
     ), [regionResponse]);
 
@@ -238,7 +238,7 @@ function MovementActivitiesMap(props: Props) {
                     <MapBounds
                         duration={DURATION_MAP_ZOOM}
                         padding={DEFAULT_MAP_PADDING}
-                        bounds={countryBounds}
+                        bounds={regionBounds}
                     />
                     {/* eslint-disable-next-line max-len */}
                     {clickedPointProperties?.lngLat && isDefined(clickedPointProperties.countryId) && (

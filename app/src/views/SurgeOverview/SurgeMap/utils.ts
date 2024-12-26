@@ -1,14 +1,11 @@
 import type {
     CircleLayer,
     CirclePaint,
-    FillLayer,
 } from 'mapbox-gl';
 
 import {
     COLOR_BLACK,
     COLOR_BLUE,
-    COLOR_DARK_GREY,
-    COLOR_LIGHT_GREY,
     COLOR_RED,
     COLOR_YELLOW,
 } from '#utils/constants';
@@ -23,18 +20,6 @@ const COLOR_DEFAULT = COLOR_BLACK;
 const SURGE_TYPE_ERU = 0;
 const SURGE_TYPE_PERSONNEL = 1;
 const SURGE_TYPE_ERU_AND_PERSONNEL = 2;
-
-export const adminFillLayerOptions: Omit<FillLayer, 'id'> = {
-    type: 'fill',
-    paint: {
-        'fill-color': [
-            'case',
-            ['boolean', ['feature-state', 'hovered'], false],
-            COLOR_DARK_GREY,
-            COLOR_LIGHT_GREY,
-        ],
-    },
-};
 
 export function getLegendOptions(strings: i18nType['strings']) {
     const legendOptions = [
