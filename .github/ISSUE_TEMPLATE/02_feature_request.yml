@@ -23,7 +23,7 @@ body:
       validations:
         required: true
 
-    - type: textarea
+  - type: textarea
     attributes:
       label: Additional Context
       description: |
