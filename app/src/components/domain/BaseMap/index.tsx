@@ -1,8 +1,4 @@
-import {
-    useContext,
-    useMemo,
-} from 'react';
-import { LanguageContext } from '@ifrc-go/ui/contexts';
+import { useMemo } from 'react';
 import { ErrorBoundary } from '@sentry/react';
 import {
     isDefined,
@@ -32,6 +28,8 @@ type overrides = 'mapStyle' | 'mapOptions' | 'navControlShown' | 'navControlPosi
 export type Props = Omit<MapProps, overrides> & {
     baseLayers?: React.ReactNode;
     withDisclaimer?: boolean;
+    // NOTE: Labels with be added from the country information instead of the
+    // mapbox layers
     withoutLabel?: boolean;
 } & Partial<Pick<MapProps, overrides>>;
 
@@ -79,6 +77,7 @@ function BaseMap(props: Props) {
 
     const countries = useCountry();
 
+    // FIXME: We should check for special cases like ICRC, IFRC, etc.
     const countryCentroidGeoJson = useMemo(
         (): GeoJSON.FeatureCollection<GeoJSON.Geometry> => ({
             type: 'FeatureCollection' as const,
@@ -104,34 +103,6 @@ function BaseMap(props: Props) {
         [countries],
     );
 
-    const {
-        currentLanguage,
-    } = useContext(LanguageContext);
-
-    const adminLabelLayerOptions : Omit<SymbolLayer, 'id'> = useMemo(
-        () => {
-            // ar, es, fr
-            let label: string;
-            if (currentLanguage === 'es') {
-                label = 'name_es';
-            } else if (currentLanguage === 'ar') {
-                label = 'name_ar';
-            } else if (currentLanguage === 'fr') {
-                label = 'name_fr';
-            } else {
-                label = 'name';
-            }
-
-            return {
-                type: 'symbol',
-                layout: {
-                    'text-field': ['get', label],
-                },
-            };
-        },
-        [currentLanguage],
-    );
-
     return (
         <Map
             mapStyle={mapStyle ?? defaultMapStyle}
@@ -147,18 +118,6 @@ function BaseMap(props: Props) {
                 sourceKey="composite"
                 managed={false}
             >
-                <MapLayer
-                    layerKey="admin-0-label"
-                    layerOptions={adminLabelLayerOptions}
-                />
-                <MapLayer
-                    layerKey="admin-0-label-non-independent"
-                    layerOptions={adminLabelLayerOptions}
-                />
-                <MapLayer
-                    layerKey="admin-0-label-priority"
-                    layerOptions={adminLabelLayerOptions}
-                />
                 {baseLayers}
             </MapSource>
             {!withoutLabel && (
@@ -168,7 +127,7 @@ function BaseMap(props: Props) {
                     geoJson={countryCentroidGeoJson}
                 >
                     <MapLayer
-                        layerKey="point-circle"
+                        layerKey="symbol-label"
                         layerOptions={adminLabelOverrideOptions}
                     />
                 </MapSource>
