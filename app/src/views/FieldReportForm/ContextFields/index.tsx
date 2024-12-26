@@ -11,7 +11,10 @@ import {
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isNotDefined,
+    isTruthyString,
+} from '@togglecorp/fujs';
 import {
     type EntriesAsList,
     type Error,
@@ -163,11 +166,6 @@ function ContextFields(props: Props) {
 
     const summaryVisible = !value.is_covid_report;
 
-    const preferredColumnNoForSummary = Math.max(
-        summaryVisible ? 1 : 0,
-        1,
-    ) as 1 | 2 | 3;
-
     return (
         <Container
             heading={strings.fieldReportFormContextTitle}
@@ -285,20 +283,32 @@ function ContextFields(props: Props) {
                 title={strings.summaryLabel}
                 description={strings.summaryDescription}
                 withAsteriskOnTitle
-                numPreferredColumns={preferredColumnNoForSummary}
+                numPreferredColumns={1}
             >
                 {summaryVisible && (
-                    <TextInput
-                        label={strings.titleSecondaryLabel}
-                        placeholder={strings.titleInputPlaceholder}
-                        name="title"
-                        value={value.title}
-                        maxLength={256}
-                        onChange={onValueChange}
-                        error={error?.title}
-                        disabled={disabled}
-                        withAsterisk
-                    />
+                    <>
+                        <TextInput
+                            label={strings.titleSecondaryLabel}
+                            placeholder={strings.titleInputPlaceholder}
+                            name="title"
+                            value={value.title}
+                            maxLength={256}
+                            onChange={onValueChange}
+                            error={error?.title}
+                            disabled={disabled}
+                            withAsterisk
+                        />
+                        {isTruthyString(value.summary) && (
+                            <TextInput
+                                label={strings.originalTitleSecondaryLabel}
+                                name="summary"
+                                value={value.summary}
+                                onChange={onValueChange}
+                                error={error?.summary}
+                                disabled
+                            />
+                        )}
+                    </>
                 )}
             </InputSection>
             <InputSection

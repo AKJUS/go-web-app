@@ -311,23 +311,23 @@ export const reportSchema: FormSchema = {
         });
 
         // CONTEXT
-        // baseSchema = addCondition(
-        //     baseSchema,
-        //     value,
-        //     ['status', 'is_covid_report', 'dtype'],
-        //     ['summary'],
-        //     (val): Pick<FormSchemaFields, 'summary'> => {
-        //         const reportType = getReportType(val?.status, val?.is_covid_report, val?.dtype);
-        //         if (reportType === 'COVID') {
-        //             return {
-        //                 summary: { forceValue: nullValue },
-        //             };
-        //         }
-        //         return {
-        //             summary: { required: true, requiredValidation: requiredStringCondition },
-        //         };
-        //     },
-        // );
+        baseSchema = addCondition(
+            baseSchema,
+            value,
+            ['status', 'is_covid_report', 'dtype'],
+            ['summary'],
+            (val): Pick<FormSchemaFields, 'summary'> => {
+                const reportType = getReportType(val?.status, val?.is_covid_report, val?.dtype);
+                if (reportType === 'COVID') {
+                    return {
+                        summary: { forceValue: nullValue },
+                    };
+                }
+                return {
+                    summary: { required: true, requiredValidation: requiredStringCondition },
+                };
+            },
+        );
 
         // SITUATION / RISK ANALYSIS
 
