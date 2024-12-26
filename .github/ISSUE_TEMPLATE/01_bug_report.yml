@@ -1,6 +1,7 @@
-name: "Report a Technical or Visual Issue on the IFRC GO Website"
-description: "Encountered a bug or glitch? Let us know so we can address it!"
+name: "Bug Report"
+description: "Report a technical or visual issue."
 labels: ["type: bug"]
+type: "Bug"
 body:
   - type: markdown
     attributes:

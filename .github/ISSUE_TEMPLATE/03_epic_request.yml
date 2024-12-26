@@ -1,6 +1,7 @@
 name: "Epic"
-description: "Track a larger initiative with multiple related tasks and deliverables for IFRC GO project."
+description: "Track a larger initiative with multiple related tasks and deliverables."
 labels: ["type: epic"]
+type: "Feature"
 body:
   - type: markdown
     attributes:
