@@ -24,3 +24,16 @@ index cb8fa497e2873bda36fcfd3c4f9600fb14cc2838..6638e250a389f5d5240239eed4f36669
          map.addImage(initialName, loadedImage, initialImageOptions);
          if (onLoad) {
            onLoad(true, initialName);
+diff --git a/build/esm/MapSource/MapLayer.js b/build/esm/MapSource/MapLayer.js
+index b25072adf1ee041149be1a2ad8d2040d87806a2a..977d8632e411915a63c45cb05606b50e99857056 100644
+--- a/build/esm/MapSource/MapLayer.js
++++ b/build/esm/MapSource/MapLayer.js
+@@ -130,7 +130,7 @@ function MapLayer(props) {
+   // Handle filter change
+   // TODO: don't call in first render
+   useEffect(() => {
+-    if (!map || !sourceKey || !layerKey) {
++    if (!map || !sourceKey || !layerKey || !filter) {
+       return;
+     }
+     const id = getLayerName(sourceKey, layerKey, initialManaged);

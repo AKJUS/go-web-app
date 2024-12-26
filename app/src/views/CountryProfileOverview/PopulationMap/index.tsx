@@ -327,7 +327,6 @@ function PopulatioMap(props: Props) {
             )}
         >
             <BaseMap
-                withoutLabel
                 baseLayers={(
                     <>
                         <MapLayer

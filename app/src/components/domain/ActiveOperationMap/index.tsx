@@ -432,7 +432,7 @@ function ActiveOperationMap(props: Props) {
             )}
         >
             <GlobalMap
-                onClick={handleCountryClick}
+                onAdminZeroFillClick={handleCountryClick}
             >
                 <MapContainerWithDisclaimer
                     className={styles.mapContainer}

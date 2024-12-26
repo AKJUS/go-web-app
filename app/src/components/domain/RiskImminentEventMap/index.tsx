@@ -29,7 +29,7 @@ import type {
     SymbolLayer,
 } from 'mapbox-gl';
 
-import BaseMap from '#components/domain/BaseMap';
+import GlobalMap from '#components/domain/GlobalMap';
 import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import { type components } from '#generated/riskTypes';
 import useDebouncedValue from '#hooks/useDebouncedValue';
@@ -347,7 +347,7 @@ function RiskImminentEventMap<
 
     return (
         <div className={styles.riskImminentEventMap}>
-            <BaseMap
+            <GlobalMap
                 mapOptions={{ bounds }}
             >
                 <MapContainerWithDisclaimer
@@ -469,7 +469,7 @@ function RiskImminentEventMap<
                         padding={DEFAULT_MAP_PADDING}
                     />
                 )}
-            </BaseMap>
+            </GlobalMap>
             <Container
                 heading={sidePanelHeading}
                 className={styles.sidePanel}

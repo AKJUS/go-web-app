@@ -368,7 +368,8 @@ function LocalUnitsMap(props: Props) {
         >
             <div className={styles.mapContainerWithContactDetails}>
                 <BaseMap
-                    withoutLabel
+                    // NOTE: Even though we are using localUnitMapStyle, the
+                    // layer override defined inside BaseMap works
                     mapStyle={localUnitMapStyle}
                     baseLayers={(
                         <ActiveCountryBaseMapLayer
