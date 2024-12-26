@@ -5,9 +5,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        "Thank you for helping improve the IFRC GO Website!
+        Thank you for helping improve the IFRC GO Website!
         Please fill out the form below with as much detail as possible. This will help us diagnose and fix the issue promptly.
-        If the issue is visual, screenshots or videos are greatly appreciated."
+        If the issue is visual, screenshots or videos are greatly appreciated.
 
   - type: input
     attributes:
@@ -48,12 +48,12 @@ body:
     attributes:
       label: "Steps to Reproduce the Issue"
       description: |
-        "Please describe the issue in detail, including:
+        Please describe the issue in detail, including:
         1. What actions led to the issue?
-        2. If possible, attach screenshots or videos demonstrating the problem."
+        2. If possible, attach screenshots or videos demonstrating the problem.
       placeholder: |
-        "1. I clicked on...
-        2. [Attach screenshots/videos if available]"
+        1. I clicked on...
+        2. [Attach screenshots/videos if available]
     validations:
       required: true
 
@@ -89,10 +89,10 @@ body:
     attributes:
       label: "Additional Context (Optional)"
       description: |
-        "Provide any extra details, such as:
+        Provide any extra details, such as:
         - Related links.
         - Previous occurrences of this issue.
-        - Workarounds you have tried."
+        - Workarounds you have tried.
       placeholder: "This issue also happened on [link]."
     validations:
       required: false
