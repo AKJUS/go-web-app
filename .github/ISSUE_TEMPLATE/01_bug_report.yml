@@ -1,98 +1,98 @@
-name: Report a Technical or Visual Issue on the IFRC GO Website
-description: 'Encountered a bug or glitch? Let us know so we can address it!'
-labels: ['type: bug']
+name: "Report a Technical or Visual Issue on the IFRC GO Website"
+description: "Encountered a bug or glitch? Let us know so we can address it!"
+labels: ["type: bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for helping improve the IFRC GO Website!
+        "Thank you for helping improve the IFRC GO Website!
         Please fill out the form below with as much detail as possible. This will help us diagnose and fix the issue promptly.
-        If the issue is visual, screenshots or videos are greatly appreciated.
+        If the issue is visual, screenshots or videos are greatly appreciated."
 
   - type: input
     attributes:
-      label: 'Page URL'
-      description: 'The URL of the page where you encountered the issue.'
-      placeholder: 'https://go.ifrc.org/'
+      label: "Page URL"
+      description: "The URL of the page where you encountered the issue."
+      placeholder: "https://go.ifrc.org/"
     validations:
       required: true
 
   - type: dropdown
     attributes:
-      label: 'Environment'
-      description: 'Please select the environment where the bug occurred.'
+      label: "Environment"
+      description: "Please select the environment where the bug occurred."
       options:
-        - 'Alpha'
-        - 'Staging'
-        - 'Production'
+        - "Alpha"
+        - "Staging"
+        - "Production"
     validations:
       required: true
 
   - type: input
     attributes:
-      label: 'Browser'
-      description: 'Which browser are you using? (e.g., Chrome, Firefox, Safari)'
-      placeholder: 'Chrome'
+      label: "Browser"
+      description: "Which browser are you using? (e.g., Chrome, Firefox, Safari)"
+      placeholder: "Chrome"
     validations:
       required: true
 
   - type: input
     attributes:
-      label: 'Operating System'
-      description: 'What operating system are you using? Include the version if possible.'
-      placeholder: 'Windows 10'
+      label: "Operating System"
+      description: "What operating system are you using? Include the version if possible."
+      placeholder: "Windows 10"
     validations:
       required: false
 
   - type: textarea
     attributes:
-      label: 'Steps to Reproduce the Issue'
+      label: "Steps to Reproduce the Issue"
       description: |
-        Please describe the issue in detail, including:
+        "Please describe the issue in detail, including:
         1. What actions led to the issue?
-        2. If possible, attach screenshots or videos demonstrating the problem.
+        2. If possible, attach screenshots or videos demonstrating the problem."
       placeholder: |
-        1. I clicked on...
-        2. [Attach screenshots/videos if available]
+        "1. I clicked on...
+        2. [Attach screenshots/videos if available]"
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: 'Expected Behavior'
-      description: 'Describe what you expected to happen.'
-      placeholder: 'I expected the page to...'
-      validations:
+      label: "Expected Behavior"
+      description: "Describe what you expected to happen."
+      placeholder: "I expected the page to..."
+    validations:
       required: true
 
   - type: textarea
     attributes:
-      label: 'Actual Behavior'
-      description: 'Describe what actually happened, including any error messages.'
-      placeholder: 'Instead, I saw...'
+      label: "Actual Behavior"
+      description: "Describe what actually happened, including any error messages."
+      placeholder: "Instead, I saw..."
     validations:
       required: true
 
   - type: dropdown
     attributes:
-      label: 'Priority'
-      description: 'How urgent is this issue?'
+      label: "Priority"
+      description: "How urgent is this issue?"
       options:
-        - 'Low (Minor inconvenience)'
-        - 'Medium (Affects functionality, but there is a workaround)'
-        - 'High (Major functionality is broken)'
-        - 'Critical (Site is unusable)'
+        - "Low (Minor inconvenience)"
+        - "Medium (Affects functionality, but there is a workaround)"
+        - "High (Major functionality is broken)"
+        - "Critical (Site is unusable)"
     validations:
       required: false
 
   - type: textarea
     attributes:
-      label: 'Additional Context (Optional)'
+      label: "Additional Context (Optional)"
       description: |
-        Provide any extra details, such as:
+        "Provide any extra details, such as:
         - Related links.
         - Previous occurrences of this issue.
-        - Workarounds you have tried.
-      placeholder: 'This issue also happened on [link].'
+        - Workarounds you have tried."
+      placeholder: "This issue also happened on [link]."
     validations:
       required: false
