@@ -60,7 +60,7 @@ import {
     outerCircleLayerOptionsForPeopleTargeted,
     type ScaleOption,
 } from '#components/domain/ActiveOperationMap/utils';
-import BaseMap from '#components/domain/BaseMap';
+import GlobalMap, { type AdminZeroFeatureProperties } from '#components/domain/GlobalMap';
 import HighlightedOperations from '#components/domain/HighlightedOperations';
 import Link from '#components/Link';
 import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
@@ -77,7 +77,6 @@ import {
     DURATION_MAP_ZOOM,
 } from '#utils/constants';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
-import { adminFillLayerOptions } from '#utils/map';
 import { type CountryOutletContext } from '#utils/outletContext';
 import { resolveUrl } from '#utils/resolveUrl';
 import type {
@@ -111,24 +110,8 @@ type BaseProps = {
     onPresentationModeButtonClick?: () => void;
 }
 
-interface CountryProperties {
-    country_id: number;
-    disputed: boolean;
-    fdrs: string;
-    independent: boolean;
-    is_deprecated: boolean;
-    iso: string;
-    iso3: string;
-    name: string;
-    name_ar: string;
-    name_es: string;
-    name_fr: string;
-    record_type: number;
-    region_id: number;
-}
-
 interface ClickedPoint {
-    feature: GeoJSON.Feature<GeoJSON.Point, CountryProperties>;
+    properties: AdminZeroFeatureProperties;
     lngLat: mapboxgl.LngLatLike;
 }
 
@@ -403,11 +386,11 @@ export function Component(props: BaseProps) {
     ]);
 
     const handleCountryClick = useCallback((
-        feature: mapboxgl.MapboxGeoJSONFeature,
+        properties: AdminZeroFeatureProperties,
         lngLat: mapboxgl.LngLatLike,
     ) => {
         setClickedPointProperties({
-            feature: feature as unknown as ClickedPoint['feature'],
+            properties,
             lngLat,
         });
         return false;
@@ -457,7 +440,7 @@ export function Component(props: BaseProps) {
     ]);
 
     const popupDetails = clickedPointProperties
-        ? countryGroupedAppeal[clickedPointProperties.feature.properties.iso3]
+        ? countryGroupedAppeal[clickedPointProperties.properties.iso3]
         : undefined;
 
     return (
@@ -535,15 +518,9 @@ export function Component(props: BaseProps) {
                     )}
                     contentViewType="vertical"
                 >
-                    <BaseMap
-                        baseLayers={(
-                            <MapLayer
-                                layerKey="admin-0"
-                                hoverable
-                                layerOptions={adminFillLayerOptions}
-                                onClick={handleCountryClick}
-                            />
-                        )}
+                    <GlobalMap
+                        // FIXME: We should use CountryMap instead
+                        onAdminZeroFillClick={handleCountryClick}
                     >
                         <MapContainerWithDisclaimer
                             className={styles.mapContainer}
@@ -600,11 +577,10 @@ export function Component(props: BaseProps) {
                                     <Link
                                         to="countriesLayout"
                                         urlParams={{
-                                            // eslint-disable-next-line max-len
-                                            countryId: clickedPointProperties.feature.properties.country_id,
+                                            countryId: clickedPointProperties.properties.country_id,
                                         }}
                                     >
-                                        {clickedPointProperties.feature.properties.name}
+                                        {clickedPointProperties.properties.name}
                                     </Link>
                                 )}
                                 childrenContainerClassName={styles.popupContent}
@@ -650,7 +626,7 @@ export function Component(props: BaseProps) {
                                 padding={DEFAULT_MAP_PADDING}
                             />
                         )}
-                    </BaseMap>
+                    </GlobalMap>
                     {onPresentationModeButtonClick && !presentationMode && (
                         <Button
                             className={styles.presentationModeButton}

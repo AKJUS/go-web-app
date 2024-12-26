@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@togglecorp/re-map@0.3.0':
-    hash: wwl62qrbjaqz37xbxuqg4ecwfa
+    hash: oifgbrbpal3uyeo2ioflq37r6q
     path: patches/@togglecorp__re-map@0.3.0.patch
   '@turf/bbox@6.5.0':
     hash: xk3vqr4ybwpgzxhosz73ljzolq
@@ -51,7 +51,7 @@ importers:
         version: 2.1.1
       '@togglecorp/re-map':
         specifier: ^0.3.0
-        version: 0.3.0(patch_hash=wwl62qrbjaqz37xbxuqg4ecwfa)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0)
+        version: 0.3.0(patch_hash=oifgbrbpal3uyeo2ioflq37r6q)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0)
       '@togglecorp/toggle-form':
         specifier: ^2.0.4
         version: 2.0.4(react-dom@18.2.0)(react@18.2.0)
@@ -4710,7 +4710,7 @@ packages:
       '@babel/runtime-corejs3': 7.26.0
     dev: false
 
-  /@togglecorp/re-map@0.3.0(patch_hash=wwl62qrbjaqz37xbxuqg4ecwfa)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0):
+  /@togglecorp/re-map@0.3.0(patch_hash=oifgbrbpal3uyeo2ioflq37r6q)(mapbox-gl@1.13.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-tCohiZxUt5tkuAmzTz8qZu2foliPkj1ZyNnS3Z4He9ZDKOuGrZy0mwRe8QDDDTF+lIULD4gQMaQIENaWRls/Uw==}
     peerDependencies:
       mapbox-gl: ^1.13.0

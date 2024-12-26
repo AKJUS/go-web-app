@@ -1,18 +1,14 @@
 import {
-    useContext,
     useMemo,
     useState,
 } from 'react';
-import { LanguageContext } from '@ifrc-go/ui/contexts';
 import { MapLayer } from '@togglecorp/re-map';
 import {
     type Expression,
     type FillLayer,
     type FillPaint,
-    type LineLayer,
     type LngLatLike,
     type MapboxGeoJSONFeature,
-    type SymbolLayer,
 } from 'mapbox-gl';
 
 import BaseMap, { type Props as BaseMapProps } from '#components/domain/BaseMap';
@@ -62,19 +58,23 @@ const adminZeroHighlightPaint: FillPaint = {
     ],
 };
 
-interface Props extends Omit<BaseMapProps, 'baseLayers'> {
-    onHover?: (hoveredFeatureProperties: AdminZeroFeatureProperties | undefined) => void;
-    onClick?: (
+interface Props extends BaseMapProps {
+    adminZeroFillPaint?: mapboxgl.FillPaint,
+    onAdminZeroFillHover?: (
+        hoveredFeatureProperties: AdminZeroFeatureProperties | undefined
+    ) => void;
+    onAdminZeroFillClick?: (
         clickedFeatureProperties: AdminZeroFeatureProperties,
         lngLat: LngLatLike,
     ) => void;
-    activeCountryIso3?: string | undefined | null;
 }
 
 function GlobalMap(props: Props) {
     const {
-        onHover,
-        onClick,
+        onAdminZeroFillHover: onHover,
+        onAdminZeroFillClick: onClick,
+        adminZeroFillPaint,
+        baseLayers,
         ...baseMapProps
     } = props;
 
@@ -146,52 +146,15 @@ function GlobalMap(props: Props) {
                 visibility: 'visible',
                 'fill-sort-key': fillSortKey,
             },
+            paint: adminZeroFillPaint,
         }),
-        [fillSortKey],
-    );
-
-    const adminZeroLineLayerOptions = useMemo<Omit<LineLayer, 'id'>>(
-        () => ({
-            type: 'line',
-            layout: {
-                visibility: 'visible',
-            },
-        }),
-        [],
-    );
-
-    const { currentLanguage } = useContext(LanguageContext);
-
-    const adminLabelLayerOptions : Omit<SymbolLayer, 'id'> = useMemo(
-        () => {
-            // ar, es, fr
-            let label: string;
-            if (currentLanguage === 'es') {
-                label = 'name_es';
-            } else if (currentLanguage === 'ar') {
-                label = 'name_ar';
-            } else if (currentLanguage === 'fr') {
-                label = 'name_fr';
-            } else {
-                label = 'name';
-            }
-
-            return {
-                type: 'symbol',
-                layout: {
-                    'text-field': ['get', label],
-                    visibility: 'visible',
-                },
-            };
-        },
-        [currentLanguage],
+        [fillSortKey, adminZeroFillPaint],
     );
 
     return (
         <BaseMap
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...baseMapProps}
-            withoutLabel
             baseLayers={(
                 <>
                     <MapLayer
@@ -200,28 +163,6 @@ function GlobalMap(props: Props) {
                         onMouseEnter={handleFeatureMouseEnter}
                         onMouseLeave={handleFeatureMouseLeave}
                     />
-                    <MapLayer
-                        layerKey="admin-0-label"
-                        layerOptions={adminLabelLayerOptions}
-                    />
-                    <MapLayer
-                        layerKey="admin-0-label-non-independent"
-                        layerOptions={adminLabelLayerOptions}
-                    />
-                    <MapLayer
-                        layerKey="admin-0-label-priority"
-                        layerOptions={adminLabelLayerOptions}
-                    />
-                    {/*
-                    <MapLayer
-                        layerKey="admin-0-boundary"
-                        layerOptions={adminZeroLineLayerOptions}
-                    />
-                    */}
-                    <MapLayer
-                        layerKey="admin-0-boundary-disputed"
-                        layerOptions={adminZeroLineLayerOptions}
-                    />
                     {(onHover || onClick) && (
                         <MapLayer
                             layerKey="admin-0-highlight"
@@ -229,6 +170,7 @@ function GlobalMap(props: Props) {
                             onClick={onClick ? handleClick : undefined}
                         />
                     )}
+                    {baseLayers}
                 </>
             )}
         />

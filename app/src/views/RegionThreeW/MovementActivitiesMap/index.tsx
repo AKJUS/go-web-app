@@ -23,7 +23,7 @@ import {
 } from '@togglecorp/re-map';
 import getBbox from '@turf/bbox';
 
-import BaseMap from '#components/domain/BaseMap';
+import GlobalMap, { type AdminZeroFeatureProperties } from '#components/domain/GlobalMap';
 import Link from '#components/Link';
 import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
@@ -34,7 +34,6 @@ import {
     DURATION_MAP_ZOOM,
 } from '#utils/constants';
 import {
-    adminFillLayerOptions,
     getPointCircleHaloPaint,
     getPointCirclePaint,
 } from '#utils/map';
@@ -107,7 +106,7 @@ function MovementActivitiesMap(props: Props) {
     const strings = useTranslation(i18n);
     const { regionResponse } = useOutletContext<RegionOutletContext>();
 
-    const countryBounds = useMemo(() => (
+    const regionBounds = useMemo(() => (
         regionResponse ? getBbox(regionResponse.bbox) : undefined
     ), [regionResponse]);
 
@@ -152,12 +151,12 @@ function MovementActivitiesMap(props: Props) {
     );
 
     const handleCountryClick = useCallback((
-        feature: mapboxgl.MapboxGeoJSONFeature,
+        properties: AdminZeroFeatureProperties,
         lngLat: mapboxgl.LngLatLike,
     ) => {
         setClickedPointProperties({
-            countryId: feature.properties?.country_id,
-            countryName: feature.properties?.name,
+            countryId: properties.country_id,
+            countryName: properties.name,
             lngLat,
         });
         return false;
@@ -209,15 +208,8 @@ function MovementActivitiesMap(props: Props) {
     return (
         <div className={_cs(styles.map, className)}>
             <div className={styles.mapWithLegend}>
-                <BaseMap
-                    baseLayers={(
-                        <MapLayer
-                            layerKey="admin-0"
-                            hoverable
-                            layerOptions={adminFillLayerOptions}
-                            onClick={handleCountryClick}
-                        />
-                    )}
+                <GlobalMap
+                    onAdminZeroFillClick={handleCountryClick}
                 >
                     <MapContainerWithDisclaimer className={styles.mapContainer} />
                     {activitiesGeoJson && (
@@ -246,7 +238,7 @@ function MovementActivitiesMap(props: Props) {
                     <MapBounds
                         duration={DURATION_MAP_ZOOM}
                         padding={DEFAULT_MAP_PADDING}
-                        bounds={countryBounds}
+                        bounds={regionBounds}
                     />
                     {/* eslint-disable-next-line max-len */}
                     {clickedPointProperties?.lngLat && isDefined(clickedPointProperties.countryId) && (
@@ -313,7 +305,7 @@ function MovementActivitiesMap(props: Props) {
                             </div>
                         </MapPopup>
                     )}
-                </BaseMap>
+                </GlobalMap>
             </div>
             {
                 sidebarContent && (

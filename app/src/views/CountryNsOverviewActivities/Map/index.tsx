@@ -35,7 +35,7 @@ import {
     type SymbolPaint,
 } from 'mapbox-gl';
 
-import BaseMap from '#components/domain/BaseMap';
+import GlobalMap, { type AdminZeroFeatureProperties } from '#components/domain/GlobalMap';
 import Link from '#components/Link';
 import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
@@ -49,7 +49,6 @@ import {
     DURATION_MAP_ZOOM,
 } from '#utils/constants';
 import {
-    adminFillLayerOptions,
     getPointCircleHaloPaint,
     getPointCirclePaint,
 } from '#utils/map';
@@ -304,10 +303,10 @@ function CountryThreeWNationalSocietyProjectsMap(props: Props) {
     );
 
     const handleCountryClick = useCallback(
-        (feature: mapboxgl.MapboxGeoJSONFeature, lngLat: mapboxgl.LngLat) => {
+        (properties: AdminZeroFeatureProperties, lngLat: mapboxgl.LngLatLike) => {
             setClickedPointProperties({
-                countryId: feature.properties?.country_id,
-                countryName: feature.properties?.name,
+                countryId: properties?.country_id,
+                countryName: properties?.name,
                 lngLat,
             });
             return true;
@@ -337,15 +336,9 @@ function CountryThreeWNationalSocietyProjectsMap(props: Props) {
     return (
         <div className={_cs(styles.map, className)}>
             <div className={styles.mapWithLegend}>
-                <BaseMap
-                    baseLayers={(
-                        <MapLayer
-                            layerKey="admin-0"
-                            hoverable
-                            layerOptions={adminFillLayerOptions}
-                            onClick={handleCountryClick}
-                        />
-                    )}
+                <GlobalMap
+                    // FIXME: We should use CountryMap instead
+                    onAdminZeroFillClick={handleCountryClick}
                 >
                     <MapContainerWithDisclaimer
                         className={styles.mapContainer}
@@ -479,7 +472,7 @@ function CountryThreeWNationalSocietyProjectsMap(props: Props) {
                             padding={DEFAULT_MAP_PADDING}
                         />
                     )}
-                </BaseMap>
+                </GlobalMap>
             </div>
             {sidebarContent && (
                 <div className={styles.sidebar}>
