@@ -275,7 +275,7 @@ export const reportSchema: FormSchema = {
             country: { required: true },
             districts: { defaultValue: [] },
             dtype: { required: true },
-            title: { required: true },
+            title: { required: true, requiredValidation: requiredStringCondition },
             start_date: { required: true },
             request_assistance: {},
             ns_request_assistance: {},

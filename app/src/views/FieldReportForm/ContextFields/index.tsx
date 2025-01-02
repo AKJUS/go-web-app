@@ -2,6 +2,7 @@ import {
     useCallback,
     useMemo,
 } from 'react';
+import { useParams } from 'react-router-dom';
 import {
     BooleanInput,
     Container,
@@ -9,9 +10,11 @@ import {
     InputSection,
     RadioInput,
     TextInput,
+    TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    isDefined,
     isNotDefined,
     isTruthyString,
 } from '@togglecorp/fujs';
@@ -36,6 +39,7 @@ import {
 } from '#utils/constants';
 
 import { type PartialFormValue } from '../common';
+import TitlePreview from './TitlePreview';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -70,6 +74,7 @@ function ContextFields(props: Props) {
     } = props;
 
     const strings = useTranslation(i18n);
+    const { fieldReportId } = useParams<{ fieldReportId: string }>();
 
     const {
         api_field_report_status,
@@ -298,16 +303,27 @@ function ContextFields(props: Props) {
                             disabled={disabled}
                             withAsterisk
                         />
-                        {isTruthyString(value.summary) && (
-                            <TextInput
-                                label={strings.originalTitleSecondaryLabel}
-                                name="summary"
-                                value={value.summary}
-                                onChange={onValueChange}
-                                error={error?.summary}
-                                disabled
-                            />
-                        )}
+                        {isDefined(value.country)
+                            && isDefined(value.dtype)
+                            && isDefined(value.title)
+                            && isTruthyString(value.title.trim())
+                            ? (
+                                <TitlePreview
+                                    country={value.country}
+                                    disasterType={value.dtype}
+                                    event={value.event}
+                                    isCovidReport={value.is_covid_report}
+                                    startDate={value.start_date}
+                                    title={value.title}
+                                />
+                            ) : (
+                                <TextOutput
+                                    value={value.summary}
+                                    label={isDefined(fieldReportId)
+                                        ? strings.originalTitle : strings.generatedTitlePreview}
+                                    strongLabel
+                                />
+                            )}
                     </>
                 )}
             </InputSection>
