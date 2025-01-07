@@ -48,3 +48,17 @@ export interface SourceFileContent {
     last_migration?: string;
     strings: SourceStringItem[];
 }
+
+export type ServerActionItem  = {
+    action: 'set',
+    key: string,
+    page_name: string,
+    value: string,
+    hash: string,
+} | {
+    action: 'delete'
+    key: string;
+    page_name: string;
+}
+
+export type Language = 'en' | 'fr' | 'es' | 'ar'

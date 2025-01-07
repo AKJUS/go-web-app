@@ -1,6 +1,7 @@
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
 import { cwd } from 'process';
+import { join, basename } from 'path';
 
 import lint from './commands/lint';
 import listMigrations from './commands/listMigrations';
@@ -9,7 +10,10 @@ import mergeMigrations from './commands/mergeMigrations';
 import applyMigrations from './commands/applyMigrations';
 import generateMigration from './commands/generateMigration';
 import exportMigration from './commands/exportMigration';
-import { join, basename } from 'path';
+import pushMigration from './commands/pushMigration';
+import pushStringsFromExcel from './commands/pushStringsFromExcel';
+import exportServerStringsToExcel from './commands/exportServerStringsToExcel';
+import clearServerStrings from './commands/clearServerStrings';
 
 const currentDir = cwd();
 
@@ -160,7 +164,7 @@ yargs(hideBin(process.argv))
         },
     )
     .command(
-        'export-migration <MIGRATION_FILE_PATH> <OUTPUT_DIR>',
+        'export-migration-to-excel <MIGRATION_FILE_PATH> <OUTPUT_DIR>',
         'Export migration file to excel format which can be used to translate the new and updated strings',
         (yargs) => {
             yargs.positional('MIGRATION_FILE_PATH', {
@@ -185,6 +189,121 @@ yargs(hideBin(process.argv))
             await exportMigration(
                 argv.MIGRATION_FILE_PATH as string,
                 exportFilePath,
+            );
+        },
+    )
+    .command(
+        'push-migration <MIGRATION_FILE_PATH>',
+        'Push migration file to the server',
+        (yargs) => {
+            yargs.positional('MIGRATION_FILE_PATH', {
+                type: 'string',
+                describe: 'Find the migration file on MIGRATION_FILE_PATH',
+            });
+            yargs.options({
+                'api-url': {
+                    type: 'string',
+                    describe: 'URL for the API server',
+                    require: true,
+                },
+                'auth-token': {
+                    type: 'string',
+                    describe: 'Authentication token to access the API server',
+                    require: true,
+                },
+            });
+        },
+        async (argv) => {
+            const migrationFilePath = (argv.MIGRATION_FILE_PATH as string);
+
+            await pushMigration(
+                migrationFilePath,
+                argv.apiUrl as string,
+                argv.authToken as string,
+            );
+        },
+    )
+    .command(
+        'push-strings-from-excel <IMPORT_FILE_PATH>',
+        'Import migration from excel file and push it to server',
+        (yargs) => {
+            yargs.positional('IMPORT_FILE_PATH', {
+                type: 'string',
+                describe: 'Find the import file on IMPORT_FILE_PATH',
+            });
+            yargs.options({
+                'auth-token': {
+                    type: 'string',
+                    describe: 'Authentication token to access the API server',
+                    require: true,
+                },
+                'api-url': {
+                    type: 'string',
+                    describe: 'URL for the API server',
+                    require: true,
+                }
+            });
+        },
+        async (argv) => {
+            const importFilePath = (argv.IMPORT_FILE_PATH as string);
+
+            await pushStringsFromExcel(
+                importFilePath,
+                argv.apiUrl as string,
+                argv.authToken as string,
+            );
+        },
+    )
+    .command(
+        'export-server-strings <API_URL>',
+        'Export server strings to excel file',
+        (yargs) => {
+            yargs.positional('API_URL', {
+                type: 'string',
+                describe: 'Fetch server strings from API_URL, language is auto appended (e.g. API_URL/en)',
+            });
+            yargs.options({
+                'auth-token': {
+                    type: 'string',
+                    describe: 'Authentication token to access the API server',
+                    require: false,
+                },
+                'output-file-name': {
+                    type: 'string',
+                    describe: 'Output excel file name',
+                    require: false,
+                },
+            });
+        },
+        async (argv) => {
+            await exportServerStringsToExcel(
+                argv.API_URL as string,
+                argv.authToken as string | undefined,
+                argv.outputFileName as string | undefined
+            );
+        },
+    )
+    .command(
+        'clear-server-strings',
+        'Clear all existing strings in the server',
+        (yargs) => {
+            yargs.options({
+                'auth-token': {
+                    type: 'string',
+                    describe: 'Authentication token to access the API server',
+                    require: true,
+                },
+                'api-url': {
+                    type: 'string',
+                    describe: 'URL for the API server',
+                    require: true,
+                }
+            });
+        },
+        async (argv) => {
+            await clearServerStrings(
+                argv.apiUrl as string,
+                argv.authToken as string,
             );
         },
     )

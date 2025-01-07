@@ -15,6 +15,9 @@ import {
     TranslationFileContent,
     MigrationFileContent,
     SourceFileContent,
+    Language,
+    ServerActionItem,
+    SourceStringItem,
 } from './types';
 
 const readFilePromisify = promisify(readFile);
@@ -22,6 +25,59 @@ export const writeFilePromisify = promisify(writeFile);
 const unlinkPromisify = promisify(unlink);
 
 // Utilities
+
+export function getCombinedKey(key: string, namespace: string) {
+    return `${namespace}:${key}`;
+}
+
+export function resolveUrl(from: string, to: string) {
+    const resolvedUrl = new URL(to, new URL(from, 'resolve://'));
+    if (resolvedUrl.protocol === 'resolve:') {
+        const { pathname, search, hash } = resolvedUrl;
+        return pathname + search + hash;
+    }
+    return resolvedUrl.toString();
+}
+
+export async function fetchLanguageStrings(language: Language, apiUrl: string, authToken?: string) {
+    const endpoint = resolveUrl(apiUrl, `${language}/`);
+    const headers: RequestInit['headers'] = {
+        'Accept': 'application/json'
+    }
+
+    if (isDefined(authToken)) {
+        headers['Authorization'] =  `Token ${authToken}`;
+    }
+
+    const promise = fetch(
+        endpoint,
+        {
+            method: 'GET',
+            headers,
+        }
+    );
+
+    return promise;
+}
+
+export async function postLanguageStrings(language: Language, actions: ServerActionItem[], apiUrl: string, authToken: string) {
+    const endpoint = resolveUrl(apiUrl, language);
+    const bulkActionEndpoint = resolveUrl(`${endpoint}/`, 'bulk-action/');
+
+    const promise = fetch(
+        bulkActionEndpoint,
+        {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${authToken}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ actions }),
+        }
+    );
+
+    return promise;
+}
 
 export function oneOneMapping<T, K extends string | number>(
     prevState: T[],
@@ -323,3 +379,37 @@ export async function removeFiles(files: string[]) {
     ));
     await Promise.all(removePromises);
 }
+
+export const languages: Language[] = ['en', 'fr', 'es', 'ar'];
+
+export async function fetchServerState(apiUrl: string, authToken?: string) {
+    const responsePromises = languages.map(
+        (language) => fetchLanguageStrings(language, apiUrl, authToken)
+    );
+
+    const responses = await Promise.all(responsePromises);
+
+    const languageJsonPromises = responses.map(
+        (response) => response.json()
+    );
+
+    const languageStrings = await Promise.all(languageJsonPromises);
+
+    const serverStrings = languageStrings.flatMap(
+        (languageString) => {
+            const language: Language = languageString.code;
+
+            const strings: SourceStringItem[] = languageString.strings.map(
+                (string: Omit<SourceStringItem, 'language'>) => ({
+                    ...string,
+                    language,
+                })
+            )
+
+            return strings;
+        }
+    );
+
+    return serverStrings;
+}
+
