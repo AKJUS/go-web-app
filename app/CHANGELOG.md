@@ -1,5 +1,16 @@
 # go-web-app
 
+## 7.7.0
+
+### Minor Changes
+
+- 3258b96: Add local unit validation workflow
+
+### Patch Changes
+
+- Updated dependencies [c5a446f]
+  - @ifrc-go/ui@1.2.2
+
 ## 7.6.6
 
 ### Patch Changes

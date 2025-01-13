@@ -1,5 +1,11 @@
 # @ifrc-go/ui
 
+## 1.2.2
+
+### Patch Changes
+
+- c5a446f: Fix label type for chip component
+
 ## 1.2.1
 
 ### Patch Changes
