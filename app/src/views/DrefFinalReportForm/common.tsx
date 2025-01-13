@@ -10,7 +10,7 @@ import { type components } from '#generated/types';
 import { type PartialFinalReport } from './schema';
 
 type TypeOfDrefEnum = components<'read'>['schemas']['DrefDrefDrefTypeEnumKey'];
-type TypeOfOnsetEnum = components<'read'>['schemas']['TypeValidatedEnum'];
+type TypeOfOnsetEnum = components<'read'>['schemas']['DrefDrefOnsetTypeEnumKey'];
 
 // export const ONSET_SLOW = 1 satisfies TypeOfOnsetEnum;
 export const ONSET_SUDDEN = 2 satisfies TypeOfOnsetEnum;
