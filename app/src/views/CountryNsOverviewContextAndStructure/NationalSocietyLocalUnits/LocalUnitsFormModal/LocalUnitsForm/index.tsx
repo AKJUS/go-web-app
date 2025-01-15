@@ -1,7 +1,9 @@
 import {
     type RefObject,
     useCallback,
+    useMemo,
     useRef,
+    useState,
 } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import {
@@ -15,6 +17,7 @@ import {
     NumberInput,
     Portal,
     SelectInput,
+    Switch,
     TextArea,
     TextInput,
 } from '@ifrc-go/ui';
@@ -44,7 +47,9 @@ import {
 import DiffWrapper from '#components/DiffWrapper';
 import BaseMapPointInput from '#components/domain/BaseMapPointInput';
 import CountrySelectInput from '#components/domain/CountrySelectInput';
+import MultiSelectDiffWrapper from '#components/MultiSelectDiffWrapper';
 import NonFieldError from '#components/NonFieldError';
+import SelectDiffWrapper from '#components/SelectDiffWrapper';
 import { environment } from '#config';
 import useAuth from '#hooks/domain/useAuth';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
@@ -61,6 +66,10 @@ import {
 } from '#utils/restRequest';
 import { transformObjectError } from '#utils/restRequest/error';
 
+import {
+    type ManageResponse,
+    VALIDATED,
+} from '../../common';
 import FormGrid from '../../FormGrid';
 import LocalUnitDeleteModal from '../../LocalUnitDeleteModal';
 import LocalUnitValidateButton from '../../LocalUnitValidateButton';
@@ -113,6 +122,7 @@ interface Props {
     actionsContainerRef: RefObject<HTMLDivElement>;
     headingDescriptionRef?: RefObject<HTMLDivElement>;
     headerDescriptionRef: RefObject<HTMLDivElement>;
+    manageResponse: ManageResponse;
 }
 
 function LocalUnitsForm(props: Props) {
@@ -125,7 +135,24 @@ function LocalUnitsForm(props: Props) {
         headingDescriptionRef,
         headerDescriptionRef,
         onDeleteActionSuccess,
+        manageResponse,
     } = props;
+
+    const { isAuthenticated } = useAuth();
+
+    const {
+        isSuperUser,
+        isCountryAdmin,
+        isLocalUnitGlobalValidatorByType,
+        isLocalUnitRegionValidatorByType,
+        isLocalUnitCountryValidatorByType,
+    } = usePermissions();
+
+    const { api_visibility_choices: visibilityOptions } = useGlobalEnums();
+
+    const { countryId, countryResponse } = useOutletContext<CountryOutletContext>();
+
+    const [updateReason, setUpdateReason] = useState<string>();
 
     const [showChangesModal, {
         setTrue: setShowChangesModalTrue,
@@ -140,6 +167,8 @@ function LocalUnitsForm(props: Props) {
     const alert = useAlert();
     const strings = useTranslation(i18n);
     const formFieldsContainerRef = useRef<HTMLDivElement>(null);
+
+    const [showValueChanges, setShowValueChanges] = useState(false);
 
     const [
         showDeleteLocalUnitModal,
@@ -158,32 +187,12 @@ function LocalUnitsForm(props: Props) {
     ] = useBooleanState(false);
 
     const {
-        isSuperUser,
-        isRegionAdmin,
-        isCountryAdmin,
-        isGuestUser,
-    } = usePermissions();
-    const { isAuthenticated } = useAuth();
-
-    const { api_visibility_choices: visibilityOptions } = useGlobalEnums();
-
-    const { countryId, countryResponse } = useOutletContext<CountryOutletContext>();
-
-    const hasValidatePermission = isSuperUser
-        || isCountryAdmin(Number(countryId))
-        || isRegionAdmin(Number(countryResponse?.region));
-
-    const hasEditPermission = hasValidatePermission;
-    const hasDeletePermission = isAuthenticated && !isGuestUser;
-
-    const {
         value,
         error: formError,
         setFieldValue,
         validate,
         setError,
         setValue,
-        pristine,
     } = useForm(
         schema,
         {
@@ -224,27 +233,11 @@ function LocalUnitsForm(props: Props) {
         },
     });
 
-    const { response: localUnitPreviousResponse } = useRequest({
+    const {
+        response: localUnitPreviousResponse,
+    } = useRequest({
         url: '/api/v2/local-units/{id}/latest-change-request/',
         pathVariables: isDefined(localUnitId) ? { id: localUnitId } : undefined,
-        /*
-        onFailure: (error) => {
-            const {
-                value: {
-                    messageForNotification,
-                },
-                debugMessage,
-            } = error;
-            alert.show(
-                strings.localUnitsMapLatestChangesFailureMessage,
-                {
-                    variant: 'danger',
-                    description: messageForNotification,
-                    debugMessage,
-                },
-            );
-        },
-        */
     });
 
     const readOnly = readOnlyFromProps
@@ -346,8 +339,26 @@ function LocalUnitsForm(props: Props) {
             );
 
             formFieldsContainerRef.current?.scrollIntoView({ block: 'start' });
+            setShowChangesModalFalse();
         },
     });
+
+    const isExternallyManaged = useMemo(() => {
+        if (isDefined(value.type) && isDefined(manageResponse)) {
+            return manageResponse[value.type]?.enabled;
+        }
+        return false;
+    }, [value.type, manageResponse]);
+
+    const hasPermission = isAuthenticated
+        && !isExternallyManaged
+        && (isSuperUser
+            || isLocalUnitGlobalValidatorByType(value.type)
+            || isLocalUnitCountryValidatorByType(countryResponse?.id, value.type)
+            || isLocalUnitRegionValidatorByType(countryResponse?.region, value.type));
+
+    const hasAddEditLocalUnitPermission = isCountryAdmin(countryResponse?.id)
+        || hasPermission;
 
     const handleFormSubmit = useCallback(
         () => {
@@ -359,12 +370,23 @@ function LocalUnitsForm(props: Props) {
             }
 
             if (isDefined(localUnitId)) {
-                updateLocalUnit(result.value as LocalUnitsRequestPostBody);
+                const finalValue = {
+                    ...result.value,
+                    update_reason_overview: updateReason,
+                };
+                updateLocalUnit(finalValue as LocalUnitsRequestPostBody);
             } else {
                 addLocalUnit(result.value as LocalUnitsRequestPostBody);
             }
         },
-        [validate, localUnitId, setError, updateLocalUnit, addLocalUnit],
+        [
+            validate,
+            localUnitId,
+            setError,
+            updateLocalUnit,
+            addLocalUnit,
+            updateReason,
+        ],
     );
 
     const {
@@ -431,21 +453,61 @@ function LocalUnitsForm(props: Props) {
     const healthFormError = getErrorObject(error?.health);
     const revertChangesFormError = getErrorObject(revertChangesError);
 
+    const previousData = (
+        localUnitPreviousResponse?.previous_data_details as unknown as LocalUnitResponse
+    );
+
+    const showChanges = !localUnitDetailsResponse?.is_new_local_unit
+        && !!localUnitDetailsResponse?.is_locked
+        && isNotDefined(localUnitDetailsResponse.bulk_upload);
+
+    const showViewChanges = !localUnitDetailsResponse?.is_new_local_unit
+        && isDefined(localUnitId)
+        && !(localUnitDetailsResponse?.status === VALIDATED);
+
+    const permissionError = useMemo(() => {
+        if (isExternallyManaged && !hasAddEditLocalUnitPermission) {
+            if (isDefined(localUnitId)) {
+                return strings.noBothPermissionEditFormError;
+            }
+            return strings.noBothPermissionAddFormError;
+        }
+        if (isExternallyManaged) {
+            return strings.noPermissionFormExternallyManaged;
+        }
+        if (!hasAddEditLocalUnitPermission) {
+            if (isDefined(localUnitId)) {
+                return strings.noLocalUnitEditPermission;
+            }
+            return strings.noLocalUnitAddPermission;
+        }
+        return undefined;
+    }, [
+        isExternallyManaged,
+        hasAddEditLocalUnitPermission,
+        strings.noLocalUnitAddPermission,
+        strings.noLocalUnitEditPermission,
+        strings.noPermissionFormExternallyManaged,
+        strings.noBothPermissionAddFormError,
+        strings.noBothPermissionEditFormError,
+        localUnitId,
+    ]);
+
     const submitButton = readOnly ? null : (
         <Button
             name={undefined}
             onClick={handleFormSubmit}
-            disabled={addLocalUnitsPending || updateLocalUnitsPending}
+            disabled={
+                addLocalUnitsPending
+                || updateLocalUnitsPending
+                || !hasAddEditLocalUnitPermission
+                || isExternallyManaged
+                || (isDefined(localUnitId) && isNotDefined(updateReason))
+            }
         >
             {strings.submitButtonLabel}
         </Button>
     );
-
-    const previousData = (
-        localUnitPreviousResponse?.previous_data_details as unknown as LocalUnitResponse
-    );
-    const isNewLocalUnit = isNotDefined(previousData);
-    const showChanges = !isNewLocalUnit && !!localUnitDetailsResponse?.is_locked;
 
     return (
         <div className={styles.localUnitsForm}>
@@ -458,6 +520,7 @@ function LocalUnitsForm(props: Props) {
                         <Button
                             name={undefined}
                             onClick={onEditButtonClick}
+                            disabled={!hasAddEditLocalUnitPermission}
                         >
                             {strings.editButtonLabel}
                         </Button>
@@ -465,11 +528,23 @@ function LocalUnitsForm(props: Props) {
 
                 </Portal>
             )}
+            {isDefined(actionsContainerRef.current)
+                && showViewChanges && (
+                <Portal container={actionsContainerRef.current}>
+                    <Switch
+                        name="valueChanges"
+                        label={strings.viewChangesLabel}
+                        value={showValueChanges}
+                        onChange={setShowValueChanges}
+                    />
+                </Portal>
+            )}
             {!readOnly && isDefined(localUnitId) && isDefined(actionsContainerRef.current) && (
                 <Portal container={actionsContainerRef.current}>
                     <Button
                         name={undefined}
                         onClick={onDoneButtonClick}
+                        disabled={!hasAddEditLocalUnitPermission}
                     >
                         {strings.doneButtonLabel}
                     </Button>
@@ -502,10 +577,14 @@ function LocalUnitsForm(props: Props) {
             {isDefined(headerDescriptionRef.current) && (
                 <Portal container={headerDescriptionRef.current}>
                     <FormGrid>
-                        <DiffWrapper
+                        <SelectDiffWrapper
+                            showPreviousValue={showValueChanges}
                             enabled={showChanges}
                             oldValue={previousData?.type}
                             value={value.type}
+                            options={localUnitsOptions?.type}
+                            keySelector={numericIdSelector}
+                            labelSelector={stringNameSelector}
                             diffContainerClassName={styles.diffContainer}
                         >
                             <SelectInput
@@ -522,12 +601,16 @@ function LocalUnitsForm(props: Props) {
                                 error={error?.type}
                                 nonClearable
                             />
-                        </DiffWrapper>
+                        </SelectDiffWrapper>
                         <FormGrid>
-                            <DiffWrapper
+                            <SelectDiffWrapper
+                                showPreviousValue={showValueChanges}
                                 enabled={showChanges}
                                 oldValue={previousData?.visibility}
                                 value={value.visibility}
+                                options={visibilityOptions}
+                                keySelector={visibilityKeySelector}
+                                labelSelector={stringValueSelector}
                                 diffContainerClassName={styles.diffContainer}
                             >
                                 <SelectInput
@@ -544,29 +627,34 @@ function LocalUnitsForm(props: Props) {
                                     readOnly={readOnly}
                                     error={error?.type}
                                 />
-                            </DiffWrapper>
+                            </SelectDiffWrapper>
                             {isDefined(localUnitDetailsResponse)
                                 && (environment !== 'production')
                                 && (
                                     <div className={styles.actions}>
-                                        {hasDeletePermission && (
-                                            <Button
-                                                name={undefined}
-                                                onClick={setShowDeleteLocalUnitModalTrue}
-                                            >
-                                                {strings.localUnitDeleteButtonLabel}
-                                            </Button>
-                                        )}
-                                        {hasValidatePermission && (
+                                        {(hasPermission
+                                            && isNotDefined(localUnitDetailsResponse.bulk_upload))
+                                            && (
+                                                <Button
+                                                    name={undefined}
+                                                    onClick={setShowDeleteLocalUnitModalTrue}
+                                                >
+                                                    {strings.localUnitDeleteButtonLabel}
+                                                </Button>
+                                            )}
+                                        {hasPermission && (
                                             <LocalUnitValidateButton
                                                 onClick={setShowValidateLocalUnitModalTrue}
-                                                readOnly={pristine}
-                                                isValidated={localUnitDetailsResponse.validated}
-                                                hasValidatePermission={hasValidatePermission}
+                                                status={localUnitDetailsResponse.status}
+                                                statusDetails={
+                                                    localUnitDetailsResponse.status_details
+                                                }
+                                                hasValidatePermission={hasPermission}
                                             />
                                         )}
-                                        {localUnitDetailsResponse.is_locked
-                                            && !isNewLocalUnit && (
+                                        {hasPermission && localUnitDetailsResponse.is_locked
+                                            && isNotDefined(localUnitDetailsResponse.bulk_upload)
+                                            && !localUnitDetailsResponse?.is_new_local_unit && (
                                             <Button
                                                 name={undefined}
                                                 onClick={setShowRevertChangesModalTrue}
@@ -595,13 +683,22 @@ function LocalUnitsForm(props: Props) {
                     error={formError}
                     withFallbackError
                 />
+                {isDefined(permissionError) && (
+                    <NonFieldError error={permissionError} />
+                )}
                 {/* NOTE: this should be moved to health specific section */}
                 <NonFieldError
                     error={error?.health}
                 />
+                {isDefined(localUnitDetailsResponse?.bulk_upload) && (
+                    <NonFieldError
+                        error={strings.noPermissionFormUpdateExternallyManaged}
+                    />
+                )}
                 <FormGrid>
                     <FormColumnContainer>
                         <DiffWrapper
+                            showPreviousValue={showValueChanges}
                             value={value.date_of_data}
                             oldValue={previousData?.date_of_data}
                             enabled={showChanges}
@@ -619,6 +716,7 @@ function LocalUnitsForm(props: Props) {
                             />
                         </DiffWrapper>
                         <DiffWrapper
+                            showPreviousValue={showValueChanges}
                             value={value.subtype}
                             oldValue={previousData?.subtype}
                             enabled={showChanges}
@@ -636,6 +734,7 @@ function LocalUnitsForm(props: Props) {
                             />
                         </DiffWrapper>
                         <DiffWrapper
+                            showPreviousValue={showValueChanges}
                             value={value.english_branch_name}
                             oldValue={previousData?.english_branch_name}
                             enabled={showChanges}
@@ -652,6 +751,7 @@ function LocalUnitsForm(props: Props) {
                             />
                         </DiffWrapper>
                         <DiffWrapper
+                            showPreviousValue={showValueChanges}
                             value={value.local_branch_name}
                             oldValue={previousData?.local_branch_name}
                             enabled={showChanges}
@@ -669,10 +769,14 @@ function LocalUnitsForm(props: Props) {
                             />
                         </DiffWrapper>
                         {value.type !== TYPE_HEALTH_CARE && (
-                            <DiffWrapper
+                            <SelectDiffWrapper
+                                showPreviousValue={showValueChanges}
                                 value={value.level}
                                 oldValue={previousData?.level}
                                 enabled={showChanges}
+                                options={localUnitsOptions?.level}
+                                keySelector={numericIdSelector}
+                                labelSelector={stringNameSelector}
                                 diffContainerClassName={styles.diffContainer}
                             >
                                 <SelectInput
@@ -687,11 +791,12 @@ function LocalUnitsForm(props: Props) {
                                     readOnly={readOnly}
                                     error={error?.level}
                                 />
-                            </DiffWrapper>
+                            </SelectDiffWrapper>
                         )}
-                        {value.type !== TYPE_HEALTH_CARE && hasEditPermission && (
+                        {value.type !== TYPE_HEALTH_CARE && hasAddEditLocalUnitPermission && (
                             <>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.focal_person_en}
                                     oldValue={previousData?.focal_person_en}
                                     enabled={showChanges}
@@ -708,6 +813,7 @@ function LocalUnitsForm(props: Props) {
                                     />
                                 </DiffWrapper>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.focal_person_loc}
                                     oldValue={previousData?.focal_person_loc}
                                     enabled={showChanges}
@@ -729,6 +835,7 @@ function LocalUnitsForm(props: Props) {
                         {value.type !== TYPE_HEALTH_CARE && (
                             <>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.source_en}
                                     oldValue={previousData?.source_en}
                                     enabled={showChanges}
@@ -745,6 +852,7 @@ function LocalUnitsForm(props: Props) {
                                     />
                                 </DiffWrapper>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.source_loc}
                                     oldValue={previousData?.source_loc}
                                     enabled={showChanges}
@@ -764,11 +872,15 @@ function LocalUnitsForm(props: Props) {
                         )}
                         {value.type === TYPE_HEALTH_CARE && (
                             <>
-                                <DiffWrapper
+                                <SelectDiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.health?.affiliation}
                                     oldValue={previousData?.health?.affiliation}
                                     enabled={showChanges}
                                     diffContainerClassName={styles.diffContainer}
+                                    options={localUnitsOptions?.affiliation}
+                                    keySelector={numericIdSelector}
+                                    labelSelector={stringNameSelector}
                                 >
                                     <SelectInput
                                         inputSectionClassName={styles.changes}
@@ -783,8 +895,9 @@ function LocalUnitsForm(props: Props) {
                                         readOnly={readOnly}
                                         error={healthFormError?.affiliation}
                                     />
-                                </DiffWrapper>
+                                </SelectDiffWrapper>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.health?.other_affiliation}
                                     oldValue={previousData?.health?.other_affiliation}
                                     enabled={showChanges}
@@ -800,11 +913,15 @@ function LocalUnitsForm(props: Props) {
                                         error={healthFormError?.other_affiliation}
                                     />
                                 </DiffWrapper>
-                                <DiffWrapper
+                                <SelectDiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.health?.functionality}
                                     oldValue={previousData?.health?.functionality}
                                     enabled={showChanges}
                                     diffContainerClassName={styles.diffContainer}
+                                    options={localUnitsOptions?.functionality}
+                                    keySelector={numericIdSelector}
+                                    labelSelector={stringNameSelector}
                                 >
                                     <SelectInput
                                         inputSectionClassName={styles.changes}
@@ -819,8 +936,12 @@ function LocalUnitsForm(props: Props) {
                                         readOnly={readOnly}
                                         error={healthFormError?.functionality}
                                     />
-                                </DiffWrapper>
-                                <DiffWrapper
+                                </SelectDiffWrapper>
+                                <SelectDiffWrapper
+                                    keySelector={numericIdSelector}
+                                    labelSelector={stringNameSelector}
+                                    options={localUnitsOptions?.hospital_type}
+                                    showPreviousValue={showValueChanges}
                                     value={value.health?.hospital_type}
                                     oldValue={previousData?.health?.hospital_type}
                                     enabled={showChanges}
@@ -838,8 +959,9 @@ function LocalUnitsForm(props: Props) {
                                         readOnly={readOnly}
                                         error={healthFormError?.hospital_type}
                                     />
-                                </DiffWrapper>
+                                </SelectDiffWrapper>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.health?.is_teaching_hospital}
                                     oldValue={
                                         previousData?.health?.is_teaching_hospital
@@ -859,6 +981,7 @@ function LocalUnitsForm(props: Props) {
                                     />
                                 </DiffWrapper>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.health?.is_in_patient_capacity}
                                     oldValue={
                                         previousData?.health?.is_in_patient_capacity
@@ -878,6 +1001,7 @@ function LocalUnitsForm(props: Props) {
                                     />
                                 </DiffWrapper>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.health?.is_isolation_rooms_wards}
                                     oldValue={
                                         previousData?.health?.is_isolation_rooms_wards
@@ -901,6 +1025,7 @@ function LocalUnitsForm(props: Props) {
                     </FormColumnContainer>
                     <FormColumnContainer>
                         <DiffWrapper
+                            showPreviousValue={showValueChanges}
                             value={value.country}
                             oldValue={previousData?.country}
                             enabled={showChanges}
@@ -920,12 +1045,14 @@ function LocalUnitsForm(props: Props) {
                             error={error?.location_json}
                         />
                         <DiffWrapper
+                            showPreviousValue={showValueChanges}
                             diffContainerClassName={styles.latitudeDiffWrapper}
                             value={value.location_json?.lat}
                             oldValue={previousData?.location_json?.lat}
                             enabled={showChanges}
                         >
                             <DiffWrapper
+                                showPreviousValue={showValueChanges}
                                 diffContainerClassName={styles.longitudeDiffWrapper}
                                 value={value.location_json?.lng}
                                 oldValue={previousData?.location_json?.lng}
@@ -958,6 +1085,7 @@ function LocalUnitsForm(props: Props) {
                             spacing="comfortable"
                         >
                             <DiffWrapper
+                                showPreviousValue={showValueChanges}
                                 value={value.address_en}
                                 oldValue={previousData?.address_en}
                                 enabled={showChanges}
@@ -974,6 +1102,7 @@ function LocalUnitsForm(props: Props) {
                                 />
                             </DiffWrapper>
                             <DiffWrapper
+                                showPreviousValue={showValueChanges}
                                 value={value.address_loc}
                                 oldValue={previousData?.address_loc}
                                 enabled={showChanges}
@@ -990,6 +1119,7 @@ function LocalUnitsForm(props: Props) {
                                 />
                             </DiffWrapper>
                             <DiffWrapper
+                                showPreviousValue={showValueChanges}
                                 value={value.city_en}
                                 oldValue={previousData?.city_en}
                                 enabled={showChanges}
@@ -1006,6 +1136,7 @@ function LocalUnitsForm(props: Props) {
                                 />
                             </DiffWrapper>
                             <DiffWrapper
+                                showPreviousValue={showValueChanges}
                                 value={value.city_loc}
                                 oldValue={previousData?.city_loc}
                                 enabled={showChanges}
@@ -1022,6 +1153,7 @@ function LocalUnitsForm(props: Props) {
                                 />
                             </DiffWrapper>
                             <DiffWrapper
+                                showPreviousValue={showValueChanges}
                                 value={value.postcode}
                                 oldValue={previousData?.postcode}
                                 enabled={showChanges}
@@ -1044,9 +1176,10 @@ function LocalUnitsForm(props: Props) {
                         >
                             {value.type !== TYPE_HEALTH_CARE && (
                                 <>
-                                    {hasEditPermission && (
+                                    {hasAddEditLocalUnitPermission && (
                                         <>
                                             <DiffWrapper
+                                                showPreviousValue={showValueChanges}
                                                 value={value.phone}
                                                 oldValue={previousData?.phone}
                                                 enabled={showChanges}
@@ -1063,6 +1196,7 @@ function LocalUnitsForm(props: Props) {
                                                 />
                                             </DiffWrapper>
                                             <DiffWrapper
+                                                showPreviousValue={showValueChanges}
                                                 value={value.email}
                                                 oldValue={previousData?.email}
                                                 enabled={showChanges}
@@ -1081,6 +1215,7 @@ function LocalUnitsForm(props: Props) {
                                         </>
                                     )}
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.link}
                                         oldValue={previousData?.link}
                                         enabled={showChanges}
@@ -1101,6 +1236,7 @@ function LocalUnitsForm(props: Props) {
                             {value.type === TYPE_HEALTH_CARE && (
                                 <>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.focal_point_position}
                                         oldValue={
                                             previousData?.health?.focal_point_position
@@ -1118,9 +1254,10 @@ function LocalUnitsForm(props: Props) {
                                             error={healthFormError?.focal_point_position}
                                         />
                                     </DiffWrapper>
-                                    {hasEditPermission && (
+                                    {hasAddEditLocalUnitPermission && (
                                         <>
                                             <DiffWrapper
+                                                showPreviousValue={showValueChanges}
                                                 value={value.health?.focal_point_email}
                                                 oldValue={previousData?.health?.focal_point_email}
                                                 enabled={showChanges}
@@ -1138,6 +1275,7 @@ function LocalUnitsForm(props: Props) {
                                                 />
                                             </DiffWrapper>
                                             <DiffWrapper
+                                                showPreviousValue={showValueChanges}
                                                 value={value.health?.focal_point_phone_number}
                                                 oldValue={
                                                     previousData?.health?.focal_point_phone_number
@@ -1173,11 +1311,15 @@ function LocalUnitsForm(props: Props) {
                         >
                             <FormGrid>
                                 <FormColumnContainer>
-                                    <DiffWrapper
+                                    <SelectDiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.health_facility_type}
                                         oldValue={previousData?.health?.health_facility_type}
                                         enabled={showChanges}
                                         diffContainerClassName={styles.diffContainer}
+                                        keySelector={numericIdSelector}
+                                        labelSelector={stringNameSelector}
+                                        options={localUnitsOptions?.health_facility_type}
                                     >
                                         <SelectInput
                                             inputSectionClassName={styles.changes}
@@ -1192,8 +1334,9 @@ function LocalUnitsForm(props: Props) {
                                             readOnly={readOnly}
                                             error={healthFormError?.health_facility_type}
                                         />
-                                    </DiffWrapper>
+                                    </SelectDiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.other_facility_type}
                                         oldValue={previousData?.health?.other_facility_type}
                                         enabled={showChanges}
@@ -1209,11 +1352,15 @@ function LocalUnitsForm(props: Props) {
                                             error={healthFormError?.other_facility_type}
                                         />
                                     </DiffWrapper>
-                                    <DiffWrapper
+                                    <SelectDiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.primary_health_care_center}
                                         oldValue={previousData?.health?.primary_health_care_center}
                                         enabled={showChanges}
                                         diffContainerClassName={styles.diffContainer}
+                                        options={localUnitsOptions?.primary_health_care_center}
+                                        keySelector={numericIdSelector}
+                                        labelSelector={stringNameSelector}
                                     >
                                         <SelectInput
                                             inputSectionClassName={styles.changes}
@@ -1227,8 +1374,9 @@ function LocalUnitsForm(props: Props) {
                                             readOnly={readOnly}
                                             error={healthFormError?.primary_health_care_center}
                                         />
-                                    </DiffWrapper>
+                                    </SelectDiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.speciality}
                                         oldValue={previousData?.health?.speciality}
                                         enabled={showChanges}
@@ -1244,10 +1392,15 @@ function LocalUnitsForm(props: Props) {
                                             error={healthFormError?.speciality}
                                         />
                                     </DiffWrapper>
-                                    <DiffWrapper
+                                    <MultiSelectDiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.general_medical_services}
                                         oldValue={previousData?.health?.general_medical_services}
                                         enabled={showChanges}
+                                        options={localUnitsOptions?.general_medical_services}
+                                        keySelector={numericIdSelector}
+                                        labelSelector={stringNameSelector}
+                                        diffContainerClassName={styles.diffContainer}
                                     >
                                         <MultiSelectInput
                                             inputSectionClassName={styles.changes}
@@ -1264,8 +1417,9 @@ function LocalUnitsForm(props: Props) {
                                                 healthFormError?.general_medical_services,
                                             )}
                                         />
-                                    </DiffWrapper>
-                                    <DiffWrapper
+                                    </MultiSelectDiffWrapper>
+                                    <MultiSelectDiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={
                                             value.health?.specialized_medical_beyond_primary_level
                                         }
@@ -1274,6 +1428,11 @@ function LocalUnitsForm(props: Props) {
                                                 ?.health?.specialized_medical_beyond_primary_level
                                         }
                                         enabled={showChanges}
+                                        options={localUnitsOptions
+                                            ?.specialized_medical_beyond_primary_level}
+                                        keySelector={numericIdSelector}
+                                        labelSelector={stringNameSelector}
+                                        diffContainerClassName={styles.diffContainer}
                                     >
                                         <MultiSelectInput
                                             inputSectionClassName={styles.changes}
@@ -1293,8 +1452,9 @@ function LocalUnitsForm(props: Props) {
                                                     ?.specialized_medical_beyond_primary_level,
                                             )}
                                         />
-                                    </DiffWrapper>
+                                    </MultiSelectDiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.other_services}
                                         oldValue={previousData?.health?.other_services}
                                         enabled={showChanges}
@@ -1310,11 +1470,15 @@ function LocalUnitsForm(props: Props) {
                                             error={healthFormError?.other_services}
                                         />
                                     </DiffWrapper>
-                                    <DiffWrapper
+                                    <MultiSelectDiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.blood_services}
                                         oldValue={previousData?.health?.blood_services}
                                         enabled={showChanges}
                                         diffContainerClassName={styles.diffContainer}
+                                        keySelector={numericIdSelector}
+                                        labelSelector={stringNameSelector}
+                                        options={localUnitsOptions?.blood_services}
                                     >
                                         <MultiSelectInput
                                             inputSectionClassName={styles.changes}
@@ -1329,14 +1493,19 @@ function LocalUnitsForm(props: Props) {
                                             readOnly={readOnly}
                                             error={getErrorString(healthFormError?.blood_services)}
                                         />
-                                    </DiffWrapper>
-                                    <DiffWrapper
+                                    </MultiSelectDiffWrapper>
+                                    <MultiSelectDiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.professional_training_facilities}
                                         oldValue={
                                             previousData?.health?.professional_training_facilities
                                         }
                                         enabled={showChanges}
                                         diffContainerClassName={styles.diffContainer}
+                                        keySelector={numericIdSelector}
+                                        labelSelector={stringNameSelector}
+                                        options={localUnitsOptions
+                                            ?.professional_training_facilities}
                                     >
                                         <MultiSelectInput
                                             inputSectionClassName={styles.changes}
@@ -1353,14 +1522,16 @@ function LocalUnitsForm(props: Props) {
                                                 healthFormError?.professional_training_facilities,
                                             )}
                                         />
-                                    </DiffWrapper>
+                                    </MultiSelectDiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.number_of_isolation_rooms}
                                         oldValue={
                                             previousData
                                                 ?.health?.number_of_isolation_rooms
                                         }
                                         enabled={showChanges}
+                                        diffContainerClassName={styles.diffContainer}
                                     >
                                         <NumberInput
                                             inputSectionClassName={styles.changes}
@@ -1377,6 +1548,7 @@ function LocalUnitsForm(props: Props) {
                                 </FormColumnContainer>
                                 <FormColumnContainer>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.maximum_capacity}
                                         oldValue={
                                             previousData?.health?.maximum_capacity
@@ -1397,6 +1569,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.is_warehousing}
                                         oldValue={previousData?.health?.is_warehousing}
                                         enabled={showChanges}
@@ -1416,6 +1589,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.is_cold_chain}
                                         oldValue={previousData?.health?.is_cold_chain}
                                         enabled={showChanges}
@@ -1435,6 +1609,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.ambulance_type_a}
                                         oldValue={
                                             previousData?.health?.ambulance_type_a
@@ -1455,6 +1630,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.ambulance_type_b}
                                         oldValue={
                                             previousData?.health?.ambulance_type_b
@@ -1475,6 +1651,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.ambulance_type_c}
                                         oldValue={
                                             previousData?.health?.ambulance_type_c
@@ -1505,6 +1682,7 @@ function LocalUnitsForm(props: Props) {
                             <FormGrid>
                                 <FormColumnContainer>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.total_number_of_human_resource}
                                         oldValue={
                                             previousData?.health?.total_number_of_human_resource
@@ -1526,6 +1704,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.general_practitioner}
                                         oldValue={
                                             previousData?.health?.general_practitioner
@@ -1546,6 +1725,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.specialist}
                                         oldValue={previousData?.health?.specialist}
                                         enabled={showChanges}
@@ -1564,6 +1744,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.residents_doctor}
                                         oldValue={
                                             previousData?.health?.residents_doctor
@@ -1584,6 +1765,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.nurse}
                                         oldValue={previousData?.health?.nurse}
                                         enabled={showChanges}
@@ -1604,6 +1786,7 @@ function LocalUnitsForm(props: Props) {
                                 </FormColumnContainer>
                                 <FormColumnContainer>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.dentist}
                                         oldValue={previousData?.health?.dentist}
                                         enabled={showChanges}
@@ -1622,6 +1805,7 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
+                                        showPreviousValue={showValueChanges}
                                         value={value.health?.nursing_aid}
                                         oldValue={previousData?.health?.nursing_aid}
                                         enabled={showChanges}
@@ -1640,8 +1824,9 @@ function LocalUnitsForm(props: Props) {
                                         />
                                     </DiffWrapper>
                                     <DiffWrapper
-                                        value={value.health?.nursing_aid}
-                                        oldValue={previousData?.health?.nursing_aid}
+                                        showPreviousValue={showValueChanges}
+                                        value={value.health?.midwife}
+                                        oldValue={previousData?.health?.midwife}
                                         enabled={showChanges}
                                         diffContainerClassName={styles.diffContainer}
                                     >
@@ -1661,6 +1846,7 @@ function LocalUnitsForm(props: Props) {
                             </FormGrid>
                             <FormGrid>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.health?.other_profiles}
                                     oldValue={previousData?.health?.other_profiles}
                                     enabled={showChanges}
@@ -1677,6 +1863,7 @@ function LocalUnitsForm(props: Props) {
                                     />
                                 </DiffWrapper>
                                 <DiffWrapper
+                                    showPreviousValue={showValueChanges}
                                     value={value.health?.other_medical_heal}
                                     oldValue={previousData?.health?.other_medical_heal}
                                     enabled={showChanges}
@@ -1699,6 +1886,7 @@ function LocalUnitsForm(props: Props) {
                         </Container>
                         <Container>
                             <DiffWrapper
+                                showPreviousValue={showValueChanges}
                                 value={value.health?.feedback}
                                 oldValue={previousData?.health?.feedback}
                                 enabled={showChanges}
@@ -1766,7 +1954,16 @@ function LocalUnitsForm(props: Props) {
                     footerActions={submitButton}
                     localUnitId={localUnitId}
                     locallyChangedValue={value}
-                />
+                >
+                    <TextArea
+                        name="update_reason_overview"
+                        required
+                        label={strings.updateReasonOverviewLabel}
+                        value={updateReason}
+                        onChange={setUpdateReason}
+                    />
+
+                </LocalUnitViewModal>
             )}
             {showValidateLocalUnitModal
                 && isDefined(localUnitId) && (

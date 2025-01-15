@@ -1,0 +1,16 @@
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--go-ui-spacing-lg);
+
+    .upload-format {
+        display: flex;
+        flex-direction: column;
+        gap: var(--go-ui-spacing-sm);
+
+        .upload-format-content {
+            display: flex;
+            gap: var(--go-ui-spacing-sm);
+        }
+    }
+}

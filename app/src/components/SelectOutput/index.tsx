@@ -2,13 +2,13 @@ import { useMemo } from 'react';
 import { TextOutput } from '@ifrc-go/ui';
 import { isDefined } from '@togglecorp/fujs';
 
-interface Props<VALUE, OPTION> {
+export interface Props<VALUE, OPTION> {
     className?: string;
     value: VALUE | undefined;
     options: OPTION[] | undefined;
     keySelector: (datum: OPTION) => VALUE;
     labelSelector: (datum: OPTION) => React.ReactNode;
-    label: React.ReactNode;
+    label?: React.ReactNode;
 }
 
 function SelectOutput<VALUE, OPTION>(props: Props<VALUE, OPTION>) {

@@ -1,22 +1,21 @@
 import {
     useCallback,
+    useMemo,
     useState,
 } from 'react';
-import {
-    Button,
-    TableActions,
-} from '@ifrc-go/ui';
+import { TableActions } from '@ifrc-go/ui';
 import {
     useBooleanState,
     useTranslation,
 } from '@ifrc-go/ui/hooks';
+import { isDefined } from '@togglecorp/fujs';
 
 import DropdownMenuItem from '#components/DropdownMenuItem';
-import { environment } from '#config';
 import useAuth from '#hooks/domain/useAuth';
 import useCountry from '#hooks/domain/useCountry';
 import usePermissions from '#hooks/domain/usePermissions';
 
+import { type ManageResponse } from '../../common';
 import LocalUnitDeleteModal from '../../LocalUnitDeleteModal';
 import LocalUnitsFormModal from '../../LocalUnitsFormModal';
 import LocalUnitValidateButton from '../../LocalUnitValidateButton';
@@ -28,9 +27,13 @@ export interface Props {
     countryId: number;
     localUnitName: string;
     localUnitId: number;
-    isValidated: boolean;
+    localUnitType: number;
+    isBulkUploadLocalUnit: boolean;
+    status: number | undefined;
+    statusDetails: string;
     onDeleteActionSuccess: () => void;
     onValidationActionSuccess: () => void;
+    manageResponse: ManageResponse;
     isLocked: boolean;
 }
 
@@ -39,31 +42,49 @@ function LocalUnitsTableActions(props: Props) {
         countryId,
         localUnitName,
         localUnitId,
-        isValidated,
+        localUnitType,
+        status,
+        statusDetails,
+        isBulkUploadLocalUnit,
         onValidationActionSuccess,
         onDeleteActionSuccess,
         isLocked,
+        manageResponse,
     } = props;
 
     const strings = useTranslation(i18n);
 
     const countryDetails = useCountry({ id: Number(countryId) });
 
+    const { isAuthenticated } = useAuth();
+
     const {
+        isLocalUnitGlobalValidatorByType,
+        isLocalUnitCountryValidatorByType,
+        isLocalUnitRegionValidatorByType,
         isSuperUser,
-        isRegionAdmin,
-        isCountryAdmin,
         isGuestUser,
     } = usePermissions();
 
-    const { isAuthenticated } = useAuth();
+    const isExternallyManaged = useMemo(() => {
+        if (isDefined(localUnitType) && isDefined(manageResponse)) {
+            return manageResponse[localUnitType]?.enabled;
+        }
+        return false;
+    }, [localUnitType, manageResponse]);
 
-    const hasValidatePermission = isSuperUser
-        || isCountryAdmin(Number(countryId))
-        || isRegionAdmin(Number(countryDetails?.region));
+    const hasPermission = isAuthenticated
+        && !isExternallyManaged
+        && (isSuperUser
+            || isLocalUnitGlobalValidatorByType(localUnitType)
+            || isLocalUnitCountryValidatorByType(countryDetails?.id, localUnitType)
+            || isLocalUnitRegionValidatorByType(countryDetails?.region, localUnitType));
 
-    const hasDeletePermission = isAuthenticated && !isGuestUser;
-    const hasEditPermission = hasValidatePermission;
+    const hasValidatePermission = isAuthenticated
+        && (isSuperUser
+            || isLocalUnitGlobalValidatorByType(localUnitType)
+            || isLocalUnitCountryValidatorByType(countryDetails?.id, localUnitType)
+            || isLocalUnitRegionValidatorByType(countryDetails?.region, localUnitType));
 
     const [readOnlyLocalUnitModal, setReadOnlyLocalUnitModal] = useState(false);
 
@@ -134,7 +155,7 @@ function LocalUnitsTableActions(props: Props) {
         <>
             <TableActions
                 persistent
-                extraActions={environment !== 'production' && (
+                extraActions={(
                     <>
                         <DropdownMenuItem
                             type="button"
@@ -144,7 +165,7 @@ function LocalUnitsTableActions(props: Props) {
                         >
                             {strings.localUnitActionsView}
                         </DropdownMenuItem>
-                        {hasDeletePermission && (
+                        {(hasPermission && !isBulkUploadLocalUnit) && (
                             <DropdownMenuItem
                                 type="button"
                                 name={undefined}
@@ -153,7 +174,7 @@ function LocalUnitsTableActions(props: Props) {
                                 {strings.localUnitActionsDelete}
                             </DropdownMenuItem>
                         )}
-                        {!isLocked && hasEditPermission && (
+                        {!isLocked && (hasPermission && !isBulkUploadLocalUnit) && (
                             <DropdownMenuItem
                                 type="button"
                                 name={localUnitId}
@@ -165,23 +186,14 @@ function LocalUnitsTableActions(props: Props) {
                     </>
                 )}
             >
-                {hasValidatePermission
-                    && environment !== 'production' ? (
-                        <LocalUnitValidateButton
-                            onClick={handleValidateLocalUnitClick}
-                            isValidated={isValidated}
-                            hasValidatePermission={hasValidatePermission}
-                        />
-                    ) : (
-                        <Button
-                            name={localUnitId}
-                            variant="tertiary"
-                            onClick={handleViewLocalUnitClick}
-                            disabled={isGuestUser}
-                        >
-                            {strings.localUnitActionsView}
-                        </Button>
-                    )}
+                {hasValidatePermission && (
+                    <LocalUnitValidateButton
+                        onClick={handleValidateLocalUnitClick}
+                        status={status}
+                        statusDetails={statusDetails}
+                        hasValidatePermission={hasPermission}
+                    />
+                )}
             </TableActions>
             {showValidateLocalUnitModal && (
                 <LocalUnitValidateModal
@@ -193,6 +205,7 @@ function LocalUnitsTableActions(props: Props) {
             )}
             {showLocalUnitModal && (
                 <LocalUnitsFormModal
+                    manageResponse={manageResponse}
                     onClose={handleLocalUnitsFormModalClose}
                     localUnitId={localUnitId}
                     readOnly={readOnlyLocalUnitModal}

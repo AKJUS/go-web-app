@@ -214,8 +214,7 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...otherProps}
                 mapOptions={{
-                    minZoom: 3,
-                    zoom: 3,
+                    zoom: 18,
                     bounds,
                     ...mapOptions,
                 }}

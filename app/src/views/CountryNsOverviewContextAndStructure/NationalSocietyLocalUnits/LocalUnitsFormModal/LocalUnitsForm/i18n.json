@@ -15,6 +15,7 @@
         "localLabel": "Local",
         "localUnitNameEn": "Local unit name (En)",
         "localUnitNameLocal": "Local unit name (Local)",
+        "viewChangesLabel": "View Changes",
         "coverage": "Coverage",
         "focalPersonEn": "Focal person (En)",
         "focalPersonLocal": "Focal person (Local)",
@@ -85,6 +86,13 @@
         "newLocalUnitDescription": "New local unit",
         "latitude": "Latitude",
         "longitude": "Longitude",
+        "updateReasonOverviewLabel": "Explain the reason why the local unit is being updated",
+        "noLocalUnitAddPermission": "You do not have permission to add this Local Unit",
+        "noLocalUnitEditPermission": "You do not have permission to Edit this Local Unit",
+        "noPermissionFormExternallyManaged": "This local unit is externally managed and cannot be created manually.",
+        "noPermissionFormUpdateExternallyManaged": "This local unit is externally managed and cannot be updated manually.",
+        "noBothPermissionAddFormError": "You do not have permission to add this Local Unit and it is externally managed",
+        "noBothPermissionEditFormError": "You do not have permission to edit this Local Unit and it is externally managed",
         "noChangesMessage": "You have made no changes to this local unit."
     }
 }

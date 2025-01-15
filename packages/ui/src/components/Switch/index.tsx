@@ -6,11 +6,11 @@ import SwitchIcon from './SwitchIcon';
 
 import styles from './styles.module.css';
 
-export interface SwitchProps<N extends string> extends Omit<CheckboxProps<N>, 'indeterminate' | 'checkmark'> {
+export interface SwitchProps<N extends string | number> extends Omit<CheckboxProps<N>, 'indeterminate' | 'checkmark'> {
     withInvertedView?: boolean;
 }
 
-function Switch<N extends string>(props: SwitchProps<N>) {
+function Switch<N extends string | number>(props: SwitchProps<N>) {
     const {
         className,
         checkmarkContainerClassName,

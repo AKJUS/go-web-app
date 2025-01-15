@@ -5,9 +5,11 @@ import { type PartialLocalUnits } from '../LocalUnitsFormModal/LocalUnitsForm/sc
 import LocalUnitView from '../LocalUnitView';
 
 import i18n from './i18n.json';
+import styles from './styles.module.css';
 
 interface Props {
     footerActions: React.ReactNode;
+    children: React.ReactNode;
     onClose: () => void;
     localUnitId: number | undefined;
     locallyChangedValue?: PartialLocalUnits;
@@ -19,6 +21,7 @@ function LocalUnitViewModal(props: Props) {
         onClose,
         locallyChangedValue,
         localUnitId,
+        children,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -30,11 +33,13 @@ function LocalUnitViewModal(props: Props) {
             withHeaderBorder
             onClose={onClose}
             footerActions={footerActions}
+            childrenContainerClassName={styles.modalContent}
         >
             <LocalUnitView
                 localUnitId={localUnitId}
                 locallyChangedValue={locallyChangedValue}
             />
+            {children}
         </Modal>
     );
 }

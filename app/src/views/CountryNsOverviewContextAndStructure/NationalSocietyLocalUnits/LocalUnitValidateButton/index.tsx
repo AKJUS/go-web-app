@@ -1,42 +1,26 @@
-import { useMemo } from 'react';
 import { CheckboxCircleLineIcon } from '@ifrc-go/icons';
 import { Button } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
 import { _cs } from '@togglecorp/fujs';
 
-import i18n from './i18n.json';
+import { VALIDATED } from '../common';
+
 import styles from './styles.module.css';
 
 interface Props {
-    isValidated: boolean;
+    status: number | undefined;
+    statusDetails: string;
     onClick: () => void;
     hasValidatePermission: boolean;
-    readOnly?: boolean
 }
 function LocalUnitValidateButton(props: Props) {
     const {
-        isValidated,
+        status,
+        statusDetails,
         onClick,
         hasValidatePermission,
-        readOnly,
     } = props;
 
-    const strings = useTranslation(i18n);
-
-    const validateButtonLabel = useMemo(
-        () => {
-            if (isValidated) {
-                return strings.localUnitsValidated;
-            }
-
-            if (readOnly) {
-                return strings.localUnitsNotValidated;
-            }
-
-            return strings.localUnitsValidate;
-        },
-        [isValidated, strings, readOnly],
-    );
+    const isValidated = status === VALIDATED;
 
     return (
         <Button
@@ -48,18 +32,18 @@ function LocalUnitValidateButton(props: Props) {
             spacing="compact"
             disabled={
                 !hasValidatePermission
-                    || isValidated
+                || isValidated
             }
             icons={
                 isValidated
-                    && (
-                        <CheckboxCircleLineIcon
-                            className={styles.icon}
-                        />
-                    )
+                && (
+                    <CheckboxCircleLineIcon
+                        className={styles.icon}
+                    />
+                )
             }
         >
-            {validateButtonLabel}
+            {statusDetails}
         </Button>
     );
 }

@@ -36,9 +36,69 @@ function usePermissions() {
                 && !!userMe?.is_per_admin_for_countries.includes(countryId)
             );
 
+            const isLocalUnitGlobalValidator = (): boolean => (
+                !isGuestUser
+                && isDefined(userMe?.local_unit_global_validators)
+                && userMe?.local_unit_global_validators.length > 0
+            );
+
+            const isLocalUnitGlobalValidatorByType = (localUnitTypeId: number | undefined) => (
+                !isGuestUser
+                && isDefined(localUnitTypeId)
+                && !!userMe?.local_unit_global_validators.includes(localUnitTypeId)
+            );
+
+            const isLocalUnitRegionValidatorByType = (
+                regionId: number | null | undefined,
+                localUnitTypeId: number | undefined,
+            ) => (
+                !isGuestUser
+                && isDefined(localUnitTypeId)
+                && isDefined(regionId)
+                && !!userMe?.local_unit_region_validators?.some(
+                    (entry) => entry.region === regionId
+                        && entry.local_unit_types.includes(localUnitTypeId),
+                )
+            );
+
+            const isLocalUnitRegionValidator = (
+                regionId: number | undefined,
+            ) => (
+                !isGuestUser
+                && isDefined(regionId)
+                && !!userMe?.local_unit_region_validators?.some(
+                    (entry) => entry.region === regionId
+                        && entry.local_unit_types.length > 0,
+                )
+            );
+
+            const isLocalUnitCountryValidatorByType = (
+                countryId: number | undefined,
+                localUnitTypeId: number | undefined,
+            ) => (
+                !isGuestUser
+                && isDefined(countryId)
+                && isDefined(localUnitTypeId)
+                && !!userMe?.local_unit_country_validators?.some(
+                    (entry) => entry.country === countryId
+                        && entry.local_unit_types.includes(localUnitTypeId),
+                )
+            );
+
+            const isLocalUnitCountryValidator = (
+                countryId: number | undefined,
+            ) => (
+                !isGuestUser
+                && isDefined(countryId)
+                && !!userMe?.local_unit_country_validators?.some(
+                    (entry) => entry.country === countryId
+                        && entry.local_unit_types.length > 0,
+                )
+            );
+
             const isPerAdmin = !isGuestUser
                 && ((userMe?.is_per_admin_for_countries.length ?? 0) > 0
-                || (userMe?.is_per_admin_for_regions.length ?? 0) > 0);
+                    || (userMe?.is_per_admin_for_regions.length ?? 0) > 0);
 
             const isIfrcAdmin = !isGuestUser
                 && (!!userMe?.is_ifrc_admin || !!userMe?.email?.toLowerCase().endsWith('@ifrc.org'));
@@ -47,9 +107,15 @@ function usePermissions() {
 
             const isRegionalOrCountryAdmin = !isGuestUser
                 && ((userMe?.is_admin_for_countries.length ?? 0) > 0
-                || (userMe?.is_admin_for_regions.length ?? 0) > 0);
+                    || (userMe?.is_admin_for_regions.length ?? 0) > 0);
 
             return {
+                isLocalUnitGlobalValidator,
+                isLocalUnitGlobalValidatorByType,
+                isLocalUnitCountryValidator,
+                isLocalUnitRegionValidator,
+                isLocalUnitCountryValidatorByType,
+                isLocalUnitRegionValidatorByType,
                 isDrefRegionalCoordinator,
                 isRegionAdmin,
                 isCountryAdmin,
