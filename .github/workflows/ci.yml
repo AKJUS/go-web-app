@@ -241,6 +241,17 @@ jobs:
   #
   #     - name: Typecheck
   #       run: pnpm typecheck
+
+  typos:
+    name: Spell Check with Typos
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Actions Repository
+      uses: actions/checkout@v4
+
+    - name: Check spelling
+      uses: crate-ci/typos@v1.29.4
+
   build:
     name: Build GO Web App
     environment: 'test'
