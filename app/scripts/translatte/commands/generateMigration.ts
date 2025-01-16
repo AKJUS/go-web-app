@@ -54,7 +54,7 @@ function generateMigration(
         (prev, current) => prev.value === current.value,
     );
 
-    console.info(`Unchaged strings: ${identicalStateItems.length}`)
+    console.info(`Unchanged strings: ${identicalStateItems.length}`)
     console.info(`Value updated strings: ${valueUpdatedStateItems.length}`)
 
     console.info(`Potentially removed: ${potentiallyRemovedStateItems.length}`)

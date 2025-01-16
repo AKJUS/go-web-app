@@ -17,7 +17,7 @@ Once all of the changes have been made, we can generate a migration file for the
 ```bash
 pnpm translatte generate-migration ./src/translationMigrations ./src/**/i18n.json
 ```
-Once the migration file has been created, the migration file can be commited to the VCS.
+Once the migration file has been created, the migration file can be committed to the VCS.
 
 ### Applying migrations
 

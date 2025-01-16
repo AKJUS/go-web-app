@@ -25,7 +25,7 @@
   - Add support for inverted view in Switch
   - Add new view withBorderAndHeaderBackground in Container
   - Add option to set className for label and list container in Legend
-- 81dc3bd: - Improve PieChart component and ProgresBar component
+- 81dc3bd: - Improve PieChart component and ProgressBar component
   - PieChart component
     - Added a `colorSelector` prop to select color for each pie
   - ProgressBar component
@@ -46,7 +46,7 @@ Updated @ifrc-go/icons to v2.0.1
   - Update RawList to extend Key prop from react
   - Add a pageWidth option for Modal size
   - Update Container to use FilterBar
-  - Remove withGridViewInFiterProp from Container, make it the default behavior
+  - Remove withGridViewInFilterProp from Container, make it the default behavior
   - Add filterActions props in Container
 
 ## 1.1.4

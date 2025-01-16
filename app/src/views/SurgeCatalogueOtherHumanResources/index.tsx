@@ -40,7 +40,7 @@ export function Component() {
                             external
                             withLinkIcon
                         >
-                            {strings.otherLinkTwoOffic}
+                            {strings.otherLinkTwoOffice}
                         </Link>
                     </li>
                 </ul>

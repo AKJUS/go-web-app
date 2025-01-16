@@ -1072,7 +1072,7 @@ const surgeCatalogueOtherInternationalDisasterResponseLaw = customWrapRoute({
     },
     wrapperComponent: Auth,
     context: {
-        title: 'International Diaster Response Law',
+        title: 'International Disaster Response Law',
         visibility: 'anything',
     },
 });
