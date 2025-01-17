@@ -3,6 +3,7 @@ import { TextOutput } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import useAlert from '#hooks/useAlert';
+import useDebouncedValue from '#hooks/useDebouncedValue';
 import { useRequest } from '#utils/restRequest';
 
 import i18n from './i18n.json';
@@ -38,12 +39,14 @@ function TitlePreview(props: Props) {
         title,
     }), [country, isCovidReport, startDate, disasterType, event, title]);
 
+    const debouncedVariables = useDebouncedValue(variables);
+
     const {
-        response: genereateTitleResponse,
+        response: generateTitleResponse,
     } = useRequest({
         url: '/api/v2/field-report/generate-title/',
         method: 'POST',
-        body: variables,
+        body: debouncedVariables,
         preserveResponse: true,
         onFailure: () => {
             alert.show(
@@ -57,7 +60,7 @@ function TitlePreview(props: Props) {
 
     return (
         <TextOutput
-            value={genereateTitleResponse?.title}
+            value={generateTitleResponse?.title}
             label={strings.titlePreview}
             strongLabel
         />
