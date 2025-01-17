@@ -75,6 +75,7 @@ jobs:
           skip: "@(renovate/**|dependabot/**)"
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          autoAcceptChanges: "develop"
           workingDir: packages/go-ui-storybook
   github-pages:
     name: Deploy to Github Pages
