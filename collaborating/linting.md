@@ -3,7 +3,7 @@
 IFRC GO Web App repository utilizes [ESLint](https://eslint.org/) and [Stylelint](https://stylelint.io/) for linting and formatting the code, as well as TypeScript for type checking.
 
 > [!NOTE]\
-> Run the following commands withing the [app](../app/) folder
+> Run the following commands within the [app](../app/) folder
 
 ### ESLint
 Configuration for ESLint can be found in the [eslint.config.js](../app/eslint.config.js) file.

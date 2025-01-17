@@ -155,7 +155,7 @@ function Pdc(props: Props) {
                 : undefined;
 
             // severity
-            // WARNING: Adverse or significant impacts to population are imminent or occuring.
+            // WARNING: Adverse or significant impacts to population are imminent or occurring.
             // WATCH: Conditions are possible for adverse or significant impacts to population.
             // ADVISORY: Conditions are possible for limited or minor impacts to population
             // INFORMATION: Conditions are possible for limited or minor impacts to population

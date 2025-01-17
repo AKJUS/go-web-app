@@ -23,7 +23,7 @@
         "personnel": "Personnel",
         "standardComponents": "Standard Components",
         "standardComponentsDetails": "Specific module names and components may vary but generally include the following services:",
-        "opdModuleValue": "Contains the equipment and supplies needed to carry out initial triage, basic first aid and life support, stabilization fo patients, as well as initial wound care, basic fracture management, minor surgical procedures, basic outpatient care of communicable disease, basic outpatient paediatric care, basic/outpatient chronic disease care; diagnostics done through clinical examination and basic point-of-care laboratory tests.",
+        "opdModuleValue": "Contains the equipment and supplies needed to carry out initial triage, basic first aid and life support, stabilization for patients, as well as initial wound care, basic fracture management, minor surgical procedures, basic outpatient care of communicable disease, basic outpatient paediatric care, basic/outpatient chronic disease care; diagnostics done through clinical examination and basic point-of-care laboratory tests.",
         "opdModuleValueLabel": "Outpatient Department (OPD) Module",
         "maternalModuleValue": "Contains the equipment and supplies needed to provide care to women in childbirth including basic emergency obstetric care with includes administering antibiotics, uterotonic drugs (oxytocin) and anticonvulsants (magnesium sulphate); manual removal of the placenta; removal of retained products following miscarriage or abortion; assisted vaginal delivery, preferably with vacuum extractor; basic neonatal resuscitation care.",
         "maternalModuleLabel": "Maternal/Newborn Care Module",

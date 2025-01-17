@@ -376,7 +376,7 @@ const preparednessGlobalPerformance = customWrapRoute({
     },
     wrapperComponent: Auth,
     context: {
-        title: 'Preparedness - Global Performace',
+        title: 'Preparedness - Global Performance',
         visibility: 'anything',
     },
 });

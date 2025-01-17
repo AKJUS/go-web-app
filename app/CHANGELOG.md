@@ -213,7 +213,7 @@
 ### Patch Changes
 
 - 478ab69: Hide contact information from IFRC Presence
-- 3fbe60f: Hide add/edit local units on production environmet
+- 3fbe60f: Hide add/edit local units on production environment
 - 90678ed: Show Organization Type properly in Account Details page
 
 ## 7.3.7
@@ -295,7 +295,7 @@
 
 ### Patch Changes
 
-- Fix crash due to undefined ICRC presense in country page
+- Fix crash due to undefined ICRC presence in country page
 
 ## 7.2.2
 

@@ -196,12 +196,12 @@ export function getDiscretePathDataList(pointList: UnsafePoint[] | undefined) {
         return undefined;
     }
 
-    const splittedList = splitList<UnsafePoint, Point>(
+    const separatedList = splitList<UnsafePoint, Point>(
         pointList,
         isUnsafePoint,
     );
 
-    const discretePaths = splittedList.map(
+    const discretePaths = separatedList.map(
         (pointListSplit) => getPathData(pointListSplit),
     );
 
