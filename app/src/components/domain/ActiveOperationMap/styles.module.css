@@ -1,4 +1,9 @@
 .active-operation-map {
+    .clear-button {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
     .content {
         position: relative;
 
