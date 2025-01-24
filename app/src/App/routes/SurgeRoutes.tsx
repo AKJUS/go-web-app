@@ -1443,6 +1443,23 @@ const deploymentCatalogueChildren = customWrapRoute({
     },
 });
 
+const obsoleteUrlDeployments = customWrapRoute({
+    parent: rootLayout,
+    path: 'deployments',
+    component: {
+        eagerLoad: true,
+        render: Navigate,
+        props: {
+            to: surgeOverview.absolutePath,
+        },
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Surge Overview',
+        visibility: 'anything',
+    },
+});
+
 export default {
     surgeLayout,
     surgeOverview,
@@ -1537,4 +1554,5 @@ export default {
     deploymentCatalogueIndex,
     deploymentCatalogueChildren,
     deploymentOthers,
+    obsoleteUrlDeployments,
 };
