@@ -1,11 +1,11 @@
-name: Publish Helm
+name: Publish Storybook Helm
 
 on:
   workflow_dispatch:
   push:
     branches:
       - develop
-      - project/*
+      - feature/deploy-storybook #TODO remove before PR is merged
 
 permissions:
   packages: write
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   publish_image:
-    name: Publish Docker Image
+    name: 🐳 Publish Docker Image
     runs-on: ubuntu-latest
 
     outputs:
@@ -34,19 +34,10 @@ jobs:
       - name: 🐳 Prepare Docker
         id: prep
         env:
-          IMAGE_NAME: ghcr.io/${{ github.repository }}
+          IMAGE_NAME: ghcr.io/${{ github.repository }}/go-ui-storybook
         run: |
           BRANCH_NAME=$(echo $GITHUB_REF_NAME | sed 's|[/:]|-|' | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g' | cut -c1-100 | sed 's/-*$//')
-
-          # XXX: Check if there is a slash in the BRANCH_NAME eg: project/add-docker
-          if [[ "$BRANCH_NAME" == *"/"* ]]; then
-              # XXX: Change the docker image package to -alpha
-              IMAGE_NAME="$IMAGE_NAME-alpha"
-              TAG="$(echo "$BRANCH_NAME" | sed 's|/|-|g').$(echo $GITHUB_SHA | head -c7)"
-          else
-              TAG="$BRANCH_NAME.$(echo $GITHUB_SHA | head -c7)"
-          fi
-
+          TAG="$BRANCH_NAME.$(echo $GITHUB_SHA | head -c7)"
           IMAGE_NAME=$(echo $IMAGE_NAME | tr '[:upper:]' '[:lower:]')
           echo "tagged_image_name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
@@ -71,17 +62,13 @@ jobs:
         with:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
-          file: nginx-serve/Dockerfile
+          file: packages/go-ui-storybook/nginx-serve/Dockerfile
           target: nginx-serve
           load: true
           push: true
           tags: ${{ steps.prep.outputs.tagged_image }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
-          build-args: |
-            "APP_SENTRY_TRACES_SAMPLE_RATE=0.8"
-            "APP_SENTRY_REPLAYS_SESSION_SAMPLE_RATE=0.8"
-            "APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE=0.8"
 
       - name: 🐳 Move docker cache
         run: |
@@ -89,7 +76,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
   publish_helm:
-    name: Publish Helm
+    name: ⎈ Publish Helm
     needs: publish_image
     runs-on: ubuntu-latest
 
@@ -104,43 +91,37 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install Helm
+    - name: ⎈ Install Helm
       uses: azure/setup-helm@v3
 
-    - name: Tag docker image in Helm Chart values.yaml
+    - name: ⎈ Tag docker image in Helm Chart values.yaml
       env:
         IMAGE_NAME: ${{ needs.publish_image.outputs.docker_image_name }}
         IMAGE_TAG: ${{ needs.publish_image.outputs.docker_image_tag }}
       run: |
         # Update values.yaml with latest docker image
-        sed -i "s|SET-BY-CICD-IMAGE|$IMAGE_NAME|" nginx-serve/helm/values.yaml
-        sed -i "s/SET-BY-CICD-TAG/$IMAGE_TAG/" nginx-serve/helm/values.yaml
+        sed -i "s|SET-BY-CICD-IMAGE|$IMAGE_NAME|" packages/go-ui-storybook/nginx-serve/helm/values.yaml
+        sed -i "s/SET-BY-CICD-TAG/$IMAGE_TAG/" packages/go-ui-storybook/nginx-serve/helm/values.yaml
 
-    - name: Package Helm Chart
+    - name: ⎈ Package Helm Chart
       id: set-variables
       run: |
-        # XXX: Check if there is a slash in the BRANCH_NAME eg: project/add-docker
-        if [[ "$GITHUB_REF_NAME" == *"/"* ]]; then
-            # XXX: Change the helm chart to <chart-name>-alpha
-            sed -i 's/^name: \(.*\)/name: \1-alpha/' nginx-serve/helm/Chart.yaml
-        fi
-
         SHA_SHORT=$(git rev-parse --short HEAD)
-        sed -i "s/SET-BY-CICD/$SHA_SHORT/g" nginx-serve/helm/Chart.yaml
-        helm package ./nginx-serve/helm -d .helm-charts
+        sed -i "s/SET-BY-CICD/$SHA_SHORT/g" packages/go-ui-storybook/nginx-serve/helm/Chart.yaml
+        helm package ./packages/go-ui-storybook/nginx-serve/helm -d .helm-charts
 
-    - name: Push Helm Chart
+    - name: ⎈ Push Helm Chart
       env:
         IMAGE: ${{ needs.publish_image.outputs.docker_image }}
         OCI_REPO: oci://ghcr.io/${{ github.repository }}
       run: |
         OCI_REPO=$(echo $OCI_REPO | tr '[:upper:]' '[:lower:]')
         PACKAGE_FILE=$(ls .helm-charts/*.tgz | head -n 1)
-        echo "# Helm Chart" >> $GITHUB_STEP_SUMMARY
+        echo "## 🚀 IFRC GO UI Helm Chart 🚀" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "Tagged Image: **$IMAGE**" >> $GITHUB_STEP_SUMMARY
+        echo "🐳 Tagged Image: **$IMAGE**" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "Helm push output" >> $GITHUB_STEP_SUMMARY
+        echo "⎈ Helm push output" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo '```bash' >> $GITHUB_STEP_SUMMARY
         helm push "$PACKAGE_FILE" $OCI_REPO >> $GITHUB_STEP_SUMMARY
