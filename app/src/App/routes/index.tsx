@@ -1,4 +1,8 @@
-import { Navigate } from 'react-router-dom';
+import {
+    generatePath,
+    Navigate,
+    useParams,
+} from 'react-router-dom';
 
 import { unwrapRoute } from '#utils/routes';
 
@@ -1187,6 +1191,40 @@ const preparednessOperationalLearning = customWrapRoute({
     },
 });
 
+// eslint-disable-next-line react-refresh/only-export-components
+function ObsoleteFieldReportRedirection() {
+    const params = useParams<{
+        fieldReportId: string,
+    }>();
+
+    const path = generatePath(
+        fieldReportDetails.absoluteForwardPath,
+        { fieldReportId: params.fieldReportId },
+    );
+
+    return (
+        <Navigate
+            to={path}
+            replace
+        />
+    );
+}
+
+const obsoleteFieldReportDetails = customWrapRoute({
+    parent: rootLayout,
+    path: 'reports/:fieldReportId',
+    component: {
+        eagerLoad: true,
+        render: ObsoleteFieldReportRedirection,
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Field Report Details',
+        visibility: 'anything',
+    },
+});
+
 const wrappedRoutes = {
     fourHundredFour,
     rootLayout,
@@ -1273,6 +1311,7 @@ const wrappedRoutes = {
 
     // Redirects
     preparednessOperationalLearning,
+    obsoleteFieldReportDetails,
 };
 
 export const unwrappedRoutes = unwrapRoute(Object.values(wrappedRoutes));
