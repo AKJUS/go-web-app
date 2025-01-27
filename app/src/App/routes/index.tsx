@@ -1,4 +1,5 @@
 import {
+    generatePath,
     Navigate,
     useParams,
 } from 'react-router-dom';
@@ -1190,18 +1191,20 @@ const preparednessOperationalLearning = customWrapRoute({
     },
 });
 
-// eslint-disable-next-line
+// eslint-disable-next-line react-refresh/only-export-components
 function ObsoleteFieldReportRedirection() {
     const params = useParams<{
         fieldReportId: string,
     }>();
 
-    // eslint-disable-next-line
-    const to = '/field-reports/' + params.fieldReportId;
+    const path = generatePath(
+        fieldReportDetails.absoluteForwardPath,
+        { fieldReportId: params.fieldReportId },
+    );
 
     return (
         <Navigate
-            to={to}
+            to={path}
             replace
         />
     );
