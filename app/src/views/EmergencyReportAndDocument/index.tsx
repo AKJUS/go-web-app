@@ -184,9 +184,9 @@ export function Component() {
                 },
             ),
             createStringColumn<AppealDocumentType, number>(
-                'iso',
-                strings.appealDocumentLocation,
-                (item) => item.iso,
+                'type',
+                strings.appealDocumentType,
+                (item) => item.type,
             ),
             createStringColumn<AppealDocumentType, number>(
                 'code',
@@ -211,7 +211,7 @@ export function Component() {
         ]),
         [
             strings.appealDocumentDate,
-            strings.appealDocumentLocation,
+            strings.appealDocumentType,
             strings.appealDocumentCode,
             strings.appealDocumentDescription,
             strings.appealDocumentLink,
