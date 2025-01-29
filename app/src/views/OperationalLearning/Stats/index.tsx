@@ -77,25 +77,24 @@ type SourceTypeEnum = components<'read'>['schemas']['ApiAppealTypeEnumKey'];
 const SOURCE_TYPE_EMERGENCY = 1 satisfies SourceTypeEnum;
 const SOURCE_TYPE_DREF = 0 satisfies SourceTypeEnum;
 
-const transformSourcesOverTimeData = (data: SourcesOverTimeItem[]) => {
-    const groupedData: Record<string, Record<SourceType, number>> = {};
-
-    data.forEach((entry) => {
+const transformSourcesOverTimeData = (data: SourcesOverTimeItem[]) => (
+    data.reduce<Record<string, Record<SourceType, number>>>((acc, entry) => {
         const year = getFormattedDateKey(entry.date);
-        if (!groupedData[year]) {
-            groupedData[year] = { dref: 0, emergencyAppeal: 0, others: 0 };
+        if (isNotDefined(acc[year])) {
+            acc[year] = { dref: 0, emergencyAppeal: 0, others: 0 };
         }
-        if (entry.atype === SOURCE_TYPE_DREF) {
-            groupedData[year].dref += entry.count;
-        } else if (entry.atype === SOURCE_TYPE_EMERGENCY) {
-            groupedData[year].emergencyAppeal += entry.count;
-        } else {
-            groupedData[year].others += entry.count;
-        }
-    });
 
-    return groupedData;
-};
+        if (entry.atype === SOURCE_TYPE_DREF) {
+            acc[year].dref += entry.count;
+        } else if (entry.atype === SOURCE_TYPE_EMERGENCY) {
+            acc[year].emergencyAppeal += entry.count;
+        } else {
+            acc[year].others += entry.count;
+        }
+
+        return acc;
+    }, {})
+);
 
 interface Props {
     query: OpsLearningQuery | undefined
@@ -138,19 +137,23 @@ function Stats(props: Props) {
         if (isNotDefined(sourcesOverTimeData)) {
             return undefined;
         }
+
         const dates = Object.keys(sourcesOverTimeData).map((year) => new Date(year));
+
+        if (dates.length < 1) {
+            return undefined;
+        }
+
         const oldestDate = new Date(Math.min(...dates.map((date) => date.getTime())));
         const latestDate = new Date(Math.max(...dates.map((date) => date.getTime())));
+
         return getDatesSeparatedByYear(oldestDate, latestDate);
     }, [sourcesOverTimeData]);
 
     const sourcesOverTimeValueSelector = useCallback(
         (key: SourceType, date: Date) => {
             const value = sourcesOverTimeData?.[getFormattedDateKey(date)]?.[key];
-            if (isDefined(value) && value > 0) {
-                return value;
-            }
-            return undefined;
+            return isDefined(value) && value > 0 ? value : undefined;
         },
         [sourcesOverTimeData],
     );
@@ -177,7 +180,8 @@ function Stats(props: Props) {
         strings.sourceOthers,
     ]);
 
-    const activePointData = activePointKey ? sourcesOverTimeData?.[activePointKey] : undefined;
+    const activePointData = isDefined(activePointKey)
+        ? sourcesOverTimeData?.[activePointKey] : undefined;
 
     return (
         <div className={styles.stats}>

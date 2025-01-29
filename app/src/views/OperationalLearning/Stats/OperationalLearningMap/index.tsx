@@ -53,8 +53,9 @@ interface ClickedPoint {
     lngLat: mapboxgl.LngLatLike;
 }
 
-const LEARNING_COUNT_LOW_COLOR = '#AEB7C2';
-const LEARNING_COUNT_HIGH_COLOR = '#011E41';
+const MIN_LEARNING_COUNT = 0;
+const LEARNING_COUNT_LOW_COLOR = 'var(--go-ui-color-blue-30)';
+const LEARNING_COUNT_HIGH_COLOR = 'var(--go-ui-color-blue-90)';
 
 interface Props {
     className?: string;
@@ -86,7 +87,7 @@ function OperationalLearningMap(props: Props) {
             }
 
             const features = learningByCountry
-                ?.map((value) => {
+                .map((value) => {
                     const country = countriesMap?.[value.country_id];
                     if (isNotDefined(country)) {
                         return undefined;
@@ -193,7 +194,7 @@ function OperationalLearningMap(props: Props) {
                         />
                         <div className={styles.labelList}>
                             <NumberOutput
-                                value={0}
+                                value={MIN_LEARNING_COUNT}
                             />
                             <NumberOutput
                                 value={maxLearning}
