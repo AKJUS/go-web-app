@@ -1,5 +1,12 @@
 # @ifrc-go/ui
 
+## 1.2.3
+
+### Patch Changes
+
+- 4843cb0: - Pass styling props to `BarChart` and `TimeSeriesChart`
+  - Fix date separation logic in `getDatesSeparatedByYear`
+
 ## 1.2.2
 
 ### Patch Changes

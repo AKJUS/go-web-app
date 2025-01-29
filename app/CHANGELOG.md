@@ -1,5 +1,34 @@
 # go-web-app
 
+## 7.8.0
+
+### Minor Changes
+
+- 4843cb0: Added Operational Learning 2.0
+
+  - Key Figures Overview in Operational Learning
+  - Map View for Operational Learning
+  - Learning by Sector Bar Chart
+  - Learning by Region Bar Chart
+  - Sources Over Time Line Chart
+  - Methodology changes for the prioritization step
+  - Added an option to regenerate cached summaries
+  - Summary post-processing and cleanup
+  - Enabled MDR code search in admin
+
+### Patch Changes
+
+- f96e177: Move field report/emergency title generation logic from client to server
+- e85fc32: Integrate `crate-ci/typos` for code spell checking
+- 4cdea2b: Add redirection logic for `preparedness#operational-learning`
+- 9a50443: Add appeal doc type for appeal documents
+- 817d56d: Display properly formatted appeal type in search results
+- 1159fa4: Redirect obsolete URLs to recent ones
+  - redirect `/reports/` to `/field-reports/`
+  - redirect `/deployments/` -> `/surge/overview`
+- Updated dependencies [4843cb0]
+  - @ifrc-go/ui@1.2.3
+
 ## 7.7.0
 
 ### Minor Changes
