@@ -348,6 +348,7 @@ const preparednessIndex = customWrapRoute({
                 '#global-summary': 'global-summary',
                 '#global-performance': 'global-performance',
                 '#resources-catalogue': 'resources-catalogue',
+                '#operational-learning': 'operational-learning',
             },
         },
     },
