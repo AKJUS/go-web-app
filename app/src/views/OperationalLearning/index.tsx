@@ -47,7 +47,6 @@ import { type components } from '#generated/types';
 import useCountry from '#hooks/domain/useCountry';
 import useDisasterTypes, { type DisasterType } from '#hooks/domain/useDisasterType';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
-import usePerComponent from '#hooks/domain/usePerComponent';
 import useSecondarySector from '#hooks/domain/useSecondarySector';
 import useAlert from '#hooks/useAlert';
 import useFilterState from '#hooks/useFilterState';
@@ -64,6 +63,7 @@ import Filters, {
     type PerLearningType,
 } from './Filters';
 import KeyInsights from './KeyInsights';
+import Stats from './Stats';
 import Summary, { type Props as SummaryProps } from './Summary';
 
 import i18n from './i18n.json';
@@ -80,8 +80,8 @@ const SUMMARY_STATUS_FAILED = 5 satisfies SummaryStatusEnum;
 type OpsLearningSummaryResponse = GoApiResponse<'/api/v2/ops-learning/summary/'>;
 type OpsLearningSectorSummary = OpsLearningSummaryResponse['sectors'][number];
 type OpsLearningComponentSummary = OpsLearningSummaryResponse['components'][number];
-
 type OpsLearningQuery = GoApiUrlQuery<'/api/v2/ops-learning/'>;
+
 type QueryType = Pick<
     OpsLearningQuery,
     | 'appeal_code__region'
@@ -93,7 +93,6 @@ type QueryType = Pick<
     | 'per_component_validated__in'
     | 'search_extracts'
 >;
-
 const regionKeySelector = (region: RegionOption) => region.key;
 const disasterTypeLabelSelector = (type: DisasterType) => type.name ?? '?';
 const perLearningTypeKeySelector = (perLearningType: PerLearningType) => perLearningType.key;
@@ -132,7 +131,21 @@ export function Component() {
     const countryList = useCountry({ region: rawFilter.region });
     const disasterTypeOptions = useDisasterTypes();
     const secondarySectorOptions = useSecondarySector();
-    const perComponentOptions = usePerComponent();
+    const {
+        response: perComponentsResponse,
+    } = useRequest({
+        url: '/api/v2/per-formcomponent/',
+        query: {
+            exclude_subcomponents: true,
+        },
+        preserveResponse: true,
+        onFailure: () => {
+            alert.show(
+                strings.failedToFetchPerComponents,
+                { variant: 'danger' },
+            );
+        },
+    });
 
     const {
         pending: opsLearningSummaryPending,
@@ -156,6 +169,12 @@ export function Component() {
             return 5000;
         },
         preserveResponse: true,
+        onFailure: () => {
+            alert.show(
+                strings.failedToFetchSummary,
+                { variant: 'danger' },
+            );
+        },
     });
 
     const sectorSummaryRendererParams = (
@@ -216,6 +235,12 @@ export function Component() {
             is_validated: true,
         },
         preserveResponse: true,
+        onFailure: () => {
+            alert.show(
+                strings.failedToFetchLearning,
+                { variant: 'danger' },
+            );
+        },
     });
 
     const {
@@ -349,7 +374,7 @@ export function Component() {
                         onChange={onFilterChange}
                         disasterTypeOptions={disasterTypeOptions}
                         secondarySectorOptions={secondarySectorOptions}
-                        perComponentOptions={perComponentOptions}
+                        perComponentOptions={perComponentsResponse?.results}
                         organizationTypeOptions={opsLearningOrganizationTypes?.results}
                         perLearningTypeOptions={perLearningTypeOptions}
                         organizationTypePending={opsLearningOrganizationTypePending}
@@ -403,7 +428,7 @@ export function Component() {
                                                 name="perComponents"
                                                 onDismiss={onFilterChange}
                                                 value={rawFilter.perComponents}
-                                                options={perComponentOptions}
+                                                options={perComponentsResponse?.results}
                                                 labelSelector={getFormattedComponentName}
                                                 keySelector={numericIdSelector}
                                             />
@@ -475,6 +500,9 @@ export function Component() {
                         </div>
                     </>
                 )}
+            />
+            <Stats
+                query={query}
             />
             {showKeyInsights && (
                 <KeyInsights
