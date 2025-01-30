@@ -205,12 +205,20 @@ function AppealsTable(props: Props) {
         ],
     );
 
+    let betterOrdering = ordering;
+    if (ordering === '-id') {
+        betterOrdering = '-start_date';
+    } else if (ordering.replace('-', '') !== 'start_date') {
+        // eslint-disable-next-line
+        betterOrdering = ordering + ',-start_date';
+    }
+
     const query = useMemo<AppealQueryParams>(
         () => {
             const baseQuery: AppealQueryParams = {
                 limit,
                 offset,
-                ordering,
+                ordering: betterOrdering,
                 atype: filter.appeal,
                 dtype: filter.displacement,
                 district: hasSomeDefinedValue(filter.district) ? filter.district : undefined,
@@ -234,7 +242,7 @@ function AppealsTable(props: Props) {
             variant,
             countryId,
             regionId,
-            ordering,
+            betterOrdering,
             filter,
             limit,
             offset,

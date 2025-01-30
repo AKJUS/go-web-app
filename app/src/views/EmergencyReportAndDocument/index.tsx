@@ -11,6 +11,7 @@ import {
     RawList,
     Table,
 } from '@ifrc-go/ui';
+import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     createDateColumn,
@@ -59,9 +60,11 @@ export function Component() {
         offset: appealDocumentsOffset,
         setPage: setAppealDocumentsPage,
         limit: appealDocumentsLimit,
+        ordering: orderingAppealDocuments,
+        sortState: sortStateAppealDocuments,
     } = useFilterState<object>({
         filter: {},
-        pageSize: 10,
+        pageSize: PAGE_SIZE,
     });
 
     const {
@@ -84,6 +87,14 @@ export function Component() {
         } : undefined, // TODO: we need to add search filter in server
     });
 
+    let betterOrdering = orderingAppealDocuments;
+    if (orderingAppealDocuments === '-id') {
+        betterOrdering = '-created_at';
+    } else if (orderingAppealDocuments.replace('-', '') !== 'created_at') {
+        // eslint-disable-next-line
+        betterOrdering = orderingAppealDocuments + ',-created_at';
+    }
+
     const {
         pending: appealDocumentsPending,
         response: appealDocumentsResponse,
@@ -100,6 +111,7 @@ export function Component() {
             appeal: emergencyResponse.appeals.map((appeal) => appeal.id).filter(isDefined),
             limit: appealDocumentsLimit,
             offset: appealDocumentsOffset,
+            ordering: betterOrdering,
         } : undefined,
     });
 
@@ -181,6 +193,7 @@ export function Component() {
                 (item) => item.created_at,
                 {
                     columnClassName: styles.date,
+                    sortable: true,
                 },
             ),
             createStringColumn<AppealDocumentType, number>(
@@ -207,6 +220,9 @@ export function Component() {
                     withLinkIcon: true,
                     href: item.document ?? item.document_url ?? undefined,
                 }),
+                {
+                    sortable: true,
+                },
             ),
         ]),
         [
@@ -363,14 +379,16 @@ export function Component() {
                         />
                     )}
                 >
-                    <Table
-                        pending={appealDocumentsPending}
-                        filtered={false}
-                        className={styles.table}
-                        columns={appealColumns}
-                        keySelector={numericIdSelector}
-                        data={appealDocumentsResponse?.results}
-                    />
+                    <SortContext.Provider value={sortStateAppealDocuments}>
+                        <Table
+                            pending={appealDocumentsPending}
+                            filtered={false}
+                            className={styles.table}
+                            columns={appealColumns}
+                            keySelector={numericIdSelector}
+                            data={appealDocumentsResponse?.results}
+                        />
+                    </SortContext.Provider>
                 </Container>
             )}
         </div>
