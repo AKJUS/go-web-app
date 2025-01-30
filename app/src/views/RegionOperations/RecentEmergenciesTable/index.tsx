@@ -129,6 +129,14 @@ function EventItemsTable(props: Props) {
         ],
     );
 
+    let betterOrdering = ordering;
+    if (ordering === '-id') {
+        betterOrdering = '-created_at';
+    } else if (ordering.replace('-', '') !== 'created_at') {
+        // eslint-disable-next-line
+        betterOrdering = ordering + ',-created_at';
+    }
+
     const {
         pending: eventPending,
         response: eventResponse,
@@ -138,7 +146,7 @@ function EventItemsTable(props: Props) {
         query: {
             limit,
             offset,
-            ordering,
+            ordering: betterOrdering,
             disaster_start_date__gt: thirtyDaysAgo.toISOString(),
             regions__in: regionId,
         },
