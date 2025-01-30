@@ -69,6 +69,7 @@ function NationalSocietyKeyDocuments() {
             search: filter.searchText,
             year__gte: filter.startDateAfter,
             year__lte: filter.startDateBefore,
+            ordering: '-year',
         },
         preserveResponse: true,
     });
