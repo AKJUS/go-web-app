@@ -2,5 +2,9 @@
 "go-web-app": patch
 ---
 
-Active Operations and Appeal Documents table ordering
-Recent Emergencies in Region - table ordering by Date
+- Appeal Documents table, emergencies/xyzw/reports page
+- Recent Emergencies in Regions
+- All Appeals table
+- Main page, Active Operations table - and the same AppealsTable is used in the next ones:
+- Active Operations in Regions
+- Previous Operations on Countries
