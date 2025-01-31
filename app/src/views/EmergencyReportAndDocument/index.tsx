@@ -84,6 +84,7 @@ export function Component() {
         query: isDefined(emergencyResponse) ? {
             event: emergencyResponse.id,
             limit: 9999,
+            ordering: '-is_pinned,-created_at',
         } : undefined, // TODO: we need to add search filter in server
     });
 

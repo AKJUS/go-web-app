@@ -74,17 +74,25 @@ export function Component() {
         return type.toUpperCase();
     }, [strings.rapidResponse]);
 
+    let betterOrdering = ordering;
+    if (ordering === '-id') {
+        betterOrdering = '-start_date';
+    } else if (ordering.replace('-', '') !== 'start_date') {
+        // eslint-disable-next-line
+        betterOrdering = ordering + ',-start_date';
+    }
+
     const query = useMemo(() => ({
         limit,
         offset,
-        ordering,
+        ordering: betterOrdering,
         // FIXME: The server does not support date string
         start_date__gte: toDateTimeString(filter.startDateAfter),
         start_date__lte: toDateTimeString(filter.startDateBefore),
     }), [
         limit,
         offset,
-        ordering,
+        betterOrdering,
         filter,
     ]);
 
