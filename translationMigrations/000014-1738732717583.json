@@ -1,0 +1,11 @@
+{
+    "parent": "000013-1738649630110.json",
+    "actions": [
+        {
+            "action": "update",
+            "key": "drefFormOperationUploadDocumentButtonLabel",
+            "newKey": "drefFormUploadDocumentButtonLabel",
+            "namespace": "drefApplicationForm"
+        }
+    ]
+}
