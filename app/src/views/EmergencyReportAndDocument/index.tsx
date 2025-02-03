@@ -201,6 +201,7 @@ export function Component() {
                 'type',
                 strings.appealDocumentType,
                 (item) => item.type,
+                { sortable: true },
             ),
             createStringColumn<AppealDocumentType, number>(
                 'code',
