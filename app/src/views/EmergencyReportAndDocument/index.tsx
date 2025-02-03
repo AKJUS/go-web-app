@@ -92,8 +92,7 @@ export function Component() {
     if (orderingAppealDocuments === '-id') {
         betterOrdering = '-created_at';
     } else if (orderingAppealDocuments.replace('-', '') !== 'created_at') {
-        // eslint-disable-next-line
-        betterOrdering = orderingAppealDocuments + ',-created_at';
+        betterOrdering = `${orderingAppealDocuments},-created_at`;
     }
 
     const {

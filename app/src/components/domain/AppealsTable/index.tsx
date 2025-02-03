@@ -209,8 +209,7 @@ function AppealsTable(props: Props) {
     if (ordering === '-id') {
         betterOrdering = '-start_date';
     } else if (ordering.replace('-', '') !== 'start_date') {
-        // eslint-disable-next-line
-        betterOrdering = ordering + ',-start_date';
+        betterOrdering = `${ordering},-start_date`;
     }
 
     const query = useMemo<AppealQueryParams>(

@@ -133,8 +133,7 @@ function EventItemsTable(props: Props) {
     if (ordering === '-id') {
         betterOrdering = '-created_at';
     } else if (ordering.replace('-', '') !== 'created_at') {
-        // eslint-disable-next-line
-        betterOrdering = ordering + ',-created_at';
+        betterOrdering = `${ordering},-created_at`;
     }
 
     const {
