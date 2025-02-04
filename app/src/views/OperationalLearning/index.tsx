@@ -516,7 +516,20 @@ export function Component() {
                 pendingMessage={pendingMessage}
                 errored={isDefined(opsLearningSummaryError)
                     || opsLearningSummaryResponse?.status === SUMMARY_STATUS_FAILED}
-                errorMessage={strings.errorMessage}
+                errorMessage={resolveToComponent(
+                    strings.errorMessage,
+                    {
+
+                        link: (
+                            <Link
+                                href="mailto:im@ifrc.org"
+                                external
+                            >
+                                im@ifrc.org
+                            </Link>
+                        ),
+                    },
+                )}
                 filtered={filtered}
                 empty={isDefined(opsLearningSummaryResponse) && ((
                     opsLearningSummaryResponse?.components.length < 1

@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1-labs
 
 # -------------------------- Dev ---------------------------------------
-FROM node:18-bullseye AS dev
+FROM node:20-bookworm AS dev
 
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
@@ -15,7 +15,6 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
 WORKDIR /code
-
 RUN git config --global --add safe.directory /code
 
 # -------------------------- Nginx - Builder --------------------------------
@@ -23,6 +22,8 @@ FROM dev AS nginx-build
 
 # NOTE: --parents is not yet available in stable syntax, using docker/dockerfile:1-labs
 COPY --parents package.json pnpm-lock.yaml pnpm-workspace.yaml ./**/package.json patches/ /code/
+
+RUN corepack prepare --activate
 
 RUN pnpm install
 
