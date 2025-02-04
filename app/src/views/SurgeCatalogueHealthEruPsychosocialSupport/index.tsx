@@ -20,7 +20,8 @@ export function Component() {
             <SurgeContentContainer
                 heading={strings.healthPSSCapacityTitle}
             >
-                <div>{strings.healthPSSCapacityDetail}</div>
+                <div>{strings.healthPSSCapacityDetailOne}</div>
+                <div>{strings.healthPSSCapacityDetailTwo}</div>
                 <ul>
                     <li>{strings.healthPSSCapacityListOne}</li>
                     <li>{strings.healthPSSCapacityListTwo}</li>
@@ -28,18 +29,14 @@ export function Component() {
                     <li>{strings.healthPSSCapacityListFour}</li>
                     <li>{strings.healthPSSCapacityListFive}</li>
                     <li>{strings.healthPSSCapacityListSix}</li>
+                    <li>{strings.healthPSSCapacityListSeven}</li>
                 </ul>
             </SurgeContentContainer>
             <SurgeContentContainer
                 heading={strings.healthPSSDesignedForTitle}
             >
-                <div>{strings.healthPSSDesignedForDetail}</div>
-                <div>{strings.healthPSSDesignedForDescription}</div>
-                <ul>
-                    <li>{strings.healthPSSDesignedForListItemOne}</li>
-                    <li>{strings.healthPSSDesignedForListItemTwo}</li>
-                    <li>{strings.healthPSSDesignedForListItemThree}</li>
-                </ul>
+                <div>{strings.healthPSSDesignedForDetailOne}</div>
+                <div>{strings.healthPSSDesignedForDetailTwo}</div>
             </SurgeContentContainer>
             <SurgeContentContainer
                 heading={strings.healthPSSPersonnel}
@@ -58,16 +55,12 @@ export function Component() {
             <SurgeContentContainer
                 heading={strings.healthPSSStandardComponentsLabel}
             >
-                <div>{strings.healthPSSStandardComponentsDetail}</div>
+                <div>{strings.healthPSSStandardComponentsDetailOne}</div>
                 <ul>
-                    <li>
-                        <TextOutput
-                            value={strings.healthPSSStandardComponentsItemOneValue}
-                            label={strings.healthPSSStandardComponentsItemOneLabel}
-                            strongLabel
-                        />
-                    </li>
+                    <li>{strings.healthPSSStandardComponentsItemOne}</li>
+                    <li>{strings.healthPSSStandardComponentsItemTwo}</li>
                 </ul>
+                <div>{strings.healthPSSStandardComponentsDetailTwo}</div>
             </SurgeContentContainer>
             <SurgeContentContainer
                 heading={strings.healthPSSSpecificationsTitle}
@@ -75,21 +68,13 @@ export function Component() {
                 <TextOutput
                     value={strings.healthPSSSpecificationsNsValue}
                     label={strings.healthPSSSpecificationsNsLabel}
-                    strongLabel
                 />
             </SurgeContentContainer>
 
             <SurgeContentContainer
                 heading={strings.healthPSSAdditionalResources}
             >
-                <Link
-                    href="http://pscentre.org/"
-                    external
-                    variant="tertiary"
-                    withLinkIcon
-                >
-                    {strings.healthPSSAdditionalResourcesLink}
-                </Link>
+                {strings.healthPSSAdditionalResourcesLink}
             </SurgeContentContainer>
         </SurgeCatalogueContainer>
     );
