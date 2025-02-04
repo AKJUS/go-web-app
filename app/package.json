@@ -1,6 +1,6 @@
 {
     "name": "go-web-app",
-    "version": "7.8.0",
+    "version": "7.8.1",
     "type": "module",
     "private": true,
     "license": "MIT",
@@ -38,7 +38,7 @@
     },
     "dependencies": {
         "@ifrc-go/icons": "^2.0.1",
-        "@ifrc-go/ui": "^1.2.3",
+        "@ifrc-go/ui": "^1.2.4",
         "@sentry/react": "^7.81.1",
         "@tinymce/tinymce-react": "^5.1.1",
         "@togglecorp/fujs": "^2.1.1",

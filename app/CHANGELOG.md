@@ -1,5 +1,12 @@
 # go-web-app
 
+## 7.8.1
+
+### Patch Changes
+
+- 9c51dee: Remove `summary` field from field report form
+- Update @ifrc-go/ui version
+
 ## 7.8.0
 
 ### Minor Changes

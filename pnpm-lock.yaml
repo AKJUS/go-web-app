@@ -38,7 +38,7 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(react@18.2.0)
       '@ifrc-go/ui':
-        specifier: ^1.2.3
+        specifier: ^1.2.4
         version: link:../packages/ui
       '@sentry/react':
         specifier: ^7.81.1
@@ -267,7 +267,7 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(react@18.2.0)
       '@ifrc-go/ui':
-        specifier: ^1.1.6
+        specifier: ^1.2.4
         version: link:../ui
       '@storybook/addon-docs':
         specifier: ^8.1.5
