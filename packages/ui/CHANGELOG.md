@@ -1,5 +1,11 @@
 # @ifrc-go/ui
 
+## 1.3.0
+
+### Minor Changes
+
+- 4032688: Add printable Signature component
+
 ## 1.2.4
 
 ### Patch Changes

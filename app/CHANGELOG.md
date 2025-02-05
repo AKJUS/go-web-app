@@ -1,5 +1,21 @@
 # go-web-app
 
+## 7.9.0
+
+### Minor Changes
+
+- 7927522: Update Imminent DREF Application in [#1455](https://github.com/IFRCGo/go-web-app/issues/1455)
+
+  - Hide sections/fields
+  - Rename sections/fields
+  - Remove sections/fields
+  - Reflect changes in the PDF export
+
+### Patch Changes
+
+- Updated dependencies [4032688]
+  - @ifrc-go/ui@1.3.0
+
 ## 7.8.1
 
 ### Patch Changes
