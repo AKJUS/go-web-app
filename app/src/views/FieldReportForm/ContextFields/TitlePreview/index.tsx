@@ -15,6 +15,7 @@ interface Props {
     isCovidReport?: boolean;
     startDate?: string;
     title: string;
+    id?: number;
 }
 
 function TitlePreview(props: Props) {
@@ -25,6 +26,7 @@ function TitlePreview(props: Props) {
         isCovidReport,
         startDate,
         title,
+        id,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -37,7 +39,8 @@ function TitlePreview(props: Props) {
         dtype: disasterType,
         event,
         title,
-    }), [country, isCovidReport, startDate, disasterType, event, title]);
+        id,
+    }), [country, isCovidReport, startDate, disasterType, event, title, id]);
 
     const debouncedVariables = useDebouncedValue(variables);
 

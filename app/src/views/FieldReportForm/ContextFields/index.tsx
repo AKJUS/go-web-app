@@ -315,6 +315,7 @@ function ContextFields(props: Props) {
                                     isCovidReport={value.is_covid_report}
                                     startDate={value.start_date}
                                     title={value.title}
+                                    id={value.id}
                                 />
                             ) : (
                                 <TextOutput
