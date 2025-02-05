@@ -29,6 +29,7 @@ import {
     DISASTER_FLOOD,
     INDIRECT_COST,
     SUB_TOTAL,
+    SURGE_DEPLOYMENT_COST,
     SURGE_INDIRECT_COST,
     TYPE_ASSESSMENT,
     TYPE_IMMINENT,
@@ -811,7 +812,13 @@ const schema: DrefFormSchema = {
                         (value) => {
                             if (value?.is_surge_personnel_deployed) {
                                 return {
-                                    surge_deployment_cost: { required: true },
+                                    surge_deployment_cost: {
+                                        required: true,
+                                        validations: [
+                                            positiveIntegerCondition,
+                                            lessThanOrEqualToCondition(SURGE_DEPLOYMENT_COST),
+                                        ],
+                                    },
                                     indirect_cost: {
                                         required: true,
                                         validations: [
