@@ -255,6 +255,12 @@
         },
         {
             "action": "add",
+            "key": "plannedInterventionAltText",
+            "namespace": "drefApplicationExport",
+            "value": "Planned Intervention Image"
+        },
+        {
+            "action": "add",
             "key": "priorityActionsBudget",
             "namespace": "drefApplicationExport",
             "value": "Budget (CHF)"

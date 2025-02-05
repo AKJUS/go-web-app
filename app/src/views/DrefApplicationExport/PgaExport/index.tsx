@@ -166,38 +166,14 @@ function PgaExport() {
                         strongLabel
                         withoutLabelColon
                     />
-                    <Signature
-                        label={strings.imminentSignature}
-                        strongLabel
-                    />
-                    <Signature
-                        label={strings.imminentSignature}
-                        strongLabel
-                    />
-                    <Signature
-                        label={strings.imminentPrintedSignatory}
-                        strongLabel
-                    />
-                    <Signature
-                        label={strings.imminentPrintedSignatory}
-                        strongLabel
-                    />
-                    <Signature
-                        label={strings.imminentTitle}
-                        strongLabel
-                    />
-                    <Signature
-                        label={strings.imminentTitle}
-                        strongLabel
-                    />
-                    <Signature
-                        label={strings.imminentDate}
-                        strongLabel
-                    />
-                    <Signature
-                        label={strings.imminentDate}
-                        strongLabel
-                    />
+                    <Signature label={strings.imminentSignature} />
+                    <Signature label={strings.imminentSignature} />
+                    <Signature label={strings.imminentPrintedSignatory} />
+                    <Signature label={strings.imminentPrintedSignatory} />
+                    <Signature label={strings.imminentTitle} />
+                    <Signature label={strings.imminentTitle} />
+                    <Signature label={strings.imminentDate} />
+                    <Signature label={strings.imminentDate} />
                 </div>
             </Container>
         </div>
