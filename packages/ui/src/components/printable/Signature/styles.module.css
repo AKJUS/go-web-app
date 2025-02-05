@@ -1,0 +1,19 @@
+.signed-container {
+    .signature-place {
+        padding: var(--go-ui-spacing-sm);
+    }
+    .line {
+        border: var(--go-ui-width-separator-sm) solid var(--go-ui-color-separator);
+    }
+
+    .label {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .strong {
+        color: var(--go-ui-color-black);
+        font-weight: var(--go-ui-font-weight-semibold);
+    }
+}

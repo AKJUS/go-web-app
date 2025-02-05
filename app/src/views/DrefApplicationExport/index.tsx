@@ -1051,10 +1051,11 @@ export function Component() {
             )}
             {proposedActionsDefined && (
                 <>
-                    <Heading level={3}>
-                        {strings.proposedActions}
-                    </Heading>
-                    <Container childrenContainerClassName={styles.actionsSection}>
+                    <Container
+                        heading={strings.proposedActions}
+                        headingLevel={3}
+                        childrenContainerClassName={styles.actionsSection}
+                    >
                         <div className={styles.actionsItem} />
                         <DescriptionText
                             className={styles.actionsTitle}

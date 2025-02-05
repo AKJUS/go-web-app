@@ -27,6 +27,9 @@ import {
     DISASTER_FIRE,
     DISASTER_FLASH_FLOOD,
     DISASTER_FLOOD,
+    INDIRECT_COST,
+    SUB_TOTAL,
+    SURGE_INDIRECT_COST,
     TYPE_ASSESSMENT,
     TYPE_IMMINENT,
     TYPE_LOAN,
@@ -783,7 +786,7 @@ const schema: DrefFormSchema = {
                             validations: [
                                 (value: Maybe<number>) => (
                                     // FIXME: use translations
-                                    isDefined(value) && value !== 75000
+                                    isDefined(value) && value !== SUB_TOTAL
                                         ? 'The sub-total of the budgets should be exactly CHF 75000'
                                         : undefined
                                 ),
@@ -813,7 +816,7 @@ const schema: DrefFormSchema = {
                                         required: true,
                                         validations: [
                                             positiveIntegerCondition,
-                                            lessThanOrEqualToCondition(5800),
+                                            lessThanOrEqualToCondition(SURGE_INDIRECT_COST),
                                         ],
                                     },
                                 };
@@ -824,7 +827,7 @@ const schema: DrefFormSchema = {
                                     required: true,
                                     validations: [
                                         positiveIntegerCondition,
-                                        lessThanOrEqualToCondition(5000),
+                                        lessThanOrEqualToCondition(INDIRECT_COST),
                                     ],
                                 },
                             };

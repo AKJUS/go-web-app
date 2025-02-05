@@ -108,7 +108,7 @@ function Operation(props: Props) {
         setValue,
     } = props;
 
-    const onProposedActionChange = useCallback(
+    const handleProposedActionChange = useCallback(
         (val: SetValueArg<ProposedActionsFormFields>, index: number | undefined) => {
             setValue((oldVal) => {
                 const newProposedValue = [...(oldVal.proposed_action ?? [])];
@@ -136,7 +136,7 @@ function Operation(props: Props) {
         [setValue],
     );
 
-    const onProposedActionRemove = useCallback(
+    const handleProposedActionRemove = useCallback(
         (index: number) => {
             setValue(
                 (oldValue) => {
@@ -911,8 +911,8 @@ function Operation(props: Props) {
                                 index={action.mainIndex}
                                 value={action}
                                 activityOptions={activityOptionResponse}
-                                onChange={onProposedActionChange}
-                                onRemove={onProposedActionRemove}
+                                onChange={handleProposedActionChange}
+                                onRemove={handleProposedActionRemove}
                                 error={getErrorObject(error?.proposed_action)}
                             />
                         ))}
@@ -952,8 +952,8 @@ function Operation(props: Props) {
                                 index={action.mainIndex}
                                 value={action}
                                 activityOptions={activityOptionResponse}
-                                onChange={onProposedActionChange}
-                                onRemove={onProposedActionRemove}
+                                onChange={handleProposedActionChange}
+                                onRemove={handleProposedActionRemove}
                                 error={getErrorObject(error?.proposed_action)}
                             />
                         ))}

@@ -3,6 +3,7 @@ import {
     Container,
     DescriptionText,
     Heading,
+    Signature,
     TextOutput,
     type TextOutputProps,
 } from '@ifrc-go/ui/printable';
@@ -30,10 +31,10 @@ function PgaExport() {
             <Heading level={2}>
                 {strings.imminentDREFRequestHeading}
             </Heading>
-            <Heading level={4}>
-                {strings.requestHeading}
-            </Heading>
-            <Container>
+            <Container
+                heading={strings.requestHeading}
+                headingLevel={4}
+            >
                 <DescriptionText>
                     <ol
                         className={styles.description}
@@ -45,10 +46,10 @@ function PgaExport() {
                     </ol>
                 </DescriptionText>
             </Container>
-            <Heading level={4}>
-                {strings.nationalSocietyHeading}
-            </Heading>
-            <Container>
+            <Container
+                heading={strings.nationalSocietyHeading}
+                headingLevel={4}
+            >
                 <DescriptionText>
                     <ol
                         className={styles.description}
@@ -119,28 +120,22 @@ function PgaExport() {
                     {strings.nationalSocietyDescriptionSixteen}
                 </DescriptionText>
             </Container>
-            <Heading level={4}>
-                {strings.nationalSocietyBankDetails}
-            </Heading>
-            <Container>
+            <Container
+                heading={strings.nationalSocietyBankDetails}
+                headingLevel={4}
+            >
                 <DescriptionText className={styles.tableDescription}>
                     {strings.nationalSocietyBankDescription}
                 </DescriptionText>
                 <div className={styles.bankDetails}>
                     <BlockTextOutput
                         label={strings.nationalSocietyBankName}
-                        value=""
-                        invalidText
                     />
                     <BlockTextOutput
                         label={strings.nationalSocietyBankAccountNumber}
-                        value=""
-                        invalidText
                     />
                     <BlockTextOutput
                         label={strings.nationalSocietySwiftCode}
-                        value=""
-                        invalidText
                     />
                     <BlockTextOutput
                         label={strings.nationalSocietyAmount}
@@ -148,21 +143,18 @@ function PgaExport() {
                     />
                     <BlockTextOutput
                         label={strings.nationalSocietyAdvancePayment}
-                        value=""
-                        invalidText
                     />
                 </div>
                 <i>{strings.nationalSocietyBankFooter}</i>
             </Container>
-            <Heading level={4}>
-                {strings.imminentDrefRequest}
-            </Heading>
-            <Container>
+            <Container
+                heading={strings.imminentDrefRequest}
+                headingLevel={4}
+            >
                 <div className={styles.drefSigned}>
                     <TextOutput
                         className={styles.drefTable}
                         label={strings.imminentDrefSigned}
-                        value=""
                         invalidText
                         strongLabel
                         withoutLabelColon
@@ -170,73 +162,40 @@ function PgaExport() {
                     <TextOutput
                         className={styles.drefTable}
                         label={strings.imminentIFRCSigned}
-                        value=""
                         invalidText
                         strongLabel
                         withoutLabelColon
                     />
-                    <TextOutput
-                        className={styles.signature}
+                    <Signature
                         label={strings.imminentSignature}
-                        value=""
-                        invalidText
-                        withoutLabelColon
                         strongLabel
                     />
-                    <TextOutput
-                        className={styles.signature}
+                    <Signature
                         label={strings.imminentSignature}
-                        value=""
-                        invalidText
-                        withoutLabelColon
                         strongLabel
                     />
-                    <TextOutput
-                        className={styles.signature}
+                    <Signature
                         label={strings.imminentPrintedSignatory}
-                        value=""
-                        invalidText
-                        withoutLabelColon
                         strongLabel
                     />
-                    <TextOutput
-                        className={styles.signature}
+                    <Signature
                         label={strings.imminentPrintedSignatory}
-                        value=""
-                        invalidText
-                        withoutLabelColon
                         strongLabel
                     />
-                    <TextOutput
-                        className={styles.signature}
+                    <Signature
                         label={strings.imminentTitle}
-                        value=""
-                        invalidText
-                        withoutLabelColon
                         strongLabel
                     />
-                    <TextOutput
-                        className={styles.signature}
+                    <Signature
                         label={strings.imminentTitle}
-                        value=""
-                        invalidText
-                        withoutLabelColon
                         strongLabel
                     />
-                    <TextOutput
-                        className={styles.signature}
+                    <Signature
                         label={strings.imminentDate}
-                        value=""
-                        invalidText
-                        withoutLabelColon
                         strongLabel
                     />
-                    <TextOutput
-                        className={styles.signature}
+                    <Signature
                         label={strings.imminentDate}
-                        value=""
-                        invalidText
-                        withoutLabelColon
                         strongLabel
                     />
                 </div>

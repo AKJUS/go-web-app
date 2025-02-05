@@ -29,6 +29,11 @@ export const DISASTER_FIRE = 15;
 export const DISASTER_FLASH_FLOOD = 27;
 export const DISASTER_FLOOD = 12;
 
+export const SURGE_DEPLOYMENT_COST = 10000;
+export const SURGE_INDIRECT_COST = 5800;
+export const INDIRECT_COST = 5000;
+export const SUB_TOTAL = 75000;
+
 export const EARLY_ACTIONS = 1 satisfies ProposedActionOption['key'];
 export const EARLY_RESPONSE = 2 satisfies ProposedActionOption['key'];
 
@@ -175,8 +180,8 @@ export const recalculateProposedActionValues = (val: PartialDref) => {
     // if Surge Personnel are not deployed,
     // the Surge Deployment cost will not be applicable,
     // and the Indirect Costs will be CHF 5,000
-    const surgeDeploymentCost = val.is_surge_personnel_deployed ? 10000 : undefined;
-    const indirectCost = val.is_surge_personnel_deployed ? 5800 : 5000;
+    const surgeDeploymentCost = val.is_surge_personnel_deployed ? SURGE_DEPLOYMENT_COST : undefined;
+    const indirectCost = val.is_surge_personnel_deployed ? SURGE_INDIRECT_COST : INDIRECT_COST;
 
     const total = sumSafe(
         [subTotal, indirectCost, surgeDeploymentCost],
