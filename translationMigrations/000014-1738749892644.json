@@ -1,5 +1,5 @@
 {
-    "parent": "000012-1738141854510.json",
+    "parent": "000013-1738649630110.json",
     "actions": [
         {
             "action": "add",
@@ -343,12 +343,6 @@
         },
         {
             "action": "add",
-            "key": "drefFormOperationUploadDocumentButtonLabel",
-            "namespace": "drefApplicationForm",
-            "value": "Upload any additional support document (Optional)"
-        },
-        {
-            "action": "add",
             "key": "drefFormOverviewUploadDocumentButtonLabel",
             "namespace": "drefApplicationForm",
             "value": "Upload document"
@@ -430,6 +424,12 @@
             "key": "drefFormRemoveActivity",
             "namespace": "drefApplicationForm",
             "value": "Remove Activity"
+        },
+        {
+            "action": "add",
+            "key": "drefFormUploadSupportingDocumentButton",
+            "namespace": "drefApplicationForm",
+            "value": "Upload document"
         },
         {
             "action": "add",
@@ -544,8 +544,8 @@
         {
             "action": "update",
             "key": "drefFormUploadDocumentButtonLabel",
-            "newKey": "drefFormUploadSupportingDocumentButton",
-            "namespace": "drefApplicationForm"
+            "namespace": "drefApplicationForm",
+            "newValue": "Upload any additional support document (Optional)"
         },
         {
             "action": "update",
