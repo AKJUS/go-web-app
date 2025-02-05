@@ -155,14 +155,14 @@ function PgaExport() {
                     <TextOutput
                         className={styles.drefTable}
                         label={strings.imminentDrefSigned}
-                        invalidText
+                        invalidText={null}
                         strongLabel
                         withoutLabelColon
                     />
                     <TextOutput
                         className={styles.drefTable}
                         label={strings.imminentIFRCSigned}
-                        invalidText
+                        invalidText={null}
                         strongLabel
                         withoutLabelColon
                     />

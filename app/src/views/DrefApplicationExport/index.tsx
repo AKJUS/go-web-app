@@ -1091,7 +1091,7 @@ export function Component() {
                             </ul>
                         ))}
                         withoutLabelColon
-                        invalidText
+                        invalidText={null}
                     />
                     <TextOutput
                         className={styles.actionsItem}
@@ -1100,26 +1100,23 @@ export function Component() {
                             <TextOutput
                                 key={action.id}
                                 className={styles.actionsItem}
-                                label=""
                                 value={action.budget}
-                                invalidText
+                                invalidText={null}
                                 withoutLabelColon
                             />
                         ))}
                         withoutLabelColon
-                        invalidText
+                        invalidText={null}
                     />
 
                     <TextOutput
                         className={styles.actionsItem}
-                        label=""
                         value={strings.priorityActionsEarlyResponse}
                         withoutLabelColon
                         strongValue
                     />
                     <TextOutput
                         className={styles.actionsItem}
-                        label=""
                         value={proposedActionsByType[EARLY_RESPONSE]?.map((response) => (
                             <ul key={response.id}>
                                 <li>
@@ -1135,22 +1132,20 @@ export function Component() {
                             </ul>
                         ))}
                         withoutLabelColon
-                        invalidText
+                        invalidText={null}
                     />
                     <TextOutput
                         className={styles.actionsItem}
-                        label=""
                         value={proposedActionsByType[EARLY_RESPONSE]?.map((response) => (
                             <TextOutput
                                 className={styles.actionsItem}
-                                label=""
                                 value={response.budget}
-                                invalidText
+                                invalidText={null}
                                 withoutLabelColon
                             />
                         ))}
                         withoutLabelColon
-                        invalidText
+                        invalidText={null}
                     />
                     <div className={styles.actionsItem} />
                     <TextOutput
@@ -1162,49 +1157,42 @@ export function Component() {
                     />
                     <TextOutput
                         className={styles.actionsItem}
-                        label=""
                         value={drefResponse?.sub_total}
                         withoutLabelColon
                     />
                     <div className={styles.actionsItem} />
                     <TextOutput
                         className={styles.costItem}
-                        label=""
                         value={strings.priorityActionsSurgeDeployment}
                         withoutLabelColon
                         strongValue
                     />
                     <TextOutput
                         className={styles.actionsItem}
-                        label=""
                         value={drefResponse?.surge_deployment_cost}
                         withoutLabelColon
                     />
                     <div className={styles.actionsItem} />
                     <TextOutput
                         className={styles.costItem}
-                        label=""
                         value={strings.priorityActionsIndirectCost}
                         withoutLabelColon
                         strongValue
                     />
                     <TextOutput
                         className={styles.actionsItem}
-                        label=""
                         value={drefResponse?.indirect_cost}
                         withoutLabelColon
                     />
                     <div className={styles.actionsItem} />
                     <TextOutput
                         className={styles.costItem}
-                        label=""
                         value={strings.priorityActionsTotal}
                         withoutLabelColon
                         strongValue
                     />
                     <TextOutput
                         className={styles.actionsItem}
-                        label=""
                         value={drefResponse?.total}
                         withoutLabelColon
                     />
@@ -1345,7 +1333,7 @@ export function Component() {
                                 <img
                                     className={styles.icon}
                                     src={plannedIntervention.image_url}
-                                    alt=""
+                                    alt={strings.plannedInterventionAltText}
                                 />
                                 {plannedIntervention.title_display}
                             </Heading>

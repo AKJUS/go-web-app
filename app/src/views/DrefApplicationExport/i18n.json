@@ -118,6 +118,7 @@
         "dateAndGeographicalArea": "(Date and geographical area)",
         "sourceInformationAttachments": "Include the link to the source of information or indicate if shared as attachments.",
         "plan": "Plan",
+        "plannedInterventionAltText": "Planned Intervention Image",
         "planDescription": "If the National Society has developed contingency plans, or recently carried out PER assessment or readiness check for instance, kindly attached those documents to the request."
     }
 }
