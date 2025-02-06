@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.10.0
+
+### Minor Changes
+
+- 4f89133: Fix DREF PGA export styling
+
 ## 7.9.0
 
 ### Minor Changes
