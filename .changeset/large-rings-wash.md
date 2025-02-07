@@ -2,4 +2,5 @@
 "go-web-app": patch
 ---
 
-Update the ERU MHPSS Module in the Catalogue.
+Update on the ERU MHPSS Module in the Catalogue of Services
+Update on a PER role profile
