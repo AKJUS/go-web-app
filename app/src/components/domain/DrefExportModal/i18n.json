@@ -7,9 +7,6 @@
         "drefExportFailed": "Export failed",
         "drefExportSuccessfully": "Export completed successfully",
         "drefClickDownloadLink": "Click on the download link below!",
-        "drefDownloadPDF": "Download PDF",
-        "drefDownloadPDFWithPGA": "Download PDF with PGA",
-        "drefDownloadPDFwithoutPGA": "Download PDF without PGA",
-        "drefFailureToExportMessage":"Failed to export PDF."
+        "drefDownloadPDF": "Download PDF"
     }
 }

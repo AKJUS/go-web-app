@@ -198,7 +198,11 @@ function Actions(props: Props) {
                 heading={strings.drefFormNationalSocietiesActions}
             >
                 <InputSection
-                    title={strings.drefFormDidNationalSocietyStartedSlow}
+                    title={
+                        value?.type_of_dref !== TYPE_IMMINENT
+                            ? strings.drefFormDidNationalSocietyStartedSlow
+                            : strings.drefFormDidNationalSocietyStartedImminent
+                    }
                 >
                     <BooleanInput
                         name="did_national_society"
@@ -210,7 +214,11 @@ function Actions(props: Props) {
                 </InputSection>
                 {value.did_national_society && (
                     <InputSection
-                        title={strings.drefFormNsResponseStarted}
+                        title={
+                            value?.type_of_dref === TYPE_IMMINENT
+                                ? strings.drefFormNSAnticipatoryAction
+                                : strings.drefFormNsResponseStarted
+                        }
                     >
                         <DateInput
                             name="ns_respond_date"
@@ -376,7 +384,11 @@ function Actions(props: Props) {
             {value?.type_of_dref !== TYPE_ASSESSMENT && (
                 <Container
                     className={styles.needsIdentified}
-                    heading={strings.drefFormNeedsIdentified}
+                    heading={
+                        value?.type_of_dref === TYPE_IMMINENT
+                            ? strings.drefFormImminentNeedsIdentified
+                            : strings.drefFormNeedsIdentified
+                    }
                 >
                     {/* NOTE: Only when RESPONSE */}
                     {value?.type_of_dref !== TYPE_IMMINENT && (
