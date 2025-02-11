@@ -62,7 +62,6 @@ import {
 import Actions from './Actions';
 import {
     checkTabErrors,
-    TYPE_IMMINENT,
     TYPE_LOAN,
     type TypeOfDrefEnum,
 } from './common';
@@ -100,22 +99,6 @@ function getNextStep(current: TabKeys, direction: 1 | -1, typeOfDref: TypeOfDref
         };
         return mapping[current];
     }
-    if (typeOfDref === TYPE_IMMINENT && direction === 1) {
-        const mapping: { [key in TabKeys]?: TabKeys } = {
-            overview: 'eventDetail',
-            eventDetail: 'operation',
-            operation: 'submission',
-        };
-        return mapping[current];
-    }
-    if (typeOfDref === TYPE_IMMINENT && direction === -1) {
-        const mapping: { [key in TabKeys]?: TabKeys } = {
-            submission: 'operation',
-            operation: 'eventDetail',
-            eventDetail: 'overview',
-        };
-        return mapping[current];
-    }
     if (direction === 1) {
         const mapping: { [key in TabKeys]?: TabKeys } = {
             overview: 'eventDetail',
@@ -136,7 +119,6 @@ function getNextStep(current: TabKeys, direction: 1 | -1, typeOfDref: TypeOfDref
     }
     return undefined;
 }
-
 /** @knipignore */
 
 export function Component() {
@@ -207,8 +189,6 @@ export function Component() {
                     disaster_category_analysis_details,
                     targeting_strategy_support_file_details,
                     budget_file_details,
-                    scenario_analysis_supporting_document_details,
-                    contingency_plans_supporting_document_details,
                 } = response;
 
                 if (
@@ -268,23 +248,6 @@ export function Component() {
                         targeting_strategy_support_file_details.id
                     ] = targeting_strategy_support_file_details.file;
                 }
-                if (
-                    scenario_analysis_supporting_document_details
-                    && scenario_analysis_supporting_document_details.file
-                ) {
-                    newMap[
-                        scenario_analysis_supporting_document_details.id
-                    ] = scenario_analysis_supporting_document_details.file;
-                }
-
-                if (
-                    contingency_plans_supporting_document_details
-                    && contingency_plans_supporting_document_details.file
-                ) {
-                    newMap[
-                        contingency_plans_supporting_document_details.id
-                    ] = contingency_plans_supporting_document_details.file;
-                }
 
                 if (budget_file_details && budget_file_details.file) {
                     newMap[budget_file_details.id] = budget_file_details.file;
@@ -311,7 +274,6 @@ export function Component() {
 
             const {
                 planned_interventions,
-                proposed_action,
                 needs_identified,
                 national_society_actions,
                 risk_security,
@@ -328,11 +290,6 @@ export function Component() {
                     (intervention) => ({
                         ...injectClientId(intervention),
                         indicators: intervention.indicators?.map(injectClientId),
-                    }),
-                ),
-                proposed_action: proposed_action?.map(
-                    (action) => ({
-                        ...injectClientId(action),
                     }),
                 ),
                 source_information: source_information?.map(injectClientId),
@@ -404,11 +361,6 @@ export function Component() {
                     if (isDefined(match)) {
                         const [index] = match;
                         return value?.planned_interventions?.[index]?.client_id;
-                    }
-                    match = matchArray(locations, ['proposed_action', NUM]);
-                    if (isDefined(match)) {
-                        const [index] = match;
-                        return value?.proposed_action?.[index]?.client_id;
                     }
                     match = matchArray(locations, ['source_information', NUM, 'source_link', NUM]);
                     if (isDefined(match)) {
@@ -497,11 +449,6 @@ export function Component() {
                     if (isDefined(match)) {
                         const [index] = match;
                         return value?.planned_interventions?.[index]?.client_id;
-                    }
-                    match = matchArray(locations, ['proposed_action', NUM]);
-                    if (isDefined(match)) {
-                        const [index] = match;
-                        return value?.proposed_action?.[index]?.client_id;
                     }
                     match = matchArray(locations, ['source_information', NUM, 'source_link', NUM]);
                     if (isDefined(match)) {
@@ -675,12 +622,9 @@ export function Component() {
                             step={2}
                             errored={checkTabErrors(formError, 'eventDetail')}
                         >
-                            {value?.type_of_dref === TYPE_IMMINENT
-                                ? strings.formTabScenarioAnalysisLabel
-                                : strings.formTabEventDetailLabel}
+                            {strings.formTabEventDetailLabel}
                         </Tab>
-                        {value.type_of_dref !== TYPE_LOAN
-                            && value.type_of_dref !== TYPE_IMMINENT && (
+                        {value.type_of_dref !== TYPE_LOAN && (
                             <Tab
                                 name="actions"
                                 step={3}
@@ -695,9 +639,7 @@ export function Component() {
                                 step={4}
                                 errored={checkTabErrors(formError, 'operation')}
                             >
-                                {value?.type_of_dref === TYPE_IMMINENT
-                                    ? strings.formTabPlanLabel
-                                    : strings.formTabOperationLabel}
+                                {strings.formTabOperationLabel}
                             </Tab>
                         )}
                         <Tab
@@ -780,7 +722,6 @@ export function Component() {
                             <Operation
                                 value={value}
                                 setFieldValue={setFieldValue}
-                                setValue={setValue}
                                 fileIdToUrlMap={fileIdToUrlMap}
                                 setFileIdToUrlMap={setFileIdToUrlMap}
                                 error={formError}
@@ -836,7 +777,6 @@ export function Component() {
                         onCancel={setShowExportModalFalse}
                         id={Number(drefId)}
                         applicationType="DREF"
-                        drefType={value?.type_of_dref}
                     />
                 )}
             </Page>

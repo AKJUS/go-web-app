@@ -259,7 +259,6 @@ function ActiveDrefTable(props: Props) {
                         canCreateFinalReport,
                         hasPermissionToApprove: isRegionCoordinator || userMe?.is_superuser,
                         onPublishSuccess: refetchActiveDref,
-                        drefType: item.type_of_dref,
                     };
                 },
                 { columnClassName: styles.actions },

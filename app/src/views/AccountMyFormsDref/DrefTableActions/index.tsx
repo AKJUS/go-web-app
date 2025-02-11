@@ -31,7 +31,6 @@ import {
     DREF_TYPE_IMMINENT,
     DREF_TYPE_LOAN,
     type DrefStatus,
-    type TypeOfDrefEnum,
 } from '#utils/constants';
 import {
     type GoApiBody,
@@ -54,7 +53,6 @@ export interface Props {
     hasPermissionToApprove?: boolean;
 
     onPublishSuccess?: () => void;
-    drefType: TypeOfDrefEnum | null | undefined;
 }
 
 function DrefTableActions(props: Props) {
@@ -67,7 +65,6 @@ function DrefTableActions(props: Props) {
         canCreateFinalReport,
         hasPermissionToApprove,
         onPublishSuccess,
-        drefType,
     } = props;
 
     const { navigate } = useRouting();
@@ -500,7 +497,6 @@ function DrefTableActions(props: Props) {
                     onCancel={setShowExportModalFalse}
                     id={id}
                     applicationType={applicationType}
-                    drefType={drefType}
                 />
             )}
             {showShareModal && (

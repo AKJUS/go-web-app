@@ -28,9 +28,9 @@ import NonFieldError from '#components/NonFieldError';
 
 import {
     ONSET_SUDDEN,
+    TYPE_ASSESSMENT,
     TYPE_IMMINENT,
     TYPE_LOAN,
-    TYPE_RESPONSE,
 } from '../common';
 import { type PartialDref } from '../schema';
 
@@ -133,7 +133,7 @@ function EventDetail(props: Props) {
 
     return (
         <div className={styles.eventDetail}>
-            {value.type_of_dref === TYPE_RESPONSE && (
+            {value.type_of_dref !== TYPE_ASSESSMENT && value.type_of_dref !== TYPE_LOAN && (
                 <Container
                     heading={strings.drefFormPreviousOperations}
                     className={styles.previousOperations}
@@ -254,7 +254,19 @@ function EventDetail(props: Props) {
             <Container
                 heading={strings.drefFormDescriptionEvent}
             >
-                {value.type_of_dref !== TYPE_IMMINENT && (
+                {value.type_of_dref === TYPE_IMMINENT ? (
+                    <InputSection
+                        title={strings.drefFormApproximateDateOfImpact}
+                    >
+                        <TextArea
+                            name="event_text"
+                            value={value.event_text}
+                            onChange={setFieldValue}
+                            error={error?.event_text}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                ) : (
                     <InputSection
                         title={(
                             value.type_of_onset === ONSET_SUDDEN
@@ -312,11 +324,16 @@ function EventDetail(props: Props) {
                         )}
                         disabled={disabled}
                     />
-                    {value?.type_of_dref !== TYPE_LOAN && value?.type_of_dref !== TYPE_IMMINENT && (
+                    {value?.type_of_dref !== TYPE_LOAN && (
                         <NumberInput
                             label={(
                                 <>
-                                    {strings.drefFormPeopleInNeed}
+                                    {/* FIXME: use string template */}
+                                    {
+                                        value?.type_of_dref === TYPE_IMMINENT
+                                            ? strings.drefFormEstimatedPeopleInNeed
+                                            : strings.drefFormPeopleInNeed
+                                    }
                                     <Link
                                         title={strings.drefFormClickEmergencyResponseFramework}
                                         href={peopleInNeedLink}
@@ -330,7 +347,11 @@ function EventDetail(props: Props) {
                             value={value?.people_in_need}
                             onChange={setFieldValue}
                             error={error?.people_in_need}
-                            hint={strings.drefFormPeopleInNeedDescriptionSlowSudden}
+                            hint={(
+                                value?.type_of_dref === TYPE_IMMINENT
+                                    ? strings.drefFormPeopleInNeedDescriptionImminent
+                                    : strings.drefFormPeopleInNeedDescriptionSlowSudden
+                            )}
                             disabled={disabled}
                         />
                     )}
@@ -338,9 +359,13 @@ function EventDetail(props: Props) {
                     {/* NOTE: Empty div to preserve the layout */}
                     <div />
                 </InputSection>
-                {value.type_of_dref !== TYPE_LOAN && value.type_of_dref !== TYPE_IMMINENT && (
+                {value.type_of_dref !== TYPE_LOAN && (
                     <InputSection
-                        title={strings.drefFormWhatWhereWhen}
+                        title={
+                            value.type_of_dref !== TYPE_IMMINENT
+                                ? strings.drefFormWhatWhereWhen
+                                : strings.drefFormImminentDisaster
+                        }
                     >
                         <TextArea
                             name="event_description"
@@ -351,7 +376,42 @@ function EventDetail(props: Props) {
                         />
                     </InputSection>
                 )}
-                {value.type_of_dref === TYPE_RESPONSE && (
+                {value.type_of_dref === TYPE_IMMINENT && (
+                    <InputSection
+                        title={strings.drefFormTargetCommunities}
+                        description={strings.drefFormTargetCommunitiesDescription}
+                    >
+                        <TextArea
+                            name="anticipatory_actions"
+                            onChange={setFieldValue}
+                            value={value.anticipatory_actions}
+                            error={error?.anticipatory_actions}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                )}
+                {value.type_of_dref === TYPE_IMMINENT && (
+                    <InputSection
+                        title={strings.drefFormUploadSupportingDocument}
+                        description={strings.drefFormUploadSupportingDocumentDescription}
+                    >
+                        <GoSingleFileInput
+                            name="supporting_document"
+                            accept=".pdf, .docx, .pptx"
+                            fileIdToUrlMap={fileIdToUrlMap}
+                            onChange={setFieldValue}
+                            url="/api/v2/dref-files/"
+                            value={value.supporting_document}
+                            error={error?.supporting_document}
+                            setFileIdToUrlMap={setFileIdToUrlMap}
+                            clearable
+                            disabled={disabled}
+                        >
+                            {strings.drefFormUploadSupportingDocumentButtonLabel}
+                        </GoSingleFileInput>
+                    </InputSection>
+                )}
+                {value.type_of_dref !== TYPE_ASSESSMENT && value.type_of_dref !== TYPE_LOAN && (
                     <InputSection
                         title={strings.drefFormScopeAndScaleEvent}
                         description={strings.drefFormScopeAndScaleDescription}
@@ -394,74 +454,24 @@ function EventDetail(props: Props) {
                                 </Button>
                             </div>
                         </InputSection>
-                        {value.type_of_dref !== TYPE_IMMINENT && (
-                            <InputSection
-                                title={strings.drefFormUploadPhotos}
-                                description={strings.drefFormUploadPhotosLimitation}
-                                contentSectionClassName={styles.imageInputContent}
-                            >
-                                <MultiImageWithCaptionInput
-                                    label={strings.drefFormSelectImages}
-                                    url="/api/v2/dref-files/multiple/"
-                                    name="images_file"
-                                    value={value.images_file}
-                                    onChange={setFieldValue}
-                                    fileIdToUrlMap={fileIdToUrlMap}
-                                    setFileIdToUrlMap={setFileIdToUrlMap}
-                                    error={getErrorObject(error?.images_file)}
-                                    disabled={disabled}
-                                />
-                            </InputSection>
-                        )}
-                    </>
-                )}
-                {value.type_of_dref === TYPE_IMMINENT && (
-                    <InputSection
-                        title={strings.drefHazardExpectedTitle}
-                        description={strings.drefHazardExpectedDescription}
-                    >
-                        <TextArea
-                            name="hazard_date_and_location"
-                            onChange={setFieldValue}
-                            value={value.hazard_date_and_location}
-                            error={error?.hazard_date_and_location}
-                            disabled={disabled}
-                        />
-                    </InputSection>
-                )}
-                {value.type_of_dref === TYPE_IMMINENT && (
-                    <InputSection
-                        title={strings.drefHazardTitle}
-                        description={strings.drefHazardDescription}
-                    >
-                        <TextArea
-                            name="hazard_vulnerabilities_and_risks"
-                            onChange={setFieldValue}
-                            value={value.hazard_vulnerabilities_and_risks}
-                            error={error?.hazard_vulnerabilities_and_risks}
-                            disabled={disabled}
-                        />
-                    </InputSection>
-                )}
-                {value.type_of_dref === TYPE_IMMINENT && (
-                    <InputSection
-                        title={strings.drefFormUploadSupportingDocument}
-                    >
-                        <GoSingleFileInput
-                            name="scenario_analysis_supporting_document"
-                            accept=".pdf, .docx, .pptx"
-                            fileIdToUrlMap={fileIdToUrlMap}
-                            onChange={setFieldValue}
-                            url="/api/v2/dref-files/"
-                            value={value.scenario_analysis_supporting_document}
-                            error={error?.scenario_analysis_supporting_document}
-                            setFileIdToUrlMap={setFileIdToUrlMap}
-                            clearable
-                            disabled={disabled}
+                        <InputSection
+                            title={strings.drefFormUploadPhotos}
+                            description={strings.drefFormUploadPhotosLimitation}
+                            contentSectionClassName={styles.imageInputContent}
                         >
-                            {strings.drefFormUploadSupportingDocumentButton}
-                        </GoSingleFileInput>
-                    </InputSection>
+                            <MultiImageWithCaptionInput
+                                label={strings.drefFormSelectImages}
+                                url="/api/v2/dref-files/multiple/"
+                                name="images_file"
+                                value={value.images_file}
+                                onChange={setFieldValue}
+                                fileIdToUrlMap={fileIdToUrlMap}
+                                setFileIdToUrlMap={setFileIdToUrlMap}
+                                error={getErrorObject(error?.images_file)}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                    </>
                 )}
             </Container>
         </div>
