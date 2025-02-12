@@ -1,5 +1,16 @@
 # go-web-app
 
+## 7.10.1
+
+### Patch Changes
+
+- 14567f1: - Improve tables by adding default and second level ordering in following - Appeal Documents table, emergencies/xyzw/reports page - Recent Emergencies in Regions - All Appeals table - All Deployed Personnel default sorting (filters to be added) - Deployed ERUs, changed filter title - Key Documents tables in Countries - Response documents - Main page, Active Operations table - and the same AppealsTable is used in the next ones: - Active Operations in Regions - Previous Operations on Countries
+- 78d25b2: Update on the ERU MHPSS Module in the Catalogue of Services
+  Update on a PER role profile
+  Update link to IM Technical Competency Framwork
+- 44623a7: Undo DREF Imminent changes
+- b57c453: Show number of people assisted in DREF Final Report export
+
 ## 7.10.0
 
 ### Minor Changes
