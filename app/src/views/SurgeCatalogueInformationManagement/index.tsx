@@ -79,7 +79,7 @@ export function Component() {
     const frameworkData: LinkData[] = [
         {
             title: strings.catalogueIMIM,
-            href: 'https://ifrcorg.sharepoint.com/:b:/s/IFRCSharing/Ebz7vm6VjlNAifhse_vLmXQBxGSqF7VytmtmPFiZwUeXgw',
+            href: 'https://ifrcorg.sharepoint.com/:b:/s/IFRCSharing/EgH4I6LxIMBFtkWGT8ROqegBc1rVqsgiPkxvVy_a-8qKZw',
             external: true,
             withLinkIcon: true,
         },
