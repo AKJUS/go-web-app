@@ -24,6 +24,7 @@ import {
 import {
     _cs,
     isDefined,
+    isNotDefined,
 } from '@togglecorp/fujs';
 
 import DisasterTypeSelectInput from '#components/domain/DisasterTypeSelectInput';
@@ -205,19 +206,30 @@ function AppealsTable(props: Props) {
         ],
     );
 
-    let betterOrdering = ordering;
-    if (ordering === '-id') {
-        betterOrdering = '-start_date';
-    } else if (ordering.replace('-', '') !== 'start_date') {
-        betterOrdering = `${ordering},-start_date`;
-    }
+    const defaultOrdering = '-start_date';
+    const orderingWithFallback = useMemo(() => {
+        if (isNotDefined(ordering)) {
+            return defaultOrdering;
+        }
+
+        if (ordering === '-id') {
+            return '-start_date';
+        }
+
+        if (ordering === 'start_date' || ordering === '-start_date') {
+            return ordering;
+        }
+
+        // Add default ordering as second ordering
+        return [ordering, defaultOrdering].join(',');
+    }, [ordering]);
 
     const query = useMemo<AppealQueryParams>(
         () => {
             const baseQuery: AppealQueryParams = {
                 limit,
                 offset,
-                ordering: betterOrdering,
+                ordering: orderingWithFallback,
                 atype: filter.appeal,
                 dtype: filter.displacement,
                 district: hasSomeDefinedValue(filter.district) ? filter.district : undefined,
@@ -241,7 +253,7 @@ function AppealsTable(props: Props) {
             variant,
             countryId,
             regionId,
-            betterOrdering,
+            orderingWithFallback,
             filter,
             limit,
             offset,

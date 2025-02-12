@@ -88,12 +88,23 @@ export function Component() {
         } : undefined, // TODO: we need to add search filter in server
     });
 
-    let betterOrdering = orderingAppealDocuments;
-    if (orderingAppealDocuments === '-id') {
-        betterOrdering = '-created_at';
-    } else if (orderingAppealDocuments.replace('-', '') !== 'created_at') {
-        betterOrdering = `${orderingAppealDocuments},-created_at`;
-    }
+    const defaultOrdering = '-created_at';
+    const orderingWithFallback = useMemo(() => {
+        if (isNotDefined(orderingAppealDocuments)) {
+            return defaultOrdering;
+        }
+
+        if (orderingAppealDocuments === '-id') {
+            return '-created_at';
+        }
+
+        if (orderingAppealDocuments === 'created_at' || orderingAppealDocuments === '-created_at') {
+            return orderingAppealDocuments;
+        }
+
+        // Add default ordering as second ordering
+        return [orderingAppealDocuments, defaultOrdering].join(',');
+    }, [orderingAppealDocuments]);
 
     const {
         pending: appealDocumentsPending,
@@ -111,7 +122,7 @@ export function Component() {
             appeal: emergencyResponse.appeals.map((appeal) => appeal.id).filter(isDefined),
             limit: appealDocumentsLimit,
             offset: appealDocumentsOffset,
-            ordering: betterOrdering,
+            ordering: orderingWithFallback,
         } : undefined,
     });
 
