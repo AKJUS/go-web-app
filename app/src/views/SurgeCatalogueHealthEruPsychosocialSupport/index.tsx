@@ -3,7 +3,6 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import SurgeCatalogueContainer from '#components/domain/SurgeCatalogueContainer';
 import SurgeContentContainer from '#components/domain/SurgeContentContainer';
-import Link from '#components/Link';
 
 import i18n from './i18n.json';
 

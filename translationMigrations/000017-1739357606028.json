@@ -1,5 +1,5 @@
 {
-    "parent": "000013-1738649630110.json",
+    "parent": "000016-1739270322324.json",
     "actions": [
         {
             "action": "update",
@@ -189,6 +189,12 @@
             "key": "healthBurialsCompositionValue",
             "namespace": "surgeCatalogueHealthSafeDignifiedBurials",
             "newValue": "Minimum: Health educator/trainer, IPC/WASH – One of these would be Team Leader. Additional profiles context-dependent and may be able to provide remote support: MHPSS,  logistician, finance/admin, Heath IM, CEA"
+        },
+        {
+            "action": "update",
+            "key": "otherLinkOne",
+            "namespace": "surgeCatalogueOtherPreparednessEffectiveResponse",
+            "newValue": "National Society Readiness and Response Capacity Strengthening Coordinator"
         }
     ]
 }
