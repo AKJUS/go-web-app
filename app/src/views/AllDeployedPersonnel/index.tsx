@@ -74,17 +74,35 @@ export function Component() {
         return type.toUpperCase();
     }, [strings.rapidResponse]);
 
+    const defaultOrdering = '-start_date';
+    const orderingWithFallback = useMemo(() => {
+        if (isNotDefined(ordering)) {
+            return defaultOrdering;
+        }
+
+        if (ordering === '-id') {
+            return '-start_date';
+        }
+
+        if (ordering === 'start_date' || ordering === '-start_date') {
+            return ordering;
+        }
+
+        // Add default ordering as second ordering
+        return [ordering, defaultOrdering].join(',');
+    }, [ordering]);
+
     const query = useMemo(() => ({
         limit,
         offset,
-        ordering,
+        ordering: orderingWithFallback,
         // FIXME: The server does not support date string
         start_date__gte: toDateTimeString(filter.startDateAfter),
         start_date__lte: toDateTimeString(filter.startDateBefore),
     }), [
         limit,
         offset,
-        ordering,
+        orderingWithFallback,
         filter,
     ]);
 
