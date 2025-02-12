@@ -23,6 +23,7 @@
         "start": "vite",
         "prebuild": "pnpm initialize:type",
         "build": "vite build",
+        "preview": "vite preview",
         "pretypecheck": "pnpm initialize:type",
         "typecheck": "tsc",
         "prelint:js": "pnpm initialize:type",
