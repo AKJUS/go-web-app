@@ -18,7 +18,7 @@
         "generate:type": "pnpm -F go-web-app generate:type",
         "preview": "pnpm -F go-web-app preview",
         "storybook": "pnpm -F go-ui-storybook storybook",
-        "build-storybook": "pnpm -F go-ui-storybook build-storybook",
+        "build-storybook": "pnpm build:ui && pnpm -F go-ui-storybook build-storybook",
         "chromatic": "pnpm -F go-ui-storybook chromatic"
     },
     "engines": {
