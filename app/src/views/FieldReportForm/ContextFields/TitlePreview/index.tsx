@@ -49,6 +49,7 @@ function TitlePreview(props: Props) {
     } = useRequest({
         url: '/api/v2/field-report/generate-title/',
         method: 'POST',
+        useCurrentLanguageForMutation: true,
         body: debouncedVariables,
         preserveResponse: true,
         onFailure: () => {
