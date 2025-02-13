@@ -19,6 +19,7 @@ import {
     isNotDefined,
 } from '@togglecorp/fujs';
 
+// import { environment } from '#config';
 import useFilterState from '#hooks/useFilterState';
 import { getFirstTruthyString } from '#utils/common';
 import { type CountryOutletContext } from '#utils/outletContext';
@@ -111,16 +112,22 @@ function LocalUnitsTable(props: Props) {
                 strings.localUnitsTableFocal,
                 (item) => getFirstTruthyString(item.focal_person_loc, item.focal_person_en),
             ),
-            createStringColumn<LocalUnitsTableListItem, number>(
+            /*
+            environment !== 'production' ? (
+                createStringColumn<LocalUnitsTableListItem, number>(
                 'phone',
                 strings.localUnitsTablePhoneNumber,
                 (item) => item.phone,
-            ),
-            createStringColumn<LocalUnitsTableListItem, number>(
-                'email',
-                strings.localUnitsTableEmail,
-                (item) => item.email,
-            ),
+                ),
+            ) : undefined,
+            environment !== 'production' ? (
+                createStringColumn<LocalUnitsTableListItem, number>(
+                    'email',
+                    strings.localUnitsTableEmail,
+                    (item) => item.email,
+                ),
+            ) : undefined,
+            */
             createElementColumn<LocalUnitsTableListItem, number, LocalUnitsTableActionsProps>(
                 'actions',
                 '',
@@ -140,14 +147,14 @@ function LocalUnitsTable(props: Props) {
                 }),
                 { columnClassName: styles.actions },
             ),
-        ]),
+        ].filter(isDefined)),
         [
             strings.localUnitsTableAddress,
             strings.localUnitsTableName,
             strings.localUnitsTableType,
             strings.localUnitsTableFocal,
-            strings.localUnitsTablePhoneNumber,
-            strings.localUnitsTableEmail,
+            // strings.localUnitsTablePhoneNumber,
+            // strings.localUnitsTableEmail,
             refetchLocalUnits,
         ],
     );
