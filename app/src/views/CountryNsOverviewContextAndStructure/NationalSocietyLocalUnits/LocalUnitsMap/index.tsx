@@ -154,7 +154,9 @@ function LocalUnitsMap(props: Props) {
         [filter, countryResponse],
     );
 
-    const { isGuestUser } = usePermissions();
+    const {
+        isGuestUser,
+    } = usePermissions();
 
     const requestType = useMemo(
         () => {
