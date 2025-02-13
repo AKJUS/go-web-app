@@ -1043,6 +1043,7 @@ function LocalUnitsForm(props: Props) {
                         >
                             {value.type !== TYPE_HEALTH_CARE && (
                                 <>
+                                    {/*
                                     <DiffWrapper
                                         value={value.phone}
                                         oldValue={previousData?.phone}
@@ -1075,6 +1076,7 @@ function LocalUnitsForm(props: Props) {
                                             error={error?.email}
                                         />
                                     </DiffWrapper>
+                                    */}
                                     <DiffWrapper
                                         value={value.link}
                                         oldValue={previousData?.link}
@@ -1113,6 +1115,7 @@ function LocalUnitsForm(props: Props) {
                                             error={healthFormError?.focal_point_position}
                                         />
                                     </DiffWrapper>
+                                    {/*
                                     <DiffWrapper
                                         value={value.health?.focal_point_email}
                                         oldValue={previousData?.health?.focal_point_email}
@@ -1146,6 +1149,7 @@ function LocalUnitsForm(props: Props) {
                                             error={healthFormError?.focal_point_phone_number}
                                         />
                                     </DiffWrapper>
+                                    */}
                                 </>
                             )}
                         </Container>
