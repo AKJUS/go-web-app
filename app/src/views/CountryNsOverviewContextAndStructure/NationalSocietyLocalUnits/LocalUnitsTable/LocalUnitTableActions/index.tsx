@@ -62,7 +62,9 @@ function LocalUnitsTableActions(props: Props) {
         || isCountryAdmin(Number(countryId))
         || isRegionAdmin(Number(countryDetails?.region));
 
-    const hasDeletePermission = isAuthenticated && !isGuestUser;
+    // const hasDeletePermission = isAuthenticated && !isGuestUser;
+    const hasDeletePermission = isAuthenticated && hasValidatePermission;
+    const hasEditPermission = isAuthenticated && hasValidatePermission;
 
     const [readOnlyLocalUnitModal, setReadOnlyLocalUnitModal] = useState(false);
 
@@ -152,12 +154,11 @@ function LocalUnitsTableActions(props: Props) {
                                 {strings.localUnitActionsDelete}
                             </DropdownMenuItem>
                         )}
-                        {!isLocked && (
+                        {!isLocked && hasEditPermission && (
                             <DropdownMenuItem
                                 type="button"
                                 name={localUnitId}
                                 onClick={handleEditLocalUnitClick}
-                                disabled={isGuestUser}
                             >
                                 {strings.localUnitActionsEdit}
                             </DropdownMenuItem>
