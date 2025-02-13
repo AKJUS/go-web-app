@@ -1,5 +1,11 @@
 # go-ui-storybook
 
+## 1.0.3
+
+### Patch Changes
+
+- db732fd: Add Dockerfile and Helm chart to deploy Storybook
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,15 +1,36 @@
 # go-web-app
 
+## 7.11.0
+
+### Minor Changes
+
+- Field report number generation: Change only when the country or event changes
+
 ## 7.10.1
 
 ### Patch Changes
 
-- 14567f1: - Improve tables by adding default and second level ordering in following - Appeal Documents table, emergencies/xyzw/reports page - Recent Emergencies in Regions - All Appeals table - All Deployed Personnel default sorting (filters to be added) - Deployed ERUs, changed filter title - Key Documents tables in Countries - Response documents - Main page, Active Operations table - and the same AppealsTable is used in the next ones: - Active Operations in Regions - Previous Operations on Countries
-- 78d25b2: Update on the ERU MHPSS Module in the Catalogue of Services
-  Update on a PER role profile
-  Update link to IM Technical Competency Framwork
+- 14567f1: Improved tables by adding default and second-level ordering in [#1633](https://github.com/IFRCGo/go-web-app/issues/1633)
+
+  - Appeal Documents table, `emergencies/{xxx}/reports` page
+  - Recent Emergencies in Regions – All Appeals table
+  - All Deployed Personnel – Default sorting (filters to be added)
+  - Deployed ERUs – Changed filter title
+  - Key Documents tables in Countries
+  - Response documents
+  - Main page – Active Operations table
+  - The same `AppealsTable` is used in:
+    - Active Operations in Regions
+    - Previous Operations in Countries
+
+- 78d25b2:
+
+  - Update on the ERU MHPSS Module in the Catalogue of Services in [#1648](https://github.com/IFRCGo/go-web-app/issues/1648)
+  - Update on a PER role profile in [#1648](https://github.com/IFRCGo/go-web-app/issues/1648)
+  - Update link to the IM Technical Competency Framework in [#1483](https://github.com/IFRCGo/go-web-app/issues/1483)
+
 - 44623a7: Undo DREF Imminent changes
-- b57c453: Show number of people assisted in DREF Final Report export
+- b57c453: Show the number of people assisted in the DREF Final Report export in [#1665](https://github.com/IFRCGo/go-web-app/issues/1665)
 
 ## 7.10.0
 
