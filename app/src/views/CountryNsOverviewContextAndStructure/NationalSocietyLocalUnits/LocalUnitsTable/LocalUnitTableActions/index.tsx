@@ -62,9 +62,8 @@ function LocalUnitsTableActions(props: Props) {
         || isCountryAdmin(Number(countryId))
         || isRegionAdmin(Number(countryDetails?.region));
 
-    // const hasDeletePermission = isAuthenticated && !isGuestUser;
-    const hasDeletePermission = isAuthenticated && hasValidatePermission;
-    const hasEditPermission = isAuthenticated && hasValidatePermission;
+    const hasDeletePermission = isAuthenticated && !isGuestUser;
+    const hasEditPermission = hasValidatePermission;
 
     const [readOnlyLocalUnitModal, setReadOnlyLocalUnitModal] = useState(false);
 
