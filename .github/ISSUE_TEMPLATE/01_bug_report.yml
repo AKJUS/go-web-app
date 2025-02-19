@@ -6,9 +6,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for helping improve the IFRC GO Website!
-        Please fill out the form below with as much detail as possible. This will help us diagnose and fix the issue promptly.
+        **Bug Report**
+        Please fill out the form below with as much detail as possible.
         If the issue is visual, screenshots or videos are greatly appreciated.
+        **Please review [our guide on reporting bugs](https://github.com/IFRCGo/go-web-app/blob/develop/CONTRIBUTING.md#reporting-bugs) before opening a new issue.**
 
   - type: input
     attributes:
@@ -36,14 +37,6 @@ body:
       placeholder: "Chrome"
     validations:
       required: true
-
-  - type: input
-    attributes:
-      label: "Operating System"
-      description: "What operating system are you using? Include the version if possible."
-      placeholder: "Windows 10"
-    validations:
-      required: false
 
   - type: textarea
     attributes:
