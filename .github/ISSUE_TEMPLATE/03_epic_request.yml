@@ -6,8 +6,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Epic Overview
-        Use this to define a large, overarching initiative. An epic typically represents a high-level goal or feature that can be broken down into smaller, actionable issues.
+        **Epic**
+        Use this to define a large, overarching initiative.
+        **Please review [our guide on suggesting enhancements](https://github.com/IFRCGo/go-web-app/blob/develop/CONTRIBUTING.md#suggesting-enhancements).**
 
   - type: textarea
     attributes:

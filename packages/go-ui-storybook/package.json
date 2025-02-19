@@ -11,7 +11,9 @@
     },
     "scripts": {
         "build": "storybook build",
-        "lint": "eslint src",
+        "lint:js": "eslint src",
+        "lint": "pnpm lint:js",
+        "lint:fix": "pnpm lint:js --fix",
         "preview": "vite preview --outDir storybook-static --port 6006",
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build",

@@ -6,9 +6,10 @@ body:
   - type: markdown
     attributes:
       value: |
+        **Feature Request**
         Thank you for suggesting a new feature!
         Please provide as much detail as possible to help us understand and evaluate your idea.
-        Before submitting, please search our issue tracker to ensure this isn’t a duplicate request.
+        **Please review [our guide on suggesting enhancements](https://github.com/IFRCGo/go-web-app/blob/develop/CONTRIBUTING.md#suggesting-enhancements).**
 
   - type: textarea
     attributes:
