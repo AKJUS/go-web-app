@@ -3,19 +3,11 @@
 # -------------------------- Dev ---------------------------------------
 FROM node:20-bookworm AS dev
 
-RUN apt-get update -y \
-    && apt-get install -y --no-install-recommends \
-        git bash g++ make \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN npm install -g pnpm
-
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN corepack enable && npm install -g corepack@latest #TODO remove once https://github.com/pnpm/pnpm/issues/9029 is fixed for node 20
 
 WORKDIR /code
-RUN git config --global --add safe.directory /code
 
 # -------------------------- Nginx - Builder --------------------------------
 FROM dev AS nginx-build
@@ -25,7 +17,7 @@ COPY --parents package.json pnpm-lock.yaml pnpm-workspace.yaml ./**/package.json
 
 RUN corepack prepare --activate
 
-RUN pnpm install
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . /code/
 
@@ -50,7 +42,7 @@ ENV APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE=${APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE
 RUN pnpm build
 
 # ---------------------------------------------------------------------------
-FROM nginx:1 AS nginx-serve
+FROM nginx:alpine AS nginx-serve
 
 LABEL maintainer="IFRC"
 LABEL org.opencontainers.image.source="https://github.com/IFRCGo/go-web-app"

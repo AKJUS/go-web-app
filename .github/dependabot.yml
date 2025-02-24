@@ -17,3 +17,11 @@ updates:
       stylelint:
         patterns:
           - "*stylelint*"
+      all-other-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "*eslint*"
+          - "*vite*"
+          - "*postcss*"
+          - "*stylelint*"
