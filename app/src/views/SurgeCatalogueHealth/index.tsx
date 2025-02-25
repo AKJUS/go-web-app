@@ -274,7 +274,6 @@ export function Component() {
                 <CatalogueInfoCard
                     title={strings.nonClinicalTitle}
                     data={healthPSS}
-                    description={strings.healthPSSDetails}
                 />
             </SurgeCardContainer>
         </SurgeCatalogueContainer>
