@@ -314,6 +314,14 @@ function EditAccountInfo(props: Props) {
                 error={profileError?.phone_number}
                 disabled={updateAccountPending}
             />
+            <TextInput
+                name="position"
+                label={strings.positionInputLabel}
+                value={formValue?.profile?.position}
+                onChange={setProfileFieldValue}
+                error={profileError?.position}
+                disabled={updateAccountPending}
+            />
         </Modal>
     );
 }
