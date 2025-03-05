@@ -150,6 +150,9 @@ const schema: DrefFormSchema = {
             field_report: {}, // This value is set from CopyFieldReportSection
             // EVENT DETAILS
             num_affected: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_male: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_female: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_minors: { validations: [positiveIntegerCondition] },
 
             // none
 
@@ -186,6 +189,11 @@ const schema: DrefFormSchema = {
             regional_focal_point_title: {},
             regional_focal_point_email: { validations: [emailCondition] },
             regional_focal_point_phone_number: {},
+            national_society_integrity_contact_name: {},
+            national_society_integrity_contact_title: {},
+            national_society_integrity_contact_email: { validations: [emailCondition] },
+            national_society_integrity_contact_phone_number: {},
+            national_society_hotline_phone_number: {},
         };
 
         // Note: Section below include conditional form element only
@@ -212,7 +220,6 @@ const schema: DrefFormSchema = {
         );
 
         const overviewDrefTypeRelatedFields = [
-            'emergency_appeal_planned',
             'event_map_file',
             'cover_image_file',
         ] as const;
@@ -227,7 +234,6 @@ const schema: DrefFormSchema = {
             overviewDrefTypeRelatedFields,
             (val): OverviewDrefTypeRelatedFields => {
                 const conditionalFields: OverviewDrefTypeRelatedFields = {
-                    emergency_appeal_planned: { forceValue: nullValue },
                     event_map_file: { forceValue: nullValue }, // NOTE: check if this works
                     cover_image_file: { forceValue: nullValue },
                 };
@@ -236,7 +242,6 @@ const schema: DrefFormSchema = {
                 }
                 return {
                     ...conditionalFields,
-                    emergency_appeal_planned: {},
                     event_map_file: {
                         fields: (): EventMapFileFields => ({
                             client_id: {},
@@ -264,6 +269,8 @@ const schema: DrefFormSchema = {
             'did_ns_respond',
             'did_ns_request_fund',
             'lessons_learned',
+            'child_safeguarding_risk_level',
+            'complete_child_safeguarding_risk',
             'event_scope',
             'event_text',
             'anticipatory_actions',
@@ -291,6 +298,8 @@ const schema: DrefFormSchema = {
                     did_ns_respond: { forceValue: nullValue },
                     did_ns_request_fund: { forceValue: nullValue },
                     lessons_learned: { forceValue: nullValue },
+                    complete_child_safeguarding_risk: {},
+                    child_safeguarding_risk_level: {},
                     event_scope: { forceValue: nullValue },
                     source_information: { forceValue: [] },
                     event_text: { forceValue: nullValue },
@@ -582,9 +591,15 @@ const schema: DrefFormSchema = {
             'risk_security',
             'risk_security_concern',
             'has_child_safeguarding_risk_analysis_assessment',
+            'has_anti_fraud_corruption_policy',
+            'has_sexual_abuse_policy',
+            'has_child_protection_policy',
+            'has_whistleblower_protection_policy',
+            'has_anti_sexual_harassment_policy',
             'budget_file',
             'planned_interventions',
             'human_resource',
+            'is_volunteer_team_diverse',
             'is_surge_personnel_deployed',
         ] as const;
         type OperationDrefTypeRelatedFields = Pick<
@@ -618,8 +633,14 @@ const schema: DrefFormSchema = {
                     risk_security: { forceValue: [] },
                     risk_security_concern: { forceValue: nullValue },
                     budget_file: { forceValue: nullValue },
+                    has_anti_fraud_corruption_policy: {},
+                    has_anti_sexual_harassment_policy: {},
+                    has_sexual_abuse_policy: {},
+                    has_whistleblower_protection_policy: {},
+                    has_child_protection_policy: {},
                     planned_interventions: { forceValue: [] },
                     human_resource: { forceValue: nullValue },
+                    is_volunteer_team_diverse: { forceValue: nullValue },
                     is_surge_personnel_deployed: { forceValue: nullValue },
                     has_child_safeguarding_risk_analysis_assessment: { forceValue: nullValue },
                 };
@@ -711,6 +732,7 @@ const schema: DrefFormSchema = {
                         }),
                     },
                     human_resource: {},
+                    is_volunteer_team_diverse: {},
                     is_surge_personnel_deployed: {},
                 };
                 if (val?.type_of_dref !== TYPE_ASSESSMENT) {

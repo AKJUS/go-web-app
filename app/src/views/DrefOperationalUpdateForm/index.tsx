@@ -9,7 +9,6 @@ import { useParams } from 'react-router-dom';
 import {
     DownloadTwoLineIcon,
     ErrorWarningFillIcon,
-    ShareLineIcon,
 } from '@ifrc-go/icons';
 import type { ButtonProps } from '@ifrc-go/ui';
 import {
@@ -41,15 +40,12 @@ import {
 
 import { type DistrictItem } from '#components/domain/DistrictSearchMultiSelectInput';
 import DrefExportModal from '#components/domain/DrefExportModal';
-import DrefShareModal from '#components/domain/DrefShareModal';
 import LanguageMismatchMessage from '#components/domain/LanguageMismatchMessage';
-import { type User } from '#components/domain/UserSearchMultiSelectInput';
 import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
 import Page from '#components/Page';
 import useCurrentLanguage from '#hooks/domain/useCurrentLanguage';
 import useAlert from '#hooks/useAlert';
-import useInputState from '#hooks/useInputState';
 import {
     type GoApiResponse,
     useLazyRequest,
@@ -128,7 +124,6 @@ export function Component() {
 
     const [activeTab, setActiveTab] = useState<TabKeys>('overview');
     const [fileIdToUrlMap, setFileIdToUrlMap] = useState<Record<number, string>>({});
-    const [drefUsers, setDrefUsers] = useInputState<User[] | undefined | null>([]);
     const [
         showObsoletePayloadModal,
         setShowObsoletePayloadModal,
@@ -137,10 +132,6 @@ export function Component() {
     const [districtOptions, setDistrictOptions] = useState<
         DistrictItem[] | undefined | null
     >([]);
-    const [showShareModal, {
-        setTrue: setShowShareModalTrue,
-        setFalse: setShowShareModalFalse,
-    }] = useBooleanState(false);
     const [showExportModal, {
         setTrue: setShowExportModalTrue,
         setFalse: setShowExportModalFalse,
@@ -169,7 +160,6 @@ export function Component() {
                 changing_geographic_location: false,
                 changing_budget: false,
                 request_for_second_allocation: false,
-                has_forecasted_event_materialize: false,
             },
         },
     );
@@ -257,7 +247,6 @@ export function Component() {
                 changing_geographic_location,
                 changing_budget,
                 request_for_second_allocation,
-                has_forecasted_event_materialize,
                 source_information,
                 // disability_people_per,
                 // people_per_urban,
@@ -297,7 +286,6 @@ export function Component() {
                 changing_geographic_location: changing_geographic_location ?? false,
                 changing_budget: changing_budget ?? false,
                 request_for_second_allocation: request_for_second_allocation ?? false,
-                has_forecasted_event_materialize: has_forecasted_event_materialize ?? false,
                 source_information: source_information?.map(injectClientId),
             });
 
@@ -419,17 +407,6 @@ export function Component() {
                     debugMessage,
                 },
             );
-        },
-    });
-
-    const {
-        retrigger: getDrefUsers,
-    } = useRequest({
-        skip: isNotDefined(drefId),
-        url: '/api/v2/dref-share-user/{id}/',
-        pathVariables: { id: Number(drefId) },
-        onSuccess: (response) => {
-            setDrefUsers(response.users_details);
         },
     });
 
@@ -579,26 +556,12 @@ export function Component() {
         ],
     );
 
-    const handleShareClick: NonNullable<ButtonProps<undefined>['onClick']> = useCallback(
-        () => {
-            setShowShareModalTrue();
-        },
-        [setShowShareModalTrue],
-    );
     const handleExportClick: NonNullable<ButtonProps<undefined>['onClick']> = useCallback(
         () => {
             setShowExportModalTrue();
         },
         [setShowExportModalTrue],
     );
-
-    const handleUserShareSuccess = useCallback(() => {
-        setShowShareModalFalse();
-        getDrefUsers();
-    }, [
-        getDrefUsers,
-        setShowShareModalFalse,
-    ]);
 
     const hasAnyWarning = isTruthyString(peopleTargetedWarning)
         || isTruthyString(operationTimeframeWarning)
@@ -643,25 +606,14 @@ export function Component() {
                 actions={(
                     <>
                         {isTruthyString(opsUpdateId) && (
-                            <>
-                                <Button
-                                    name={undefined}
-                                    onClick={handleShareClick}
-                                    disabled={isNotDefined(drefId)}
-                                    icons={<ShareLineIcon />}
-                                    variant="secondary"
-                                >
-                                    {strings.formShareButtonLabel}
-                                </Button>
-                                <Button
-                                    name={undefined}
-                                    onClick={handleExportClick}
-                                    icons={<DownloadTwoLineIcon />}
-                                    variant="secondary"
-                                >
-                                    {strings.formExportLabel}
-                                </Button>
-                            </>
+                            <Button
+                                name={undefined}
+                                onClick={handleExportClick}
+                                icons={<DownloadTwoLineIcon />}
+                                variant="secondary"
+                            >
+                                {strings.formExportLabel}
+                            </Button>
                         )}
                         <Button
                             name={undefined}
@@ -781,8 +733,8 @@ export function Component() {
                                 error={formError}
                                 disabled={disabled}
                                 districtOptions={districtOptions}
-                                drefUsers={drefUsers}
                                 setDistrictOptions={setDistrictOptions}
+                                drefId={drefId}
                             />
                         </TabPanel>
                         <TabPanel name="eventDetail">
@@ -833,14 +785,23 @@ export function Component() {
                                 >
                                     {strings.formBackButtonLabel}
                                 </Button>
-                                <Button
-                                    name={nextStep ?? activeTab}
-                                    onClick={handleTabChange}
-                                    disabled={isNotDefined(nextStep)}
-                                    variant="secondary"
-                                >
-                                    {strings.formContinueButtonLabel}
-                                </Button>
+                                {isDefined(nextStep) ? (
+                                    <Button
+                                        name={nextStep ?? activeTab}
+                                        onClick={handleTabChange}
+                                        variant="secondary"
+                                    >
+                                        {strings.formContinueButtonLabel}
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        name={undefined}
+                                        onClick={handleFormSubmit}
+                                        disabled={disabled}
+                                    >
+                                        {strings.formSaveButtonLabel}
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </>
@@ -850,13 +811,6 @@ export function Component() {
                         opsUpdateId={+opsUpdateId}
                         onOverwriteButtonClick={handleObsoletePayloadOverwriteButtonClick}
                         onCancelButtonClick={setShowObsoletePayloadModal}
-                    />
-                )}
-                {showShareModal && isDefined(drefId) && (
-                    <DrefShareModal
-                        onCancel={setShowShareModalFalse}
-                        onSuccess={handleUserShareSuccess}
-                        drefId={drefId}
                     />
                 )}
                 {showExportModal && isDefined(opsUpdateId) && (

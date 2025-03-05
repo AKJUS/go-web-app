@@ -199,14 +199,6 @@ function useImportTemplateSchema() {
                 validation: 'string',
             },
 
-            emergency_appeal_planned: {
-                type: 'select',
-                label: 'Emergency appeal planned',
-                optionsKey: '__boolean',
-                validation: 'boolean',
-                description: 'Select <b>Yes</b> or <b>No</b> from the drop-down list.',
-            },
-
             // EVENT DETAIL
 
             did_it_affect_same_area: {

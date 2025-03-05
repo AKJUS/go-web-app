@@ -3,7 +3,11 @@ import {
     type SetStateAction,
     useCallback,
 } from 'react';
-import { WikiHelpSectionLineIcon } from '@ifrc-go/icons';
+import { useParams } from 'react-router-dom';
+import {
+    ShareLineIcon,
+    WikiHelpSectionLineIcon,
+} from '@ifrc-go/icons';
 import {
     BooleanInput,
     Button,
@@ -13,9 +17,15 @@ import {
     SelectInput,
     TextInput,
 } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
+import {
+    useBooleanState,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
 import { stringValueSelector } from '@ifrc-go/ui/utils';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 import {
     type EntriesAsList,
     type Error,
@@ -26,6 +36,7 @@ import {
 import CountrySelectInput from '#components/domain/CountrySelectInput';
 import DisasterTypeSelectInput from '#components/domain/DisasterTypeSelectInput';
 import DistrictSearchMultiSelectInput, { type DistrictItem } from '#components/domain/DistrictSearchMultiSelectInput';
+import DrefShareModal from '#components/domain/DrefShareModal';
 import UserItem from '#components/domain/DrefShareModal/UserItem';
 import { type FieldReportItem as FieldReportSearchItem } from '#components/domain/FieldReportSearchSelectInput';
 import GoSingleFileInput from '#components/domain/GoSingleFileInput';
@@ -36,11 +47,15 @@ import Link from '#components/Link';
 import useCountry from '#hooks/domain/useCountry';
 import useDisasterType from '#hooks/domain/useDisasterType';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
+import useInputState from '#hooks/useInputState';
 import {
     DISASTER_CATEGORY_ORANGE,
     DISASTER_CATEGORY_RED,
 } from '#utils/constants';
-import { type GoApiResponse } from '#utils/restRequest';
+import {
+    type GoApiResponse,
+    useRequest,
+} from '#utils/restRequest';
 
 import {
     DISASTER_FIRE,
@@ -84,7 +99,6 @@ interface Props {
 
     fieldReportOptions: FieldReportSearchItem[] | null | undefined;
     setFieldReportOptions: Dispatch<SetStateAction<FieldReportSearchItem[] | null | undefined>>;
-    drefUsers?: User[] | null;
 }
 
 const userKeySelector = (item: User) => item.id;
@@ -101,7 +115,6 @@ function Overview(props: Props) {
         setDistrictOptions,
         fieldReportOptions,
         setFieldReportOptions,
-        drefUsers,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -113,6 +126,8 @@ function Overview(props: Props) {
     } = useGlobalEnums();
 
     const countryOptions = useCountry();
+    const { drefId } = useParams<{ drefId: string }>();
+    const [drefUsers, setDrefUsers] = useInputState<User[] | undefined | null>([]);
 
     const disasterTypes = useDisasterType();
 
@@ -160,6 +175,29 @@ function Overview(props: Props) {
     }), []);
 
     const error = getErrorObject(formError);
+    const [showShareModal, {
+        setTrue: setShowShareModalTrue,
+        setFalse: setShowShareModalFalse,
+    }] = useBooleanState(false);
+
+    const {
+        retrigger: getDrefUsers,
+    } = useRequest({
+        skip: isNotDefined(drefId),
+        url: '/api/v2/dref-share-user/{id}/',
+        pathVariables: { id: Number(drefId) },
+        onSuccess: (response) => {
+            setDrefUsers(response.users_details);
+        },
+    });
+
+    const handleUserShareSuccess = useCallback(() => {
+        setShowShareModalFalse();
+        getDrefUsers();
+    }, [
+        getDrefUsers,
+        setShowShareModalFalse,
+    ]);
 
     return (
         <div className={styles.operationOverview}>
@@ -185,6 +223,21 @@ function Overview(props: Props) {
                         pending={false}
                         compact
                     />
+                    <Button
+                        name={undefined}
+                        onClick={setShowShareModalTrue}
+                        variant="secondary"
+                        icons={<ShareLineIcon />}
+                    >
+                        {strings.formShareButtonLabel}
+                    </Button>
+                    {showShareModal && isDefined(drefId) && (
+                        <DrefShareModal
+                            onCancel={setShowShareModalFalse}
+                            onSuccess={handleUserShareSuccess}
+                            drefId={Number(drefId)}
+                        />
+                    )}
                 </InputSection>
             </Container>
             <Container
@@ -193,6 +246,7 @@ function Overview(props: Props) {
             >
                 <InputSection
                     title={strings.drefFormNationalSociety}
+                    description={strings.drefFormNationalSocietyDescription}
                     numPreferredColumns={2}
                     withAsteriskOnTitle
                 >
@@ -387,19 +441,6 @@ function Overview(props: Props) {
                         </Button>
                     </div>
                 </InputSection>
-                {value?.type_of_dref !== TYPE_LOAN && (
-                    <InputSection
-                        title={strings.drefFormEmergencyAppealPlanned}
-                    >
-                        <BooleanInput
-                            name="emergency_appeal_planned"
-                            value={value?.emergency_appeal_planned}
-                            onChange={setFieldValue}
-                            error={error?.emergency_appeal_planned}
-                            disabled={disabled}
-                        />
-                    </InputSection>
-                )}
                 {value?.type_of_dref !== TYPE_LOAN && (
                     <InputSection
                         title={strings.drefFormUploadMap}

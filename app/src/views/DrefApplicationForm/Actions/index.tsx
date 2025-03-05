@@ -333,6 +333,7 @@ function Actions(props: Props) {
                 </InputSection>
                 <InputSection
                     title={strings.drefFormNationalAuthorities}
+                    description={strings.drefFormNationalAuthoritiesDescription}
                 >
                     <TextArea
                         label={strings.drefFormActionDescription}
@@ -345,6 +346,7 @@ function Actions(props: Props) {
                 </InputSection>
                 <InputSection
                     title={strings.drefFormUNorOtherActors}
+                    description={strings.drefFormUNorOtherActorsDescription}
                 >
                     <TextArea
                         label={strings.drefFormActionDescription}
@@ -454,6 +456,30 @@ function Actions(props: Props) {
                     {value?.type_of_dref !== TYPE_IMMINENT && (
                         <InputSection
                             title={strings.drefFormGapsInAssessment}
+                            description={(
+                                <>
+                                    <p>
+                                        {strings.drefFormGapsInAssessmentDescriptionHeading}
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            {strings.drefFormGapsInAssessmentDescriptionPoint1}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormGapsInAssessmentDescriptionPoint2}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormGapsInAssessmentDescriptionPoint3}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormGapsInAssessmentDescriptionPoint4}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormGapsInAssessmentDescriptionPoint5}
+                                        </li>
+                                    </ul>
+                                </>
+                            )}
                         >
                             <TextArea
                                 label={strings.drefFormActionDescription}

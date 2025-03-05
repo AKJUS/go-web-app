@@ -170,6 +170,9 @@ const schema: FinalReportFormSchema = {
             number_of_people_affected: {
                 validations: [positiveIntegerCondition],
             },
+            estimated_number_of_affected_male: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_female: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_minors: { validations: [positiveIntegerCondition] },
             people_in_need: { validations: [positiveIntegerCondition] },
             event_description: {},
             images_file: {
@@ -241,6 +244,11 @@ const schema: FinalReportFormSchema = {
                 }),
             },
             risk_security_concern: {},
+            has_anti_fraud_corruption_policy: {},
+            has_anti_sexual_harassment_policy: {},
+            has_sexual_abuse_policy: {},
+            has_whistleblower_protection_policy: {},
+            has_child_protection_policy: {},
             has_child_safeguarding_risk_analysis_assessment: {},
             planned_interventions: {
                 keySelector: (n) => n.client_id,
@@ -331,6 +339,11 @@ const schema: FinalReportFormSchema = {
             media_contact_title: {},
             media_contact_email: { validations: [emailCondition] },
             media_contact_phone_number: {},
+            national_society_integrity_contact_name: {},
+            national_society_integrity_contact_title: {},
+            national_society_integrity_contact_email: { validations: [emailCondition] },
+            national_society_integrity_contact_phone_number: {},
+            national_society_hotline_phone_number: {},
         };
 
         // OVERVIEW

@@ -208,8 +208,7 @@ export function Component() {
         || isDefined(drefResponse?.changing_budget)
         || isDefined(drefResponse?.changing_operation_strategy)
         || isDefined(drefResponse?.changing_target_population_of_operation)
-        || isDefined(drefResponse?.request_for_second_allocation)
-        || isDefined(drefResponse?.has_forecasted_event_materialize);
+        || isDefined(drefResponse?.request_for_second_allocation);
 
     const nsActionImagesDefined = isDefined(drefResponse)
         && drefResponse.photos_file
@@ -613,12 +612,6 @@ export function Component() {
                     <BlockTextOutput
                         label={strings.secondAllocationLabel}
                         value={drefResponse?.request_for_second_allocation}
-                        valueType="boolean"
-                        strongValue
-                    />
-                    <BlockTextOutput
-                        label={strings.eventMaterializedLabel}
-                        value={drefResponse?.has_forecasted_event_materialize}
                         valueType="boolean"
                         strongValue
                     />

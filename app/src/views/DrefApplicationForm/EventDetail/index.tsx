@@ -249,6 +249,25 @@ function EventDetail(props: Props) {
                             disabled={disabled}
                         />
                     </InputSection>
+                    <InputSection
+                        title={strings.drefFormChildSafeguardingRiskAnalysisTitle}
+                    >
+                        <BooleanInput
+                            name="complete_child_safeguarding_risk"
+                            value={value.complete_child_safeguarding_risk}
+                            onChange={setFieldValue}
+                            error={error?.complete_child_safeguarding_risk}
+                            disabled={disabled}
+                        />
+                        <TextArea
+                            label={strings.drefFormChildSafeguardingRiskLevelLabel}
+                            name="child_safeguarding_risk_level"
+                            onChange={setFieldValue}
+                            value={value.child_safeguarding_risk_level}
+                            error={error?.child_safeguarding_risk_level}
+                            disabled={disabled}
+                        />
+                    </InputSection>
                 </Container>
             )}
             <Container
@@ -355,6 +374,30 @@ function EventDetail(props: Props) {
                             disabled={disabled}
                         />
                     )}
+                    <NumberInput
+                        name="estimated_number_of_affected_male"
+                        label={strings.drefFormAffectedMaleLabel}
+                        value={value?.estimated_number_of_affected_male}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_male}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_female"
+                        label={strings.drefFormAffectedFemaleLabel}
+                        value={value?.estimated_number_of_affected_female}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_female}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_minors"
+                        label={strings.drefFormAffectedMinorsLabel}
+                        value={value?.estimated_number_of_affected_minors}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_minors}
+                        disabled={disabled}
+                    />
                     {/* FIXME: use grid to fix the empty div issue */}
                     {/* NOTE: Empty div to preserve the layout */}
                     <div />
@@ -366,6 +409,24 @@ function EventDetail(props: Props) {
                                 ? strings.drefFormWhatWhereWhen
                                 : strings.drefFormImminentDisaster
                         }
+                        description={value.type_of_dref !== TYPE_IMMINENT && (
+                            <>
+                                <p>
+                                    {strings.drefFormWhatWhereWhenDescriptionHeading}
+                                </p>
+                                <ol>
+                                    <li>
+                                        {strings.drefFormWhatWhereWhenDescriptionPoint1}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormWhatWhereWhenDescriptionPoint2}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormWhatWhereWhenDescriptionPoint3}
+                                    </li>
+                                </ol>
+                            </>
+                        )}
                     >
                         <TextArea
                             name="event_description"

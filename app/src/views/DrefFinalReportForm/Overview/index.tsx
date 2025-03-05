@@ -3,7 +3,10 @@ import {
     type SetStateAction,
     useCallback,
 } from 'react';
-import { WikiHelpSectionLineIcon } from '@ifrc-go/icons';
+import {
+    ShareLineIcon,
+    WikiHelpSectionLineIcon,
+} from '@ifrc-go/icons';
 import {
     Button,
     Container,
@@ -13,9 +16,15 @@ import {
     TextArea,
     TextInput,
 } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
+import {
+    useBooleanState,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
 import { stringValueSelector } from '@ifrc-go/ui/utils';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 import {
     type EntriesAsList,
     type Error,
@@ -26,6 +35,7 @@ import {
 import CountrySelectInput from '#components/domain/CountrySelectInput';
 import DisasterTypeSelectInput from '#components/domain/DisasterTypeSelectInput';
 import DistrictSearchMultiSelectInput, { type DistrictItem } from '#components/domain/DistrictSearchMultiSelectInput';
+import DrefShareModal from '#components/domain/DrefShareModal';
 import UserItem from '#components/domain/DrefShareModal/UserItem';
 import ImageWithCaptionInput from '#components/domain/ImageWithCaptionInput';
 import NationalSocietySelectInput from '#components/domain/NationalSocietySelectInput';
@@ -34,7 +44,11 @@ import Link from '#components/Link';
 import useCountry from '#hooks/domain/useCountry';
 import useDisasterType from '#hooks/domain/useDisasterType';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
-import { type GoApiResponse } from '#utils/restRequest';
+import useInputState from '#hooks/useInputState';
+import {
+    type GoApiResponse,
+    useRequest,
+} from '#utils/restRequest';
 
 import {
     TYPE_IMMINENT,
@@ -74,7 +88,7 @@ interface Props {
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     districtOptions: DistrictItem[] | null | undefined;
     setDistrictOptions: Dispatch<SetStateAction<DistrictItem[] | null | undefined>>;
-    drefUsers?: User[] | null;
+    drefId: number | undefined;
 }
 
 function Overview(props: Props) {
@@ -87,10 +101,15 @@ function Overview(props: Props) {
         disabled,
         districtOptions,
         setDistrictOptions,
-        drefUsers,
+        drefId,
     } = props;
 
     const strings = useTranslation(i18n);
+    const [drefUsers, setDrefUsers] = useInputState<User[] | undefined | null>([]);
+    const [showShareModal, {
+        setTrue: setShowShareModalTrue,
+        setFalse: setShowShareModalFalse,
+    }] = useBooleanState(false);
     const {
         dref_dref_dref_type: typeOfDrefOptions,
         dref_dref_disaster_category: drefDisasterCategoryOptions,
@@ -137,6 +156,25 @@ function Overview(props: Props) {
         (option) => option.key !== TYPE_LOAN,
     );
 
+    const {
+        retrigger: getDrefUsers,
+    } = useRequest({
+        skip: isNotDefined(drefId),
+        url: '/api/v2/dref-share-user/{id}/',
+        pathVariables: { id: Number(drefId) },
+        onSuccess: (response) => {
+            setDrefUsers(response.users_details);
+        },
+    });
+
+    const handleUserShareSuccess = useCallback(() => {
+        setShowShareModalFalse();
+        getDrefUsers();
+    }, [
+        getDrefUsers,
+        setShowShareModalFalse,
+    ]);
+
     const error = getErrorObject(formError);
 
     return (
@@ -163,6 +201,15 @@ function Overview(props: Props) {
                         pending={false}
                         compact
                     />
+                    <Button
+                        name={undefined}
+                        onClick={setShowShareModalTrue}
+                        disabled={isNotDefined(drefId)}
+                        variant="secondary"
+                        icons={<ShareLineIcon />}
+                    >
+                        {strings.formShareButtonLabel}
+                    </Button>
                 </InputSection>
             </Container>
             <Container
@@ -377,6 +424,13 @@ function Overview(props: Props) {
                     />
                 </InputSection>
             </Container>
+            {showShareModal && isDefined(drefId) && (
+                <DrefShareModal
+                    onCancel={setShowShareModalFalse}
+                    onSuccess={handleUserShareSuccess}
+                    drefId={drefId}
+                />
+            )}
         </div>
     );
 }

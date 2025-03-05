@@ -154,6 +154,9 @@ const schema: OpsUpdateFormSchema = {
             // EVENT DETAILS
             number_of_people_affected: { validations: [positiveIntegerCondition] },
             number_of_people_targeted: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_male: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_female: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_minors: { validations: [positiveIntegerCondition] },
 
             // none
 
@@ -209,7 +212,6 @@ const schema: OpsUpdateFormSchema = {
         );
 
         const overviewDrefTypeRelatedFields = [
-            'emergency_appeal_planned',
             'event_map_file',
             'cover_image_file',
             'ns_request_date',
@@ -226,7 +228,6 @@ const schema: OpsUpdateFormSchema = {
             overviewDrefTypeRelatedFields,
             (val): OverviewDrefTypeRelatedFields => {
                 const conditionalFields: OverviewDrefTypeRelatedFields = {
-                    emergency_appeal_planned: { forceValue: nullValue },
                     event_map_file: { forceValue: nullValue },
                     cover_image_file: { forceValue: nullValue },
                     ns_request_date: { forceValue: nullValue },
@@ -241,7 +242,6 @@ const schema: OpsUpdateFormSchema = {
                 }
                 return {
                     ...conditionalFields,
-                    emergency_appeal_planned: {},
                     event_map_file: {
                         fields: (): EventMapFileFields => ({
                             client_id: {},
@@ -278,7 +278,6 @@ const schema: OpsUpdateFormSchema = {
             'changing_target_population_of_operation',
             'changing_geographic_location',
             'request_for_second_allocation',
-            'has_forecasted_event_materialize',
             'source_information',
         ] as const;
         type EventDetailDrefTypeRelatedFields = Pick<
@@ -308,7 +307,6 @@ const schema: OpsUpdateFormSchema = {
                     changing_target_population_of_operation: { forceValue: nullValue },
                     changing_geographic_location: { forceValue: nullValue },
                     request_for_second_allocation: { forceValue: nullValue },
-                    has_forecasted_event_materialize: { forceValue: nullValue },
                 };
 
                 if (
@@ -374,7 +372,6 @@ const schema: OpsUpdateFormSchema = {
                         changing_target_population_of_operation: {},
                         changing_geographic_location: {},
                         request_for_second_allocation: {},
-                        has_forecasted_event_materialize: {},
                     };
                 }
 
@@ -382,13 +379,14 @@ const schema: OpsUpdateFormSchema = {
             },
         );
 
+        // NOTE: @samshara can you confirm this logic?
         formFields = addCondition(
             formFields,
             formValue,
-            ['type_of_dref', 'has_forecasted_event_materialize'],
+            ['type_of_dref'],
             ['specified_trigger_met'],
             (val): Pick<OpsUpdateFormSchemaFields, 'specified_trigger_met'> => {
-                if (val?.type_of_dref === TYPE_IMMINENT && val?.has_forecasted_event_materialize) {
+                if (val?.type_of_dref === TYPE_IMMINENT) {
                     return {
                         specified_trigger_met: {},
                     };
@@ -573,9 +571,15 @@ const schema: OpsUpdateFormSchema = {
             'displaced_people',
             'risk_security',
             'risk_security_concern',
+            'has_anti_fraud_corruption_policy',
+            'has_sexual_abuse_policy',
+            'has_child_protection_policy',
+            'has_whistleblower_protection_policy',
+            'has_anti_sexual_harassment_policy',
             'budget_file',
             'planned_interventions',
             'human_resource',
+            'is_volunteer_team_diverse',
             'is_surge_personnel_deployed',
             'has_child_safeguarding_risk_analysis_assessment',
         ] as const;
@@ -609,9 +613,15 @@ const schema: OpsUpdateFormSchema = {
                     displaced_people: { forceValue: nullValue },
                     risk_security: { forceValue: [] },
                     risk_security_concern: { forceValue: nullValue },
+                    has_anti_fraud_corruption_policy: {},
+                    has_anti_sexual_harassment_policy: {},
+                    has_sexual_abuse_policy: {},
+                    has_whistleblower_protection_policy: {},
+                    has_child_protection_policy: {},
                     budget_file: { forceValue: nullValue },
                     planned_interventions: { forceValue: [] },
                     human_resource: { forceValue: nullValue },
+                    is_volunteer_team_diverse: { forceValue: nullValue },
                     is_surge_personnel_deployed: { forceValue: nullValue },
                     has_child_safeguarding_risk_analysis_assessment: { forceValue: nullValue },
                 };
@@ -716,6 +726,7 @@ const schema: OpsUpdateFormSchema = {
                         }),
                     },
                     human_resource: {},
+                    is_volunteer_team_diverse: {},
                     is_surge_personnel_deployed: {},
                 };
                 if (val?.type_of_dref !== TYPE_ASSESSMENT) {
@@ -778,6 +789,11 @@ const schema: OpsUpdateFormSchema = {
             'media_contact_title',
             'media_contact_email',
             'media_contact_phone_number',
+            'national_society_integrity_contact_name',
+            'national_society_integrity_contact_title',
+            'national_society_integrity_contact_email',
+            'national_society_integrity_contact_phone_number',
+            'national_society_hotline_phone_number',
             'glide_code',
         ] as const;
         type SubmissionDrefTypeRelatedFields = Pick<
@@ -808,6 +824,11 @@ const schema: OpsUpdateFormSchema = {
                     media_contact_email: { forceValue: nullValue },
                     media_contact_phone_number: { forceValue: nullValue },
                     glide_code: { forceValue: nullValue },
+                    national_society_integrity_contact_name: {},
+                    national_society_integrity_contact_title: {},
+                    national_society_integrity_contact_email: { validations: [emailCondition] },
+                    national_society_integrity_contact_phone_number: {},
+                    national_society_hotline_phone_number: {},
                 };
 
                 if (val?.type_of_dref !== TYPE_LOAN) {

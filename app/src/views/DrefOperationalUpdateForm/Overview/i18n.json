@@ -23,7 +23,7 @@
         "drefFormAddRegion": "Region/Province",
         "drefFormTitle": "DREF Title",
         "drefFormGenerateTitle": "Generate title",
-        "drefFormEmergencyAppealPlanned": "Emergency appeal planned",
+        "formShareButtonLabel": "Add",
         "drefFormUploadMap": "Upload map",
         "drefFormUploadMapDescription": "Add a map highlighting the targeted areas for this operation, it will be used for the publicly published DREF application.",
         "drefFormUploadAnImageLabel": "Select an Image",

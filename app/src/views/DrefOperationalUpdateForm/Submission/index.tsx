@@ -417,6 +417,56 @@ function Submission(props: Props) {
                         />
                     </InputSection>
                 )}
+                <InputSection
+                    title={strings.drefFormNationalSocietyIntegrityTitle}
+                    numPreferredColumns={2}
+                >
+                    <TextInput
+                        label={strings.drefFormIntegrityContactNameLabel}
+                        name="national_society_integrity_contact_name"
+                        value={value.national_society_integrity_contact_name}
+                        onChange={setFieldValue}
+                        error={error?.national_society_integrity_contact_name}
+                        disabled={disabled}
+                    />
+                    <TextInput
+                        label={strings.drefFormIntegrityContactEmailLabel}
+                        name="national_society_integrity_contact_email"
+                        value={value.national_society_integrity_contact_email}
+                        onChange={setFieldValue}
+                        error={error?.national_society_integrity_contact_email}
+                        disabled={disabled}
+                    />
+                    <TextInput
+                        label={strings.drefFormIntegrityContactTitleLabel}
+                        name="national_society_integrity_contact_title"
+                        value={value.national_society_integrity_contact_title}
+                        onChange={setFieldValue}
+                        error={error?.national_society_integrity_contact_title}
+                        disabled={disabled}
+                    />
+                    <TextInput
+                        label={strings.drefFormIntegrityContactPhoneNumberLabel}
+                        name="national_society_integrity_contact_phone_number"
+                        value={value.national_society_integrity_contact_phone_number}
+                        onChange={setFieldValue}
+                        error={error?.national_society_integrity_contact_phone_number}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                <InputSection
+                    title={strings.drefFormNationalSocietyHotlineNumberTitle}
+                    numPreferredColumns={2}
+                >
+                    <TextInput
+                        label={strings.drefFormNationalSocietyHotlineNumberLabel}
+                        name="national_society_hotline_phone_number"
+                        value={value.national_society_hotline_phone_number}
+                        onChange={setFieldValue}
+                        error={error?.national_society_hotline_phone_number}
+                        disabled={disabled}
+                    />
+                </InputSection>
             </Container>
         </div>
     );

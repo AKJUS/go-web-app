@@ -159,19 +159,7 @@ function EventDetail(props: Props) {
                             disabled={disabled}
                         />
                     </InputSection>
-                    <InputSection
-                        title={strings.drefOperationalUpdateEventMaterialize}
-                    >
-                        <BooleanInput
-                            name="has_forecasted_event_materialize"
-                            value={value.has_forecasted_event_materialize}
-                            onChange={setFieldValue}
-                            error={error?.has_forecasted_event_materialize}
-                            disabled={disabled}
-                        />
-                    </InputSection>
-                    {/* eslint-disable-next-line max-len */}
-                    {value.type_of_dref === TYPE_IMMINENT && value.has_forecasted_event_materialize && (
+                    {value.type_of_dref === TYPE_IMMINENT && (
                         <InputSection
                             title={strings.drefOperationalUpdateEventMaterializeExplain}
                             // eslint-disable-next-line max-len
@@ -301,6 +289,30 @@ function EventDetail(props: Props) {
                             disabled={disabled}
                         />
                     )}
+                    <NumberInput
+                        name="estimated_number_of_affected_male"
+                        label={strings.drefFormAffectedMaleLabel}
+                        value={value?.estimated_number_of_affected_male}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_male}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_female"
+                        label={strings.drefFormAffectedFemaleLabel}
+                        value={value?.estimated_number_of_affected_female}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_female}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_minors"
+                        label={strings.drefFormAffectedMinorsLabel}
+                        value={value?.estimated_number_of_affected_minors}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_minors}
+                        disabled={disabled}
+                    />
                     <NumberInput
                         label={(
                             <>

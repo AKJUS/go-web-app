@@ -3,8 +3,14 @@ import {
     type SetStateAction,
     useCallback,
 } from 'react';
-import { useLocation } from 'react-router-dom';
-import { WikiHelpSectionLineIcon } from '@ifrc-go/icons';
+import {
+    useLocation,
+    useParams,
+} from 'react-router-dom';
+import {
+    ShareLineIcon,
+    WikiHelpSectionLineIcon,
+} from '@ifrc-go/icons';
 import {
     BooleanInput,
     Button,
@@ -21,7 +27,10 @@ import {
     useTranslation,
 } from '@ifrc-go/ui/hooks';
 import { stringValueSelector } from '@ifrc-go/ui/utils';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 import {
     type EntriesAsList,
     type Error,
@@ -32,6 +41,7 @@ import {
 import CountrySelectInput from '#components/domain/CountrySelectInput';
 import DisasterTypeSelectInput from '#components/domain/DisasterTypeSelectInput';
 import DistrictSearchMultiSelectInput, { type DistrictItem } from '#components/domain/DistrictSearchMultiSelectInput';
+import DrefShareModal from '#components/domain/DrefShareModal';
 import UserItem from '#components/domain/DrefShareModal/UserItem';
 import ImageWithCaptionInput from '#components/domain/ImageWithCaptionInput';
 import NationalSocietySelectInput from '#components/domain/NationalSocietySelectInput';
@@ -40,13 +50,16 @@ import Link from '#components/Link';
 import useCountry from '#hooks/domain/useCountry';
 import useDisasterType from '#hooks/domain/useDisasterType';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
-import { type GoApiResponse } from '#utils/restRequest';
+import useInputState from '#hooks/useInputState';
+import {
+    type GoApiResponse,
+    useRequest,
+} from '#utils/restRequest';
 
 import {
     DISASTER_FIRE,
     DISASTER_FLASH_FLOOD,
     DISASTER_FLOOD,
-    ONSET_SUDDEN,
     TYPE_ASSESSMENT,
     TYPE_IMMINENT,
     TYPE_LOAN,
@@ -85,7 +98,7 @@ interface Props {
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     districtOptions: DistrictItem[] | null | undefined;
     setDistrictOptions: Dispatch<SetStateAction<DistrictItem[] | null | undefined>>;
-    drefUsers?: User[] | null;
+    drefId: number | undefined;
 }
 
 function Overview(props: Props) {
@@ -98,9 +111,11 @@ function Overview(props: Props) {
         disabled,
         districtOptions,
         setDistrictOptions,
-        drefUsers,
+        drefId,
     } = props;
     const { state } = useLocation();
+    const { opsUpdateId } = useParams<{ opsUpdateId: string }>();
+    const [drefUsers, setDrefUsers] = useInputState<User[] | undefined | null>([]);
 
     const strings = useTranslation(i18n);
     const {
@@ -119,16 +134,6 @@ function Overview(props: Props) {
             setFalse: setShowChangeDrefTypeModalFalse,
         },
     ] = useBooleanState(true);
-
-    const handleTypeOfOnsetChange = useCallback((
-        typeOfOnset: OnsetTypeOption['key'] | undefined,
-        name: 'type_of_onset',
-    ) => {
-        setFieldValue(typeOfOnset, name);
-        if (typeOfOnset === ONSET_SUDDEN) {
-            setFieldValue(false, 'emergency_appeal_planned');
-        }
-    }, [setFieldValue]);
 
     const handleNSChange = useCallback((nationalSociety: number | undefined) => {
         setFieldValue(nationalSociety, 'national_society');
@@ -177,6 +182,30 @@ function Overview(props: Props) {
         userId,
         user,
     }), []);
+
+    const {
+        retrigger: getDrefUsers,
+    } = useRequest({
+        skip: isNotDefined(drefId),
+        url: '/api/v2/dref-share-user/{id}/',
+        pathVariables: { id: Number(drefId) },
+        onSuccess: (response) => {
+            setDrefUsers(response.users_details);
+        },
+    });
+
+    const [showShareModal, {
+        setTrue: setShowShareModalTrue,
+        setFalse: setShowShareModalFalse,
+    }] = useBooleanState(false);
+
+    const handleUserShareSuccess = useCallback(() => {
+        setShowShareModalFalse();
+        getDrefUsers();
+    }, [
+        getDrefUsers,
+        setShowShareModalFalse,
+    ]);
 
     const error = getErrorObject(formError);
 
@@ -234,6 +263,15 @@ function Overview(props: Props) {
                         pending={false}
                         compact
                     />
+                    <Button
+                        name={undefined}
+                        onClick={setShowShareModalTrue}
+                        disabled={isNotDefined(opsUpdateId)}
+                        icons={<ShareLineIcon />}
+                        variant="secondary"
+                    >
+                        {strings.formShareButtonLabel}
+                    </Button>
                 </InputSection>
             </Container>
             <Container
@@ -296,7 +334,7 @@ function Overview(props: Props) {
                         keySelector={onsetTypeKeySelector}
                         labelSelector={stringValueSelector}
                         value={value?.type_of_onset}
-                        onChange={handleTypeOfOnsetChange}
+                        onChange={setFieldValue}
                         error={error?.type_of_onset}
                         disabled={disabled}
                         withAsterisk
@@ -403,19 +441,6 @@ function Overview(props: Props) {
 
                 {value?.type_of_dref !== TYPE_LOAN && (
                     <InputSection
-                        title={strings.drefFormEmergencyAppealPlanned}
-                    >
-                        <BooleanInput
-                            name="emergency_appeal_planned"
-                            value={value?.emergency_appeal_planned}
-                            onChange={setFieldValue}
-                            error={error?.emergency_appeal_planned}
-                            disabled={disabled}
-                        />
-                    </InputSection>
-                )}
-                {value?.type_of_dref !== TYPE_LOAN && (
-                    <InputSection
                         title={strings.drefFormUploadMap}
                         description={strings.drefFormUploadMapDescription}
                         contentSectionClassName={styles.imageInputContent}
@@ -470,6 +495,13 @@ function Overview(props: Props) {
                     </InputSection>
                 )}
             </Container>
+            {showShareModal && isDefined(drefId) && (
+                <DrefShareModal
+                    onCancel={setShowShareModalFalse}
+                    onSuccess={handleUserShareSuccess}
+                    drefId={drefId}
+                />
+            )}
         </div>
     );
 }
