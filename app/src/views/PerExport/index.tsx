@@ -505,7 +505,7 @@ export function Component() {
                                 key={component.rating.id}
                             >
                                 <div className={styles.label}>
-                                    {component.rating?.title}
+                                    {component.rating.title}
                                 </div>
                                 <div>
                                     {getFormattedComponentName(component.details)}

@@ -25,7 +25,7 @@ export function Component() {
 
     const {
         pending: surgeAggregatedResponsePending,
-        response: surgeAggregatedResponse,
+        response: aggregatedResponse,
     } = useRequest({
         url: '/api/v2/deployment/aggregated',
     });
@@ -39,25 +39,33 @@ export function Component() {
             info={(
                 <>
                     {surgeAggregatedResponsePending && <BlockLoading />}
-                    {surgeAggregatedResponse && (
+                    {aggregatedResponse && (
                         <>
                             <KeyFigure
                                 className={styles.keyFigure}
                                 icon={<DeployedIcon />}
-                                value={surgeAggregatedResponse.active_deployments}
-                                label={strings.activeDeploymentsTitle}
+                                value={aggregatedResponse.active_rapid_response_personnel}
+                                label={strings.activeRapidResponsePersonnel}
+                            />
+                            <KeyFigure
+                                className={styles.keyFigure}
+                                icon={<DeployedIcon />}
+                                value={aggregatedResponse.rapid_response_deployments_this_year}
+                                label={strings.rapidResponseDeployments}
                             />
                             <KeyFigure
                                 className={styles.keyFigure}
                                 icon={<EmergencyResponseUnitIcon />}
-                                value={surgeAggregatedResponse.active_erus}
-                                label={strings.activeErusTitle}
+                                value={aggregatedResponse.active_emergency_response_units}
+                                label={strings.activeErus}
                             />
                             <KeyFigure
                                 className={styles.keyFigure}
                                 icon={<ClinicIcon />}
-                                value={surgeAggregatedResponse.deployments_this_year}
-                                label={strings.deploymentsThisYearTitle}
+                                value={
+                                    aggregatedResponse.emergency_response_unit_deployed_this_year
+                                }
+                                label={strings.eruDeploymentsThisYear}
                             />
                         </>
                     )}
@@ -66,7 +74,13 @@ export function Component() {
         >
             <NavigationTabList>
                 <NavigationTab
-                    to="surgeOverview"
+                    to="activeSurgeDeployments"
+                >
+                    {strings.activeSurgeDeploymentsTab}
+                </NavigationTab>
+                <NavigationTab
+                    to="surgeOverviewLayout"
+                    parentRoute
                 >
                     {strings.surgeOverviewTab}
                 </NavigationTab>
@@ -77,7 +91,6 @@ export function Component() {
                 </NavigationTab>
                 <NavigationTab
                     to="surgeCatalogueLayout"
-                    parentRoute
                 >
                     {strings.surgeCatalogueTab}
                 </NavigationTab>

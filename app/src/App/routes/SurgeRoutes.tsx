@@ -17,11 +17,11 @@ import {
     rootLayout,
 } from './common';
 
-type DefaultSurgeChild = 'overview';
+type DefaultSurgeChild = 'active-surge-deployments';
 const surgeLayout = customWrapRoute({
     parent: rootLayout,
     path: 'surge',
-    forwardPath: 'overview' satisfies DefaultSurgeChild,
+    forwardPath: 'active-surge-deployments' satisfies DefaultSurgeChild,
     component: {
         render: () => import('#views/Surge'),
         props: {},
@@ -40,7 +40,7 @@ const surgeIndex = customWrapRoute({
         eagerLoad: true,
         render: Navigate,
         props: {
-            to: 'overview' satisfies DefaultSurgeChild,
+            to: 'active-surge-deployments' satisfies DefaultSurgeChild,
             replace: true,
         },
     },
@@ -50,9 +50,25 @@ const surgeIndex = customWrapRoute({
     },
 });
 
-const surgeOverview = customWrapRoute({
+const activeSurgeDeployments = customWrapRoute({
     parent: surgeLayout,
-    path: 'overview' satisfies DefaultSurgeChild,
+    path: 'active-surge-deployments',
+    component: {
+        render: () => import('#views/ActiveSurgeDeployments'),
+        props: {},
+    },
+    context: {
+        title: 'Active Surge Deployments',
+        visibility: 'anything',
+    },
+});
+
+type DefaultSurgeOverviewChild = 'rapid-response-personnel';
+
+const surgeOverviewLayout = customWrapRoute({
+    parent: surgeLayout,
+    path: 'overview',
+    forwardPath: 'rapid-response-personnel' satisfies DefaultSurgeOverviewChild,
     component: {
         render: () => import('#views/SurgeOverview'),
         props: {},
@@ -60,6 +76,67 @@ const surgeOverview = customWrapRoute({
     context: {
         title: 'Surge Overview',
         visibility: 'anything',
+    },
+});
+
+const surgeOverviewIndex = customWrapRoute({
+    parent: surgeOverviewLayout,
+    index: true,
+    component: {
+        eagerLoad: true,
+        render: Navigate,
+        props: {
+            to: 'rapid-response-personnel' satisfies DefaultSurgeOverviewChild,
+            replace: true,
+        },
+    },
+    context: {
+        title: 'Surge Overview',
+        visibility: 'anything',
+    },
+});
+
+const rapidResponsePersonnel = customWrapRoute({
+    parent: surgeOverviewLayout,
+    path: 'rapid-response-personnel',
+    component: {
+        render: () => import('#views/SurgeOverview/RapidResponsePersonnel'),
+        props: {},
+    },
+    context: {
+        title: 'Rapid Response Personnel',
+        visibility: 'anything',
+    },
+});
+
+const emergencyResponseUnit = customWrapRoute({
+    parent: surgeOverviewLayout,
+    path: 'emergency-response-unit',
+    component: {
+        render: () => import('#views/SurgeOverview/EmergencyResponseUnit'),
+        props: {},
+    },
+    context: {
+        title: 'Emergency Response Unit',
+        visibility: 'anything',
+    },
+});
+
+const eruReadinessForm = customWrapRoute({
+    parent: rootLayout,
+    path: 'eru-readiness',
+    component: {
+        render: () => import('#views/EruReadinessForm'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'ERU Readiness Update Form',
+        visibility: 'is-authenticated',
+        permissions: ({
+            isRegionalOrCountryAdmin,
+            isSuperUser,
+        }) => isSuperUser || isRegionalOrCountryAdmin,
     },
 });
 
@@ -1264,7 +1341,7 @@ function DeploymentNavigate() {
     const params = useParams<{ surgeId: string }>();
 
     const deploymentRouteMap: Record<string, MyOutputNonIndexRouteObject<ExtendedProps>> = {
-        overview: surgeOverview,
+        overview: surgeOverviewLayout,
         'operational-toolbox': surgeOperationalToolbox,
         personnel: allDeployedPersonnel,
         erus: allDeployedEmergencyResponseUnits,
@@ -1276,7 +1353,7 @@ function DeploymentNavigate() {
 
     const path = isDefined(newRoute)
         ? newRoute.absoluteForwardPath
-        : surgeOverview.absoluteForwardPath;
+        : surgeOverviewLayout.absoluteForwardPath;
 
     return (
         <Navigate
@@ -1483,7 +1560,7 @@ const deploymentCatalogueIndex = customWrapRoute({
     },
     wrapperComponent: Auth,
     context: {
-        title: 'Catalogue of surge services',
+        title: 'Catalogue of Surge Services',
         visibility: 'anything',
     },
 });
@@ -1498,7 +1575,7 @@ const deploymentCatalogueChildren = customWrapRoute({
     },
     wrapperComponent: Auth,
     context: {
-        title: 'Catalogue of surge services',
+        title: 'Catalogue of Surge Services',
         visibility: 'anything',
     },
 });
@@ -1510,7 +1587,7 @@ const obsoleteUrlDeployments = customWrapRoute({
         eagerLoad: true,
         render: Navigate,
         props: {
-            to: surgeOverview.absolutePath,
+            to: surgeOverviewLayout.absolutePath,
         },
     },
     wrapperComponent: Auth,
@@ -1522,9 +1599,10 @@ const obsoleteUrlDeployments = customWrapRoute({
 
 export default {
     surgeLayout,
-    surgeOverview,
+    surgeOverviewLayout,
     surgeOperationalToolbox,
     surgeCatalogueLayout,
+    surgeOverviewIndex,
     surgeIndex,
     catalogueIndex,
     surgeCatalogueOverview,
@@ -1562,10 +1640,8 @@ export default {
     surgeCatalogueInformationManagement,
     surgeCatalogueInformationManagementSatelliteImagery,
     surgeCatalogueInformationManagementRolesResponsibility,
-    // eslint-disable-next-line max-len
-    surgeCatalogueInformationManagementSupport: surgeCatalogueInformationManagementRegionalOfficeSupport,
-    // eslint-disable-next-line max-len
-    surgeCatalogueInformationManagementOperationSupport: surgeCatalogueInformationManagementGenevaSupport,
+    surgeCatalogueInformationManagementRegionalOfficeSupport,
+    surgeCatalogueInformationManagementGenevaSupport,
     surgeCatalogueInformationManagementComposition,
     surgeCatalogueInformationTechnology,
     surgeCataloguePmer,
@@ -1619,4 +1695,8 @@ export default {
     deploymentCatalogueChildren,
     deploymentOthers,
     obsoleteUrlDeployments,
+    activeSurgeDeployments,
+    rapidResponsePersonnel,
+    emergencyResponseUnit,
+    eruReadinessForm,
 };
