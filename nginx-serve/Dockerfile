@@ -5,7 +5,7 @@ FROM node:20-bookworm AS dev
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && npm install -g corepack@latest #TODO remove once https://github.com/pnpm/pnpm/issues/9029 is fixed for node 20
+RUN corepack enable
 
 WORKDIR /code
 

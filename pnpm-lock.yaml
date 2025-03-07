@@ -38,8 +38,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(react@18.3.1)
       '@ifrc-go/ui':
-        specifier: ^1.3.0
-        version: 1.3.0(@ifrc-go/icons@2.0.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: workspace:^
+        version: link:../packages/ui
       '@sentry/react':
         specifier: ^7.81.1
         version: 7.120.3(react@18.3.1)
@@ -264,8 +264,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(react@18.3.1)
       '@ifrc-go/ui':
-        specifier: ^1.2.4
-        version: 1.3.0(@ifrc-go/icons@2.0.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: workspace:^
+        version: link:../ui
       '@storybook/addon-docs':
         specifier: ^8.1.5
         version: 8.5.8(@types/react@18.3.18)(storybook@8.5.8(prettier@2.8.8))
@@ -1268,13 +1268,6 @@ packages:
     resolution: {integrity: sha512-j0KXz5UgUgVBfSljx6XATBWchj1tDckaGX+uI86QTO63teP5zCd6osR9q/e6H3jv8bzil1sdUmVt4VOwSX6xhw==}
     peerDependencies:
       react: '>= 16'
-
-  '@ifrc-go/ui@1.3.0':
-    resolution: {integrity: sha512-9Zv3qMMEVOH995YgBgL0PiJEgRZ5bN+recCEtGHTQqilduQ8z8uUJsRN1oz18YZ/xXE/TGIiVCrLz79E7C1xEQ==}
-    peerDependencies:
-      '@ifrc-go/icons': ^1.3.1
-      react: ^18.2.0
-      react-dom: ^18.2.0
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -7202,17 +7195,6 @@ snapshots:
   '@ifrc-go/icons@2.0.1(react@18.3.1)':
     dependencies:
       react: 18.3.1
-
-  '@ifrc-go/ui@1.3.0(@ifrc-go/icons@2.0.1(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@ifrc-go/icons': 2.0.1(react@18.3.1)
-      '@togglecorp/fujs': 2.2.0
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-focus-on: 3.9.4(@types/react@18.3.18)(react@18.3.1)
-      sanitize-html: 2.14.0
-    transitivePeerDependencies:
-      - '@types/react'
 
   '@isaacs/cliui@8.0.2':
     dependencies:
