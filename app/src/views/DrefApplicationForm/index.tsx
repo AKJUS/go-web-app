@@ -81,7 +81,7 @@ import styles from './styles.module.css';
 
 type GetDrefResponse = GoApiResponse<'/api/v2/dref/{id}/'>;
 
-export type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
+type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
 
 // FIXME: fix typings in server (medium priority)
 function getNextStep(current: TabKeys, direction: 1 | -1, typeOfDref: TypeOfDrefEnum | '' | undefined) {
@@ -120,7 +120,7 @@ function getNextStep(current: TabKeys, direction: 1 | -1, typeOfDref: TypeOfDref
     return undefined;
 }
 /** @knipignore */
-
+// eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { drefId } = useParams<{ drefId: string }>();
 

@@ -79,13 +79,13 @@ interface ObjectField<VALUE, OPTIONS_MAPPING extends TemplateFieldOptionsMapping
     },
 }
 
-export interface TemplateOptionItem<T extends ValidationType> {
+interface TemplateOptionItem<T extends ValidationType> {
     key: T;
     label: string;
     description?: string;
 }
 
-export interface TemplateFieldOptionsMapping {
+interface TemplateFieldOptionsMapping {
     [key: string]: TemplateOptionItem<string>[]
     | TemplateOptionItem<number>[]
     | TemplateOptionItem<boolean>[]

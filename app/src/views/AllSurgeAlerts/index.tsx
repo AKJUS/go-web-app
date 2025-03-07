@@ -47,7 +47,7 @@ type SurgeResponse = GoApiResponse<'/api/v2/surge_alert/'>;
 type SurgeListItem = NonNullable<SurgeResponse['results']>[number];
 
 type GetEventResponse = GoApiResponse<'/api/v2/event/mini/'>;
-export type EventItem = Pick<NonNullable<GetEventResponse['results']>[number], 'id' | 'name' | 'dtype'>;
+type EventItem = Pick<NonNullable<GetEventResponse['results']>[number], 'id' | 'name' | 'dtype'>;
 
 type TableKey = number;
 const nowTimestamp = new Date().getTime();
@@ -67,8 +67,9 @@ function getMolnixKeywords(molnixTags: SurgeListItem['molnix_tags']) {
         .filter((tag) => !['Nosuitable', 'NotSurge', 'OpsChange'].includes(tag))
         .join(', ');
 }
-/** @knipignore */
 
+/** @knipignore */
+// eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
 

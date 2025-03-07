@@ -26,7 +26,7 @@ import { type GoApiResponse } from '#utils/restRequest';
 
 import i18n from './i18n.json';
 
-export type PerComponent = NonNullable<PerComponents['results']>[number];
+type PerComponent = NonNullable<PerComponents['results']>[number];
 
 type OpsLearningOrganizationType = NonNullable<GoApiResponse<'/api/v2/ops-learning/organization-type/'>['results']>[number];
 export type PerLearningType = components<'read'>['schemas']['PerLearningTypeEnum'];

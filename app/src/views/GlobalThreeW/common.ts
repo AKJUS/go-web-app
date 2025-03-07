@@ -1,16 +1,16 @@
-export interface ProjectPerProgrammeType {
+interface ProjectPerProgrammeType {
     programme_type: number;
     programme_type_display: string;
     count: number;
 }
 
-export interface ProjectPerSector {
+interface ProjectPerSector {
     count: number;
     primary_sector: number;
     primary_sector_display: string;
 }
 
-export interface ProjectPerSecondarySector {
+interface ProjectPerSecondarySector {
     count: number;
     secondary_sectors: number;
     secondary_sectors_display: string;

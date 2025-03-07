@@ -10,7 +10,7 @@ import { Component as RootLayout } from '#views/RootLayout';
 import Auth from '../Auth';
 import PageError from '../PageError';
 
-export interface Perms {
+interface Perms {
     isDrefRegionalCoordinator: (regionId: number | undefined) => boolean,
     isRegionAdmin: (regionId: number | undefined) => boolean,
     isCountryAdmin: (countryId: number | undefined) => boolean,

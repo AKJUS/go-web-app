@@ -1,7 +1,7 @@
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import json from "@eslint/json";
-import tseslint from '@typescript-eslint/eslint-plugin';
+import tseslint from "typescript-eslint";
 import process from 'process';
 
 const dirname = process.cwd();

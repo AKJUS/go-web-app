@@ -79,7 +79,7 @@ import styles from './styles.module.css';
 
 type GetOpsUpdateResponse = GoApiResponse<'/api/v2/dref-op-update/{id}/'>;
 
-export type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
+type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
 
 function getNextStep(current: TabKeys, direction: 1 | -1, typeOfDref: TypeOfDrefEnum | undefined) {
     if (typeOfDref === TYPE_LOAN && direction === 1) {
@@ -117,7 +117,7 @@ function getNextStep(current: TabKeys, direction: 1 | -1, typeOfDref: TypeOfDref
     return undefined;
 }
 /** @knipignore */
-
+// eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { opsUpdateId } = useParams<{ opsUpdateId: string }>();
 
