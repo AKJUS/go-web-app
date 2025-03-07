@@ -1,4 +1,9 @@
 packages:
-  - "app"
-  - "packages/ui"
-  - "packages/go-ui-storybook"
+  - app
+  - packages/ui
+  - packages/go-ui-storybook
+onlyBuiltDependencies:
+  - '@swc/core'
+  - core-js
+  - core-js-pure
+  - esbuild
