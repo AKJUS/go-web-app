@@ -150,6 +150,20 @@ const surgeCatalogueEmergencyNeedsAssessmentCell = customWrapRoute({
     },
 });
 
+const surgeCatalogueAdministration = customWrapRoute({
+    parent: surgeCatalogueLayout,
+    path: 'administration',
+    component: {
+        render: () => import('#views/SurgeCatalogueAdministration'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Administration',
+        visibility: 'anything',
+    },
+});
+
 const surgeCatalogueBasecamp = customWrapRoute({
     parent: surgeCatalogueLayout,
     path: 'basecamp',
@@ -216,6 +230,34 @@ const surgeCatalogueBasecampFacilityManagement = customWrapRoute({
     wrapperComponent: Auth,
     context: {
         title: 'Basecamp Facility Management',
+        visibility: 'anything',
+    },
+});
+
+const surgeCatalogueBasecampOffice = customWrapRoute({
+    parent: surgeCatalogueLayout,
+    path: 'basecamp/office',
+    component: {
+        render: () => import('#views/SurgeCatalogueBasecampOffice'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Basecamp Office',
+        visibility: 'anything',
+    },
+});
+
+const surgeCatalogueBasecampWelcome = customWrapRoute({
+    parent: surgeCatalogueLayout,
+    path: 'basecamp/welcome',
+    component: {
+        render: () => import('#views/SurgeCatalogueBasecampWelcome'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Basecamp Admin and Welcome Service',
         visibility: 'anything',
     },
 });
@@ -951,6 +993,20 @@ const surgeCatalogueWashHwts = customWrapRoute({
     },
 });
 
+const surgeCatalogueWashSludge = customWrapRoute({
+    parent: surgeCatalogueLayout,
+    path: 'wash/sludge',
+    component: {
+        render: () => import('#views/SurgeCatalogueWashSludge'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Faecal Sludge Management',
+        visibility: 'anything',
+    },
+});
+
 const surgeCatalogueRelief = customWrapRoute({
     parent: surgeCatalogueLayout,
     path: 'relief',
@@ -1272,6 +1328,7 @@ function DeploymentCatalogueNavigate() {
     const catalogueRouteMap: Record<string, WrappedRoute> = {
         overview: surgeCatalogueOverview,
         emergency: surgeCatalogueEmergencyNeedsAssessment,
+        administration: surgeCatalogueAdministration,
         basecamp: surgeCatalogueBasecamp,
         cash: surgeCatalogueCash,
         community: surgeCatalogueCommunityEngagement,
@@ -1299,6 +1356,8 @@ function DeploymentCatalogueNavigate() {
             'eru-base-camp-medium': surgeCatalogueBasecampEruMedium,
             'eru-base-camp-large': surgeCatalogueBasecampEruLarge,
             'facility-management': surgeCatalogueBasecampFacilityManagement,
+            office: surgeCatalogueBasecampOffice,
+            welcome: surgeCatalogueBasecampWelcome,
         },
         cash: {
             cva: surgeCatalogueCashRapidResponse,
@@ -1365,6 +1424,7 @@ function DeploymentCatalogueNavigate() {
             'sct-shelter-coordination-team': surgeCatalogueShelterCoordinatorTeam,
         },
         water: {
+            'faecal-sludge-management': surgeCatalogueWashSludge,
             'household-water-treatment-and-safe-storage-hwts': surgeCatalogueWashHwts,
             'water-supply-rehabilitation-wsr': surgeCatalogueWashWaterSupplyRehabilitation,
             'm40-eru': surgeCatalogueWashKitM40Eru,
@@ -1470,11 +1530,14 @@ export default {
     surgeCatalogueOverview,
     surgeCatalogueEmergencyNeedsAssessment,
     surgeCatalogueEmergencyNeedsAssessmentCell,
+    surgeCatalogueAdministration,
     surgeCatalogueBasecamp,
     surgeCatalogueBasecampEruSmall,
     surgeCatalogueBasecampEruMedium,
     surgeCatalogueBasecampEruLarge,
     surgeCatalogueBasecampFacilityManagement,
+    surgeCatalogueBasecampOffice,
+    surgeCatalogueBasecampWelcome,
     surgeCatalogueCash,
     surgeCatalogueCashRapidResponse,
     surgeCatalogueCommunityEngagement,
@@ -1533,6 +1596,7 @@ export default {
     surgeCatalogueWashKitM40Eru,
     surgeCatalogueWashWaterSupplyRehabilitation,
     surgeCatalogueWashHwts,
+    surgeCatalogueWashSludge,
     surgeCatalogueOtherCivilMilitaryRelations,
     surgeCatalogueOtherDisasterRiskReduction,
     surgeCatalogueOtherHumanitarianDiplomacy,

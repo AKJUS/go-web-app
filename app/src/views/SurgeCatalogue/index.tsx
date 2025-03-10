@@ -7,6 +7,7 @@ import {
     CoordinatedAssessementIcon,
     DisasterRiskReductionIcon,
     DroneTwoIcon,
+    EditLineTwoIcon,
     EmergencyTelecommunicationsIcon,
     GreenResponseIcon,
     GroupIcon,
@@ -54,11 +55,11 @@ export function Component() {
                     {strings.catalogueServiceOverview}
                 </NavigationTab>
                 <NavigationTab
-                    to="surgeCatalogueBasecamp"
+                    to="surgeCatalogueAdministration"
                     parentRoute
                 >
-                    <BasecampIcon className={styles.icon} />
-                    {strings.catalogueBasecamp}
+                    <EditLineTwoIcon className={styles.icon} />
+                    {strings.catalogueAdministration}
                 </NavigationTab>
                 <NavigationTab
                     to="surgeCatalogueCash"
@@ -192,6 +193,13 @@ export function Component() {
                 >
                     <GroupIcon className={styles.icon} />
                     {strings.catalogueOperations}
+                </NavigationTab>
+                <NavigationTab
+                    to="surgeCatalogueBasecamp"
+                    parentRoute
+                >
+                    <BasecampIcon className={styles.icon} />
+                    {strings.catalogueBasecamp}
                 </NavigationTab>
                 <NavigationTab
                     to="surgeCataloguePmer"

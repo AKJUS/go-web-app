@@ -3,7 +3,8 @@
     "strings": {
         "catalogueServiceOverview": "Catalogue",
         "catalogueEmergency": "Emergency Needs Assessment",
-        "catalogueBasecamp": "Basecamp",
+        "catalogueAdministration": "Administration",
+        "catalogueBasecamp": "Operations Support HUB (OSH)",
         "catalogueCash": "Cash and Vouchers Assistance (CVA)",
         "catalogueCommunityEngagement": "Community Engagement and Accountability (CEA)",
         "catalogueCommunication": "Communications",
