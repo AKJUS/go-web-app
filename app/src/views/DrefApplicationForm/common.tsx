@@ -55,6 +55,8 @@ export const eventDetailTabFields: (keyof PartialDref)[] = [
     'ns_request_text',
     'dref_recurrent_text',
     'lessons_learned',
+    'child_safeguarding_risk_level',
+    'complete_child_safeguarding_risk',
     'event_date',
     'event_text',
     'num_affected',

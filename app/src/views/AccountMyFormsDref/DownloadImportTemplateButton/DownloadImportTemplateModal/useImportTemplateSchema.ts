@@ -274,6 +274,22 @@ function useImportTemplateSchema() {
                 ),
             },
 
+            // FIXME: These are not showing up on the file
+            complete_child_safeguarding_risk: {
+                type: 'select',
+                validation: 'boolean',
+                optionsKey: '__boolean',
+                label: 'Did you complete the Child Safeguarding Risk Analysis in previous operations?',
+                description: 'Select <b>Yes</b> or <b>No</b> from the drop-down list.',
+            },
+
+            child_safeguarding_risk_level: {
+                type: 'input',
+                label: 'Child safeguarding risk level',
+                validation: 'textArea',
+                description: 'What was the risk level for child safeguarding risk analysis?',
+            },
+
             event_date: {
                 headingBefore: 'Description of the Event',
                 type: 'input',
@@ -287,6 +303,27 @@ function useImportTemplateSchema() {
                 validation: 'number',
                 label: 'Total affected population',
                 description: 'People Affected include all those whose lives and livelihoods have been impacted as a direct result of the event.',
+            },
+
+            estimated_number_of_affected_male: {
+                type: 'input',
+                validation: 'number',
+                label: 'Estimated number of affected male',
+                description: '',
+            },
+
+            estimated_number_of_affected_female: {
+                type: 'input',
+                validation: 'number',
+                label: 'Estimated number of affected female',
+                description: '',
+            },
+
+            estimated_number_of_affected_minors: {
+                type: 'input',
+                validation: 'number',
+                label: 'Estimated number of affected minors',
+                description: '',
             },
 
             people_in_need: {
@@ -661,6 +698,45 @@ function useImportTemplateSchema() {
                 ),
             },
 
+            has_anti_fraud_corruption_policy: {
+                type: 'select',
+                optionsKey: '__boolean',
+                validation: 'boolean',
+                label: 'Does your National Society have anti-fraud and corruption policy?',
+                description: '',
+            },
+
+            has_sexual_abuse_policy: {
+                type: 'select',
+                optionsKey: '__boolean',
+                validation: 'boolean',
+                label: 'Does your National Society have prevention of sexual exploitation and abuse policy?',
+                description: '',
+            },
+
+            has_child_protection_policy: {
+                type: 'select',
+                optionsKey: '__boolean',
+                validation: 'boolean',
+                label: 'Does your National Society have child protection/child safeguarding policy?',
+                description: '',
+            },
+
+            has_whistleblower_protection_policy: {
+                type: 'select',
+                optionsKey: '__boolean',
+                validation: 'boolean',
+                label: 'Does your National Society have whistleblower protection policy?',
+                description: '',
+            },
+
+            has_anti_sexual_harassment_policy: {
+                type: 'select',
+                optionsKey: '__boolean',
+                validation: 'boolean',
+                label: 'Does your National Society have anti-sexual harassment policy?',
+                description: '',
+            },
             has_child_safeguarding_risk_analysis_assessment: {
                 type: 'select',
                 optionsKey: '__boolean',
@@ -765,6 +841,13 @@ function useImportTemplateSchema() {
                     + '- What specific roles or responsibilities will they have during the operation?\n'
                     + '- Are there any key leadership positions or coordinators overseeing the activities?'
                 ),
+            },
+
+            is_volunteer_team_diverse: {
+                type: 'input',
+                validation: 'textArea',
+                label: 'Does your volunteer team reflect the gender, age, and cultural diversity of the people you’re helping? What gaps exist in your volunteer team’s gender, age, or cultural diversity, and how are you addressing them to ensure inclusive and appropriate support?',
+                description: 'This question is about making sure your team includes the right mix of people to best support those affected. For example, if you’re helping single female heads of households, it’s important to have enough female volunteers to make everyone feel comfortable and understood. Including team members who share the same language or cultural background as the people you’re helping can also make a big difference in building trust and providing effective support.',
             },
 
             is_surge_personnel_deployed: {
