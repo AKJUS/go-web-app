@@ -16,6 +16,7 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    resolveToComponent,
     stringValueSelector,
     sumSafe,
 } from '@ifrc-go/ui/utils';
@@ -213,6 +214,7 @@ function Operation(props: Props) {
             >
                 <InputSection
                     title={strings.drefFormObjectiveOperation}
+                    description={strings.drefFormObjectiveOperationDescription}
                 >
                     <TextArea
                         name="operation_objective"
@@ -231,7 +233,6 @@ function Operation(props: Props) {
                                 {strings.drefFormResponseRationaleDescription}
                             </p>
                             <ul>
-                                {/* FIXME: Add indicator databank link */}
                                 <li>
                                     {strings.drefFormResponseRationaleDescriptionPoint1}
                                 </li>
@@ -640,7 +641,20 @@ function Operation(props: Props) {
                                     {strings.drefFormRequestAmountDescriptionWithIntervention}
                                     <ul>
                                         <li>
-                                            {strings.drefFormRequestAmountDescriptionPoint1}
+                                            {resolveToComponent(
+                                                strings.drefFormRequestAmountDescriptionPoint1,
+                                                {
+                                                    indicatorDatabankLink: (
+                                                        <Link
+                                                            href="https://github.com/user-attachments/files/18903662/Annex.III.Risk.Categories.1.pdf"
+                                                            withLinkIcon
+                                                            external
+                                                        >
+                                                            {strings.drefFormIndicatorDataLinkLabel}
+                                                        </Link>
+                                                    ),
+                                                },
+                                            )}
                                         </li>
                                         <li>
                                             {strings.drefFormRequestAmountDescriptionPoint2}

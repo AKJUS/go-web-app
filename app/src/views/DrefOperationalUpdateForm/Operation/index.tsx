@@ -66,6 +66,8 @@ interface Props {
     fileIdToUrlMap: Record<number, string>;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     disabled?: boolean;
+    peopleTargetedWarning: string | undefined;
+    budgetWarning: string | undefined;
 }
 
 function Operation(props: Props) {
@@ -81,6 +83,8 @@ function Operation(props: Props) {
         fileIdToUrlMap,
         setFileIdToUrlMap,
         disabled,
+        peopleTargetedWarning,
+        budgetWarning,
     } = props;
 
     const error = getErrorObject(formError);
@@ -230,6 +234,7 @@ function Operation(props: Props) {
             >
                 <InputSection
                     title={strings.drefFormObjectiveOperation}
+                    description={strings.drefFormObjectiveOperationDescription}
                 >
                     <TextArea
                         name="operation_objective"
@@ -242,8 +247,32 @@ function Operation(props: Props) {
                 </InputSection>
                 <InputSection
                     title={strings.drefFormResponseRationale}
-                    description={value?.type_of_dref === TYPE_ASSESSMENT
-                        && strings.drefFormResponseRationaleDescription}
+                    description={(
+                        <>
+                            <p>
+                                {strings.drefFormResponseRationaleDescription}
+                            </p>
+                            <ul>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint1}
+                                </li>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint3}
+                                </li>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint4}
+                                </li>
+                                {value?.type_of_dref === TYPE_ASSESSMENT && (
+                                    <li>
+                                        {strings.drefFormResponseRationaleForAssessment}
+                                    </li>
+                                )}
+                            </ul>
+                        </>
+                    )}
                 >
                     <TextArea
                         name="response_strategy"
@@ -341,14 +370,22 @@ function Operation(props: Props) {
                             />
                         </>
                     )}
-                    <NumberInput
-                        label={strings.drefFormTotal}
-                        name="total_targeted_population"
-                        value={value.total_targeted_population}
-                        onChange={setFieldValue}
-                        error={error?.total_targeted_population}
-                        disabled={disabled}
-                    />
+                    <div>
+                        <NumberInput
+                            label={strings.drefFormTotal}
+                            name="total_targeted_population"
+                            value={value.total_targeted_population}
+                            onChange={setFieldValue}
+                            error={error?.total_targeted_population}
+                            disabled={disabled}
+                        />
+                        {peopleTargetedWarning && (
+                            <div className={styles.warning}>
+                                <ErrorWarningFillIcon className={styles.icon} />
+                                {peopleTargetedWarning}
+                            </div>
+                        )}
+                    </div>
                 </InputSection>
                 <InputSection
                     title={strings.drefFormEstimateResponse}
@@ -529,6 +566,24 @@ function Operation(props: Props) {
                 </InputSection>
                 <InputSection
                     title={strings.drefFormRiskSecuritySafetyConcern}
+                    description={(
+                        <>
+                            <p>
+                                {strings.drefFormRiskSecuritySafetyConcernDescription}
+                            </p>
+                            <ul>
+                                <li>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint1}
+                                </li>
+                                <li>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint3}
+                                </li>
+                            </ul>
+                        </>
+                    )}
                 >
                     <TextArea
                         name="risk_security_concern"
@@ -600,13 +655,21 @@ function Operation(props: Props) {
                     title={strings.drefOperationalUpdateAdditionalAllocationRequested}
                     numPreferredColumns={2}
                 >
-                    <NumberInput
-                        name="additional_allocation"
-                        value={value.additional_allocation}
-                        onChange={handleAdditionalAllocationChange}
-                        error={error?.additional_allocation}
-                        disabled={disabled}
-                    />
+                    <div>
+                        <NumberInput
+                            name="additional_allocation"
+                            value={value.additional_allocation}
+                            onChange={handleAdditionalAllocationChange}
+                            error={error?.additional_allocation}
+                            disabled={disabled}
+                        />
+                        {budgetWarning && (
+                            <div className={styles.warning}>
+                                <ErrorWarningFillIcon className={styles.icon} />
+                                {budgetWarning}
+                            </div>
+                        )}
+                    </div>
                 </InputSection>
                 <InputSection
                     title={strings.drefOperationalUpdateTotalAllocation}
@@ -721,9 +784,22 @@ function Operation(props: Props) {
                 </InputSection>
                 <InputSection
                     title={strings.drefFormSurgePersonnelDeployed}
-                    description={value?.is_surge_personnel_deployed
-                        ? strings.drefFormSurgePersonnelDeployedDescription
-                        : undefined}
+                    description={value?.is_surge_personnel_deployed && (
+                        <ul>
+                            <li>
+                                {strings.drefFormSurgePersonnelDeployedDescriptionPoint1}
+                            </li>
+                            <li>
+                                {strings.drefFormSurgePersonnelDeployedDescriptionPoint2}
+                            </li>
+                            <li>
+                                {strings.drefFormSurgePersonnelDeployedDescriptionPoint3}
+                            </li>
+                            <li>
+                                {strings.drefFormSurgePersonnelDeployedDescriptionPoint4}
+                            </li>
+                        </ul>
+                    )}
                 >
                     <BooleanInput
                         name="is_surge_personnel_deployed"
@@ -739,7 +815,6 @@ function Operation(props: Props) {
                             onChange={setFieldValue}
                             value={value.surge_personnel_deployed}
                             error={error?.surge_personnel_deployed}
-                            placeholder={strings.drefFormSurgePersonnelDeployedDescription}
                             disabled={disabled}
                         />
                     )}
@@ -748,7 +823,28 @@ function Operation(props: Props) {
                     <>
                         <InputSection
                             title={strings.drefFormLogisticCapacityOfNs}
-                            description={strings.drefFormLogisticCapacityOfNsDescription}
+                            description={(
+                                <>
+                                    {strings.drefFormLogisticCapacityOfNsDescription}
+                                    <ul>
+                                        <li>
+                                            {strings.drefFormLogisticCapacityOfNsDescriptionPoint1}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormLogisticCapacityOfNsDescriptionPoint2}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormLogisticCapacityOfNsDescriptionPoint3}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormLogisticCapacityOfNsDescriptionPoint4}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormLogisticCapacityOfNsDescriptionPoint5}
+                                        </li>
+                                    </ul>
+                                </>
+                            )}
                         >
                             <TextArea
                                 label={strings.drefFormOperationDescription}
@@ -761,7 +857,25 @@ function Operation(props: Props) {
                         </InputSection>
                         <InputSection
                             title={strings.drefFormPmer}
-                            description={strings.drefFormPmerDescription}
+                            description={(
+                                <>
+                                    {strings.drefFormPmerDescription}
+                                    <ul>
+                                        <li>
+                                            {strings.drefFormPmerDescriptionPoint1}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormPmerDescriptionPoint2}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormPmerDescriptionPoint3}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormPmerDescriptionPoint4}
+                                        </li>
+                                    </ul>
+                                </>
+                            )}
                         >
                             <TextArea
                                 label={strings.drefFormOperationDescription}
@@ -774,7 +888,25 @@ function Operation(props: Props) {
                         </InputSection>
                         <InputSection
                             title={strings.drefFormCommunication}
-                            description={strings.drefFormCommunicationDescription}
+                            description={(
+                                <>
+                                    {strings.drefFormCommunicationDescription}
+                                    <ul>
+                                        <li>
+                                            {strings.drefFormCommunicationDescriptionPoint1}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormCommunicationDescriptionPoint2}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormCommunicationDescriptionPoint3}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormCommunicationDescriptionPoint4}
+                                        </li>
+                                    </ul>
+                                </>
+                            )}
                         >
                             <TextArea
                                 label={strings.drefFormOperationDescription}

@@ -199,7 +199,6 @@ const schema: FinalReportFormSchema = {
             national_authorities: {},
             un_or_other_actor: {},
             is_there_major_coordination_mechanism: {},
-            has_national_society_conducted: {},
 
             // OPERATION
             total_dref_allocation: {},
@@ -299,7 +298,12 @@ const schema: FinalReportFormSchema = {
                                         required: true,
                                         requiredValidation: requiredStringCondition,
                                     },
-                                    actual: { validations: [positiveNumberCondition] },
+                                    actual: {
+                                        required: true,
+                                        validations: [
+                                            positiveNumberCondition,
+                                        ],
+                                    },
                                     target: { validations: [positiveNumberCondition] },
                                 }),
                             }),
@@ -416,23 +420,6 @@ const schema: FinalReportFormSchema = {
                 }
                 return {
                     major_coordination_mechanism: { forceValue: nullValue },
-                };
-            },
-        );
-
-        formFields = addCondition(
-            formFields,
-            formValue,
-            ['has_national_society_conducted'],
-            ['national_society_conducted_description'],
-            (val): Pick<FinalReportFormSchemaFields, 'national_society_conducted_description'> => {
-                if (val?.has_national_society_conducted) {
-                    return {
-                        national_society_conducted_description: {},
-                    };
-                }
-                return {
-                    national_society_conducted_description: { forceValue: nullValue },
                 };
             },
         );

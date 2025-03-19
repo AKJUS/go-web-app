@@ -218,6 +218,7 @@ function Overview(props: Props) {
             >
                 <InputSection
                     title={strings.drefFormNationalSociety}
+                    description={strings.drefFormNationalSocietyDescription}
                     numPreferredColumns={2}
                     withAsteriskOnTitle
                 >

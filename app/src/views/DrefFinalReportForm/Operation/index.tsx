@@ -196,6 +196,7 @@ function Operation(props: Props) {
             >
                 <InputSection
                     title={strings.drefFormObjectiveOperation}
+                    description={strings.drefFormObjectiveOperationDescription}
                 >
                     <TextArea
                         name="operation_objective"
@@ -208,8 +209,32 @@ function Operation(props: Props) {
                 </InputSection>
                 <InputSection
                     title={strings.drefFormResponseRationale}
-                    description={value?.type_of_dref === TYPE_ASSESSMENT
-                        && strings.drefFormResponseRationaleDescription}
+                    description={(
+                        <>
+                            <p>
+                                {strings.drefFormResponseRationaleDescription}
+                            </p>
+                            <ul>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint1}
+                                </li>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint3}
+                                </li>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint4}
+                                </li>
+                                {value?.type_of_dref === TYPE_ASSESSMENT && (
+                                    <li>
+                                        {strings.drefFormResponseRationaleForAssessment}
+                                    </li>
+                                )}
+                            </ul>
+                        </>
+                    )}
                 >
                     <TextArea
                         name="response_strategy"
@@ -522,6 +547,24 @@ function Operation(props: Props) {
                 </InputSection>
                 <InputSection
                     title={strings.drefFormRiskSecuritySafetyConcern}
+                    description={(
+                        <>
+                            <p>
+                                {strings.drefFormRiskSecuritySafetyConcernDescription}
+                            </p>
+                            <ul>
+                                <li>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint1}
+                                </li>
+                                <li>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint3}
+                                </li>
+                            </ul>
+                        </>
+                    )}
                 >
                     <TextArea
                         name="risk_security_concern"

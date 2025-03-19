@@ -9,6 +9,7 @@
         "drefFormInstantShareLabel": "Create & Share",
         "drefFormEssentialInformation": "Essential Information",
         "drefFormNationalSociety": "Name of National Society",
+        "drefFormNationalSocietyDescription": "Indicate your National Society by selecting it from the drop-down list.",
         "drefFormTypeOfDref": "Type of DREF",
         "drefFormImminentDisasterDetails": "Hazard Details",
         "drefFormDisasterDetails": "Disaster Details",

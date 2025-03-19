@@ -65,6 +65,7 @@ function IndicatorInput(props: Props) {
                 error={error?.title}
                 disabled={disabled}
                 withAsterisk
+                readOnly
             />
             <NumberInput
                 className={styles.numberInput}
@@ -74,6 +75,7 @@ function IndicatorInput(props: Props) {
                 onChange={onFieldChange}
                 error={error?.target}
                 disabled={disabled}
+                readOnly
             />
             <NumberInput
                 label={strings.drefOperationalUpdateIndicatorActualLabel}
@@ -82,6 +84,7 @@ function IndicatorInput(props: Props) {
                 onChange={onFieldChange}
                 error={error?.actual}
                 disabled={disabled}
+                withAsterisk
             />
             <Button
                 name={index}

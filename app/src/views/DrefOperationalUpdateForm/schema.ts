@@ -52,7 +52,6 @@ export type OpsUpdateRequestBody = GoApiBody<'/api/v2/dref-op-update/{id}/', 'PA
 };
 
 type NeedIdentifiedResponse = NonNullable<OpsUpdateRequestBody['needs_identified']>[number];
-type NsActionResponse = NonNullable<OpsUpdateRequestBody['national_society_actions']>[number];
 type InterventionResponse = NonNullable<OpsUpdateRequestBody['planned_interventions']>[number];
 type IndicatorResponse = NonNullable<InterventionResponse['indicators']>[number];
 type RiskSecurityResponse = NonNullable<OpsUpdateRequestBody['risk_security']>[number];
@@ -60,7 +59,6 @@ type ImagesFileResponse = NonNullable<OpsUpdateRequestBody['images_file']>[numbe
 type SourceInformationResponse = NonNullable<OpsUpdateRequestBody['source_information']>[number];
 
 type NeedIdentifiedFormFields = NeedIdentifiedResponse & { client_id: string };
-type NsActionFormFields = NsActionResponse & { client_id: string; }
 type InterventionFormFields = InterventionResponse & { client_id: string };
 type IndicatorFormFields = IndicatorResponse & { client_id: string };
 type SourceInformationFormFields = SourceInformationResponse & { client_id: string };
@@ -83,13 +81,9 @@ type OpsUpdateFormFields = (
                         DeepReplace<
                             DeepReplace<
                                 DeepReplace<
-                                    DeepReplace<
-                                        OpsUpdateRequestBody,
-                                        NeedIdentifiedResponse,
-                                        NeedIdentifiedFormFields
-                                    >,
-                                    NsActionResponse,
-                                    NsActionFormFields
+                                    OpsUpdateRequestBody,
+                                    NeedIdentifiedResponse,
+                                    NeedIdentifiedFormFields
                                 >,
                                 InterventionResponse,
                                 InterventionFormFields
@@ -122,12 +116,9 @@ export type PartialOpsUpdate = PartialForm<
 type OpsUpdateFormSchema = ObjectSchema<PartialOpsUpdate>;
 type OpsUpdateFormSchemaFields = ReturnType<OpsUpdateFormSchema['fields']>;
 
-type PhotoFileFields = ReturnType<ObjectSchema<NonNullable<PartialOpsUpdate['photos_file']>[number], PartialOpsUpdate>['fields']>;
-
 type EventMapFileFields = ReturnType<ObjectSchema<PartialOpsUpdate['event_map_file'], PartialOpsUpdate>['fields']>;
 type CoverImageFileFields = ReturnType<ObjectSchema<PartialOpsUpdate['cover_image_file'], PartialOpsUpdate>['fields']>;
 type ImageFileFields = ReturnType<ObjectSchema<NonNullable<PartialOpsUpdate['images_file']>[number], PartialOpsUpdate>['fields']>;
-type NationalSocietyFields = ReturnType<ObjectSchema<NonNullable<PartialOpsUpdate['national_society_actions']>[number], PartialOpsUpdate>['fields']>;
 type NeedsIdentifiedFields = ReturnType<ObjectSchema<NonNullable<PartialOpsUpdate['needs_identified']>[number], PartialOpsUpdate>['fields']>;
 type RiskSecurityFields = ReturnType<ObjectSchema<NonNullable<PartialOpsUpdate['risk_security']>[number], PartialOpsUpdate>['fields']>;
 type SourceInformationFields = ReturnType<ObjectSchema<NonNullable<PartialOpsUpdate['source_information']>[number], PartialOpsUpdate>['fields']>;
@@ -402,23 +393,6 @@ const schema: OpsUpdateFormSchema = {
         formFields = addCondition(
             formFields,
             formValue,
-            ['did_national_society', 'type_of_dref'],
-            ['ns_respond_date'],
-            (val): Pick<OpsUpdateFormSchemaFields, 'ns_respond_date'> => {
-                if (val?.type_of_dref !== TYPE_LOAN && val?.did_national_society) {
-                    return {
-                        ns_respond_date: {},
-                    };
-                }
-                return {
-                    ns_respond_date: { forceValue: nullValue },
-                };
-            },
-        );
-
-        formFields = addCondition(
-            formFields,
-            formValue,
             ['is_there_major_coordination_mechanism', 'type_of_dref'],
             ['major_coordination_mechanism'],
             (val): Pick<OpsUpdateFormSchemaFields, 'major_coordination_mechanism'> => {
@@ -437,8 +411,6 @@ const schema: OpsUpdateFormSchema = {
             'assessment_report',
             'needs_identified',
             'identified_gaps',
-            'did_national_society',
-            'national_society_actions',
             'ifrc',
             'icrc',
             'partner_national_society',
@@ -446,7 +418,6 @@ const schema: OpsUpdateFormSchema = {
             'national_authorities',
             'un_or_other_actor',
             'is_there_major_coordination_mechanism',
-            'photos_file',
         ] as const;
         type ActionsDrefTypeRelatedFields = Pick<
             OpsUpdateFormSchemaFields,
@@ -462,9 +433,6 @@ const schema: OpsUpdateFormSchema = {
                     assessment_report: { forceValue: nullValue },
                     needs_identified: { forceValue: [] },
                     identified_gaps: { forceValue: nullValue },
-                    did_national_society: { forceValue: nullValue },
-                    national_society_actions: { forceValue: [] },
-                    photos_file: { forceValue: [] },
                     ifrc: { forceValue: nullValue },
                     icrc: { forceValue: nullValue },
                     partner_national_society: { forceValue: nullValue },
@@ -478,34 +446,6 @@ const schema: OpsUpdateFormSchema = {
                 }
                 conditionalFields = {
                     ...conditionalFields,
-                    did_national_society: {},
-                    national_society_actions: {
-                        keySelector: (nsAction) => nsAction.client_id,
-                        member: () => ({
-                            fields: (): NationalSocietyFields => ({
-                                client_id: {},
-                                title: {
-                                    required: true,
-                                    requiredValidation: requiredStringCondition,
-                                },
-                                description: {
-                                    required: true,
-                                    requiredValidation: requiredStringCondition,
-                                },
-                            }),
-                        }),
-                    },
-                    photos_file: {
-                        validations: [lessThanEqualToTwoImagesCondition],
-                        keySelector: (value) => value.client_id,
-                        member: () => ({
-                            fields: (): PhotoFileFields => ({
-                                client_id: {},
-                                id: { defaultValue: undefinedValue },
-                                caption: {},
-                            }),
-                        }),
-                    },
                     ifrc: {},
                     icrc: {},
                     partner_national_society: {},
@@ -718,7 +658,12 @@ const schema: OpsUpdateFormSchema = {
                                             client_id: {},
                                             title: {},
                                             target: { validations: [positiveNumberCondition] },
-                                            actual: { validations: [positiveNumberCondition] },
+                                            actual: {
+                                                required: true,
+                                                validations: [
+                                                    positiveNumberCondition,
+                                                ],
+                                            },
                                         }),
                                     }),
                                 },

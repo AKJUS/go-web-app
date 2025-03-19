@@ -257,6 +257,24 @@ function EventDetail(props: Props) {
                             ? strings.drefFormWhatWhereWhen
                             : strings.drefFormImminentDisaster
                     }
+                    description={value.type_of_dref !== TYPE_IMMINENT && (
+                        <>
+                            <p>
+                                {strings.drefFormWhatWhereWhenDescriptionHeading}
+                            </p>
+                            <ol>
+                                <li>
+                                    {strings.drefFormWhatWhereWhenDescriptionPoint1}
+                                </li>
+                                <li>
+                                    {strings.drefFormWhatWhereWhenDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFormWhatWhereWhenDescriptionPoint3}
+                                </li>
+                            </ol>
+                        </>
+                    )}
                 >
                     <TextArea
                         name="event_description"

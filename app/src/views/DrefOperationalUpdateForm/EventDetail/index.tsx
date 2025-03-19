@@ -1,5 +1,8 @@
 import { useCallback } from 'react';
-import { WikiHelpSectionLineIcon } from '@ifrc-go/icons';
+import {
+    ErrorWarningFillIcon,
+    WikiHelpSectionLineIcon,
+} from '@ifrc-go/icons';
 import {
     BooleanInput,
     Button,
@@ -44,6 +47,10 @@ interface Props {
     fileIdToUrlMap: Record<number, string>;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     disabled?: boolean;
+    operationTimeframeWarning: string | undefined;
+    budgetWarning: string | undefined;
+    geoWarning: string | undefined;
+    peopleTargetedWarning: string | undefined;
 }
 
 const totalPopulationRiskImminentLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
@@ -61,6 +68,10 @@ function EventDetail(props: Props) {
         fileIdToUrlMap,
         setFileIdToUrlMap,
         disabled,
+        operationTimeframeWarning,
+        budgetWarning,
+        geoWarning,
+        peopleTargetedWarning,
     } = props;
 
     const error = getErrorObject(formError);
@@ -95,13 +106,21 @@ function EventDetail(props: Props) {
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryAreYouChangingTimeFrame}
                     >
-                        <BooleanInput
-                            name="changing_timeframe_operation"
-                            value={value.changing_timeframe_operation}
-                            onChange={setFieldValue}
-                            error={error?.changing_timeframe_operation}
-                            disabled={disabled}
-                        />
+                        <div>
+                            <BooleanInput
+                                name="changing_timeframe_operation"
+                                value={value.changing_timeframe_operation}
+                                onChange={setFieldValue}
+                                error={error?.changing_timeframe_operation}
+                                disabled={disabled}
+                            />
+                            {operationTimeframeWarning && (
+                                <div className={styles.warning}>
+                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    {operationTimeframeWarning}
+                                </div>
+                            )}
+                        </div>
                     </InputSection>
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryAreYouChangingStrategy}
@@ -117,36 +136,60 @@ function EventDetail(props: Props) {
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryAreYouChangingTargetPopulation}
                     >
-                        <BooleanInput
-                            name="changing_target_population_of_operation"
-                            value={value.changing_target_population_of_operation}
-                            onChange={setFieldValue}
-                            error={error?.changing_target_population_of_operation}
-                            disabled={disabled}
-                        />
+                        <div>
+                            <BooleanInput
+                                name="changing_target_population_of_operation"
+                                value={value.changing_target_population_of_operation}
+                                onChange={setFieldValue}
+                                error={error?.changing_target_population_of_operation}
+                                disabled={disabled}
+                            />
+                            {peopleTargetedWarning && (
+                                <div className={styles.warning}>
+                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    {peopleTargetedWarning}
+                                </div>
+                            )}
+                        </div>
                     </InputSection>
                     <InputSection
                         // eslint-disable-next-line max-len
                         title={strings.drefOperationalUpdateSummaryAreYouChangingGeographicalLocation}
                     >
-                        <BooleanInput
-                            name="changing_geographic_location"
-                            value={value.changing_geographic_location}
-                            onChange={setFieldValue}
-                            error={error?.changing_geographic_location}
-                            disabled={disabled}
-                        />
+                        <div>
+                            <BooleanInput
+                                name="changing_geographic_location"
+                                value={value.changing_geographic_location}
+                                onChange={setFieldValue}
+                                error={error?.changing_geographic_location}
+                                disabled={disabled}
+                            />
+                            {geoWarning && (
+                                <div className={styles.warning}>
+                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    {geoWarning}
+                                </div>
+                            )}
+                        </div>
                     </InputSection>
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryAreYouChangingBudget}
                     >
-                        <BooleanInput
-                            name="changing_budget"
-                            value={value.changing_budget}
-                            onChange={setFieldValue}
-                            error={error?.changing_budget}
-                            disabled={disabled}
-                        />
+                        <div>
+                            <BooleanInput
+                                name="changing_budget"
+                                value={value.changing_budget}
+                                onChange={setFieldValue}
+                                error={error?.changing_budget}
+                                disabled={disabled}
+                            />
+                            {budgetWarning && (
+                                <div className={styles.warning}>
+                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    {budgetWarning}
+                                </div>
+                            )}
+                        </div>
                     </InputSection>
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryRequestForSecondAllocation}
@@ -343,6 +386,24 @@ function EventDetail(props: Props) {
                                 ? strings.drefFormWhatWhereWhen
                                 : strings.drefFormImminentDisaster
                         }
+                        description={value.type_of_dref !== TYPE_IMMINENT && (
+                            <>
+                                <p>
+                                    {strings.drefFormWhatWhereWhenDescriptionHeading}
+                                </p>
+                                <ol>
+                                    <li>
+                                        {strings.drefFormWhatWhereWhenDescriptionPoint1}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormWhatWhereWhenDescriptionPoint2}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormWhatWhereWhenDescriptionPoint3}
+                                    </li>
+                                </ol>
+                            </>
+                        )}
                     >
                         <TextArea
                             name="event_description"

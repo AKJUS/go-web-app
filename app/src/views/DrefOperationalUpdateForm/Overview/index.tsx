@@ -8,6 +8,7 @@ import {
     useParams,
 } from 'react-router-dom';
 import {
+    ErrorWarningFillIcon,
     ShareLineIcon,
     WikiHelpSectionLineIcon,
 } from '@ifrc-go/icons';
@@ -99,6 +100,7 @@ interface Props {
     districtOptions: DistrictItem[] | null | undefined;
     setDistrictOptions: Dispatch<SetStateAction<DistrictItem[] | null | undefined>>;
     drefId: number | undefined;
+    geoWarning: string | undefined;
 }
 
 function Overview(props: Props) {
@@ -112,6 +114,7 @@ function Overview(props: Props) {
         districtOptions,
         setDistrictOptions,
         drefId,
+        geoWarning,
     } = props;
     const { state } = useLocation();
     const { opsUpdateId } = useParams<{ opsUpdateId: string }>();
@@ -280,6 +283,7 @@ function Overview(props: Props) {
             >
                 <InputSection
                     title={strings.drefFormNationalSociety}
+                    description={strings.drefFormNationalSocietyDescription}
                     numPreferredColumns={2}
                     withAsteriskOnTitle
                 >
@@ -397,17 +401,25 @@ function Overview(props: Props) {
                         error={error?.country}
                         disabled={disabled}
                     />
-                    <DistrictSearchMultiSelectInput
-                        name="district"
-                        countryId={value.country}
-                        label={strings.drefFormAddRegion}
-                        options={districtOptions}
-                        onChange={setFieldValue}
-                        value={value?.district}
-                        disabled={disabled}
-                        onOptionsChange={setDistrictOptions}
-                        error={getErrorString(error?.district)}
-                    />
+                    <div>
+                        <DistrictSearchMultiSelectInput
+                            name="district"
+                            countryId={value.country}
+                            label={strings.drefFormAddRegion}
+                            options={districtOptions}
+                            onChange={setFieldValue}
+                            value={value?.district}
+                            disabled={disabled}
+                            onOptionsChange={setDistrictOptions}
+                            error={getErrorString(error?.district)}
+                        />
+                        {geoWarning && (
+                            <div className={styles.warning}>
+                                <ErrorWarningFillIcon className={styles.icon} />
+                                {geoWarning}
+                            </div>
+                        )}
+                    </div>
                 </InputSection>
                 <InputSection
                     title={strings.drefFormTitle}

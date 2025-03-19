@@ -6,10 +6,7 @@ import {
     useState,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-    DownloadTwoLineIcon,
-    ErrorWarningFillIcon,
-} from '@ifrc-go/icons';
+import { DownloadTwoLineIcon } from '@ifrc-go/icons';
 import type { ButtonProps } from '@ifrc-go/ui';
 import {
     Button,
@@ -563,11 +560,6 @@ export function Component() {
         [setShowExportModalTrue],
     );
 
-    const hasAnyWarning = isTruthyString(peopleTargetedWarning)
-        || isTruthyString(operationTimeframeWarning)
-        || isTruthyString(budgetWarning)
-        || isTruthyString(geoWarning);
-
     const disabled = fetchingOpsUpdate
         || updateOpsUpdatePending
         || fetchingDref
@@ -696,34 +688,6 @@ export function Component() {
                             error={formError}
                             withFallbackError
                         />
-                        {hasAnyWarning && (
-                            <div className={styles.warnings}>
-                                {operationTimeframeWarning && (
-                                    <div className={styles.warning}>
-                                        <ErrorWarningFillIcon className={styles.icon} />
-                                        {operationTimeframeWarning}
-                                    </div>
-                                )}
-                                {budgetWarning && (
-                                    <div className={styles.warning}>
-                                        <ErrorWarningFillIcon className={styles.icon} />
-                                        {budgetWarning}
-                                    </div>
-                                )}
-                                {geoWarning && (
-                                    <div className={styles.warning}>
-                                        <ErrorWarningFillIcon className={styles.icon} />
-                                        {geoWarning}
-                                    </div>
-                                )}
-                                {peopleTargetedWarning && (
-                                    <div className={styles.warning}>
-                                        <ErrorWarningFillIcon className={styles.icon} />
-                                        {peopleTargetedWarning}
-                                    </div>
-                                )}
-                            </div>
-                        )}
                         <TabPanel name="overview">
                             <Overview
                                 value={value}
@@ -735,6 +699,7 @@ export function Component() {
                                 districtOptions={districtOptions}
                                 setDistrictOptions={setDistrictOptions}
                                 drefId={drefId}
+                                geoWarning={geoWarning}
                             />
                         </TabPanel>
                         <TabPanel name="eventDetail">
@@ -745,6 +710,10 @@ export function Component() {
                                 setFileIdToUrlMap={setFileIdToUrlMap}
                                 error={formError}
                                 disabled={disabled}
+                                operationTimeframeWarning={operationTimeframeWarning}
+                                budgetWarning={budgetWarning}
+                                geoWarning={geoWarning}
+                                peopleTargetedWarning={peopleTargetedWarning}
                             />
                         </TabPanel>
                         <TabPanel name="actions">
@@ -765,6 +734,8 @@ export function Component() {
                                 setFileIdToUrlMap={setFileIdToUrlMap}
                                 error={formError}
                                 disabled={disabled}
+                                budgetWarning={budgetWarning}
+                                peopleTargetedWarning={peopleTargetedWarning}
                             />
                         </TabPanel>
                         <TabPanel name="submission">
@@ -772,6 +743,7 @@ export function Component() {
                                 value={value}
                                 setFieldValue={setFieldValue}
                                 error={formError}
+                                operationTimeframeWarning={operationTimeframeWarning}
                                 disabled={disabled}
                             />
                         </TabPanel>
