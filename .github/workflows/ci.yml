@@ -21,6 +21,10 @@ env:
   APP_TITLE: ${{ vars.APP_TITLE }}
   GITHUB_WORKFLOW: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ui:
     name: Build UI Library
@@ -290,8 +294,8 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v4
 
-      - name: 🐳 Helm lint
+      - name: Helm lint
         run: helm lint ./nginx-serve/helm --values ./nginx-serve/helm/values-test.yaml
 
-      - name: 🐳 Helm template
+      - name: Helm template
         run: helm template ./nginx-serve/helm --values ./nginx-serve/helm/values-test.yaml
