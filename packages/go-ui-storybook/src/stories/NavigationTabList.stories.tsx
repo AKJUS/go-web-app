@@ -28,10 +28,10 @@ export default meta;
 export const Default: Story = {
     args: {
         children: [
-            <div>Home</div>,
-            <div>About</div>,
-            <div>Services</div>,
-            <div>Contact</div>,
+            <div key="home">Home</div>,
+            <div key="about">About</div>,
+            <div key="services">Services</div>,
+            <div key="contacts">Contact</div>,
         ],
         variant: 'primary',
     },

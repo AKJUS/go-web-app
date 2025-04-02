@@ -486,7 +486,7 @@ export function Component() {
                 >
                     {assessmentStats.topFiveRatedComponents.map(
                         (component) => (
-                            <div className={styles.topRatedComponent}>
+                            <div className={styles.topRatedComponent} key={component.ra}>
                                 <div className={styles.label}>
                                     {component.rating?.title}
                                 </div>

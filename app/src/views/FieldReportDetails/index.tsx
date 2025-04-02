@@ -638,6 +638,7 @@ export function Component() {
                                                 : undefined,
                                             isTruthyString(contact.email) ? (
                                                 <Link
+                                                    key={contact.email}
                                                     href={`mailto:${contact.email}`}
                                                     external
                                                 >
@@ -646,6 +647,7 @@ export function Component() {
                                             ) : undefined,
                                             isTruthyString(contact.phone) ? (
                                                 <Link
+                                                    key={contact.phone}
                                                     href={`tel:${contact.phone}`}
                                                     external
                                                 >

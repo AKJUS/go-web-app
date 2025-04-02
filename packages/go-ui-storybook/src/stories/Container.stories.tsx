@@ -67,6 +67,7 @@ export const FooterAction: Story = {
         children: 'Container content',
         footerActions: [
             <Button
+                key="container-footer-action"
                 name={undefined}
             >
                 save

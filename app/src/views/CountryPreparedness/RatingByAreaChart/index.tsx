@@ -103,8 +103,7 @@ function RatingByAreaChart(props: Props) {
                                 x={point.x - barWidth / 2}
                                 y={point.y}
                             >
-                                {Number(point.originalData.value.toFixed(2))
-                                    ?? DEFAULT_INVALID_TEXT}
+                                {Number(point.originalData.value.toFixed(2))}
                             </text>
                         )}
                         <rect

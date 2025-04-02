@@ -246,6 +246,7 @@ export function Component() {
                             label={strings.sources}
                             value={joinList([
                                 <Link
+                                    key="link-databank"
                                     variant="tertiary"
                                     href="https://data.worldbank.org"
                                     external
@@ -254,6 +255,7 @@ export function Component() {
                                     {strings.dataBank}
                                 </Link>,
                                 <Link
+                                    key="link-unicef"
                                     variant="tertiary"
                                     href="https://sdmx.data.unicef.org/overview.html"
                                     external
@@ -262,6 +264,7 @@ export function Component() {
                                     {strings.unicef}
                                 </Link>,
                                 <Link
+                                    key="link-hdr"
                                     variant="tertiary"
                                     href="https://hdr.undp.org/data-center"
                                     external
