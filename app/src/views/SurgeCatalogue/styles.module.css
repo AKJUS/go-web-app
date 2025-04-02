@@ -9,7 +9,7 @@
     }
 
     .tab-list {
-        grid-column: 1fr;
+        grid-column: 1;
 
         .icon {
             flex-shrink: 0;

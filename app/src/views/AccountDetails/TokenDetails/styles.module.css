@@ -3,8 +3,7 @@
         flex-grow: 1;
         background-color: var(--go-ui-color-background);
         padding: var(--go-ui-spacing-md);
-        overflow: auto;
-        word-break: break-word;
+        overflow-wrap: break-word;
         font-family: monospace;
     }
 

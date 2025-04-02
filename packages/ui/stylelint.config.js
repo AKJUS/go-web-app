@@ -1,4 +1,4 @@
-module.exports = {
+const config  = {
     plugins: [
         'stylelint-no-unused-selectors',
         'stylelint-value-no-unknown-custom-properties',
@@ -29,3 +29,5 @@ module.exports = {
         ],
     },
 };
+
+export default config;
