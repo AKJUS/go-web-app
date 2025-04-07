@@ -10,6 +10,7 @@
         "organizationNameInputLabel": "Organization Name",
         "departmentInputLabel": "Department",
         "phoneNumberInputLabel": "Phone Number",
+        "positionInputLabel":"Position",
         "editProfileConfirmButtonLabel": "Confirm",
         "editProfileCancelButtonLabel": "Cancel",
         "editAccountSuccessfulMessage": "Account edited successfully!",
