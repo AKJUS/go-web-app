@@ -133,9 +133,8 @@ export function Component() {
                             {
                                 termsLink: (
                                     <Link
-                                        href="https://go.ifrc.org/register"
+                                        to="register"
                                         withUnderline
-                                        external
                                     >
                                         {strings.userRegistrationDescriptionLink}
                                     </Link>

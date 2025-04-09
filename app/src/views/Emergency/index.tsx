@@ -19,7 +19,10 @@ import {
     NavigationTabList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { sumSafe } from '@ifrc-go/ui/utils';
+import {
+    resolveToString,
+    sumSafe,
+} from '@ifrc-go/ui/utils';
 import {
     isDefined,
     isNotDefined,
@@ -221,10 +224,15 @@ export function Component() {
     const showSurgeTab = (surgeAlertsResponse?.count ?? 0) > 0
         || (emergencyResponse?.active_deployments ?? 0) > 0;
 
+    const pageTitle = resolveToString(
+        strings.emergencyPageTitle,
+        { emergencyName: emergencyResponse?.name ?? strings.emergencyPageTitleFallback },
+    );
+
     return (
         <Page
             className={styles.emergency}
-            title={strings.emergencyPageTitle}
+            title={pageTitle}
             breadCrumbs={(
                 <Breadcrumbs>
                     <Link to="home">
