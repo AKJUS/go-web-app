@@ -71,7 +71,7 @@ import { type PartialOpsUpdate } from '../schema';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-const disasterCategoryLink = 'https://www.ifrc.org/sites/default/files/2021-07/IFRC%20Emergency%20Response%20Framework%20-%202017.pdf';
+const disasterCategoryLink = 'https://ifrcorg.sharepoint.com/:u:/r/sites/DisastersClimateandCrises/SitePages/Emergency-Response-Framework.aspx?csf=1&web=1&e=WWGByn';
 
 type GlobalEnumsResponse = GoApiResponse<'/api/v2/global-enums/'>;
 type DrefTypeOption = NonNullable<GlobalEnumsResponse['dref_dref_dref_type']>[number];

@@ -22,7 +22,7 @@
         "drefOperationalUpdateFormTimeframe": "Please select a different timeframe when selected yes on changing the operation timeframe",
         "drefOperationalUpdateFormOperationTimeframe": "Please select yes on changing the operation timeframe",
         "drefOperationAdditionalBudget": "When requesting for additional budget allocation, the fields \"Are you making changes to the budget\" and \"Are you requesting an additional allocation\" both should be marked \"Yes\" in \"Event Details\" section",
-        "drefOperationAdditionalAllocation": "The field \"Additional Allocation Requested\" should be filled in \"Operation Overview\" section to change the budget or for an additional allocation",
+        "drefOperationAdditionalAllocation": "The field \"Additional Allocation Requested\" should be filled in \"Operation\" section to change the budget or for an additional allocation",
         "drefOperationSelectDistrict": "Please select a different district when selected yes on changing geographic location",
         "drefOperationSelectLocation": "Please select yes on changing geographic location",
         "drefOperationTargetedPopulation": "Please select a different value for targeted population when selected yes on changing target population",

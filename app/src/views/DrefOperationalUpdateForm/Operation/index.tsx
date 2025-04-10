@@ -16,6 +16,7 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    resolveToComponent,
     stringValueSelector,
     sumSafe,
 } from '@ifrc-go/ui/utils';
@@ -35,7 +36,10 @@ import GoSingleFileInput from '#components/domain/GoSingleFileInput';
 import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
-import { type GoApiResponse } from '#utils/restRequest';
+import {
+    type GoApiResponse,
+    useRequest,
+} from '#utils/restRequest';
 
 import {
     TYPE_ASSESSMENT,
@@ -88,6 +92,12 @@ function Operation(props: Props) {
     } = props;
 
     const error = getErrorObject(formError);
+
+    const {
+        response: globalFilesResponse,
+    } = useRequest({
+        url: '/api/v2/dref/global-files/',
+    });
 
     const [
         selectedIntervention,
@@ -674,6 +684,41 @@ function Operation(props: Props) {
                 <InputSection
                     title={strings.drefOperationalUpdateTotalAllocation}
                     numPreferredColumns={2}
+                    description={(
+                        <>
+                            {strings.drefOperationalUpdateRequestAmountDescription}
+                            <ul>
+                                <li>
+                                    {resolveToComponent(
+                                        strings.drefOperationalUpdateRequestAmountDescriptionPoint1,
+                                        {
+                                            indicatorDatabankLink: (
+                                                <Link
+                                                    href="https://github.com/user-attachments/files/18903662/Annex.III.Risk.Categories.1.pdf"
+                                                    withLinkIcon
+                                                    external
+                                                >
+                                                    {strings.drefIndicatorDataLinkLabel}
+                                                </Link>
+                                            ),
+                                        },
+                                    )}
+                                </li>
+                                <li>
+                                    {strings.drefOperationalUpdateRequestAmountDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefOperationalUpdateRequestAmountDescriptionPoint3}
+                                </li>
+                                <li>
+                                    {strings.drefOperationalUpdateRequestAmountDescriptionPoint4}
+                                </li>
+                                <li>
+                                    {strings.drefOperationalUpdateRequestAmountDescriptionPoint5}
+                                </li>
+                            </ul>
+                        </>
+                    )}
                 >
                     <NumberInput
                         name="total_dref_allocation"
@@ -696,6 +741,15 @@ function Operation(props: Props) {
                         error={error?.budget_file}
                         disabled={disabled}
                         clearable
+                        description={(
+                            <Link
+                                href={globalFilesResponse?.budget_template_url}
+                                withLinkIcon
+                                external
+                            >
+                                {strings.drefFormDownloadBudgetTemplate}
+                            </Link>
+                        )}
                     >
                         {strings.drefFormBudgetTemplateUploadButtonLabel}
                     </GoSingleFileInput>

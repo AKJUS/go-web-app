@@ -391,11 +391,19 @@ function EventDetail(props: Props) {
                         disabled={disabled}
                     />
                     <NumberInput
-                        name="estimated_number_of_affected_minors"
-                        label={strings.drefFormAffectedMinorsLabel}
-                        value={value?.estimated_number_of_affected_minors}
+                        name="estimated_number_of_affected_girls_under_18"
+                        label={strings.drefFormAffectedMinorGirlsLabel}
+                        value={value?.estimated_number_of_affected_girls_under_18}
                         onChange={setFieldValue}
-                        error={error?.estimated_number_of_affected_minors}
+                        error={error?.estimated_number_of_affected_girls_under_18}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_boys_under_18"
+                        label={strings.drefFormAffectedMinorBoysLabel}
+                        value={value?.estimated_number_of_affected_boys_under_18}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_boys_under_18}
                         disabled={disabled}
                     />
                     {/* FIXME: use grid to fix the empty div issue */}

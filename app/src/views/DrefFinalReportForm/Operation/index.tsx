@@ -16,6 +16,7 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    resolveToComponent,
     stringValueSelector,
     sumSafe,
 } from '@ifrc-go/ui/utils';
@@ -610,6 +611,42 @@ function Operation(props: Props) {
             >
                 <InputSection
                     title={strings.finalReportTotalAllocation}
+                    description={(
+                        <>
+                            {strings.drefFinalReportRequestAmountDescription}
+                            <ul>
+                                <li>
+                                    {resolveToComponent(
+                                        strings.drefFinalReportRequestAmountDescriptionPoint1,
+                                        {
+                                            indicatorDatabankLink: (
+                                                <Link
+                                                    href="https://github.com/user-attachments/files/18903662/Annex.III.Risk.Categories.1.pdf"
+                                                    withLinkIcon
+                                                    external
+                                                >
+                                                    {strings.drefIndicatorDataLinkLabel}
+                                                </Link>
+                                            ),
+                                        },
+                                    )}
+                                </li>
+                                <li>
+                                    {strings.drefFinalReportRequestAmountDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFinalReportRequestAmountDescriptionPoint3}
+                                </li>
+                                <li>
+                                    {strings.drefFinalReportRequestAmountDescriptionPoint4}
+                                </li>
+                                <li>
+                                    {strings.drefFinalReportRequestAmountDescriptionPoint5}
+                                </li>
+                            </ul>
+                        </>
+                    )}
+
                 >
                     <NumberInput
                         name="total_dref_allocation"

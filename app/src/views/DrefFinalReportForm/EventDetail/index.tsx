@@ -202,30 +202,19 @@ function EventDetail(props: Props) {
                         disabled={disabled}
                     />
                     <NumberInput
-                        name="estimated_number_of_affected_minors"
-                        label={strings.drefFormAffectedMinorsLabel}
-                        value={value?.estimated_number_of_affected_minors}
+                        name="estimated_number_of_affected_girls_under_18"
+                        label={strings.drefFormAffectedMinorGirlsLabel}
+                        value={value?.estimated_number_of_affected_girls_under_18}
                         onChange={setFieldValue}
-                        error={error?.estimated_number_of_affected_minors}
+                        error={error?.estimated_number_of_affected_girls_under_18}
                         disabled={disabled}
                     />
                     <NumberInput
-                        label={(
-                            <>
-                                {strings.drefFormPeopleTargeted}
-                                <Link
-                                    title={strings.drefFormClickEmergencyResponseFramework}
-                                    href={peopleTargetedLink}
-                                    external
-                                >
-                                    <WikiHelpSectionLineIcon />
-                                </Link>
-                            </>
-                        )}
-                        name="number_of_people_targeted"
-                        value={value.number_of_people_targeted}
+                        name="estimated_number_of_affected_boys_under_18"
+                        label={strings.drefFormAffectedMinorBoysLabel}
+                        value={value?.estimated_number_of_affected_boys_under_18}
                         onChange={setFieldValue}
-                        error={error?.number_of_people_targeted}
+                        error={error?.estimated_number_of_affected_boys_under_18}
                         disabled={disabled}
                     />
                     <NumberInput

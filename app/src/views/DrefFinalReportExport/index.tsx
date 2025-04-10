@@ -379,30 +379,6 @@ export function Component() {
                 />
                 <TextOutput
                     className={styles.metaItem}
-                    label={strings.estimatedAffectedMale}
-                    value={drefResponse?.estimated_number_of_affected_male}
-                    valueType="number"
-                    suffix={strings.peopleSuffix}
-                    strongValue
-                />
-                <TextOutput
-                    className={styles.metaItem}
-                    label={strings.estimatedAffectedFemale}
-                    value={drefResponse?.estimated_number_of_affected_female}
-                    valueType="number"
-                    suffix={strings.peopleSuffix}
-                    strongValue
-                />
-                <TextOutput
-                    className={styles.metaItem}
-                    label={strings.estimatedAffectedMinors}
-                    value={drefResponse?.estimated_number_of_affected_minors}
-                    valueType="number"
-                    suffix={strings.peopleSuffix}
-                    strongValue
-                />
-                <TextOutput
-                    className={styles.metaItem}
                     label={strings.peopleTargetedLabel}
                     value={drefResponse?.total_targeted_population}
                     suffix={strings.peopleSuffix}

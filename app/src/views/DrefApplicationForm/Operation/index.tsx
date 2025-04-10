@@ -37,6 +37,7 @@ import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import { type GoApiResponse } from '#utils/restRequest';
+import { useRequest } from '#utils/restRequest';
 
 import {
     TYPE_ASSESSMENT,
@@ -90,6 +91,12 @@ function Operation(props: Props) {
         selectedIntervention,
         setSelectedIntervention,
     ] = useState<PlannedInterventionOption['key'] | undefined>();
+
+    const {
+        response: globalFilesResponse,
+    } = useRequest({
+        url: '/api/v2/dref/global-files/',
+    });
 
     const {
         setValue: onInterventionChange,
@@ -627,6 +634,15 @@ function Operation(props: Props) {
                         error={error?.budget_file}
                         disabled={disabled}
                         clearable
+                        description={(
+                            <Link
+                                href={globalFilesResponse?.budget_template_url}
+                                withLinkIcon
+                                external
+                            >
+                                {strings.drefFormDownloadBudgetTemplate}
+                            </Link>
+                        )}
                     >
                         {strings.drefFormBudgetTemplateUploadButtonLabel}
                     </GoSingleFileInput>
@@ -664,6 +680,9 @@ function Operation(props: Props) {
                                         </li>
                                         <li>
                                             {strings.drefFormRequestAmountDescriptionPoint4}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormRequestAmountDescriptionPoint5}
                                         </li>
                                     </ul>
                                 </>

@@ -172,7 +172,12 @@ const schema: FinalReportFormSchema = {
             },
             estimated_number_of_affected_male: { validations: [positiveIntegerCondition] },
             estimated_number_of_affected_female: { validations: [positiveIntegerCondition] },
-            estimated_number_of_affected_minors: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_girls_under_18: {
+                validations: [positiveIntegerCondition],
+            },
+            estimated_number_of_affected_boys_under_18: {
+                validations: [positiveIntegerCondition],
+            },
             people_in_need: { validations: [positiveIntegerCondition] },
             event_description: {},
             images_file: {
@@ -185,9 +190,6 @@ const schema: FinalReportFormSchema = {
                     }),
                 }),
                 validations: [lessThanEqualToTwoImagesCondition],
-            },
-            number_of_people_targeted: {
-                validations: [positiveIntegerCondition],
             },
             num_assisted: { validations: [positiveIntegerCondition] },
             // ACTIONS

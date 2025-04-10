@@ -52,11 +52,11 @@ const overviewFields: (keyof PartialOpsUpdate)[] = [
 ] satisfies (keyof PartialOpsUpdate)[];
 
 const eventDetailFields: (keyof PartialOpsUpdate)[] = [
-    'number_of_people_targeted',
     'number_of_people_affected',
     'estimated_number_of_affected_male',
     'estimated_number_of_affected_female',
-    'estimated_number_of_affected_minors',
+    'estimated_number_of_affected_girls_under_18',
+    'estimated_number_of_affected_boys_under_18',
     'people_in_need',
     'event_description',
     'event_scope',

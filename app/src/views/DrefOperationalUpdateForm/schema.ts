@@ -144,10 +144,14 @@ const schema: OpsUpdateFormSchema = {
             },
             // EVENT DETAILS
             number_of_people_affected: { validations: [positiveIntegerCondition] },
-            number_of_people_targeted: { validations: [positiveIntegerCondition] },
             estimated_number_of_affected_male: { validations: [positiveIntegerCondition] },
             estimated_number_of_affected_female: { validations: [positiveIntegerCondition] },
-            estimated_number_of_affected_minors: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_girls_under_18: {
+                validations: [positiveIntegerCondition],
+            },
+            estimated_number_of_affected_boys_under_18: {
+                validations: [positiveIntegerCondition],
+            },
 
             // none
 

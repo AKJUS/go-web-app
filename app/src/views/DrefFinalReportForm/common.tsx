@@ -48,12 +48,12 @@ const overviewFields: (keyof PartialFinalReport)[] = [
 
 const eventDetailFields: (keyof PartialFinalReport)[] = [
     'number_of_people_affected',
-    'number_of_people_targeted',
     'num_assisted',
     'people_in_need',
     'estimated_number_of_affected_male',
     'estimated_number_of_affected_female',
-    'estimated_number_of_affected_minors',
+    'estimated_number_of_affected_girls_under_18',
+    'estimated_number_of_affected_boys_under_18',
     'event_description',
     'event_scope',
     'images_file',
