@@ -54,12 +54,12 @@ export function resolveToComponent(template: string, params = emptyObject) {
         }
 
         return (
-            <>
+            <Fragment key={key}>
                 {/* And, replace with associated component */}
                 {value}
                 {/* Remove the key */}
                 {part.replace(`${key}}`, '')}
-            </>
+            </Fragment>
         );
     });
 

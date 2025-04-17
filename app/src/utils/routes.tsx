@@ -84,7 +84,7 @@ export type MyInputNonIndexRouteObject<T, K extends object> = {
     context: K;
 } & Omit<NonIndexRouteObject, OmitInputRouteObjectKeys>;
 
-export type MyInputRouteObject<T, K extends object> = (
+type MyInputRouteObject<T, K extends object> = (
     MyInputIndexRouteObject<T, K> | MyInputNonIndexRouteObject<T, K>
 );
 
@@ -104,7 +104,7 @@ export type MyOutputNonIndexRouteObject<K extends object> = {
     parent?: MyOutputRouteObject<K>;
 } & Omit<NonIndexRouteObject, OmitOutputRouteObjectKeys> & K;
 
-export type MyOutputRouteObject<K extends object> = (
+type MyOutputRouteObject<K extends object> = (
     MyOutputIndexRouteObject<K> | MyOutputNonIndexRouteObject<K>
 );
 

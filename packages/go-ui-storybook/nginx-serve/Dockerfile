@@ -1,22 +1,13 @@
 # syntax=docker/dockerfile:1-labs
 
 # -------------------------- Dev ---------------------------------------
-FROM node:20-bullseye AS dev
-
-RUN apt-get update -y \
-    && apt-get install -y --no-install-recommends \
-        git bash g++ make \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN npm install -g pnpm
+FROM node:20-bookworm AS dev
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
 WORKDIR /code
-
-RUN git config --global --add safe.directory /code
 
 # -------------------------- Nginx - Builder --------------------------------
 FROM dev AS nginx-build
@@ -26,7 +17,7 @@ COPY --parents package.json pnpm-lock.yaml pnpm-workspace.yaml ./**/package.json
 
 RUN corepack prepare --activate
 
-RUN pnpm install
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY ./packages/ui /code/packages/ui
 COPY ./packages/go-ui-storybook /code/packages/go-ui-storybook

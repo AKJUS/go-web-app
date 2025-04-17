@@ -46,7 +46,7 @@ export const WithAction: Story = {
     args: {
         heading: 'IFRC Disaster Response and Preparedness',
         actions: [
-            <TabList>
+            <TabList key="tablist">
                 <Tab name="Tab1">
                     Home
                 </Tab>

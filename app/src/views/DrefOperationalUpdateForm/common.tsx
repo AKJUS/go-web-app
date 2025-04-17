@@ -29,7 +29,7 @@ export const DISASTER_FLOOD = 12;
 
 // TAB NAVIGATION
 
-export type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
+type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
 
 // FORM ERROR
 

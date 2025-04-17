@@ -27,7 +27,7 @@ export const TYPE_LOAN = 3 satisfies TypeOfDrefEnum;
 
 // TAB NAVIGATION
 
-export type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
+type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
 
 // FORM ERROR
 

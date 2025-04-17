@@ -69,7 +69,7 @@ function CheckList<
         if (isSelected) {
             onChange([...(value ?? []), key], name);
         } else {
-            onChange([...(value ?? []).filter((v) => v !== key)], name);
+            onChange((value ?? []).filter((v) => v !== key), name);
         }
     }, [value, onChange, name]);
 

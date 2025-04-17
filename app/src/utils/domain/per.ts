@@ -45,7 +45,7 @@ export function getFormattedComponentName(component: PerComponent): string {
 
 const PER_FALLBACK_COLOR = 'var(--go-ui-color-gray-40)';
 
-export type PerRatingValue = 0 | 1 | 2 | 3 | 4 | 5;
+type PerRatingValue = 0 | 1 | 2 | 3 | 4 | 5;
 const PER_RATING_VALUE_NOT_REVIEWED = 0 satisfies PerRatingValue;
 const PER_RATING_VALUE_DOES_NOT_EXIST = 1 satisfies PerRatingValue;
 const PER_RATING_VALUE_PARTIALLY_EXISTS = 2 satisfies PerRatingValue;
@@ -72,7 +72,7 @@ export function perRatingColorSelector(item: { value: number | undefined }) {
     return getPerRatingColor(item.value);
 }
 
-export type PerAreaNumber = 1 | 2 | 3 | 4 | 5;
+type PerAreaNumber = 1 | 2 | 3 | 4 | 5;
 const PER_AREA_NUMBER_1 = 1 satisfies PerAreaNumber;
 const PER_AREA_NUMBER_2 = 2 satisfies PerAreaNumber;
 const PER_AREA_NUMBER_3 = 3 satisfies PerAreaNumber;

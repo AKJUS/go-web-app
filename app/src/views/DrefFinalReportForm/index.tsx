@@ -69,7 +69,7 @@ import styles from './styles.module.css';
 
 type GetFinalReportResponse = GoApiResponse<'/api/v2/dref-final-report/{id}/'>;
 
-export type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
+type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
 
 function getNextStep(current: TabKeys, direction: 1 | -1) {
     if (direction === 1) {
@@ -93,7 +93,7 @@ function getNextStep(current: TabKeys, direction: 1 | -1) {
     return undefined;
 }
 /** @knipignore */
-
+// eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { finalReportId } = useParams<{ finalReportId: string }>();
 

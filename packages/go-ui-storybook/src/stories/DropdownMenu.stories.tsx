@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { DropdownMenuProps } from '@ifrc-go/ui';
 import type {
     Meta,
@@ -27,12 +28,12 @@ export const Default = {
     args: {
         label: 'Select a language',
         children: [
-            <>
+            <Fragment key="language">
                 <div className="dropdown-option">English</div>
                 <div className="dropdown-option">Spanish</div>
                 <div className="dropdown-option">French</div>
                 <div className="dropdown-option">Arabic</div>
-            </>,
+            </Fragment>,
         ],
     },
 } satisfies Story;

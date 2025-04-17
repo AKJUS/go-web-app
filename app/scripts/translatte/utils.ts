@@ -80,14 +80,8 @@ export function oneOneMapping<T, K extends string | number>(
     return {
         validCommonItems,
         invalidCommonItems,
-        prevStateRemainder: [
-            ...Array.from(prevStateExclusiveKeySet).map((key) => prevStateMapping[key]),
-            // ...Array.from(invalidCommonItemsKeySet).map((key) => prevStateMapping[key]),
-        ],
-        currentStateRemainder: [
-            ...Array.from(currentStateExclusiveKeySet).map((key) => currentStateMapping[key]),
-            // ...Array.from(invalidCommonItemsKeySet).map((key) => currentStateMapping[key]),
-        ],
+        prevStateRemainder: Array.from(prevStateExclusiveKeySet).map((key) => prevStateMapping[key]),
+        currentStateRemainder: Array.from(currentStateExclusiveKeySet).map((key) => currentStateMapping[key]),
     };
 }
 
@@ -274,8 +268,8 @@ export async function readJsonFilesContents(fileNames: string[]) {
                 file: fileName,
                 content,
             };
-        } catch (e) {
-            throw `Error while parsing JSON for ${fileName}`;
+        } catch {
+            throw `Error while parsing JSON for ${fileName}}`;
         }
     });
     const contents = await Promise.all(contentsPromise);

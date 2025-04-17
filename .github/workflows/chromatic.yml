@@ -1,4 +1,4 @@
-name: 'GO UI CD'
+name: 'Chromatic'
 
 on:
   pull_request:

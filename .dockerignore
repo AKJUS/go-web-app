@@ -139,3 +139,10 @@ deploy/eb/
 
 # Helm
 .helm-charts/
+
+# Docker
+Dockerfile
+.dockerignore
+
+# git
+.gitignore

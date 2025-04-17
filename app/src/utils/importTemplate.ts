@@ -79,13 +79,13 @@ interface ObjectField<VALUE, OPTIONS_MAPPING extends TemplateFieldOptionsMapping
     },
 }
 
-export interface TemplateOptionItem<T extends ValidationType> {
+interface TemplateOptionItem<T extends ValidationType> {
     key: T;
     label: string;
     description?: string;
 }
 
-export interface TemplateFieldOptionsMapping {
+interface TemplateFieldOptionsMapping {
     [key: string]: TemplateOptionItem<string>[]
     | TemplateOptionItem<number>[]
     | TemplateOptionItem<boolean>[]
@@ -182,26 +182,23 @@ export function createImportTemplate<
     context: { field: string, key: string }[] = [],
 ): TemplateField[] {
     if (schema.type === 'object') {
-        return [
-            ...Object.keys(schema.fields).flatMap((key) => {
-                const fieldSchema = schema.fields[key as keyof typeof schema.fields];
+        return Object.keys(schema.fields).flatMap((key) => {
+            const fieldSchema = schema.fields[key as keyof typeof schema.fields];
+            if (fieldSchema) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const newFields = createImportTemplate<any, OPTIONS_MAPPING>(
+                    fieldSchema,
+                    optionsMap,
+                    getCombinedKey(key, fieldName),
+                    outlineLevel + 1,
+                    context,
+                );
 
-                if (fieldSchema) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const newFields = createImportTemplate<any, OPTIONS_MAPPING>(
-                        fieldSchema,
-                        optionsMap,
-                        getCombinedKey(key, fieldName),
-                        outlineLevel + 1,
-                        context,
-                    );
+                return newFields;
+            }
 
-                    return newFields;
-                }
-
-                return [];
-            }),
-        ];
+            return [];
+        });
     }
 
     if (isNotDefined(fieldName)) {
