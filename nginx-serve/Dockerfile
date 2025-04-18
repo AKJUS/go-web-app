@@ -42,7 +42,7 @@ ENV APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE=${APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE
 RUN pnpm build
 
 # ---------------------------------------------------------------------------
-FROM nginx:alpine AS nginx-serve
+FROM nginx:bookworm AS nginx-serve
 
 LABEL maintainer="IFRC"
 LABEL org.opencontainers.image.source="https://github.com/IFRCGo/go-web-app"
