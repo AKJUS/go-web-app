@@ -139,7 +139,7 @@ function EventItemsTable(props: Props) {
         }
 
         if (ordering === '-id') {
-            return '-created_at';
+            return '-created_at,-id';
         }
 
         if (ordering === 'created_at' || ordering === '-created_at') {

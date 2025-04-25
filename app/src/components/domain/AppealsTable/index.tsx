@@ -213,7 +213,7 @@ function AppealsTable(props: Props) {
         }
 
         if (ordering === '-id') {
-            return '-start_date';
+            return '-start_date,-id';
         }
 
         if (ordering === 'start_date' || ordering === '-start_date') {
