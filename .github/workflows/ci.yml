@@ -119,6 +119,9 @@ jobs:
         run: pnpm lint:translation
 
   translation-migrations:
+    if: |
+      (github.event_name == 'pull_request' && github.base_ref == 'develop') ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/develop')
     continue-on-error: true
     name: Identify if translation migrations need to be generated
     runs-on: ubuntu-latest
