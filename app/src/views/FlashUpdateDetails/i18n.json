@@ -1,7 +1,8 @@
 {
     "namespace": "flashUpdateDetails",
     "strings": {
-        "flashUpdateDetailsPageTitle": "IFRC GO - Flash Update Details",
+        "flashUpdateDetailsPageTitle": "IFRC GO - Flash Update - {flashUpdateName}",
+        "flashUpdatePageTitleFallback": "IFRC GO - Flash Update",
         "flashUpdateDetailsHeading": "Flash Update",
         "flashUpdateExport": "Export",
         "flashUpdateShare": "Share",
