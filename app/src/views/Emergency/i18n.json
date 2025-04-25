@@ -2,7 +2,7 @@
     "namespace": "emergency",
     "strings": {
         "emergencyPageTitle": "IFRC GO - Emergency - {emergencyName}",
-        "emergencyPageTitleFallback": "Emergency",
+        "emergencyPageTitleFallback": "IFRC GO - Emergency",
         "emergencyTabDetails":"Emergency Details",
         "emergencyTabReports":"Reports/Documents",
         "emergencyTabActivities":"Activities",

@@ -111,18 +111,15 @@ export function Component() {
 
     const countryDistricts = flashUpdateResponse?.country_district;
 
-    const pageTitle = resolveToString(
-        strings.flashUpdateDetailsPageTitle,
-        {
-            flashUpdateName: flashUpdateResponse?.title
-            ?? strings.flashUpdatePageTitleFallback,
-        },
-    );
+    const pageTitle = (isDefined(flashUpdateResponse) && isDefined(flashUpdateResponse.title))
+        ? resolveToString(
+            strings.flashUpdateDetailsPageTitle,
+            { flashUpdateName: flashUpdateResponse?.title },
+        ) : strings.flashUpdatePageTitleFallback;
 
     return (
         <Page
             title={pageTitle}
-            // title={strings.flashUpdateDetailsPageTitle}
             className={styles.flashUpdateDetails}
             heading={flashUpdateResponse?.title ?? strings.flashUpdateDetailsHeading}
             breadCrumbs={(

@@ -224,10 +224,11 @@ export function Component() {
     const showSurgeTab = (surgeAlertsResponse?.count ?? 0) > 0
         || (emergencyResponse?.active_deployments ?? 0) > 0;
 
-    const pageTitle = resolveToString(
-        strings.emergencyPageTitle,
-        { emergencyName: emergencyResponse?.name ?? strings.emergencyPageTitleFallback },
-    );
+    const pageTitle = (isDefined(emergencyResponse) && isDefined(emergencyResponse.name))
+        ? resolveToString(
+            strings.emergencyPageTitle,
+            { emergencyName: emergencyResponse.name },
+        ) : strings.emergencyPageTitleFallback;
 
     return (
         <Page
