@@ -1,5 +1,11 @@
 # @ifrc-go/ui
 
+## 1.3.1
+
+### Patch Changes
+
+- fe4b727: Update eslint
+
 ## 1.3.0
 
 ### Minor Changes

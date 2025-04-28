@@ -1,5 +1,13 @@
 # go-ui-storybook
 
+## 1.0.4
+
+### Patch Changes
+
+- fe4b727: Update eslint and use workspace protocol to reference @ifrc-go/ui
+- Updated dependencies [fe4b727]
+  - @ifrc-go/ui@1.3.1
+
 ## 1.0.3
 
 ### Patch Changes

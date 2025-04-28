@@ -1,5 +1,26 @@
 # go-web-app
 
+## 7.13.0
+
+### Minor Changes
+
+- 69fd74f: - Update page title for Emergency to include the name
+  - Update page title of Flash update to include the name
+  - Fix the user registration link in the Terms & Condition page
+- 680c673: Implement [DREF Superticket 2.0](https://github.com/IFRCGo/go-web-app/issues/1695)
+
+### Patch Changes
+
+- fe4b727: - Upgrade pnpm to v10.6.1
+  - Cleanup Dockerfile
+  - Configure depandabot to track other dependencies updates
+  - Upgrade eslint
+  - Use workspace protocol to reference workspace packages
+- 9f20016: Enable user to edit their position field in [#1647](https://github.com/IFRCGo/go-web-app/issues/1647)
+- ef15af1: Add secondary ordering in tables for rows with same date
+- Updated dependencies [fe4b727]
+  - @ifrc-go/ui@1.3.1
+
 ## 7.12.1
 
 ### Patch Changes
