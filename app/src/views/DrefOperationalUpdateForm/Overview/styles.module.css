@@ -35,4 +35,13 @@
             min-height: 3rem;
         }
     }
+
+    .warning {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--go-ui-spacing-sm);
+        padding: var(--go-ui-spacing-sm) 0;
+        color: var(--go-ui-color-warning);
+        font-weight: var(--go-ui-font-weight-semibold);
+    }
 }

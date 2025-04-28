@@ -1,9 +1,6 @@
 {
     "namespace": "drefFinalReportForm",
     "strings": {
-        "finalReportNationalSocietiesActions": "National Society Actions",
-        "finalReportHaveNationalSocietyConducted": "Have the National Society conducted any intervention additionally to those part of this DREF Operation?",
-        "finalReportDescriptionOfAdditionalActivities": "Please provide a brief description of those additional activities",
         "drefFormActionFieldsLabel": "Select the needs that apply.",
         "drefFormAssessmentReportUploadLabel": "Assessment Report (Optional)",
         "drefFormCoordinationMechanism": "Are there major coordination mechanisms in place?",
@@ -18,12 +15,13 @@
         "ifrcNetworkActionsHeading": "IFRC Network Actions Related To The Current Event",
         "icrcActionsHeading": "ICRC Actions Related To The Current Event",
         "drefFormNationalAuthorities": "National authorities",
+        "drefFormNationalAuthoritiesDescription": "Brief description of actions taken by the national authorities.",
         "drefFormNationalOtherActors": "Other Actors Actions Related To The Current Event",
-        "drefFormNationalSocietiesActionsDescription": "Please indicate a description of the ongoing response with if possible: Branches involved, number of volunteers/staff involved in actions, assets deployed/distributed, number of people reach. Impact/added value of the NS in the response already ongoing.",
         "drefFormNeedsIdentified": "Needs (Gaps) Identified",
         "drefFormPartnerNationalSociety": "Participating National Societies",
         "drefFormPartnerNationalSocietyDescription": "Briefly set out which PNS are present and give details of PNS contributions/roles on the ground and remotely for this specific operation",
         "drefFormUNorOtherActors": "UN or other actors",
+        "drefFormUNorOtherActorsDescription": "Brief description of actions taken by the UN or other actors.",
         "drefFormAddButton": "Add"
     }
 }

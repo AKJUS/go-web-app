@@ -5,10 +5,7 @@ import {
     useState,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-    DownloadTwoLineIcon,
-    ShareLineIcon,
-} from '@ifrc-go/icons';
+import { DownloadTwoLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     Message,
@@ -35,18 +32,15 @@ import {
 
 import { type DistrictItem } from '#components/domain/DistrictSearchMultiSelectInput';
 import DrefExportModal from '#components/domain/DrefExportModal';
-import DrefShareModal from '#components/domain/DrefShareModal';
 import { type FieldReportItem as FieldReportSearchItem } from '#components/domain/FieldReportSearchSelectInput';
 import FormFailedToLoadMessage from '#components/domain/FormFailedToLoadMessage';
 import LanguageMismatchMessage from '#components/domain/LanguageMismatchMessage';
 import NonEnglishFormCreationMessage from '#components/domain/NonEnglishFormCreationMessage';
-import { type User } from '#components/domain/UserSearchMultiSelectInput';
 import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
 import Page from '#components/Page';
 import useCurrentLanguage from '#hooks/domain/useCurrentLanguage';
 import useAlert from '#hooks/useAlert';
-import useInputState from '#hooks/useInputState';
 import useRouting from '#hooks/useRouting';
 import {
     type GoApiResponse,
@@ -132,7 +126,6 @@ export function Component() {
 
     const [activeTab, setActiveTab] = useState<TabKeys>('overview');
     const [fileIdToUrlMap, setFileIdToUrlMap] = useState<Record<number, string>>({});
-    const [drefUsers, setDrefUsers] = useInputState<User[] | undefined | null>([]);
     const currentLanguage = useCurrentLanguage();
 
     const [
@@ -140,10 +133,6 @@ export function Component() {
         setShowObsoletePayloadModal,
     ] = useState(false);
 
-    const [showShareModal, {
-        setTrue: setShowShareModalTrue,
-        setFalse: setShowShareModalFalse,
-    }] = useBooleanState(false);
     const [showExportModal, {
         setTrue: setShowExportModalTrue,
         setFalse: setShowExportModalFalse,
@@ -475,17 +464,6 @@ export function Component() {
         },
     });
 
-    const {
-        retrigger: getDrefUsers,
-    } = useRequest({
-        skip: isNotDefined(drefId),
-        url: '/api/v2/dref-share-user/{id}/',
-        pathVariables: { id: Number(drefId) },
-        onSuccess: (response) => {
-            setDrefUsers(response.users_details);
-        },
-    });
-
     const handleFormSubmit = useCallback(
         (modifiedAt?: string) => {
             formContentRef.current?.scrollIntoView();
@@ -525,14 +503,6 @@ export function Component() {
         formContentRef.current?.scrollIntoView();
         setActiveTab(newTab);
     }, []);
-
-    const handleUserShareSuccess = useCallback(() => {
-        setShowShareModalFalse();
-        getDrefUsers();
-    }, [
-        getDrefUsers,
-        setShowShareModalFalse,
-    ]);
 
     const nextStep = getNextStep(activeTab, 1, value.type_of_dref);
     const prevStep = getNextStep(activeTab, -1, value.type_of_dref);
@@ -580,24 +550,14 @@ export function Component() {
                             />
                         )}
                         {isDefined(drefId) && (
-                            <>
-                                <Button
-                                    name={undefined}
-                                    onClick={setShowShareModalTrue}
-                                    variant="secondary"
-                                    icons={<ShareLineIcon />}
-                                >
-                                    {strings.formShareButtonLabel}
-                                </Button>
-                                <Button
-                                    name={undefined}
-                                    onClick={setShowExportModalTrue}
-                                    icons={<DownloadTwoLineIcon />}
-                                    variant="secondary"
-                                >
-                                    {strings.formExportLabel}
-                                </Button>
-                            </>
+                            <Button
+                                name={undefined}
+                                onClick={setShowExportModalTrue}
+                                icons={<DownloadTwoLineIcon />}
+                                variant="secondary"
+                            >
+                                {strings.formExportLabel}
+                            </Button>
                         )}
                         <Button
                             name={undefined}
@@ -695,7 +655,6 @@ export function Component() {
                                 setDistrictOptions={setDistrictOptions}
                                 fieldReportOptions={fieldReportOptions}
                                 setFieldReportOptions={setFieldReportOptions}
-                                drefUsers={drefUsers}
                             />
                         </TabPanel>
                         <TabPanel name="eventDetail">
@@ -746,14 +705,23 @@ export function Component() {
                                 >
                                     {strings.formBackButtonLabel}
                                 </Button>
-                                <Button
-                                    name={nextStep ?? activeTab}
-                                    onClick={handleTabChange}
-                                    disabled={isNotDefined(nextStep)}
-                                    variant="secondary"
-                                >
-                                    {strings.formContinueButtonLabel}
-                                </Button>
+                                {isDefined(nextStep) ? (
+                                    <Button
+                                        name={nextStep ?? activeTab}
+                                        onClick={handleTabChange}
+                                        variant="secondary"
+                                    >
+                                        {strings.formContinueButtonLabel}
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        name={undefined}
+                                        onClick={handleFormSubmit}
+                                        disabled={disabled}
+                                    >
+                                        {strings.formSaveButtonLabel}
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </>
@@ -763,13 +731,6 @@ export function Component() {
                         drefId={+drefId}
                         onOverwriteButtonClick={handleObsoletePayloadOverwriteButtonClick}
                         onCancelButtonClick={setShowObsoletePayloadModal}
-                    />
-                )}
-                {showShareModal && isDefined(drefId) && (
-                    <DrefShareModal
-                        onCancel={setShowShareModalFalse}
-                        onSuccess={handleUserShareSuccess}
-                        drefId={Number(drefId)}
                     />
                 )}
                 {showExportModal && (

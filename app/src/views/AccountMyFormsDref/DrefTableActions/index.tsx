@@ -136,7 +136,6 @@ function DrefTableActions(props: Props) {
                     // FIXME: can't compare imminent with Imminent Crisis directly
                         ? 'Imminent Crisis'
                         : response?.type_of_onset_display,
-                noOfPeopleTargeted: response?.number_of_people_targeted,
                 nsRequestDate: response?.ns_request_date,
                 disasterStartDate: response?.event_date,
                 implementationPeriod: response?.total_operation_timeframe,

@@ -186,22 +186,35 @@ function EventDetail(props: Props) {
                         disabled={disabled}
                     />
                     <NumberInput
-                        label={(
-                            <>
-                                {strings.drefFormPeopleTargeted}
-                                <Link
-                                    title={strings.drefFormClickEmergencyResponseFramework}
-                                    href={peopleTargetedLink}
-                                    external
-                                >
-                                    <WikiHelpSectionLineIcon />
-                                </Link>
-                            </>
-                        )}
-                        name="number_of_people_targeted"
-                        value={value.number_of_people_targeted}
+                        name="estimated_number_of_affected_male"
+                        label={strings.drefFormAffectedMaleLabel}
+                        value={value?.estimated_number_of_affected_male}
                         onChange={setFieldValue}
-                        error={error?.number_of_people_targeted}
+                        error={error?.estimated_number_of_affected_male}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_female"
+                        label={strings.drefFormAffectedFemaleLabel}
+                        value={value?.estimated_number_of_affected_female}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_female}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_girls_under_18"
+                        label={strings.drefFormAffectedMinorGirlsLabel}
+                        value={value?.estimated_number_of_affected_girls_under_18}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_girls_under_18}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_boys_under_18"
+                        label={strings.drefFormAffectedMinorBoysLabel}
+                        value={value?.estimated_number_of_affected_boys_under_18}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_boys_under_18}
                         disabled={disabled}
                     />
                     <NumberInput
@@ -233,6 +246,24 @@ function EventDetail(props: Props) {
                             ? strings.drefFormWhatWhereWhen
                             : strings.drefFormImminentDisaster
                     }
+                    description={value.type_of_dref !== TYPE_IMMINENT && (
+                        <>
+                            <p>
+                                {strings.drefFormWhatWhereWhenDescriptionHeading}
+                            </p>
+                            <ol>
+                                <li>
+                                    {strings.drefFormWhatWhereWhenDescriptionPoint1}
+                                </li>
+                                <li>
+                                    {strings.drefFormWhatWhereWhenDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFormWhatWhereWhenDescriptionPoint3}
+                                </li>
+                            </ol>
+                        </>
+                    )}
                 >
                     <TextArea
                         name="event_description"

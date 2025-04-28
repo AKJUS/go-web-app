@@ -32,16 +32,12 @@ type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submissio
 // FORM ERROR
 
 const overviewFields: (keyof PartialFinalReport)[] = [
-    'number_of_people_affected',
-    'number_of_people_targeted',
-    'num_assisted',
     'total_dref_allocation',
     'main_donors',
     'title',
     'national_society',
     'country',
     'district',
-    'people_in_need',
     'disaster_type',
     'type_of_onset',
     'disaster_category',
@@ -51,9 +47,17 @@ const overviewFields: (keyof PartialFinalReport)[] = [
 ] satisfies (keyof PartialFinalReport)[];
 
 const eventDetailFields: (keyof PartialFinalReport)[] = [
+    'number_of_people_affected',
+    'num_assisted',
+    'people_in_need',
+    'estimated_number_of_affected_male',
+    'estimated_number_of_affected_female',
+    'estimated_number_of_affected_girls_under_18',
+    'estimated_number_of_affected_boys_under_18',
     'event_description',
     'event_scope',
     'images_file',
+    'source_information',
     'event_date',
     'event_text',
 ] satisfies (keyof PartialFinalReport)[];
@@ -126,6 +130,11 @@ const submissionFields: (keyof PartialFinalReport)[] = [
     'media_contact_name',
     'media_contact_email',
     'media_contact_phone_number',
+    'national_society_integrity_contact_name',
+    'national_society_integrity_contact_title',
+    'national_society_integrity_contact_email',
+    'national_society_integrity_contact_phone_number',
+    'national_society_hotline_phone_number',
     'media_contact_title',
 ] satisfies (keyof PartialFinalReport)[];
 

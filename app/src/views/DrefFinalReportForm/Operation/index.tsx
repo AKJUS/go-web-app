@@ -16,6 +16,7 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    resolveToComponent,
     stringValueSelector,
     sumSafe,
 } from '@ifrc-go/ui/utils';
@@ -196,6 +197,7 @@ function Operation(props: Props) {
             >
                 <InputSection
                     title={strings.drefFormObjectiveOperation}
+                    description={strings.drefFormObjectiveOperationDescription}
                 >
                     <TextArea
                         name="operation_objective"
@@ -208,8 +210,32 @@ function Operation(props: Props) {
                 </InputSection>
                 <InputSection
                     title={strings.drefFormResponseRationale}
-                    description={value?.type_of_dref === TYPE_ASSESSMENT
-                        && strings.drefFormResponseRationaleDescription}
+                    description={(
+                        <>
+                            <p>
+                                {strings.drefFormResponseRationaleDescription}
+                            </p>
+                            <ul>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint1}
+                                </li>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint3}
+                                </li>
+                                <li>
+                                    {strings.drefFormResponseRationaleDescriptionPoint4}
+                                </li>
+                                {value?.type_of_dref === TYPE_ASSESSMENT && (
+                                    <li>
+                                        {strings.drefFormResponseRationaleForAssessment}
+                                    </li>
+                                )}
+                            </ul>
+                        </>
+                    )}
                 >
                     <TextArea
                         name="response_strategy"
@@ -402,9 +428,100 @@ function Operation(props: Props) {
                 heading={strings.drefFormRiskSecurity}
             >
                 <InputSection
+                    title={strings.drefFormRiskDoesNSHaveAntiFraudPolicy}
+                >
+                    <BooleanInput
+                        name="has_anti_fraud_corruption_policy"
+                        value={value.has_anti_fraud_corruption_policy}
+                        onChange={setFieldValue}
+                        error={error?.has_anti_fraud_corruption_policy}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                <InputSection
+                    title={strings.drefFormRiskDoesNSHaveSexualAbusePolicy}
+                >
+                    <BooleanInput
+                        name="has_sexual_abuse_policy"
+                        value={value.has_sexual_abuse_policy}
+                        onChange={setFieldValue}
+                        error={error?.has_sexual_abuse_policy}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                <InputSection
+                    title={strings.drefFormRiskDoesNSHaveChildProtectionPolicy}
+                >
+                    <BooleanInput
+                        name="has_child_protection_policy"
+                        value={value.has_child_protection_policy}
+                        onChange={setFieldValue}
+                        error={error?.has_child_protection_policy}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                <InputSection
+                    title={strings.drefFormRiskDoesNSHaveWhistleblowerPolicy}
+                >
+                    <BooleanInput
+                        name="has_whistleblower_protection_policy"
+                        value={value.has_whistleblower_protection_policy}
+                        onChange={setFieldValue}
+                        error={error?.has_whistleblower_protection_policy}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                <InputSection
+                    title={strings.drefFormRiskDoesNSHaveAntiSexualHarassmentPolicy}
+                >
+                    <BooleanInput
+                        name="has_anti_sexual_harassment_policy"
+                        value={value.has_anti_sexual_harassment_policy}
+                        onChange={setFieldValue}
+                        error={error?.has_anti_sexual_harassment_policy}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                <InputSection
                     title={strings.drefFormRiskSecurityPotentialRisk}
-                    description={value?.type_of_dref === TYPE_ASSESSMENT
-                        && strings.drefFormRiskSecurityPotentialRiskDescription}
+                    description={(
+                        <>
+                            {value?.type_of_dref === TYPE_ASSESSMENT
+                                && strings.drefFormRiskSecurityPotentialRiskAssessmentDescription}
+                            {strings.drefFormRiskSecurityPotentialRiskDescription}
+                            <Link
+                                href="https://github.com/user-attachments/files/18903662/Annex.III.Risk.Categories.1.pdf"
+                                withLinkIcon
+                                external
+                            >
+                                {strings.drefFormRiskSecurityRiskCategoriesLinkLabel}
+                            </Link>
+                            {(value.risk_security?.length ?? 0) > 0 && (
+                                <>
+                                    <p>
+                                        {strings.drefFormRiskSecurityRiskSelectedDescription}
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            {strings.drefFormRiskSecurityRiskSelectedPoint1}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormRiskSecurityRiskSelectedPoint2}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormRiskSecurityRiskSelectedPoint3}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormRiskSecurityRiskSelectedPoint4}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormRiskSecurityRiskSelectedPoint5}
+                                        </li>
+                                    </ul>
+                                </>
+                            )}
+                        </>
+                    )}
                 >
                     <NonFieldError error={getErrorObject(error?.risk_security)} />
                     {value.risk_security?.map((rs, i) => (
@@ -431,6 +548,24 @@ function Operation(props: Props) {
                 </InputSection>
                 <InputSection
                     title={strings.drefFormRiskSecuritySafetyConcern}
+                    description={(
+                        <>
+                            <p>
+                                {strings.drefFormRiskSecuritySafetyConcernDescription}
+                            </p>
+                            <ul>
+                                <li>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint1}
+                                </li>
+                                <li>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint3}
+                                </li>
+                            </ul>
+                        </>
+                    )}
                 >
                     <TextArea
                         name="risk_security_concern"
@@ -476,6 +611,42 @@ function Operation(props: Props) {
             >
                 <InputSection
                     title={strings.finalReportTotalAllocation}
+                    description={(
+                        <>
+                            {strings.drefFinalReportRequestAmountDescription}
+                            <ul>
+                                <li>
+                                    {resolveToComponent(
+                                        strings.drefFinalReportRequestAmountDescriptionPoint1,
+                                        {
+                                            indicatorDatabankLink: (
+                                                <Link
+                                                    href="https://github.com/user-attachments/files/18903662/Annex.III.Risk.Categories.1.pdf"
+                                                    withLinkIcon
+                                                    external
+                                                >
+                                                    {strings.drefIndicatorDataLinkLabel}
+                                                </Link>
+                                            ),
+                                        },
+                                    )}
+                                </li>
+                                <li>
+                                    {strings.drefFinalReportRequestAmountDescriptionPoint2}
+                                </li>
+                                <li>
+                                    {strings.drefFinalReportRequestAmountDescriptionPoint3}
+                                </li>
+                                <li>
+                                    {strings.drefFinalReportRequestAmountDescriptionPoint4}
+                                </li>
+                                <li>
+                                    {strings.drefFinalReportRequestAmountDescriptionPoint5}
+                                </li>
+                            </ul>
+                        </>
+                    )}
+
                 >
                     <NumberInput
                         name="total_dref_allocation"

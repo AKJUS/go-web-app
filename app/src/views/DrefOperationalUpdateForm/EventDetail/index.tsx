@@ -1,5 +1,8 @@
 import { useCallback } from 'react';
-import { WikiHelpSectionLineIcon } from '@ifrc-go/icons';
+import {
+    ErrorWarningFillIcon,
+    WikiHelpSectionLineIcon,
+} from '@ifrc-go/icons';
 import {
     BooleanInput,
     Button,
@@ -44,11 +47,14 @@ interface Props {
     fileIdToUrlMap: Record<number, string>;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     disabled?: boolean;
+    operationTimeframeWarning: string | undefined;
+    budgetWarning: string | undefined;
+    geoWarning: string | undefined;
+    peopleTargetedWarning: string | undefined;
 }
 
 const totalPopulationRiskImminentLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
 const totalPeopleAffectedSlowSuddenLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
-const peopleTargetedLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
 const peopleInNeedLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
 
 function EventDetail(props: Props) {
@@ -61,6 +67,10 @@ function EventDetail(props: Props) {
         fileIdToUrlMap,
         setFileIdToUrlMap,
         disabled,
+        operationTimeframeWarning,
+        budgetWarning,
+        geoWarning,
+        peopleTargetedWarning,
     } = props;
 
     const error = getErrorObject(formError);
@@ -95,13 +105,21 @@ function EventDetail(props: Props) {
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryAreYouChangingTimeFrame}
                     >
-                        <BooleanInput
-                            name="changing_timeframe_operation"
-                            value={value.changing_timeframe_operation}
-                            onChange={setFieldValue}
-                            error={error?.changing_timeframe_operation}
-                            disabled={disabled}
-                        />
+                        <div>
+                            <BooleanInput
+                                name="changing_timeframe_operation"
+                                value={value.changing_timeframe_operation}
+                                onChange={setFieldValue}
+                                error={error?.changing_timeframe_operation}
+                                disabled={disabled}
+                            />
+                            {operationTimeframeWarning && (
+                                <div className={styles.warning}>
+                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    {operationTimeframeWarning}
+                                </div>
+                            )}
+                        </div>
                     </InputSection>
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryAreYouChangingStrategy}
@@ -117,36 +135,60 @@ function EventDetail(props: Props) {
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryAreYouChangingTargetPopulation}
                     >
-                        <BooleanInput
-                            name="changing_target_population_of_operation"
-                            value={value.changing_target_population_of_operation}
-                            onChange={setFieldValue}
-                            error={error?.changing_target_population_of_operation}
-                            disabled={disabled}
-                        />
+                        <div>
+                            <BooleanInput
+                                name="changing_target_population_of_operation"
+                                value={value.changing_target_population_of_operation}
+                                onChange={setFieldValue}
+                                error={error?.changing_target_population_of_operation}
+                                disabled={disabled}
+                            />
+                            {peopleTargetedWarning && (
+                                <div className={styles.warning}>
+                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    {peopleTargetedWarning}
+                                </div>
+                            )}
+                        </div>
                     </InputSection>
                     <InputSection
                         // eslint-disable-next-line max-len
                         title={strings.drefOperationalUpdateSummaryAreYouChangingGeographicalLocation}
                     >
-                        <BooleanInput
-                            name="changing_geographic_location"
-                            value={value.changing_geographic_location}
-                            onChange={setFieldValue}
-                            error={error?.changing_geographic_location}
-                            disabled={disabled}
-                        />
+                        <div>
+                            <BooleanInput
+                                name="changing_geographic_location"
+                                value={value.changing_geographic_location}
+                                onChange={setFieldValue}
+                                error={error?.changing_geographic_location}
+                                disabled={disabled}
+                            />
+                            {geoWarning && (
+                                <div className={styles.warning}>
+                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    {geoWarning}
+                                </div>
+                            )}
+                        </div>
                     </InputSection>
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryAreYouChangingBudget}
                     >
-                        <BooleanInput
-                            name="changing_budget"
-                            value={value.changing_budget}
-                            onChange={setFieldValue}
-                            error={error?.changing_budget}
-                            disabled={disabled}
-                        />
+                        <div>
+                            <BooleanInput
+                                name="changing_budget"
+                                value={value.changing_budget}
+                                onChange={setFieldValue}
+                                error={error?.changing_budget}
+                                disabled={disabled}
+                            />
+                            {budgetWarning && (
+                                <div className={styles.warning}>
+                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    {budgetWarning}
+                                </div>
+                            )}
+                        </div>
                     </InputSection>
                     <InputSection
                         title={strings.drefOperationalUpdateSummaryRequestForSecondAllocation}
@@ -159,19 +201,7 @@ function EventDetail(props: Props) {
                             disabled={disabled}
                         />
                     </InputSection>
-                    <InputSection
-                        title={strings.drefOperationalUpdateEventMaterialize}
-                    >
-                        <BooleanInput
-                            name="has_forecasted_event_materialize"
-                            value={value.has_forecasted_event_materialize}
-                            onChange={setFieldValue}
-                            error={error?.has_forecasted_event_materialize}
-                            disabled={disabled}
-                        />
-                    </InputSection>
-                    {/* eslint-disable-next-line max-len */}
-                    {value.type_of_dref === TYPE_IMMINENT && value.has_forecasted_event_materialize && (
+                    {value.type_of_dref === TYPE_IMMINENT && (
                         <InputSection
                             title={strings.drefOperationalUpdateEventMaterializeExplain}
                             // eslint-disable-next-line max-len
@@ -302,23 +332,35 @@ function EventDetail(props: Props) {
                         />
                     )}
                     <NumberInput
-                        label={(
-                            <>
-                                {strings.drefFormPeopleTargeted}
-                                <Link
-                                    title={strings.drefFormClickEmergencyResponseFramework}
-                                    href={peopleTargetedLink}
-                                    external
-                                >
-                                    <WikiHelpSectionLineIcon />
-                                </Link>
-                            </>
-                        )}
-                        name="number_of_people_targeted"
-                        value={value?.number_of_people_targeted}
+                        name="estimated_number_of_affected_male"
+                        label={strings.drefFormAffectedMaleLabel}
+                        value={value?.estimated_number_of_affected_male}
                         onChange={setFieldValue}
-                        error={error?.number_of_people_targeted}
-                        hint={strings.drefFormPeopleTargetedDescription}
+                        error={error?.estimated_number_of_affected_male}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_female"
+                        label={strings.drefFormAffectedFemaleLabel}
+                        value={value?.estimated_number_of_affected_female}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_female}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_girls_under_18"
+                        label={strings.drefFormAffectedMinorGirlsLabel}
+                        value={value?.estimated_number_of_affected_girls_under_18}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_girls_under_18}
+                        disabled={disabled}
+                    />
+                    <NumberInput
+                        name="estimated_number_of_affected_boys_under_18"
+                        label={strings.drefFormAffectedMinorBoysLabel}
+                        value={value?.estimated_number_of_affected_boys_under_18}
+                        onChange={setFieldValue}
+                        error={error?.estimated_number_of_affected_boys_under_18}
                         disabled={disabled}
                     />
                     {/* NOTE: Empty div to preserve the layout */}
@@ -331,6 +373,24 @@ function EventDetail(props: Props) {
                                 ? strings.drefFormWhatWhereWhen
                                 : strings.drefFormImminentDisaster
                         }
+                        description={value.type_of_dref !== TYPE_IMMINENT && (
+                            <>
+                                <p>
+                                    {strings.drefFormWhatWhereWhenDescriptionHeading}
+                                </p>
+                                <ol>
+                                    <li>
+                                        {strings.drefFormWhatWhereWhenDescriptionPoint1}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormWhatWhereWhenDescriptionPoint2}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormWhatWhereWhenDescriptionPoint3}
+                                    </li>
+                                </ol>
+                            </>
+                        )}
                     >
                         <TextArea
                             name="event_description"

@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { ErrorWarningFillIcon } from '@ifrc-go/icons';
 import {
     Container,
     DateInput,
@@ -31,6 +32,7 @@ interface Props {
     setFieldValue: (...entries: EntriesAsList<Value>) => void;
     error: Error<Value> | undefined;
     disabled?: boolean;
+    operationTimeframeWarning: string | undefined;
 }
 
 function Submission(props: Props) {
@@ -39,6 +41,7 @@ function Submission(props: Props) {
         setFieldValue,
         value,
         disabled,
+        operationTimeframeWarning,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -104,14 +107,22 @@ function Submission(props: Props) {
                             disabled={disabled}
                         />
                     )}
-                    <NumberInput
-                        label={strings.drefOperationalUpdateTimeFrameTotalOperatingTimeFrame}
-                        name="total_operation_timeframe"
-                        value={value.total_operation_timeframe}
-                        onChange={handleTotalOperationTimeframeChange}
-                        error={error?.total_operation_timeframe}
-                        disabled={disabled}
-                    />
+                    <div>
+                        <NumberInput
+                            label={strings.drefOperationalUpdateTimeFrameTotalOperatingTimeFrame}
+                            name="total_operation_timeframe"
+                            value={value.total_operation_timeframe}
+                            onChange={handleTotalOperationTimeframeChange}
+                            error={error?.total_operation_timeframe}
+                            disabled={disabled}
+                        />
+                        {operationTimeframeWarning && (
+                            <div className={styles.warning}>
+                                <ErrorWarningFillIcon className={styles.icon} />
+                                {operationTimeframeWarning}
+                            </div>
+                        )}
+                    </div>
                     {value.type_of_dref !== TYPE_LOAN && (
                         <DateInput
                             label={strings.drefOperationalUpdateTimeFrameExtensionRequestedIfYes}
@@ -417,6 +428,56 @@ function Submission(props: Props) {
                         />
                     </InputSection>
                 )}
+                <InputSection
+                    title={strings.drefFormNationalSocietyIntegrityTitle}
+                    numPreferredColumns={2}
+                >
+                    <TextInput
+                        label={strings.drefFormIntegrityContactNameLabel}
+                        name="national_society_integrity_contact_name"
+                        value={value.national_society_integrity_contact_name}
+                        onChange={setFieldValue}
+                        error={error?.national_society_integrity_contact_name}
+                        disabled={disabled}
+                    />
+                    <TextInput
+                        label={strings.drefFormIntegrityContactEmailLabel}
+                        name="national_society_integrity_contact_email"
+                        value={value.national_society_integrity_contact_email}
+                        onChange={setFieldValue}
+                        error={error?.national_society_integrity_contact_email}
+                        disabled={disabled}
+                    />
+                    <TextInput
+                        label={strings.drefFormIntegrityContactTitleLabel}
+                        name="national_society_integrity_contact_title"
+                        value={value.national_society_integrity_contact_title}
+                        onChange={setFieldValue}
+                        error={error?.national_society_integrity_contact_title}
+                        disabled={disabled}
+                    />
+                    <TextInput
+                        label={strings.drefFormIntegrityContactPhoneNumberLabel}
+                        name="national_society_integrity_contact_phone_number"
+                        value={value.national_society_integrity_contact_phone_number}
+                        onChange={setFieldValue}
+                        error={error?.national_society_integrity_contact_phone_number}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                <InputSection
+                    title={strings.drefFormNationalSocietyHotlineNumberTitle}
+                    numPreferredColumns={2}
+                >
+                    <TextInput
+                        label={strings.drefFormNationalSocietyHotlineNumberLabel}
+                        name="national_society_hotline_phone_number"
+                        value={value.national_society_hotline_phone_number}
+                        onChange={setFieldValue}
+                        error={error?.national_society_hotline_phone_number}
+                        disabled={disabled}
+                    />
+                </InputSection>
             </Container>
         </div>
     );

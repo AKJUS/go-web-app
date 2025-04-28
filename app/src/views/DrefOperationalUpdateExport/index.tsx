@@ -208,8 +208,7 @@ export function Component() {
         || isDefined(drefResponse?.changing_budget)
         || isDefined(drefResponse?.changing_operation_strategy)
         || isDefined(drefResponse?.changing_target_population_of_operation)
-        || isDefined(drefResponse?.request_for_second_allocation)
-        || isDefined(drefResponse?.has_forecasted_event_materialize);
+        || isDefined(drefResponse?.request_for_second_allocation);
 
     const nsActionImagesDefined = isDefined(drefResponse)
         && drefResponse.photos_file
@@ -258,8 +257,22 @@ export function Component() {
     const hasChildrenSafeguardingDefined = isDefined(
         drefResponse?.has_child_safeguarding_risk_analysis_assessment,
     );
+    const hasAntiFraudPolicy = isDefined(drefResponse?.has_anti_fraud_corruption_policy);
+    const hasSexualAbusePolicy = isDefined(drefResponse?.has_sexual_abuse_policy);
+    const hasChildProtectionPolicy = isDefined(drefResponse?.has_child_protection_policy);
+    const hasWhistleblowerProtectionPolicy = isDefined(
+        drefResponse?.has_whistleblower_protection_policy,
+    );
+    const hasAntiSexualHarassmentPolicy = isDefined(
+        drefResponse?.has_anti_sexual_harassment_policy,
+    );
     const showRiskAndSecuritySection = riskSecurityDefined
         || riskSecurityConcernDefined
+        || hasAntiFraudPolicy
+        || hasSexualAbusePolicy
+        || hasChildProtectionPolicy
+        || hasWhistleblowerProtectionPolicy
+        || hasAntiSexualHarassmentPolicy
         || hasChildrenSafeguardingDefined;
 
     const plannedInterventionDefined = isDefined(drefResponse)
@@ -267,6 +280,9 @@ export function Component() {
         && drefResponse.planned_interventions.length > 0;
 
     const humanResourceDefined = isTruthyString(drefResponse?.human_resource?.trim());
+    const isVolunteerTeamDiverseDefined = isTruthyString(
+        drefResponse?.is_volunteer_team_diverse?.trim(),
+    );
     const surgePersonnelDeployedDefined = isTruthyString(
         drefResponse?.surge_personnel_deployed?.trim(),
     );
@@ -318,11 +334,26 @@ export function Component() {
         drefResponse?.media_contact_phone_number,
     ].filter(isTruthyString).join(', ');
     const mediaContactDefined = isTruthyString(mediaContactText);
+    const nationalSocietyIntegrityContactText = [
+        drefResponse?.national_society_integrity_contact_name,
+        drefResponse?.national_society_integrity_contact_title,
+        drefResponse?.national_society_integrity_contact_email,
+        drefResponse?.national_society_integrity_contact_phone_number,
+    ].filter(isTruthyString).join(', ');
+    const nationalSocietyIntegrityContactDefined = isTruthyString(
+        nationalSocietyIntegrityContactText,
+    );
+    const nationalSocietyHotlineDefined = isTruthyString(
+        drefResponse?.national_society_hotline_phone_number,
+    );
+
     const showContactsSection = nsContactDefined
         || appealManagerContactDefined
         || projectManagerContactDefined
         || focalPointContactDefined
-        || mediaContactDefined;
+        || mediaContactDefined
+        || nationalSocietyIntegrityContactDefined
+        || nationalSocietyHotlineDefined;
 
     return (
         <div className={styles.drefOperationalUpdateExport}>
@@ -613,12 +644,6 @@ export function Component() {
                     <BlockTextOutput
                         label={strings.secondAllocationLabel}
                         value={drefResponse?.request_for_second_allocation}
-                        valueType="boolean"
-                        strongValue
-                    />
-                    <BlockTextOutput
-                        label={strings.eventMaterializedLabel}
-                        value={drefResponse?.has_forecasted_event_materialize}
                         valueType="boolean"
                         strongValue
                     />
@@ -928,6 +953,56 @@ export function Component() {
                     <Heading level={2}>
                         {strings.riskAndSecuritySectionHeading}
                     </Heading>
+                    {hasAntiFraudPolicy && (
+                        <Container>
+                            <BlockTextOutput
+                                label={strings.hasAntiFraudPolicy}
+                                value={drefResponse?.has_anti_fraud_corruption_policy}
+                                valueType="boolean"
+                                strongLabel
+                            />
+                        </Container>
+                    )}
+                    {hasSexualAbusePolicy && (
+                        <Container>
+                            <BlockTextOutput
+                                label={strings.hasSexualAbusePolicy}
+                                value={drefResponse?.has_sexual_abuse_policy}
+                                valueType="boolean"
+                                strongLabel
+                            />
+                        </Container>
+                    )}
+                    {hasChildProtectionPolicy && (
+                        <Container>
+                            <BlockTextOutput
+                                label={strings.hasChildProtectionPolicy}
+                                value={drefResponse?.has_child_protection_policy}
+                                valueType="boolean"
+                                strongLabel
+                            />
+                        </Container>
+                    )}
+                    {hasWhistleblowerProtectionPolicy && (
+                        <Container>
+                            <BlockTextOutput
+                                label={strings.hasWhistleblowerProtectionPolicy}
+                                value={drefResponse?.has_whistleblower_protection_policy}
+                                valueType="boolean"
+                                strongLabel
+                            />
+                        </Container>
+                    )}
+                    {hasAntiSexualHarassmentPolicy && (
+                        <Container>
+                            <BlockTextOutput
+                                label={strings.hasAntiSexualHarassmentPolicy}
+                                value={drefResponse?.has_anti_sexual_harassment_policy}
+                                valueType="boolean"
+                                strongLabel
+                            />
+                        </Container>
+                    )}
                     {riskSecurityDefined && (
                         <Container
                             heading={strings.riskSecurityHeading}
@@ -1073,6 +1148,15 @@ export function Component() {
                             </DescriptionText>
                         </Container>
                     )}
+                    {isVolunteerTeamDiverseDefined && (
+                        <Container
+                            heading={strings.isVolunteerTeamDiverseHeading}
+                        >
+                            <DescriptionText>
+                                {drefResponse?.is_volunteer_team_diverse}
+                            </DescriptionText>
+                        </Container>
+                    )}
                     {surgePersonnelDeployedDefined && (
                         <Container
                             heading={strings.surgePersonnelDeployedHeading}
@@ -1179,6 +1263,22 @@ export function Component() {
                                 labelClassName={styles.contactPersonLabel}
                                 label={strings.mediaContactHeading}
                                 value={mediaContactText}
+                                strongLabel
+                            />
+                        )}
+                        {nationalSocietyIntegrityContactDefined && (
+                            <TextOutput
+                                labelClassName={styles.contactPersonLabel}
+                                label={strings.nationalSocietyIntegrityHeading}
+                                value={nationalSocietyIntegrityContactText}
+                                strongLabel
+                            />
+                        )}
+                        {nationalSocietyHotlineDefined && (
+                            <TextOutput
+                                labelClassName={styles.contactPersonLabel}
+                                label={strings.nationalSocietyHotlineHeading}
+                                value={drefResponse?.national_society_hotline_phone_number}
                                 strongLabel
                             />
                         )}

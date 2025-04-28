@@ -24,6 +24,13 @@
         "drefFormSubmissionNameLabel": "Name",
         "drefFormSubmissionTitleLabel": "Title",
         "drefFromSubmissionEmailLabel": "Email",
+        "drefFormNationalSocietyIntegrityTitle": "National Societies' Integrity Focal Point",
+        "drefFormIntegrityContactNameLabel": "Name",
+        "drefFormIntegrityContactEmailLabel": "Email",
+        "drefFormIntegrityContactTitleLabel": "Title",
+        "drefFormIntegrityContactPhoneNumberLabel": "Phone Number",
+        "drefFormNationalSocietyHotlineNumberTitle": "National Society Hotline",
+        "drefFormNationalSocietyHotlineNumberLabel": "Phone Number",
         "drefFromSubmissionPhoneNumberLabel": "Phone Number"
     }
 }

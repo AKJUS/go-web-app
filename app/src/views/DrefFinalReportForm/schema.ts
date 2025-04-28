@@ -170,6 +170,14 @@ const schema: FinalReportFormSchema = {
             number_of_people_affected: {
                 validations: [positiveIntegerCondition],
             },
+            estimated_number_of_affected_male: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_female: { validations: [positiveIntegerCondition] },
+            estimated_number_of_affected_girls_under_18: {
+                validations: [positiveIntegerCondition],
+            },
+            estimated_number_of_affected_boys_under_18: {
+                validations: [positiveIntegerCondition],
+            },
             people_in_need: { validations: [positiveIntegerCondition] },
             event_description: {},
             images_file: {
@@ -183,9 +191,6 @@ const schema: FinalReportFormSchema = {
                 }),
                 validations: [lessThanEqualToTwoImagesCondition],
             },
-            number_of_people_targeted: {
-                validations: [positiveIntegerCondition],
-            },
             num_assisted: { validations: [positiveIntegerCondition] },
             // ACTIONS
 
@@ -196,7 +201,6 @@ const schema: FinalReportFormSchema = {
             national_authorities: {},
             un_or_other_actor: {},
             is_there_major_coordination_mechanism: {},
-            has_national_society_conducted: {},
 
             // OPERATION
             total_dref_allocation: {},
@@ -241,6 +245,11 @@ const schema: FinalReportFormSchema = {
                 }),
             },
             risk_security_concern: {},
+            has_anti_fraud_corruption_policy: {},
+            has_anti_sexual_harassment_policy: {},
+            has_sexual_abuse_policy: {},
+            has_whistleblower_protection_policy: {},
+            has_child_protection_policy: {},
             has_child_safeguarding_risk_analysis_assessment: {},
             planned_interventions: {
                 keySelector: (n) => n.client_id,
@@ -291,7 +300,12 @@ const schema: FinalReportFormSchema = {
                                         required: true,
                                         requiredValidation: requiredStringCondition,
                                     },
-                                    actual: { validations: [positiveNumberCondition] },
+                                    actual: {
+                                        required: true,
+                                        validations: [
+                                            positiveNumberCondition,
+                                        ],
+                                    },
                                     target: { validations: [positiveNumberCondition] },
                                 }),
                             }),
@@ -331,6 +345,11 @@ const schema: FinalReportFormSchema = {
             media_contact_title: {},
             media_contact_email: { validations: [emailCondition] },
             media_contact_phone_number: {},
+            national_society_integrity_contact_name: {},
+            national_society_integrity_contact_title: {},
+            national_society_integrity_contact_email: { validations: [emailCondition] },
+            national_society_integrity_contact_phone_number: {},
+            national_society_hotline_phone_number: {},
         };
 
         // OVERVIEW
@@ -403,23 +422,6 @@ const schema: FinalReportFormSchema = {
                 }
                 return {
                     major_coordination_mechanism: { forceValue: nullValue },
-                };
-            },
-        );
-
-        formFields = addCondition(
-            formFields,
-            formValue,
-            ['has_national_society_conducted'],
-            ['national_society_conducted_description'],
-            (val): Pick<FinalReportFormSchemaFields, 'national_society_conducted_description'> => {
-                if (val?.has_national_society_conducted) {
-                    return {
-                        national_society_conducted_description: {},
-                    };
-                }
-                return {
-                    national_society_conducted_description: { forceValue: nullValue },
                 };
             },
         );

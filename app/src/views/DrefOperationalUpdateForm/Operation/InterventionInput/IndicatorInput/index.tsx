@@ -82,6 +82,7 @@ function IndicatorInput(props: Props) {
                 onChange={onFieldChange}
                 error={error?.actual}
                 disabled={disabled}
+                withAsterisk
             />
             <Button
                 name={index}
