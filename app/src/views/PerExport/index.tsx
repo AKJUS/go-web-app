@@ -212,9 +212,23 @@ export function Component() {
                 ),
             );
 
-            const topFiveRatedComponents = topRatedComponents.filter(
-                (component) => isDefined(component.rating),
-            ).slice(0, 5);
+            const topFiveRatedComponents = topRatedComponents.map(
+                (component) => {
+                    const {
+                        rating,
+                        ...other
+                    } = component;
+
+                    if (isNotDefined(rating)) {
+                        return undefined;
+                    }
+
+                    return {
+                        ...other,
+                        rating,
+                    };
+                },
+            ).filter(isDefined).slice(0, 5);
 
             // FIXME: let's use avgSafe
             function getAverage(list: number[]) {
@@ -486,7 +500,10 @@ export function Component() {
                 >
                     {assessmentStats.topFiveRatedComponents.map(
                         (component) => (
-                            <div className={styles.topRatedComponent} key={component.ra}>
+                            <div
+                                className={styles.topRatedComponent}
+                                key={component.rating.id}
+                            >
                                 <div className={styles.label}>
                                     {component.rating?.title}
                                 </div>

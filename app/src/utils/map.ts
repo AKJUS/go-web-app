@@ -1,22 +1,11 @@
 import { isDefined } from '@togglecorp/fujs';
 import getBbox from '@turf/bbox';
 import type {
-    FillLayer,
     Map,
     NavigationControl,
 } from 'mapbox-gl';
 
 import { type Country } from '#hooks/domain/useCountryRaw';
-import {
-    COLOR_BLUE,
-    COLOR_DARK_GREY,
-    COLOR_LIGHT_GREY,
-    COLOR_ORANGE,
-    COLOR_RED,
-    OPERATION_TYPE_EMERGENCY,
-    OPERATION_TYPE_MULTI,
-    OPERATION_TYPE_PROGRAMME,
-} from '#utils/constants';
 
 export const defaultMapStyle = 'mapbox://styles/go-ifrc/ckrfe16ru4c8718phmckdfjh0';
 export const localUnitMapStyle = 'mapbox://styles/go-ifrc/clvvgugzh00x501pc1n00b8cz';
@@ -41,105 +30,6 @@ export const defaultMapOptions: Omit<mapboxgl.MapboxOptions, 'style' | 'containe
     attributionControl: false,
     preserveDrawingBuffer: true,
     // interactive: false,
-};
-
-export const pointColorMap: {
-  [key: number]: string;
-} = {
-    [OPERATION_TYPE_EMERGENCY]: COLOR_BLUE,
-    [OPERATION_TYPE_PROGRAMME]: COLOR_RED,
-    [OPERATION_TYPE_MULTI]: COLOR_ORANGE,
-};
-
-const DEFAULT_CIRCLE_SIZE = 'medium';
-const DEFAULT_CIRCLE_OPACITY = 'full';
-
-const CIRCLE_RADIUS_SMALL = 3;
-const CIRCLE_RADIUS_MEDIUM = 5;
-const CIRCLE_RADIUS_LARGE = 8;
-const CIRCLE_RADIUS_EXTRA_LARGE = 12;
-// const CIRCLE_RADIUS_SUPER_LARGE = 16;
-
-export function getPointCirclePaint(
-    color: string,
-    size: 'small' | 'medium' | 'large' | 'extraLarge' = DEFAULT_CIRCLE_SIZE,
-    opacity: 'full' | 'light' = DEFAULT_CIRCLE_OPACITY,
-): mapboxgl.CirclePaint {
-    const sizeMap = {
-        small: CIRCLE_RADIUS_SMALL,
-        medium: CIRCLE_RADIUS_MEDIUM,
-        large: CIRCLE_RADIUS_LARGE,
-        extraLarge: CIRCLE_RADIUS_EXTRA_LARGE,
-    };
-
-    const opacityMap = {
-        full: 1,
-        light: 0.7,
-    };
-
-    return {
-        'circle-color': color,
-        'circle-radius': sizeMap[size] ?? DEFAULT_CIRCLE_SIZE,
-        'circle-opacity': opacityMap[opacity] ?? DEFAULT_CIRCLE_OPACITY,
-        'circle-pitch-alignment': 'map',
-    };
-}
-
-export function getPointCircleHaloPaint(
-    color: string,
-    scaleProp: string,
-    maxScaleValue: number,
-): mapboxgl.CirclePaint {
-    // NOTE: setting this value as 2 because there are already stops of 0
-    // and 1
-    const maxScale = Math.max(maxScaleValue, 2);
-
-    return {
-        ...getPointCirclePaint(color),
-        'circle-opacity': 0.4,
-        'circle-radius': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            3, [
-                'interpolate',
-                ['exponential', 1],
-                ['number', ['get', scaleProp]],
-                0,
-                0,
-                1,
-                10,
-                maxScale,
-                15,
-            ],
-            8, [
-                'interpolate',
-                ['exponential', 1],
-                ['number', ['get', scaleProp]],
-                0,
-                0,
-                1,
-                20,
-                maxScale,
-                40,
-            ],
-        ],
-    };
-}
-
-export const adminFillLayerOptions: Omit<FillLayer, 'id'> = {
-    type: 'fill',
-    layout: {
-        visibility: 'visible',
-    },
-    paint: {
-        'fill-color': [
-            'case',
-            ['boolean', ['feature-state', 'hovered'], false],
-            COLOR_DARK_GREY,
-            COLOR_LIGHT_GREY,
-        ],
-    },
 };
 
 export function getCountryListBoundingBox(countryList: Country[]) {

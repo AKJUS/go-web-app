@@ -56,8 +56,8 @@ export const CATEGORY_RISK_VERY_HIGH = 5;
 // Colors
 
 export const COLOR_WHITE = '#ffffff';
-export const COLOR_TEXT = '#313131';
-export const COLOR_TEXT_ON_DARK = '#ffffff';
+// export const COLOR_TEXT = '#313131';
+// export const COLOR_TEXT_ON_DARK = '#ffffff';
 export const COLOR_LIGHT_GREY = '#e0e0e0';
 export const COLOR_DARK_GREY = '#a5a5a5';
 export const COLOR_BLACK = '#000000';
@@ -77,23 +77,6 @@ export const COLOR_ACTIVE_REGION = '#7d8b9d';
 // Import template
 
 export const FONT_FAMILY_HEADER = 'Montserrat';
-
-// Three W
-
-type OperationTypeEnum = components<'read'>['schemas']['DeploymentsProjectOperationTypeEnumKey'];
-export const OPERATION_TYPE_PROGRAMME = 0 satisfies OperationTypeEnum;
-export const OPERATION_TYPE_EMERGENCY = 1 satisfies OperationTypeEnum;
-export const OPERATION_TYPE_MULTI = -1;
-
-type ProgrammeTypeEnum = components<'read'>['schemas']['DeploymentsProjectProgrammeTypeEnumKey'];
-export const PROGRAMME_TYPE_MULTILATERAL = 1 satisfies ProgrammeTypeEnum;
-export const PROGRAMME_TYPE_DOMESTIC = 2 satisfies ProgrammeTypeEnum;
-// const PROGRAMME_TYPE_BILATERAL = 0 satisfies ProgrammeTypeEnum;
-
-type StatusTypeEnum = components<'read'>['schemas']['DeploymentsProjectStatusEnumKey'];
-export const PROJECT_STATUS_COMPLETED = 2 satisfies StatusTypeEnum;
-export const PROJECT_STATUS_ONGOING = 1 satisfies StatusTypeEnum;
-export const PROJECT_STATUS_PLANNED = 0 satisfies StatusTypeEnum;
 
 // DREF
 

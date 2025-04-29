@@ -240,13 +240,6 @@ function Navbar(props: Props) {
                                 >
                                     {strings.headerMenuThreeW}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="newThreeWProject"
-                                    variant="secondary"
-                                >
-                                    {strings.userMenuSubmit3WProject}
-                                </DropdownMenuItem>
                             </TabPanel>
                         </Tabs>
                     </DropdownMenu>

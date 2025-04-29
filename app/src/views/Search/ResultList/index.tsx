@@ -10,7 +10,8 @@ import { type GoApiResponse } from '#utils/restRequest';
 
 import styles from './styles.module.css';
 
-type SearchResponse = GoApiResponse<'/api/v1/search/'>;
+// TODO: update typing after removal of projects
+type SearchResponse = Omit<GoApiResponse<'/api/v1/search/'>, 'projects'>;
 type DistrictProvinceResult = NonNullable<SearchResponse['district_province_response']>[number];
 
 type SearchResponseKey = keyof SearchResponse;

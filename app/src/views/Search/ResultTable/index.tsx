@@ -13,7 +13,8 @@ import { type GoApiResponse } from '#utils/restRequest';
 
 import useColumns from '../useColumns';
 
-type SearchResponse = GoApiResponse<'/api/v1/search/'>;
+// TODO: update typing after removal of projects
+type SearchResponse = Omit<GoApiResponse<'/api/v1/search/'>, 'projects'>;
 
 type SearchResponseKey = keyof SearchResponse;
 // NOTE: We are excluding these enums as they will be handled by ResultList

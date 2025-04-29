@@ -1,15 +1,6 @@
 {
     "namespace": "accountMyFormsThreeW",
     "strings": {
-        "threeWTableCountry": "Receiving Country",
-        "threeWTableNS": "National Society",
-        "threeWTableProjectName": "Project Name",
-        "threeWTableSector": "Sector",
-        "threeWTableTotalBudget": "Total Budget",
-        "threeWTableProgrammeType": "Programme Type",
-        "threeWTableDisasterType": "Disaster Type",
-        "threeWTablePeopleTargeted": "People Targeted",
-        "threeWTablePeopleReached2": "Services provided to people in need",
         "threeWProjects": "3W Projects",
         "threeWActivities": "Emergency Response 3W Activities",
         "threeWNationalSociety": "National Society / ERU",

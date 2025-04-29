@@ -18,7 +18,6 @@ import {
     InputSection,
     Message,
     Modal,
-    NavigationTabList,
     RadioInput,
     SegmentInput,
     TextInput,
@@ -54,7 +53,6 @@ import FormFailedToLoadMessage from '#components/domain/FormFailedToLoadMessage'
 import LanguageMismatchMessage from '#components/domain/LanguageMismatchMessage';
 import NationalSocietySelectInput from '#components/domain/NationalSocietySelectInput';
 import NonEnglishFormCreationMessage from '#components/domain/NonEnglishFormCreationMessage';
-import NavigationTab from '#components/NavigationTab';
 import NonFieldError from '#components/NonFieldError';
 import Page from '#components/Page';
 import { type GlobalEnums } from '#contexts/domain';
@@ -604,23 +602,6 @@ export function Component() {
             heading={strings.threeWFormHeading}
             description={strings.threeWFormDescription}
             withBackgroundColorInMainSection
-            info={!shouldHideForm && isNotDefined(activityId) && (
-                <NavigationTabList
-                    className={styles.tabList}
-                    variant="secondary"
-                >
-                    <NavigationTab
-                        to="newThreeWProject"
-                    >
-                        {strings.newThreeWProjectTabLabel}
-                    </NavigationTab>
-                    <NavigationTab
-                        to="newThreeWActivity"
-                    >
-                        {strings.newThreeWActivityTabLabel}
-                    </NavigationTab>
-                </NavigationTabList>
-            )}
             mainSectionClassName={styles.content}
         >
             {fetchingActivity && (
