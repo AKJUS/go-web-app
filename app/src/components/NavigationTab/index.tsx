@@ -97,13 +97,20 @@ function NavigationTab(props: Props) {
                 return false;
             }
 
+            const pathname = isTruthyString(location.hash)
+                ? `${location.pathname}${location.hash}`
+                : location.pathname;
+            const { absolutePath } = routes[to];
+            const testPath = isTruthyString(urlHash)
+                ? `${absolutePath}#${urlHash}`
+                : absolutePath;
             const match = matchPath(
                 {
 
-                    path: routes[to].absolutePath,
+                    path: testPath,
                     end: !parentRoute,
                 },
-                location.pathname,
+                pathname,
             );
 
             if (isNotDefined(match)) {
@@ -122,7 +129,16 @@ function NavigationTab(props: Props) {
 
             return true;
         },
-        [to, routes, location.pathname, matchParam, parentRoute, matchParamValue],
+        [
+            to,
+            location.hash,
+            location.pathname,
+            routes,
+            urlHash,
+            parentRoute,
+            matchParam,
+            matchParamValue,
+        ],
     );
 
     const linkClassName = useMemo(
