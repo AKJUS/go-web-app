@@ -1,5 +1,12 @@
 # @ifrc-go/ui
 
+## 1.4.0
+
+### Minor Changes
+
+- 18ccc85: - Add missing eslint config packages
+  - Add elementId prop in Container
+
 ## 1.3.1
 
 ### Patch Changes

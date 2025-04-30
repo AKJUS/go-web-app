@@ -1,5 +1,37 @@
 # go-web-app
 
+## 7.14.0
+
+### Minor Changes
+
+- 18ccc85:
+  - Update styling of vertical NavigationTab
+  - Hide register URL in the T&C page for logged in user
+  - Update styling of T&C page
+    - Make the page responsive
+    - Make sidebar sticky
+  - Update url for [monty docs](https://github.com/IFRCGo/go-web-app/issues/1418#issuecomment-2422371363)
+- 8d3a7bd: Initiate shutdown for 3W
+  - Remove "Submit 3W Projects" from the menu Prepare > Global 3W projects
+  - Rename "Global 3W Projects" to "Programmatic Partnerships" in Prepare menu
+  - Update global 3W page
+    - Update title and description for Programmatic Partnerships
+    - Remove all the contents related to 3W
+  - Replace contents in various places with project shutdown message
+    - Regional 3W tab
+    - 3W Projects section in Accounts > My Form > 3W
+    - Projects tab in Country > Ongoing Activities
+    - All Projects page
+    - New, edit 3W project form
+    - View 3W project page
+  - Remove NS Activities section in Country > NS overview > NS Activities page
+  - Remove Projects section from search results page
+
+### Patch Changes
+
+- Updated dependencies [18ccc85]
+  - @ifrc-go/ui@1.4.0
+
 ## 7.13.0
 
 ### Minor Changes
