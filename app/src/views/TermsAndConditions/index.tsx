@@ -1,65 +1,63 @@
-import {
-    useRef,
-    useState,
-} from 'react';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
     Container,
-    Tab,
-    TabList,
-    Tabs,
+    NavigationTabList,
 } from '@ifrc-go/ui';
 import {
     useBooleanState,
     useTranslation,
 } from '@ifrc-go/ui/hooks';
 import { resolveToComponent } from '@ifrc-go/ui/utils';
+import { isFalsyString } from '@togglecorp/fujs';
 
 import Link from '#components/Link';
+import NavigationTab from '#components/NavigationTab';
 import Page from '#components/Page';
+import useAuth from '#hooks/domain/useAuth';
 
 import ConditionsModal from './ConditionsModal';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type TitlesOptionKey = 'data-provenance' | 'user-registration' | 'unauthorised-users'| 'compliance-of-user-owner' | 'liability-of-ifrc' | 'protection-personal-data' | 'privileges-and-immunities' | 'final-provisions';
+const sectionUrlHash = {
+    dataProvenance: 'data-provenance',
+    userRegistration: 'user-registration',
+    unauthorizedUses: 'unauthorised-uses',
+    complianceOfUserOwner: 'compliance-of-user-owner',
+    liabilityOfIfrc: 'liability-of-ifrc',
+    protectionPersonalData: 'protection-personal-data',
+    privilegesAndImmunities: 'privileges-and-immunities',
+    finalProvisions: 'final-provisions',
+};
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);
+    const { isAuthenticated } = useAuth();
+
+    const { hash: locationHash } = useLocation();
 
     const [showHereConditionModal, {
         setTrue: setShowHereModalTrue,
         setFalse: setShowHereModalFalse,
     }] = useBooleanState(false);
 
-    const [activeTitlesOption, setActiveTitleOption] = useState<TitlesOptionKey>('data-provenance');
+    useEffect(() => {
+        if (isFalsyString(locationHash)) {
+            return;
+        }
 
-    const dataProvenanceRef = useRef<HTMLDivElement>(null);
-    const userRegistrationRef = useRef<HTMLDivElement>(null);
-    const unauthorisedUsersRef = useRef<HTMLDivElement>(null);
-    const complianceOfUserOwnerRef = useRef<HTMLDivElement>(null);
-    const liabilityOfIFRCRef = useRef<HTMLDivElement>(null);
-    const protectionPersonalDataRef = useRef<HTMLDivElement>(null);
-    const privilegesAndImmunitiesRef = useRef<HTMLDivElement>(null);
-    const finalProvisionsRef = useRef<HTMLDivElement>(null);
-
-    const handleTabChange = (newTab: TitlesOptionKey) => {
-        setActiveTitleOption(newTab);
-
-        const tabRefs = {
-            'data-provenance': dataProvenanceRef,
-            'user-registration': userRegistrationRef,
-            'unauthorised-users': unauthorisedUsersRef,
-            'compliance-of-user-owner': complianceOfUserOwnerRef,
-            'liability-of-ifrc': liabilityOfIFRCRef,
-            'protection-personal-data': protectionPersonalDataRef,
-            'privileges-and-immunities': privilegesAndImmunitiesRef,
-            'final-provisions': finalProvisionsRef,
-        };
-        tabRefs[newTab]?.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+        const element = document.getElementById(locationHash.substring(1));
+        if (element) {
+            element.scrollIntoView({
+                block: 'start',
+                behavior: 'smooth',
+            });
+        }
+    }, [locationHash]);
 
     return (
         <Page
@@ -67,40 +65,61 @@ export function Component() {
             className={styles.termsAndConditions}
             mainSectionClassName={styles.mainSection}
         >
-            <Tabs
-                value={activeTitlesOption}
-                onChange={handleTabChange}
-                variant="vertical"
-            >
-                <TabList
-                    className={styles.sideTitles}
+            <div className={styles.sidebar}>
+                <NavigationTabList
+                    className={styles.tabList}
+                    variant="vertical"
                 >
-                    <Tab name="data-provenance">
+                    <NavigationTab
+                        to="termsAndConditions"
+                        urlHash={sectionUrlHash.dataProvenance}
+                    >
                         {strings.dataProvenanceHeading}
-                    </Tab>
-                    <Tab name="user-registration">
+                    </NavigationTab>
+                    <NavigationTab
+                        to="termsAndConditions"
+                        urlHash={sectionUrlHash.userRegistration}
+                    >
                         {strings.userRegistrationHeading}
-                    </Tab>
-                    <Tab name="unauthorised-users">
+                    </NavigationTab>
+                    <NavigationTab
+                        to="termsAndConditions"
+                        urlHash={sectionUrlHash.unauthorizedUses}
+                    >
                         {strings.unAuthorisedUsesHeading }
-                    </Tab>
-                    <Tab name="compliance-of-user-owner">
+                    </NavigationTab>
+                    <NavigationTab
+                        to="termsAndConditions"
+                        urlHash={sectionUrlHash.complianceOfUserOwner}
+                    >
                         {strings.complianceDateOwnerHeading}
-                    </Tab>
-                    <Tab name="liability-of-ifrc">
+                    </NavigationTab>
+                    <NavigationTab
+                        to="termsAndConditions"
+                        urlHash={sectionUrlHash.liabilityOfIfrc}
+                    >
                         {strings.liabilityOfIFRCHeading }
-                    </Tab>
-                    <Tab name="protection-personal-data">
+                    </NavigationTab>
+                    <NavigationTab
+                        to="termsAndConditions"
+                        urlHash={sectionUrlHash.protectionPersonalData}
+                    >
                         {strings.protectionUsersPersonalDataHeading}
-                    </Tab>
-                    <Tab name="privileges-and-immunities">
+                    </NavigationTab>
+                    <NavigationTab
+                        to="termsAndConditions"
+                        urlHash={sectionUrlHash.privilegesAndImmunities}
+                    >
                         {strings.privilegesAndImmunitiesHeading}
-                    </Tab>
-                    <Tab name="final-provisions">
+                    </NavigationTab>
+                    <NavigationTab
+                        to="termsAndConditions"
+                        urlHash={sectionUrlHash.finalProvisions}
+                    >
                         {strings.finalProvisionsHeading}
-                    </Tab>
-                </TabList>
-            </Tabs>
+                    </NavigationTab>
+                </NavigationTabList>
+            </div>
             <Container
                 className={styles.content}
                 contentViewType="vertical"
@@ -116,35 +135,36 @@ export function Component() {
                 <Container
                     heading={strings.dataProvenanceHeading}
                     withHeaderBorder
-                    containerRef={dataProvenanceRef}
+                    elementId={sectionUrlHash.dataProvenance}
                 >
                     {strings.dataProvenanceDescription}
                 </Container>
                 <Container
                     heading={strings.userRegistrationHeading}
                     withHeaderBorder
-                    containerRef={userRegistrationRef}
+                    elementId={sectionUrlHash.userRegistration}
                     contentViewType="vertical"
                 >
                     <div>{strings.userRegistrationDescription}</div>
-                    <div>
-                        {resolveToComponent(
-                            strings.userRegistrationDescriptionToLink,
-                            {
-                                termsLink: (
-                                    <Link
-                                        to="register"
-                                        withUnderline
-                                    >
-                                        {strings.userRegistrationDescriptionLink}
-                                    </Link>
-                                ),
-                            },
-                        )}
-                    </div>
+                    {!isAuthenticated && (
+                        <div>
+                            {resolveToComponent(
+                                strings.userRegistrationDescriptionToLink,
+                                {
+                                    registerLink: (
+                                        <Link
+                                            to="register"
+                                            withUnderline
+                                        >
+                                            {strings.userRegistrationDescriptionLink}
+                                        </Link>
+                                    ),
+                                },
+                            )}
+                        </div>
+                    )}
                     <div>
                         {strings.userRegistrationAuthorizedUser}
-
                     </div>
                     <div>{strings.userRegistrationDescriptionByRegistering}</div>
                     <ul>
@@ -156,22 +176,22 @@ export function Component() {
                             <ul>
                                 <li>
                                     {strings.userRegistrationDescriptionList}
-                                    <p>
+                                    <div>
                                         { resolveToComponent(
                                             strings.userRegistrationByLink,
                                             {
                                                 termsLink: (
                                                     <Link
-                                                        href="http://montandon.westeurope.cloudapp.azure.com:8000/__docs__/"
+                                                        href="https://monty-api.ifrc.org/__docs__/"
                                                         withUnderline
                                                         external
                                                     >
-                                                        http://montandon.westeurope.cloudapp.azure.com:8000/__docs__/
+                                                        https://monty-api.ifrc.org/__docs__/
                                                     </Link>
                                                 ),
                                             },
                                         )}
-                                    </p>
+                                    </div>
                                 </li>
                             </ul>
                         </li>
@@ -183,7 +203,7 @@ export function Component() {
                 <Container
                     heading={strings.unAuthorisedUsesHeading}
                     withHeaderBorder
-                    containerRef={unauthorisedUsersRef}
+                    elementId={sectionUrlHash.unauthorizedUses}
                     contentViewType="vertical"
                 >
                     <p>{strings.unAuthorisedUsesDescription}</p>
@@ -205,11 +225,11 @@ export function Component() {
                 <Container
                     heading={strings.complianceDateOwnerHeading}
                     withHeaderBorder
-                    containerRef={complianceOfUserOwnerRef}
+                    elementId={sectionUrlHash.complianceOfUserOwner}
                     contentViewType="vertical"
                 >
                     <p>{strings.complianceDateOwnerDescription1}</p>
-                    <p>
+                    <div>
                         {resolveToComponent(
                             strings.complianceDateOwnerDescription2,
                             {
@@ -227,8 +247,8 @@ export function Component() {
                         {showHereConditionModal && (
                             <ConditionsModal onClose={setShowHereModalFalse} />
                         )}
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                         {resolveToComponent(
                             strings.complianceDateOwnerDescription3,
                             {
@@ -243,14 +263,14 @@ export function Component() {
                                 ),
                             },
                         )}
-                    </p>
+                    </div>
                     <p>{strings.complianceDateOwnerDescription4}</p>
                     <p>{strings.complianceDateOwnerDescription5}</p>
                 </Container>
                 <Container
                     heading={strings.liabilityOfIFRCHeading}
                     withHeaderBorder
-                    containerRef={liabilityOfIFRCRef}
+                    elementId={sectionUrlHash.liabilityOfIfrc}
                     contentViewType="vertical"
                 >
                     <p>{strings.liabilityOfIFRCDescription}</p>
@@ -284,7 +304,7 @@ export function Component() {
                 <Container
                     heading={strings.protectionUsersPersonalDataHeading}
                     withHeaderBorder
-                    containerRef={protectionPersonalDataRef}
+                    elementId={sectionUrlHash.protectionPersonalData}
                     contentViewType="vertical"
                 >
                     <p>{strings.protectionUsersPersonalDataDescription}</p>
@@ -294,7 +314,7 @@ export function Component() {
                         <li>{strings.protectionUsersPersonalDataDescriptionList3}</li>
                         <li>{strings.protectionUsersPersonalDataDescriptionList4}</li>
                     </ul>
-                    <p>
+                    <div>
                         {resolveToComponent(
                             strings.protectionUsersPersonalDataDescription2,
                             {
@@ -310,8 +330,8 @@ export function Component() {
                                 ),
                             },
                         )}
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                         {resolveToComponent(
                             strings.protectionUsersPersonalDataDescription3,
                             {
@@ -326,10 +346,9 @@ export function Component() {
                                 ),
                             },
                         )}
-                    </p>
-
+                    </div>
                     <p>{strings.protectionUsersPersonalDataDescription4}</p>
-                    <p>
+                    <div>
                         {resolveToComponent(
                             strings.protectionUsersPersonalDataDescription5,
                             {
@@ -345,12 +364,12 @@ export function Component() {
                                 ),
                             },
                         )}
-                    </p>
+                    </div>
                 </Container>
                 <Container
                     heading={strings.privilegesAndImmunitiesHeading}
                     withHeaderBorder
-                    containerRef={privilegesAndImmunitiesRef}
+                    elementId={sectionUrlHash.privilegesAndImmunities}
                     contentViewType="vertical"
                 >
                     {strings.privilegesAndImmunitiesDescription}
@@ -358,12 +377,12 @@ export function Component() {
                 <Container
                     heading={strings.finalProvisionsHeading}
                     withHeaderBorder
-                    containerRef={finalProvisionsRef}
+                    elementId={sectionUrlHash.finalProvisions}
                     contentViewType="vertical"
                 >
                     <p>{strings.finalProvisionsDescription1}</p>
                     <p>{strings.finalProvisionsDescription2}</p>
-                    <p>
+                    <div>
                         {resolveToComponent(
                             strings.finalProvisionsDescription3,
                             {
@@ -378,7 +397,7 @@ export function Component() {
                                 ),
                             },
                         )}
-                    </p>
+                    </div>
                     <p>{strings.finalProvisionsDescription4}</p>
                 </Container>
             </Container>

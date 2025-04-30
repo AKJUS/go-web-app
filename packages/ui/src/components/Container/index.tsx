@@ -29,6 +29,7 @@ export interface Props {
     childrenContainerClassName?: string,
     className?: string;
     contentViewType?: 'grid' | 'vertical' | 'default';
+    elementId?: string;
     ellipsizeHeading?: boolean;
     filters?: React.ReactNode;
     filterActions?: React.ReactNode;
@@ -85,6 +86,7 @@ function Container(props: Props) {
         className,
         containerRef,
         contentViewType = 'default',
+        elementId,
         ellipsizeHeading,
         filters,
         filterActions,
@@ -185,7 +187,8 @@ function Container(props: Props) {
     }
 
     return (
-        <div
+        <section
+            id={elementId}
             ref={containerRef}
             className={_cs(
                 styles.container,
@@ -285,7 +288,7 @@ function Container(props: Props) {
                     {footerContent}
                 </Footer>
             )}
-        </div>
+        </section>
     );
 }
 

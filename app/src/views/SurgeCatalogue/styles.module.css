@@ -1,6 +1,6 @@
 .surge-catalogue {
     display: grid;
-    grid-gap: var(--go-ui-spacing-2xl);
+    grid-gap: var(--go-ui-spacing-xl);
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     padding: var(--go-ui-spacing-2xl) 0;
 
