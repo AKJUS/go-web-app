@@ -19,6 +19,7 @@ import {
 } from '@ifrc-go/ui/utils';
 import { _cs } from '@togglecorp/fujs';
 
+import ThreeWDecommissionMessage from '#components/domain/ThreeWDecommissionMessage';
 import Link from '#components/Link';
 import UserContext from '#contexts/user';
 import useFilterState from '#hooks/useFilterState';
@@ -35,9 +36,6 @@ import styles from './styles.module.css';
 
 type ActivitiesResponse = GoApiResponse<'/api/v2/emergency-project/'>;
 type ActivityListItem = NonNullable<ActivitiesResponse['results']>[number];
-
-type ProjectsResponse = GoApiResponse<'/api/v2/project/'>;
-type ProjectListItem = NonNullable<ProjectsResponse['results']>[number];
 
 type DistrictDetails = ActivityListItem['districts_details'][number];
 
@@ -126,15 +124,6 @@ export function Component(props: Props) {
     const { className } = props;
     const strings = useTranslation(i18n);
     const { userAuth: userDetails } = useContext(UserContext);
-    const {
-        page: projectActivePage,
-        setPage: setProjectActivePage,
-        limit: projectLimit,
-        offset: projectOffset,
-    } = useFilterState<object>({
-        filter: {},
-        pageSize: 5,
-    });
 
     const {
         page: activityActivePage,
@@ -144,19 +133,6 @@ export function Component(props: Props) {
     } = useFilterState<object>({
         filter: {},
         pageSize: 5,
-    });
-
-    const {
-        response: projectResponse,
-        pending: projectResponsePending,
-    } = useRequest({
-        url: '/api/v2/project/',
-        preserveResponse: true,
-        query: {
-            limit: projectLimit,
-            offset: projectOffset,
-            user: userDetails?.id,
-        },
     });
 
     const {
@@ -171,94 +147,6 @@ export function Component(props: Props) {
             user: userDetails?.id,
         },
     });
-
-    const projectColumns = useMemo(
-        () => ([
-            createLinkColumn<ProjectListItem, number>(
-                'country',
-                strings.threeWTableCountry,
-                (item) => item.project_country_detail?.name,
-                (item) => ({
-                    to: 'countryOngoingActivitiesThreeWProjects',
-                    urlParams: { countryId: item.project_country },
-                }),
-                { columnClassName: styles.country },
-            ),
-            createStringColumn<ProjectListItem, number>(
-                'ns',
-                strings.threeWTableNS,
-                (item) => item.reporting_ns_detail?.society_name,
-                { columnClassName: styles.ns },
-            ),
-            createLinkColumn<ProjectListItem, number>(
-                'name',
-                strings.threeWTableProjectName,
-                (item) => item.name,
-                (item) => ({
-                    to: 'threeWProjectDetail',
-                    urlParams: { projectId: item.id },
-                }),
-                { columnClassName: styles.title },
-            ),
-            createStringColumn<ProjectListItem, number>(
-                'sector',
-                strings.threeWTableSector,
-                (item) => item.primary_sector_display,
-                { columnClassName: styles.primarySector },
-            ),
-            createNumberColumn<ProjectListItem, number>(
-                'budget',
-                strings.threeWTableTotalBudget,
-                (item) => item.budget_amount,
-                { columnClassName: styles.budget },
-            ),
-            createStringColumn<ProjectListItem, number>(
-                'programmeType',
-                strings.threeWTableProgrammeType,
-                (item) => item.programme_type_display,
-                { columnClassName: styles.programmeType },
-            ),
-            createStringColumn<ProjectListItem, number>(
-                'disasterType',
-                strings.threeWTableDisasterType,
-                (item) => item.dtype_detail?.name,
-                { columnClassName: styles.disasterType },
-            ),
-            createNumberColumn<ProjectListItem, number>(
-                'peopleTargeted',
-                strings.threeWTablePeopleTargeted,
-                (item) => item.target_total,
-                { columnClassName: styles.peopleTargeted },
-            ),
-            createNumberColumn<ProjectListItem, number>(
-                'peopleReached',
-                strings.threeWTablePeopleReached2,
-                (item) => item.reached_total,
-                { columnClassName: styles.peopleReached },
-            ),
-            createElementColumn<ProjectListItem, number, ThreeWTableActionsProps>(
-                'actions',
-                '',
-                ThreeWTableActions,
-                (projectId) => ({
-                    type: 'project',
-                    projectId,
-                }),
-                { columnClassName: styles.actions },
-            ),
-        ]),
-        [
-            strings.threeWTableCountry,
-            strings.threeWTableNS,
-            strings.threeWTableProjectName,
-            strings.threeWTableSector,
-            strings.threeWTableTotalBudget,
-            strings.threeWTableProgrammeType,
-            strings.threeWTableDisasterType,
-            strings.threeWTablePeopleTargeted,
-            strings.threeWTablePeopleReached2,
-        ],
-    );
 
     const activityColumns = useMemo(
         () => ([
@@ -357,36 +245,7 @@ export function Component(props: Props) {
 
     return (
         <div className={_cs(styles.accountThreeWForms, className)}>
-            <Container
-                heading={strings.threeWProjects}
-                withHeaderBorder
-                actions={(
-                    <Link
-                        to="allThreeWProject"
-                        withUnderline
-                        withLinkIcon
-                    >
-                        {strings.threeWViewAllProjectLabel}
-                    </Link>
-                )}
-                footerActions={(
-                    <Pager
-                        activePage={projectActivePage}
-                        onActivePageChange={setProjectActivePage}
-                        itemsCount={projectResponse?.count ?? 0}
-                        maxItemsPerPage={projectLimit}
-                    />
-                )}
-            >
-                <Table
-                    pending={projectResponsePending}
-                    className={styles.projectTable}
-                    data={projectResponse?.results}
-                    columns={projectColumns}
-                    keySelector={numericIdSelector}
-                    filtered={false}
-                />
-            </Container>
+            <ThreeWDecommissionMessage />
             <Container
                 heading={strings.threeWActivities}
                 actions={(

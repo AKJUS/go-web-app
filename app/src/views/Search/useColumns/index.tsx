@@ -5,8 +5,6 @@ import {
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     createDateColumn,
-    createDateRangeColumn,
-    createListDisplayColumn,
     createNumberColumn,
     createProgressColumn,
     createStringColumn,
@@ -23,14 +21,12 @@ import {
 } from '#utils/domain/tableHelpers';
 import { type GoApiResponse } from '#utils/restRequest';
 
-import DistrictNameOutput from './DistrictNameOutput';
-
 import i18n from './i18n.json';
 
-type SearchResponse = GoApiResponse<'/api/v1/search/'>;
+// TODO: update typing after removal of projects
+type SearchResponse = Omit<GoApiResponse<'/api/v1/search/'>, 'projects'>;
 type EmergencyResult = NonNullable<SearchResponse['emergencies']>[number];
 type FieldReportResult = NonNullable<SearchResponse['reports']>[number];
-type ProjectResult = NonNullable<SearchResponse['projects']>[number];
 type RapidResponseDeploymentResult = NonNullable<SearchResponse['rapid_response_deployments']>[number];
 type SurgeAlertResult = NonNullable<SearchResponse['surge_alerts']>[number];
 type SurgeDeploymentResult = NonNullable<SearchResponse['surge_deployments']>[number];
@@ -92,74 +88,6 @@ function useColumns(searchResponse: SearchResponse | undefined) {
         strings.searchEmergencyTableFundingRequirements,
         strings.searchEmergencyTableFundingCoverage,
         strings.searchEmergencyTableCountry,
-    ]);
-
-    const getProjectColumns = useCallback(() => ([
-        createLinkColumn<ProjectResult, number>(
-            'emergency_name',
-            strings.searchProjectTableEmergency,
-            (project) => project.event_name,
-            (project) => ({
-                to: 'emergenciesLayout',
-                urlParams: { emergencyId: project.event_id },
-            }),
-        ),
-        createStringColumn<ProjectResult, number>(
-            'national_society',
-            strings.searchProjectTableNationalSociety,
-            (project) => project.national_society,
-        ),
-        createLinkColumn<ProjectResult, number>(
-            'name',
-            strings.searchProjectTableProjectName,
-            (project) => project.name,
-            (project) => ({
-                to: 'threeWProjectDetail',
-                urlParams: { projectId: project.id },
-            }),
-        ),
-        createDateRangeColumn<ProjectResult, number>(
-            'start_date',
-            strings.searchProjectTableStartEndDate,
-            (project) => ({
-                startDate: project.start_date,
-                endDate: project.end_date,
-            }),
-        ),
-        createListDisplayColumn<
-            ProjectResult,
-            number,
-            string,
-            { name: string }
-        >(
-            'districts',
-            strings.searchProjectTableProvince,
-            (activity) => ({
-                // FIXME: type should be fixed on the server
-                list: activity.regions as string[],
-                renderer: DistrictNameOutput,
-                rendererParams: (districtDetail) => ({ name: districtDetail }),
-                keySelector: (districtDetail) => districtDetail,
-            }),
-        ),
-        createStringColumn<ProjectResult, number>(
-            'sector',
-            strings.searchProjectTableSector,
-            (project) => project.sector,
-        ),
-        createNumberColumn<ProjectResult, number>(
-            'people_targeted',
-            strings.searchProjectTablePeopleTargeted,
-            (project) => project.people_targeted,
-        ),
-    ]), [
-        strings.searchProjectTableEmergency,
-        strings.searchProjectTableNationalSociety,
-        strings.searchProjectTableProjectName,
-        strings.searchProjectTableStartEndDate,
-        strings.searchProjectTableProvince,
-        strings.searchProjectTableSector,
-        strings.searchProjectTablePeopleTargeted,
     ]);
 
     const getRapidResponseDeploymentColumns = useCallback(() => ([
@@ -391,11 +319,6 @@ function useColumns(searchResponse: SearchResponse | undefined) {
                 keySelector: (item: EmergencyResult) => item.id,
                 data: searchResponse?.emergencies as EmergencyResult[],
             },
-            projects: {
-                columns: getProjectColumns(),
-                keySelector: (item: ProjectResult) => item.id,
-                data: searchResponse?.projects,
-            },
             rapid_response_deployments: {
                 columns: getRapidResponseDeploymentColumns(),
                 keySelector: (item: RapidResponseDeploymentResult) => item.id,
@@ -414,7 +337,6 @@ function useColumns(searchResponse: SearchResponse | undefined) {
         }),
         [
             getFieldReportColumns,
-            getProjectColumns,
             getRapidResponseDeploymentColumns,
             getSurgeAlertColumns,
             getSurgeDeploymentColumns,

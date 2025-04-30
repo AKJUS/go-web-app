@@ -1,53 +1,14 @@
 .global-three-w {
-    .description {
+    .main-section {
         display: flex;
-        flex-direction: column;
-        gap: var(--go-ui-spacing-md);
-    }
+        align-items: center;
+        justify-content: center;
+        width: 100%;
 
-    .key-figures-list {
-        display: grid;
-        grid-gap: var(--go-ui-spacing-md);
-        grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-
-        .key-figure {
-            border-radius: var(--go-ui-border-radius-lg);
-            background-color: var(--go-ui-color-white);
-            height: 100%;
-        }
-    }
-
-    .main-content {
-        display: flex;
-        flex-direction: column;
-        gap: var(--go-ui-spacing-2xl);
-
-        .charts {
-            display: grid;
-            grid-gap: var(--go-ui-spacing-md);
-            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
-
-            @media screen and (max-width: 30rem) {
-                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-            }
-
-            .chart-container {
-                border-radius: var(--go-ui-border-radius-lg);
-                box-shadow: var(--go-ui-box-shadow-md);
-                height: 100%;
-            }
-        }
-
-        .iframe-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            .ppp-iframe {
-                border: none;
-                width: 1050px;
-                height: 850px;
-            }
+        .pp-iframe {
+            border: none;
+            width: 1050px;
+            height: 850px;
         }
     }
 }

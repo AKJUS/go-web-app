@@ -4,8 +4,6 @@
         "threeWFormTitle": "IFRC GO - 3W Activity",
         "threeWFormHeading": "3W Activity",
         "threeWFormDescription": "The information you provide will be used to inform the operational planning and to communicate about our work. The numbers will be made public but your personal information will never be shared.",
-        "newThreeWProjectTabLabel": "Project",
-        "newThreeWActivityTabLabel": "Response Activity",
         "alertMessageSuccessful": "alertMessageSuccessful",
         "supportedOperationTitle": "IFRC supported Operation",
         "supportedOperationDescription": "If operation does not appear in the dropdown, the operation does not yet exist in GO. In that case, please submit a new Field Report to generate the operation, then come back to this form",

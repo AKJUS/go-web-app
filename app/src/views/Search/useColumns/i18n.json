@@ -8,21 +8,10 @@
         "searchEmergencyTableFundingCoverage": "Funding Coverage",
         "searchEmergencyTableCountry": "Country",
         "searchEmergencyTableMultipleCountries": "Multiple Countries",
-        "searchIfrcEmergencies": "Emergencies",
 
         "searchFieldReportTableDate": "Date",
         "searchFieldReportTableType": "Type",
         "searchFieldReportTableTitle": "Title",
-        "searchIfrcReport": "Reports",
-
-        "searchProjectTableEmergency": "Emergency",
-        "searchProjectTableNationalSociety": "National Society/ERU",
-        "searchProjectTableProjectName": "Project/Activity Name",
-        "searchProjectTableStartEndDate": "Start-End Dates",
-        "searchProjectTableProvince": "Province/Region",
-        "searchProjectTableSector": "Sector",
-        "searchProjectTablePeopleTargeted": "People Targeted",
-        "searchIfrcProjects": "Projects",
 
         "searchIFRCRapidResponseDeployment": "Ongoing Rapid Response Deployments",
         "searchRapidDeploymentTableStartDate":"Start Date",

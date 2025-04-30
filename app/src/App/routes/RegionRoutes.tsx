@@ -65,7 +65,7 @@ const regionThreeW = customWrapRoute({
     parent: regionsLayout,
     path: 'three-w',
     component: {
-        render: () => import('#views/RegionThreeW'),
+        render: () => import('#views/ThreeWDecommission'),
         props: {},
     },
     context: {

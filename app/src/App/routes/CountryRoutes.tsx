@@ -162,7 +162,7 @@ const countryOngoingActivitiesThreeWProjects = customWrapRoute({
     parent: countryOngoingActivitiesLayout,
     path: 'three-w/projects',
     component: {
-        render: () => import('#views/CountryOngoingActivitiesThreeWProjects'),
+        render: () => import('#views/ThreeWDecommission'),
         props: {},
     },
     context: {

@@ -418,8 +418,8 @@ const newThreeWProject = customWrapRoute({
     parent: rootLayout,
     path: 'three-w/projects/new',
     component: {
-        render: () => import('#views/ThreeWProjectForm'),
-        props: {},
+        render: () => import('#views/ThreeWDecommission'),
+        props: { variant: 'page' },
     },
     wrapperComponent: Auth,
     context: {
@@ -433,8 +433,8 @@ const threeWProjectDetail = customWrapRoute({
     parent: rootLayout,
     path: 'three-w/projects/:projectId/',
     component: {
-        render: () => import('#views/ThreeWProjectDetail'),
-        props: {},
+        render: () => import('#views/ThreeWDecommission'),
+        props: { variant: 'page' },
     },
     wrapperComponent: Auth,
     context: {
@@ -447,8 +447,8 @@ const threeWProjectEdit = customWrapRoute({
     parent: rootLayout,
     path: 'three-w/projects/:projectId/edit',
     component: {
-        render: () => import('#views/ThreeWProjectForm'),
-        props: {},
+        render: () => import('#views/ThreeWDecommission'),
+        props: { variant: 'page' },
     },
     wrapperComponent: Auth,
     context: {
@@ -773,8 +773,8 @@ const allThreeWProject = customWrapRoute({
     parent: rootLayout,
     path: 'three-w/projects/all',
     component: {
-        render: () => import('#views/AllThreeWProject'),
-        props: {},
+        render: () => import('#views/ThreeWDecommission'),
+        props: { variant: 'page' },
     },
     wrapperComponent: Auth,
     context: {

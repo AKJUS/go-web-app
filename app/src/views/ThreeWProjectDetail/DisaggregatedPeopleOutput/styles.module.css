@@ -1,7 +1,0 @@
-.disaggregated-people-output {
-    .people-targeted-content {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
-    }
-}

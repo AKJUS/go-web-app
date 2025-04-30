@@ -48,7 +48,8 @@ import styles from './styles.module.css';
 type SearchResponse = GoApiResponse<'/api/v1/search/'>;
 
 const MAX_VIEW_PER_SECTION = 5;
-type SearchResponseKeys = keyof SearchResponse;
+// TODO: update typing after removal of projects
+type SearchResponseKeys = Exclude<keyof SearchResponse, 'projects'>;
 
 function isListTypeResult(
     resultKey: SearchResponseKeys,
@@ -95,7 +96,7 @@ export function Component() {
     const strings = useTranslation(i18n);
     const {
         pending: searchPending,
-        response: searchResponse,
+        response: searchResponseRaw,
     } = useRequest({
         skip: isNotDefined(urlSearchValue),
         url: '/api/v1/search/',
@@ -103,11 +104,25 @@ export function Component() {
         preserveResponse: true,
     });
 
+    // TODO: remove this filtering after removal of projects
+    const searchResponse = useMemo(() => {
+        if (isNotDefined(searchResponseRaw)) {
+            return undefined;
+        }
+
+        const {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            projects,
+            ...others
+        } = searchResponseRaw;
+
+        return others;
+    }, [searchResponseRaw]);
+
     const headingStringMap = useMemo<Record<SearchResponseKeys, string>>(
         () => ({
             emergencies: strings.searchEmergenciesTitle,
             reports: strings.searchReportsTitle,
-            projects: strings.searchProjectsTitle,
             surge_alerts: strings.searchSurgeAlertsTitle,
             surge_deployments: strings.searchSurgeDeploymentsTitle,
             rapid_response_deployments: strings.searchRapidResponseDeploymentsTitle,
@@ -119,7 +134,6 @@ export function Component() {
         [
             strings.searchEmergenciesTitle,
             strings.searchReportsTitle,
-            strings.searchProjectsTitle,
             strings.searchSurgeAlertsTitle,
             strings.searchSurgeDeploymentsTitle,
             strings.searchRapidResponseDeploymentsTitle,
