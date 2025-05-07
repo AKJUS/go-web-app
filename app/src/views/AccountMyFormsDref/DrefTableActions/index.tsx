@@ -142,6 +142,7 @@ function DrefTableActions(props: Props) {
                 allocationRequested: response?.additional_allocation,
                 previousAllocation: response?.dref_allocated_so_far ?? 0,
                 totalDREFAllocation: response?.total_dref_allocation,
+                noOfPeopleTargeted: response?.number_of_people_targeted,
                 toBeAllocatedFrom:
                     response?.type_of_dref_display === 'Imminent'
                     // FIXME: can't compare imminent with Anticipatory Pillar

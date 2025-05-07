@@ -57,7 +57,8 @@ function DrefExportModal(props: Props) {
                 export_id: id,
                 export_type: type,
                 selector: '#pdf-preview-ready',
-                per_country: undefined, // FIXME: typing is altered by the useRequest function
+                per_country: undefined,
+                is_pga: false,
             };
         },
         [id, applicationType],
