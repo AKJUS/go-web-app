@@ -778,66 +778,56 @@ export function Component() {
                 />
             </Container>
             {showRiskAndSecuritySection && (
-                <>
-                    <Heading level={2}>
-                        {strings.riskAndSecuritySectionHeading}
-                    </Heading>
+                <Container
+                    childrenContainerClassName={styles.riskAndSecuritySection}
+                    heading={strings.riskAndSecuritySectionHeading}
+                    headingLevel={2}
+                >
                     {hasAntiFraudPolicy && (
-                        <Container>
-                            <BlockTextOutput
-                                label={strings.hasAntiFraudPolicy}
-                                value={drefResponse?.has_anti_fraud_corruption_policy}
-                                valueType="boolean"
-                                strongLabel
-                            />
-                        </Container>
+                        <BlockTextOutput
+                            label={strings.hasAntiFraudPolicy}
+                            value={drefResponse?.has_anti_fraud_corruption_policy}
+                            valueType="boolean"
+                            strongValue
+                        />
                     )}
                     {hasSexualAbusePolicy && (
-                        <Container>
-                            <BlockTextOutput
-                                label={strings.hasSexualAbusePolicy}
-                                value={drefResponse?.has_sexual_abuse_policy}
-                                valueType="boolean"
-                                strongLabel
-                            />
-                        </Container>
+                        <BlockTextOutput
+                            label={strings.hasSexualAbusePolicy}
+                            value={drefResponse?.has_sexual_abuse_policy}
+                            valueType="boolean"
+                            strongValue
+                        />
                     )}
                     {hasChildProtectionPolicy && (
-                        <Container>
-                            <BlockTextOutput
-                                label={strings.hasChildProtectionPolicy}
-                                value={drefResponse?.has_child_protection_policy}
-                                valueType="boolean"
-                                strongLabel
-                            />
-                        </Container>
+                        <BlockTextOutput
+                            label={strings.hasChildProtectionPolicy}
+                            value={drefResponse?.has_child_protection_policy}
+                            valueType="boolean"
+                            strongValue
+                        />
                     )}
                     {hasWhistleblowerProtectionPolicy && (
-                        <Container>
-                            <BlockTextOutput
-                                label={strings.hasWhistleblowerProtectionPolicy}
-                                value={drefResponse?.has_whistleblower_protection_policy}
-                                valueType="boolean"
-                                strongLabel
-                            />
-                        </Container>
+                        <BlockTextOutput
+                            label={strings.hasWhistleblowerProtectionPolicy}
+                            value={drefResponse?.has_whistleblower_protection_policy}
+                            valueType="boolean"
+                            strongValue
+                        />
                     )}
                     {hasAntiSexualHarassmentPolicy && (
-                        <Container>
-                            <BlockTextOutput
-                                label={strings.hasAntiSexualHarassmentPolicy}
-                                value={drefResponse?.has_anti_sexual_harassment_policy}
-                                valueType="boolean"
-                                strongLabel
-                            />
-                        </Container>
+                        <BlockTextOutput
+                            label={strings.hasAntiSexualHarassmentPolicy}
+                            value={drefResponse?.has_anti_sexual_harassment_policy}
+                            valueType="boolean"
+                            strongValue
+                        />
                     )}
                     {riskSecurityDefined && (
-                        <Container
-                            heading={strings.riskSecurityHeading}
-                            childrenContainerClassName={styles.riskList}
-                            headingLevel={6}
-                        >
+                        <>
+                            <div className={styles.potentialRisksHeading}>
+                                {strings.riskSecurityHeading}
+                            </div>
                             <div className={styles.riskTitle}>
                                 {strings.riskLabel}
                             </div>
@@ -856,32 +846,26 @@ export function Component() {
                                     </Fragment>
                                 ),
                             )}
-                        </Container>
+                        </>
                     )}
                     {riskSecurityConcernDefined && (
-                        <Container
-                            heading={strings.safetyConcernHeading}
-                            headingLevel={6}
-                        >
-                            <DescriptionText
-                                className={styles.description}
-                            >
-                                {drefResponse?.risk_security_concern}
-                            </DescriptionText>
-                        </Container>
+                        <TextOutput
+                            className={styles.riskSecurityConcern}
+                            label={strings.safetyConcernHeading}
+                            value={drefResponse?.risk_security_concern}
+                            valueType="text"
+                            strongLabel
+                        />
                     )}
                     {hasChildrenSafeguardingDefined && (
-                        <Container>
-                            <BlockTextOutput
-                                label={strings.hasChildRiskCompleted}
-                                // eslint-disable-next-line max-len
-                                value={drefResponse?.has_child_safeguarding_risk_analysis_assessment}
-                                valueType="boolean"
-                                strongLabel
-                            />
-                        </Container>
+                        <BlockTextOutput
+                            label={strings.hasChildRiskCompleted}
+                            value={drefResponse?.has_child_safeguarding_risk_analysis_assessment}
+                            valueType="boolean"
+                            strongValue
+                        />
                     )}
-                </>
+                </Container>
             )}
             {plannedInterventionDefined && (
                 <>

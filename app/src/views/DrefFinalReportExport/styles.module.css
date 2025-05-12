@@ -134,11 +134,26 @@
         }
     }
 
-    .risk-list,
+    .risk-and-security-section,
     .source-information-list {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-gap: var(--go-ui-width-separator-md);
+
+        .potential-risks-heading {
+            grid-column: span 2;
+            background-color: var(--pdf-element-bg);
+            padding: var(--go-ui-spacing-sm) var(--go-ui-spacing-xs);
+            color: var(--go-ui-color-black);
+            font-weight: var(--go-ui-font-weight-semibold);
+        }
+
+        .risk-security-concern {
+            grid-column: span 2;
+            background-color: var(--pdf-element-bg);
+            padding: var(--go-ui-spacing-sm) var(--go-ui-spacing-xs);
+            gap: var(--go-ui-spacing-sm);
+        }
 
         .risk,
         .name,
