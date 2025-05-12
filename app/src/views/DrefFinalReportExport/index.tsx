@@ -174,8 +174,7 @@ export function Component() {
     const partnerNsActionsDefined = isTruthyString(drefResponse?.partner_national_society?.trim());
     const showMovementPartnersActionsSection = ifrcActionsDefined || partnerNsActionsDefined;
 
-    const showNsActionsSection = isDefined(drefResponse?.has_national_society_conducted)
-        || isTruthyString(drefResponse?.national_society_conducted_description);
+    const showNsActionsSection = isDefined(drefResponse?.has_national_society_conducted);
 
     const icrcActionsDefined = isTruthyString(drefResponse?.icrc?.trim());
 
@@ -550,12 +549,14 @@ export function Component() {
                         valueType="boolean"
                         strongLabel
                     />
-                    <BlockTextOutput
-                        label={strings.nsInterventionDescriptionLabel}
-                        value={drefResponse?.national_society_conducted_description}
-                        valueType="text"
-                        strongLabel
-                    />
+                    {drefResponse?.has_national_society_conducted === true && (
+                        <BlockTextOutput
+                            label={strings.nsInterventionDescriptionLabel}
+                            value={drefResponse?.national_society_conducted_description}
+                            valueType="text"
+                            strongLabel
+                        />
+                    )}
                 </Container>
             )}
             {showMovementPartnersActionsSection && (
