@@ -131,6 +131,7 @@ function Submission(props: Props) {
                             onChange={setFieldValue}
                             error={error?.new_operational_end_date}
                             disabled={disabled}
+                            readOnly
                         />
                     )}
                     {value.type_of_dref === TYPE_LOAN && (
