@@ -110,6 +110,7 @@ function Submission(props: Props) {
                         onChange={setFieldValue}
                         error={error?.operation_end_date}
                         disabled={disabled}
+                        readOnly
                     />
                     <DateInput
                         label={strings.finalReportDateOfPublication}

@@ -6,9 +6,12 @@
     .warning {
         display: flex;
         align-items: flex-start;
-        gap: var(--go-ui-spacing-sm);
-        padding: var(--go-ui-spacing-sm) 0;
+        gap: var(--go-ui-spacing-2xs);
+        padding: var(--go-ui-spacing-2xs) 0;
         color: var(--go-ui-color-warning);
-        font-weight: var(--go-ui-font-weight-semibold);
+
+        .icon {
+            font-size: var(--go-ui-height-icon-multiplier);
+        }
     }
 }
