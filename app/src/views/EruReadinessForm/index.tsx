@@ -120,8 +120,6 @@ export function Component() {
                 people_readiness: eruType.people_readiness,
                 funding_readiness: eruType.funding_readiness,
                 comment: eruType.comment,
-                has_capacity_to_lead: eruType.has_capacity_to_lead,
-                has_capacity_to_support: eruType.has_capacity_to_support,
                 client_id: randomString(),
             })),
         });

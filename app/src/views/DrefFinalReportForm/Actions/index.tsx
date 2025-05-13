@@ -129,6 +129,32 @@ function Actions(props: Props) {
     return (
         <div className={styles.actions}>
             <Container
+                className={styles.nationalSocietyActions}
+                heading={strings.finalReportNationalSocietiesActions}
+                headerDescription={strings.drefFormNationalSocietiesActionsDescription}
+            >
+                <InputSection title={strings.finalReportHaveNationalSocietyConducted}>
+                    <BooleanInput
+                        name="has_national_society_conducted"
+                        onChange={setFieldValue}
+                        value={value?.has_national_society_conducted}
+                        error={error?.has_national_society_conducted}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                {value.has_national_society_conducted === true && (
+                    <InputSection title={strings.finalReportDescriptionOfAdditionalActivities}>
+                        <TextArea
+                            name="national_society_conducted_description"
+                            value={value.national_society_conducted_description}
+                            onChange={setFieldValue}
+                            error={error?.national_society_conducted_description}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                )}
+            </Container>
+            <Container
                 heading={strings.ifrcNetworkActionsHeading}
             >
                 <InputSection
