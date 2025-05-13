@@ -368,7 +368,14 @@ function Navbar(props: Props) {
                                 </div>
                                 <DropdownMenuItem
                                     type="link"
-                                    to="surgeOverview"
+                                    to="activeSurgeDeployments"
+                                    variant="tertiary"
+                                >
+                                    {strings.userMenuActiveSurgeDeployments}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    type="link"
+                                    to="surgeOverviewLayout"
                                     variant="tertiary"
                                 >
                                     {strings.userMenuSurgeGlobalOverview}
