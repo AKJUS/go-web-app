@@ -52,6 +52,7 @@ export type OpsUpdateRequestBody = GoApiBody<'/api/v2/dref-op-update/{id}/', 'PA
 };
 
 type NeedIdentifiedResponse = NonNullable<OpsUpdateRequestBody['needs_identified']>[number];
+type NsActionResponse = NonNullable<OpsUpdateRequestBody['national_society_actions']>[number];
 type InterventionResponse = NonNullable<OpsUpdateRequestBody['planned_interventions']>[number];
 type IndicatorResponse = NonNullable<InterventionResponse['indicators']>[number];
 type RiskSecurityResponse = NonNullable<OpsUpdateRequestBody['risk_security']>[number];
@@ -59,6 +60,7 @@ type ImagesFileResponse = NonNullable<OpsUpdateRequestBody['images_file']>[numbe
 type SourceInformationResponse = NonNullable<OpsUpdateRequestBody['source_information']>[number];
 
 type NeedIdentifiedFormFields = NeedIdentifiedResponse & { client_id: string };
+type NsActionFormFields = NsActionResponse & { client_id: string; }
 type InterventionFormFields = InterventionResponse & { client_id: string };
 type IndicatorFormFields = IndicatorResponse & { client_id: string };
 type SourceInformationFormFields = SourceInformationResponse & { client_id: string };
@@ -81,9 +83,13 @@ type OpsUpdateFormFields = (
                         DeepReplace<
                             DeepReplace<
                                 DeepReplace<
-                                    OpsUpdateRequestBody,
-                                    NeedIdentifiedResponse,
-                                    NeedIdentifiedFormFields
+                                    DeepReplace<
+                                        OpsUpdateRequestBody,
+                                        NeedIdentifiedResponse,
+                                        NeedIdentifiedFormFields
+                                    >,
+                                    NsActionResponse,
+                                    NsActionFormFields
                                 >,
                                 InterventionResponse,
                                 InterventionFormFields
