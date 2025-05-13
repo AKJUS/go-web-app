@@ -1,5 +1,37 @@
 # go-web-app
 
+## 7.15.0
+
+### Minor Changes
+
+- c26bda4: Implement [ERU Readiness](https://github.com/IFRCGo/go-web-app/issues/1710)
+
+  - Restucture surge page to acommodate ERU
+    - Move surge deployment related sections to a new dedicated tab **Active Surge Deployments**
+      - Update active deployments to improve scaling of points in the map
+      - Add **Active Surge Support per Emergency** section
+    - Revamp **Surge Overview** tab
+      - Add **Rapid Response Personnel** sub-tab
+        - Update existings charts and add new related tables/charts
+      - Add **Emergency Response Unit** sub-tab
+        - Add section to visualize ERU capacity and readiness
+        - Add section to view ongoing ERU deployments
+        - Add a form to update ERU Readiness
+        - Add option to export ERU Readiness data
+  - Update **Respond > Surge/Deployments** menu to include **Active Surge Deployments**
+
+- 9ed8181: Address feedbacks in [DREF superticket feedbacks](https://github.com/IFRCGo/go-web-app/issues/1816)
+
+  - Make end date of operation readonly field in all DREF forms
+  - Fix font and spacing issues in the DREF exports (caused by link text overflow)
+  - Update styling of Risk and Security Considerations section to match that of Previous Operations
+  - Update visibility condition of National Society Actions in Final Report export
+
+### Patch Changes
+
+- Updated dependencies [c26bda4]
+  - @ifrc-go/ui@1.5.0
+
 ## 7.14.0
 
 ### Minor Changes

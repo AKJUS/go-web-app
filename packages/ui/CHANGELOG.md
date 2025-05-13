@@ -1,5 +1,11 @@
 # @ifrc-go/ui
 
+## 1.5.0
+
+### Minor Changes
+
+- c26bda4: Add MultiTimelineHeader component to column shortcuts
+
 ## 1.4.0
 
 ### Minor Changes
