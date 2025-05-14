@@ -1,5 +1,14 @@
 # go-web-app
 
+## 7.16.0
+
+### Minor Changes
+
+- 9dcdd38: Add Montandon landing page
+
+  - Add a basic landing page for Montandon with links and information
+  - Add link to Montandon landing page to Learn > Resources menu
+
 ## 7.15.0
 
 ### Minor Changes
