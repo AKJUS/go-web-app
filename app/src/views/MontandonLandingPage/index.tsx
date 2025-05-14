@@ -216,11 +216,11 @@ export function Component() {
                         </div>
                     </div>
                     <Link
-                        href="mailto:justin.ginetti@ifrc.org"
+                        href="mailto:justin.ginnetti@ifrc.org"
                         variant="tertiary"
                         external
                     >
-                        justin.ginetti@ifrc.org
+                        justin.ginnetti@ifrc.org
                     </Link>
                 </Container>
 

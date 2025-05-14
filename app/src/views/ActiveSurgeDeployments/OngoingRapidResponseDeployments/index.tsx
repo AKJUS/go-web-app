@@ -252,10 +252,12 @@ function OngoingRapidResponseDeployments() {
                 return row;
             }
 
-            const subRows = datum.deployments?.flatMap((deployment) => ({
-                ...deployment.personnel,
-                country_deployed_to: deployment.country_deployed_to,
-            }));
+            const subRows = datum.deployments?.flatMap((deployment) => (
+                deployment.personnel.map((personnel) => ({
+                    ...personnel,
+                    country_deployed_to: deployment.country_deployed_to,
+                }))
+            ));
 
             return (
                 <>
