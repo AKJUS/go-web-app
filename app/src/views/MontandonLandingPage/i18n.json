@@ -3,7 +3,7 @@
     "strings": {
         "montandonPageTitle": "Montandon - The Global Crisis Data Bank",
         "montandonHeading": "Montandon - The Global Crisis Data Bank",
-        "montandonHeadingDescription": "Montandon is the world’s largest disaster database—a global public good with applications far beyond IFRC. Montandon integrates three key types of data: 1) forecasted and recorded natural hazards; 2) impact data on these hazards; and 3) operational response data (where available). Montandon contains more than millions of records about hazards and their impacts for hundreds of thousands of events.",
+        "montandonHeadingDescription": "Montandon is the world’s largest disaster database—a global public good with applications far beyond IFRC. Montandon integrates three key types of data: 1) forecasted and recorded natural hazards; 2) impact data on these hazards; and 3) operational response data (where available). Montandon contains more than 2 million of records about hazards and their impacts for hundreds of thousands of events.",
 
         "sourceButtonTitle": "Source",
         "sourcePopupTitle": "Source Data",
@@ -33,7 +33,7 @@
         "scaledUpSystemsBlogPostTitle": "Scaled-up ambitions require scaled-up systems",
 
         "contact": "Contact",
-        "contactName": "Justin Ginetti",
+        "contactName": "Justin Ginnetti",
         "contactInfo": "Senior Officer, Information Management and Risk Analysis, IFRC",
 
         "accessAPILabel": "Access API",
