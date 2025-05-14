@@ -1,5 +1,12 @@
 # go-web-app
 
+## 7.16.1
+
+### Patch Changes
+
+- d561dc4: - Update Montandon landing page - Fix typo in Justin's name and email - Update description
+  - Fix position and deploying organisation in ongoing RR deployment table
+
 ## 7.16.0
 
 ### Minor Changes
