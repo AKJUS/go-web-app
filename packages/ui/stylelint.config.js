@@ -1,6 +1,5 @@
 const config  = {
     plugins: [
-        'stylelint-no-unused-selectors',
         'stylelint-value-no-unknown-custom-properties',
     ],
     extends: [
@@ -10,12 +9,6 @@ const config  = {
     rules: {
         // https://stylelint.io/migration-guide/to-15
         // indentation: 4,
-        'plugin/no-unused-selectors': {
-            'suffixesToStrip': ['.module'],
-            'documents': [
-                '{cssDir}/{cssName}.tsx',
-            ],
-        },
         'csstools/value-no-unknown-custom-properties': [
             true, {
                 importFrom: ['./src/index.css']

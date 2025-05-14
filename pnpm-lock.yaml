@@ -215,9 +215,6 @@ importers:
       stylelint-config-recommended:
         specifier: ^15.0.0
         version: 15.0.0(stylelint@16.17.0(typescript@5.7.3))
-      stylelint-no-unused-selectors:
-        specifier: git+https://github.com/toggle-corp/stylelint-no-unused-selectors#e0831e1
-        version: https://codeload.github.com/toggle-corp/stylelint-no-unused-selectors/tar.gz/e0831e1(stylelint@16.17.0(typescript@5.7.3))
       stylelint-value-no-unknown-custom-properties:
         specifier: ^6.0.1
         version: 6.0.1(stylelint@16.17.0(typescript@5.7.3))
@@ -502,9 +499,6 @@ importers:
       stylelint-config-recommended:
         specifier: ^15.0.0
         version: 15.0.0(stylelint@16.17.0(typescript@5.7.3))
-      stylelint-no-unused-selectors:
-        specifier: git+https://github.com/toggle-corp/stylelint-no-unused-selectors#e0831e1
-        version: https://codeload.github.com/toggle-corp/stylelint-no-unused-selectors/tar.gz/e0831e1(stylelint@16.17.0(typescript@5.7.3))
       stylelint-value-no-unknown-custom-properties:
         specifier: ^6.0.1
         version: 6.0.1(stylelint@16.17.0(typescript@5.7.3))
@@ -4781,9 +4775,6 @@ packages:
     resolution: {integrity: sha512-pMsA8GrMQKtNOPPjKnJbDotA2UpKsIcTHecMw2Bl3M/2eWTVs8zAYBm/cgaE9Qz5GrcVCDIru9GQX/P9vxtUFg==}
     hasBin: true
 
-  option-t@20.3.1:
-    resolution: {integrity: sha512-umjR1qtje0FD7AJbPmrzaaYCmHkh9yWDWUfRtcN8P3o5pv/JYaAVsXu0t3sRj2/Ogcp6Q9jrGRKBWX5DyiQFMQ==}
-
   optionator@0.8.3:
     resolution: {integrity: sha512-+IW9pACdk3XWmmTXG8m3upGUJst5XRGzxMRjXzAuJ1XnIFNvfhjjIuYkDvysnPQ7qzqVzLt78BCruntqRhWQbA==}
     engines: {node: '>= 0.8.0'}
@@ -5139,10 +5130,6 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       postcss: ^8.4
-
-  postcss-selector-parser@6.1.2:
-    resolution: {integrity: sha512-Q8qQfPiZ+THO/3ZrOrO0cJJKfpYCagtMUkXbnEfmgUjwXg6z/WBeOyS9APBBPCTSiDV+s4SwQGu8yFsiMRIudg==}
-    engines: {node: '>=4'}
 
   postcss-selector-parser@7.1.0:
     resolution: {integrity: sha512-8sLjZwK0R+JlxlYcTuVnyT2v+htpdrjDOKuMcOVdYjt52Lh8hWRYpxBPoKx/Zg+bcjc3wx6fmQevMmUztS/ccA==}
@@ -5706,9 +5693,6 @@ packages:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
     engines: {node: '>=0.6.19'}
 
-  string-template@1.0.0:
-    resolution: {integrity: sha512-SLqR3GBUXuoPP5MmYtD7ompvXiG87QjT6lzOszyXjTM86Uu7At7vNnt2xgyTLq5o9T4IxTYFyGxcULqpsmsfdg==}
-
   string-width@2.1.1:
     resolution: {integrity: sha512-nOqH59deCq9SRHlxq1Aw85Jnt4w6KvLKqWVik6oA9ZklXLNIOlqg4F2yrT1MVaTjAqvVwdfeZ7w7aCvJD7ugkw==}
     engines: {node: '>=4'}
@@ -5811,13 +5795,6 @@ packages:
     engines: {node: '>=18.12.0'}
     peerDependencies:
       stylelint: ^16.13.0
-
-  stylelint-no-unused-selectors@https://codeload.github.com/toggle-corp/stylelint-no-unused-selectors/tar.gz/e0831e1:
-    resolution: {tarball: https://codeload.github.com/toggle-corp/stylelint-no-unused-selectors/tar.gz/e0831e1}
-    version: 1.0.4
-    engines: {node: '>=8.16.0'}
-    peerDependencies:
-      stylelint: ^15.5.0
 
   stylelint-order@1.0.0:
     resolution: {integrity: sha512-2IVM8GzeKIDQDTETNdmgX99ywGrb7OqFWkniCw7QLqS/xONPGMLY/xAQnvGcUS3oBSo8znsoshsWVBqPz2Kv4Q==}
@@ -8507,26 +8484,31 @@ snapshots:
 
   '@vue/shared@3.5.13': {}
 
-  abab@2.0.6: {}
+  abab@2.0.6:
+    optional: true
 
   acorn-globals@4.3.4:
     dependencies:
       acorn: 6.4.2
       acorn-walk: 6.2.0
+    optional: true
 
   acorn-jsx@5.3.2(acorn@8.14.0):
     dependencies:
       acorn: 8.14.0
 
-  acorn-walk@6.2.0: {}
+  acorn-walk@6.2.0:
+    optional: true
 
   acorn-walk@8.3.4:
     dependencies:
       acorn: 8.14.0
 
-  acorn@6.4.2: {}
+  acorn@6.4.2:
+    optional: true
 
-  acorn@7.4.1: {}
+  acorn@7.4.1:
+    optional: true
 
   acorn@8.14.0: {}
 
@@ -8647,7 +8629,8 @@ snapshots:
       call-bound: 1.0.3
       is-array-buffer: 3.0.5
 
-  array-equal@1.0.2: {}
+  array-equal@1.0.2:
+    optional: true
 
   array-includes@3.1.8:
     dependencies:
@@ -9339,7 +9322,8 @@ snapshots:
 
   browser-assert@1.2.1: {}
 
-  browser-process-hrtime@1.0.0: {}
+  browser-process-hrtime@1.0.0:
+    optional: true
 
   browserslist@4.24.4:
     dependencies:
@@ -9655,13 +9639,16 @@ snapshots:
 
   cssesc@3.0.0: {}
 
-  cssom@0.3.8: {}
+  cssom@0.3.8:
+    optional: true
 
-  cssom@0.4.4: {}
+  cssom@0.4.4:
+    optional: true
 
   cssstyle@2.3.0:
     dependencies:
       cssom: 0.3.8
+    optional: true
 
   csstype@3.1.3: {}
 
@@ -9682,6 +9669,7 @@ snapshots:
       abab: 2.0.6
       whatwg-mimetype: 2.3.0
       whatwg-url: 7.1.0
+    optional: true
 
   data-view-buffer@1.0.2:
     dependencies:
@@ -9789,6 +9777,7 @@ snapshots:
   domexception@1.0.1:
     dependencies:
       webidl-conversions: 4.0.2
+    optional: true
 
   domhandler@5.0.3:
     dependencies:
@@ -10046,12 +10035,13 @@ snapshots:
       optionator: 0.8.3
     optionalDependencies:
       source-map: 0.6.1
+    optional: true
 
   eslint-config-airbnb-base@15.0.0(eslint-plugin-import@2.31.0)(eslint@9.20.1(jiti@2.4.2)):
     dependencies:
       confusing-browser-globals: 1.0.11
       eslint: 9.20.1(jiti@2.4.2)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2)(eslint@9.20.1(jiti@2.4.2))
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.26.0(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2)(eslint@9.20.1(jiti@2.4.2))
       object.assign: 4.1.7
       object.entries: 1.1.8
       semver: 6.3.1
@@ -10060,7 +10050,7 @@ snapshots:
     dependencies:
       eslint: 9.20.1(jiti@2.4.2)
       eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0)(eslint@9.20.1(jiti@2.4.2))
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2)(eslint@9.20.1(jiti@2.4.2))
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.26.0(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2)(eslint@9.20.1(jiti@2.4.2))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.20.1(jiti@2.4.2))
       eslint-plugin-react: 7.37.4(eslint@9.20.1(jiti@2.4.2))
       eslint-plugin-react-hooks: 5.1.0(eslint@9.20.1(jiti@2.4.2))
@@ -10086,7 +10076,7 @@ snapshots:
       stable-hash: 0.0.4
       tinyglobby: 0.2.12
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2)(eslint@9.20.1(jiti@2.4.2))
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.26.0(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2)(eslint@9.20.1(jiti@2.4.2))
     transitivePeerDependencies:
       - supports-color
 
@@ -10308,7 +10298,8 @@ snapshots:
     dependencies:
       estraverse: 5.3.0
 
-  estraverse@4.3.0: {}
+  estraverse@4.3.0:
+    optional: true
 
   estraverse@5.3.0: {}
 
@@ -10695,6 +10686,7 @@ snapshots:
   html-encoding-sniffer@1.0.2:
     dependencies:
       whatwg-encoding: 1.0.5
+    optional: true
 
   html-escaper@2.0.2: {}
 
@@ -10792,7 +10784,8 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
 
-  ip-regex@2.1.0: {}
+  ip-regex@2.1.0:
+    optional: true
 
   is-arguments@1.2.0:
     dependencies:
@@ -11044,6 +11037,7 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+    optional: true
 
   jsesc@0.5.0: {}
 
@@ -11161,6 +11155,7 @@ snapshots:
     dependencies:
       prelude-ls: 1.1.2
       type-check: 0.3.2
+    optional: true
 
   levn@0.4.1:
     dependencies:
@@ -11240,7 +11235,8 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
-  lodash.sortby@4.7.0: {}
+  lodash.sortby@4.7.0:
+    optional: true
 
   lodash.startcase@4.4.0: {}
 
@@ -11449,7 +11445,8 @@ snapshots:
     dependencies:
       path-key: 4.0.0
 
-  nwsapi@2.2.16: {}
+  nwsapi@2.2.16:
+    optional: true
 
   oauth-sign@0.9.0: {}
 
@@ -11525,8 +11522,6 @@ snapshots:
       undici: 5.28.5
       yargs-parser: 21.1.1
 
-  option-t@20.3.1: {}
-
   optionator@0.8.3:
     dependencies:
       deep-is: 0.1.4
@@ -11535,6 +11530,7 @@ snapshots:
       prelude-ls: 1.1.2
       type-check: 0.3.2
       word-wrap: 1.2.5
+    optional: true
 
   optionator@0.9.4:
     dependencies:
@@ -11612,7 +11608,8 @@ snapshots:
 
   parse-srcset@1.0.2: {}
 
-  parse5@5.1.0: {}
+  parse5@5.1.0:
+    optional: true
 
   path-browserify@1.0.1: {}
 
@@ -11666,7 +11663,8 @@ snapshots:
       mlly: 1.7.4
       pathe: 2.0.3
 
-  pn@1.1.0: {}
+  pn@1.1.0:
+    optional: true
 
   polished@4.3.1:
     dependencies:
@@ -11910,11 +11908,6 @@ snapshots:
       postcss: 8.5.3
       postcss-selector-parser: 7.1.0
 
-  postcss-selector-parser@6.1.2:
-    dependencies:
-      cssesc: 3.0.0
-      util-deprecate: 1.0.2
-
   postcss-selector-parser@7.1.0:
     dependencies:
       cssesc: 3.0.0
@@ -11940,7 +11933,8 @@ snapshots:
 
   potpack@1.0.2: {}
 
-  prelude-ls@1.1.2: {}
+  prelude-ls@1.1.2:
+    optional: true
 
   prelude-ls@1.2.1: {}
 
@@ -12204,6 +12198,7 @@ snapshots:
     dependencies:
       lodash: 4.17.21
       request: 2.88.2
+    optional: true
 
   request-promise-native@1.0.9(request@2.88.2):
     dependencies:
@@ -12211,6 +12206,7 @@ snapshots:
       request-promise-core: 1.1.4(request@2.88.2)
       stealthy-require: 1.1.1
       tough-cookie: 2.5.0
+    optional: true
 
   request@2.88.2:
     dependencies:
@@ -12373,6 +12369,7 @@ snapshots:
   saxes@3.1.11:
     dependencies:
       xmlchars: 2.2.0
+    optional: true
 
   saxes@5.0.1:
     dependencies:
@@ -12528,7 +12525,8 @@ snapshots:
 
   std-env@3.8.0: {}
 
-  stealthy-require@1.1.1: {}
+  stealthy-require@1.1.1:
+    optional: true
 
   storybook@8.5.8(prettier@2.8.8):
     dependencies:
@@ -12541,8 +12539,6 @@ snapshots:
       - utf-8-validate
 
   string-argv@0.3.2: {}
-
-  string-template@1.0.0: {}
 
   string-width@2.1.1:
     dependencies:
@@ -12674,23 +12670,6 @@ snapshots:
     dependencies:
       stylelint: 16.17.0(typescript@5.7.3)
 
-  stylelint-no-unused-selectors@https://codeload.github.com/toggle-corp/stylelint-no-unused-selectors/tar.gz/e0831e1(stylelint@16.17.0(typescript@5.7.3)):
-    dependencies:
-      '@babel/parser': 7.26.9
-      '@babel/traverse': 7.26.9
-      array.prototype.flatmap: 1.3.3
-      jsdom: 15.2.1
-      option-t: 20.3.1
-      postcss-resolve-nested-selector: 0.1.6
-      postcss-selector-parser: 6.1.2
-      string-template: 1.0.0
-      stylelint: 16.17.0(typescript@5.7.3)
-    transitivePeerDependencies:
-      - bufferutil
-      - canvas
-      - supports-color
-      - utf-8-validate
-
   stylelint-order@1.0.0(stylelint@16.17.0(typescript@5.7.3)):
     dependencies:
       lodash: 4.17.21
@@ -12809,7 +12788,8 @@ snapshots:
 
   svg-tags@1.0.0: {}
 
-  symbol-tree@3.2.4: {}
+  symbol-tree@3.2.4:
+    optional: true
 
   table@6.9.0:
     dependencies:
@@ -12890,10 +12870,12 @@ snapshots:
       ip-regex: 2.1.0
       psl: 1.15.0
       punycode: 2.3.1
+    optional: true
 
   tr46@1.0.1:
     dependencies:
       punycode: 2.3.1
+    optional: true
 
   traverse@0.3.9: {}
 
@@ -12948,6 +12930,7 @@ snapshots:
   type-check@0.3.2:
     dependencies:
       prelude-ls: 1.1.2
+    optional: true
 
   type-check@0.4.0:
     dependencies:
@@ -13297,19 +13280,22 @@ snapshots:
   w3c-hr-time@1.0.2:
     dependencies:
       browser-process-hrtime: 1.0.0
+    optional: true
 
   w3c-xmlserializer@1.1.2:
     dependencies:
       domexception: 1.0.1
       webidl-conversions: 4.0.2
       xml-name-validator: 3.0.0
+    optional: true
 
   wcwidth@1.0.1:
     dependencies:
       defaults: 1.0.4
     optional: true
 
-  webidl-conversions@4.0.2: {}
+  webidl-conversions@4.0.2:
+    optional: true
 
   webidl-conversions@7.0.0: {}
 
@@ -13318,12 +13304,14 @@ snapshots:
   whatwg-encoding@1.0.5:
     dependencies:
       iconv-lite: 0.4.24
+    optional: true
 
   whatwg-encoding@2.0.0:
     dependencies:
       iconv-lite: 0.6.3
 
-  whatwg-mimetype@2.3.0: {}
+  whatwg-mimetype@2.3.0:
+    optional: true
 
   whatwg-mimetype@3.0.0: {}
 
@@ -13332,6 +13320,7 @@ snapshots:
       lodash.sortby: 4.7.0
       tr46: 1.0.1
       webidl-conversions: 4.0.2
+    optional: true
 
   which-boxed-primitive@1.1.1:
     dependencies:
@@ -13415,11 +13404,13 @@ snapshots:
       imurmurhash: 0.1.4
       signal-exit: 4.1.0
 
-  ws@7.5.10: {}
+  ws@7.5.10:
+    optional: true
 
   ws@8.18.0: {}
 
-  xml-name-validator@3.0.0: {}
+  xml-name-validator@3.0.0:
+    optional: true
 
   xmlchars@2.2.0: {}
 
