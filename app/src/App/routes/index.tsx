@@ -1226,6 +1226,20 @@ const obsoleteFieldReportDetails = customWrapRoute({
     },
 });
 
+const montandonLandingPage = customWrapRoute({
+    parent: rootLayout,
+    path: 'montandon-landing',
+    component: {
+        render: () => import('#views/MontandonLandingPage'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'Montandon',
+        visibility: 'anything',
+    },
+});
+
 const wrappedRoutes = {
     fourHundredFour,
     rootLayout,
@@ -1306,6 +1320,7 @@ const wrappedRoutes = {
     threeWProjectDetail,
     termsAndConditions,
     operationalLearning,
+    montandonLandingPage,
     ...regionRoutes,
     ...countryRoutes,
     ...surgeRoutes,

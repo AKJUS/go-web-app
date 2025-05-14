@@ -500,6 +500,19 @@ function Navbar(props: Props) {
                                 <div className={styles.menuItemWithDescription}>
                                     <DropdownMenuItem
                                         type="link"
+                                        to="montandonLandingPage"
+                                        variant="tertiary"
+                                        state={{ earlyWarning: true }}
+                                    >
+                                        {strings.userMenuMontandonItem}
+                                    </DropdownMenuItem>
+                                    <div className={styles.description}>
+                                        {strings.userMenuMontandonItemDescription}
+                                    </div>
+                                </div>
+                                <div className={styles.menuItemWithDescription}>
+                                    <DropdownMenuItem
+                                        type="link"
                                         to="surgeCatalogueLayout"
                                         variant="tertiary"
                                         state={{ earlyWarning: true }}
@@ -507,7 +520,7 @@ function Navbar(props: Props) {
                                         {strings.userMenuCatalogueSurgeServicesItem}
                                     </DropdownMenuItem>
                                     <div className={styles.description}>
-                                        {strings.userMenuCatalogueSurgeServicesItem}
+                                        {strings.userMenuCatalogueSurgeServicesItemDescription}
                                     </div>
                                 </div>
                                 <div className={styles.menuItemWithDescription}>
