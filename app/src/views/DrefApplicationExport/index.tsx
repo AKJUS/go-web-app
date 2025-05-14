@@ -1066,7 +1066,6 @@ export function Component() {
                     {hasChildrenSafeguardingDefined && (
                         <BlockTextOutput
                             label={strings.hasChildRiskCompleted}
-                            // eslint-disable-next-line max-len
                             value={drefResponse?.has_child_safeguarding_risk_analysis_assessment}
                             valueType="boolean"
                             strongValue
