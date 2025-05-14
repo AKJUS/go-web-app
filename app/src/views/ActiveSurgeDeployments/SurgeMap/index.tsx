@@ -14,6 +14,7 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    encodeDate,
     numericIdSelector,
     stringNameSelector,
     sumSafe,
@@ -63,7 +64,7 @@ const sourceOptions: mapboxgl.GeoJSONSourceRaw = {
 const SURGE_MECHANISM_ERU = 1;
 const SURGE_MECHANISM_RR = 2;
 
-const now = new Date().toISOString();
+const now = encodeDate(new Date());
 
 interface ClickedPoint {
     properties: AdminZeroFeatureProperties;
@@ -102,6 +103,7 @@ function SurgeMap(props: Props) {
     } = useRequest({
         url: '/api/v2/eru/',
         query: {
+            end_date__gt: now,
             deployed_to__isnull: false,
             disaster_type: disasterFilter,
             limit: MAX_PAGE_LIMIT,
