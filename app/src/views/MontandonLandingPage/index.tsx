@@ -131,6 +131,26 @@ export function Component() {
                 contentViewType="grid"
                 numPreferredGridContentColumns={3}
                 spacing="comfortable"
+                footerActions={(
+                    <>
+                        <Link
+                            href="https://montandon-eoapi-stage.ifrc.org/stac/api.html"
+                            variant="secondary"
+                            external
+                            withLinkIcon
+                        >
+                            {strings.accessAPILabel}
+                        </Link>
+                        <Link
+                            href="https://radiantearth.github.io/stac-browser/#/external/montandon-eoapi-stage.ifrc.org/stac/"
+                            variant="secondary"
+                            external
+                            withLinkIcon
+                        >
+                            {strings.exploreRadiantEarthLabel}
+                        </Link>
+                    </>
+                )}
             >
                 <Container
                     className={styles.guideCard}
@@ -224,28 +244,6 @@ export function Component() {
                     </Link>
                 </Container>
 
-            </Container>
-            <Container
-                contentViewType="vertical"
-                heading="Other links"
-                withHeaderBorder
-            >
-                <Link
-                    href="https://montandon-eoapi-stage.ifrc.org/stac/api.html"
-                    withUnderline
-                    withLinkIcon
-                    external
-                >
-                    {strings.accessAPILabel}
-                </Link>
-                <Link
-                    href="https://radiantearth.github.io/stac-browser/#/external/montandon-eoapi-stage.ifrc.org/stac/"
-                    withUnderline
-                    withLinkIcon
-                    external
-                >
-                    {strings.exploreRadiantEarthLabel}
-                </Link>
             </Container>
         </Page>
     );

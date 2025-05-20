@@ -36,7 +36,7 @@
         "contactName": "Justin Ginnetti",
         "contactInfo": "Senior Officer, Information Management and Risk Analysis, IFRC",
 
-        "accessAPILabel": "Access API",
-        "exploreRadiantEarthLabel": "Explore Radiant Earth API"
+        "accessAPILabel": "Access the Montandon API",
+        "exploreRadiantEarthLabel": "Explore data in STAC browser"
     }
 }
