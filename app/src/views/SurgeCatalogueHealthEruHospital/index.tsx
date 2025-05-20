@@ -9,6 +9,7 @@ import Link from '#components/Link';
 
 import i18n from './i18n.json';
 
+// healthEruHospitalImageThree is removed due to a non-appropriate one
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
@@ -23,10 +24,6 @@ export function Component() {
             {
                 src: 'https://prddsgofilestorage.blob.core.windows.net/api/documents/surge/health-emt2_02.jpg',
                 caption: strings.healthEruHospitalImageTwo,
-            },
-            {
-                src: 'https://prddsgofilestorage.blob.core.windows.net/api/documents/surge/health-emt2_03.jpg',
-                caption: strings.healthEruHospitalImageThree,
             },
             {
                 src: 'https://prddsgofilestorage.blob.core.windows.net/api/documents/surge/health-emt2_04.jpg',
@@ -44,7 +41,6 @@ export function Component() {
         [
             strings.healthEruHospitalImageOne,
             strings.healthEruHospitalImageTwo,
-            strings.healthEruHospitalImageThree,
             strings.healthEruHospitalImageFour,
             strings.healthEruHospitalImageFive,
             strings.healthEruHospitalImageSix,
