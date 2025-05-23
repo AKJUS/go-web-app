@@ -648,7 +648,7 @@ function useImportTemplateSchema() {
                 type: 'input',
                 validation: 'number',
                 label: 'Estimated number of <b>People on the move</b> (if any)',
-                description: '<i>Number, e.g. XX,XXX.</i>',
+                description: '<i>Number, e.g. XX,XXX.</i> If 0, leave the box empty.',
             },
 
             risk_security: {
@@ -789,7 +789,7 @@ function useImportTemplateSchema() {
                                 + '<u>Example</u>:\n'
                                 + '<b>* Activity A</b>\n'
                                 + '<b>* Activity B</b>\n'
-                                + '<b>* Activity B</b>\n'
+                                + '<b>* Activity C</b>\n'
                             ),
                         },
                         indicators: {

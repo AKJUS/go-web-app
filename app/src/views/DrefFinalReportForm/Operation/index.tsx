@@ -204,7 +204,7 @@ function Operation(props: Props) {
                         onChange={setFieldValue}
                         value={value.operation_objective}
                         error={error?.operation_objective}
-                        placeholder={strings.drefFormObjectiveOperationPlaceholder}
+                        hint={strings.drefFormObjectiveOperationPlaceholder}
                         disabled={disabled}
                     />
                 </InputSection>
@@ -713,6 +713,7 @@ function Operation(props: Props) {
                     >
                         {strings.finalReportFinancialReportAttachment}
                     </GoSingleFileInput>
+                    {strings.drefFormUploadTargetingSupportingDescription}
                 </InputSection>
                 <InputSection title={strings.finalReportFinancialReportVariances}>
                     <TextArea

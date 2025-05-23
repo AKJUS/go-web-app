@@ -29,7 +29,10 @@ import {
 
 import useUserMe from '#hooks/domain/useUserMe';
 import useFilterState from '#hooks/useFilterState';
-import { DREF_TYPE_LOAN } from '#utils/constants';
+import {
+    DREF_TYPE_LOAN,
+    type TypeOfDrefEnum,
+} from '#utils/constants';
 import { useRequest } from '#utils/restRequest';
 
 import DrefTableActions, { type Props as DrefTableActionsProps } from '../DrefTableActions';
@@ -89,8 +92,8 @@ function ActiveDrefTable(props: Props) {
         () => {
             if (
                 isNotDefined(userMe)
-                    || isNotDefined(userMe.is_dref_coordinator_for_regions)
-                    || userMe.is_dref_coordinator_for_regions.length === 0
+                || isNotDefined(userMe.is_dref_coordinator_for_regions)
+                || userMe.is_dref_coordinator_for_regions.length === 0
             ) {
                 return undefined;
             }
@@ -211,6 +214,7 @@ function ActiveDrefTable(props: Props) {
                     // FIXME: fix typing in server (medium priority)
                     // the application_type should be an enum
                     const applicationType = item.application_type as 'DREF' | 'OPS_UPDATE' | 'FINAL_REPORT';
+                    const drefType = item.type_of_dref as TypeOfDrefEnum;
                     if (!originalDref) {
                         return {
                             id,
@@ -242,7 +246,7 @@ function ActiveDrefTable(props: Props) {
                         && (item.type_of_dref !== DREF_TYPE_LOAN)
                         && (
                             !has_ops_update
-                                || (has_ops_update && unpublished_op_update_count === 0)
+                            || (has_ops_update && unpublished_op_update_count === 0)
                         );
 
                     const drefRegion = country_details?.region;
@@ -253,6 +257,7 @@ function ActiveDrefTable(props: Props) {
                     return {
                         id,
                         drefId: originalDref.id,
+                        drefType,
                         status: item.status,
                         applicationType,
                         canAddOpsUpdate,

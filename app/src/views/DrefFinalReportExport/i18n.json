@@ -76,6 +76,8 @@
         "interventionSectionHeading": "Implementation",
         "targetedPersonsLabel": "Targeted Persons",
         "assistedPersonsLabel": "Assisted Persons",
+        "targetedMaleLabel": "Targeted Male",
+        "targetedFemaleLabel": "Targeted Female",
         "budgetLabel": "Budget",
         "indicatorsHeading": "Indicators",
         "indicatorTitleLabel": "Title",

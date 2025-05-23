@@ -4,6 +4,7 @@ import {
     addCondition,
     emailCondition,
     greaterThanOrEqualToCondition,
+    lengthSmallerThanCondition,
     lessThanOrEqualToCondition,
     nullValue,
     type ObjectSchema,
@@ -41,9 +42,9 @@ function max500CharCondition(value: string | undefined) {
         : undefined;
 }
 
-function lessThanEqualToTwoImagesCondition<T>(value: T[] | undefined) {
-    return isDefined(value) && Array.isArray(value) && value.length > 2
-        ? 'Only two images are allowed'
+function lessThanEqualToFourImagesCondition<T>(value: T[] | undefined) {
+    return isDefined(value) && Array.isArray(value) && value.length > 4
+        ? 'Maximum four images are allowed'
         : undefined;
 }
 
@@ -360,11 +361,12 @@ const schema: OpsUpdateFormSchema = {
                                 fields: (): ImageFileFields => ({
                                     client_id: {},
                                     id: { defaultValue: undefinedValue },
-                                    caption: {},
+                                    caption: {
+                                        validations: [lengthSmallerThanCondition(80)],
+                                    },
                                 }),
                             }),
-                            // FIXME: this is not defined on array schema type
-                            validations: [lessThanEqualToTwoImagesCondition],
+                            validation: lessThanEqualToFourImagesCondition,
                         },
                         summary_of_change: {},
                         changing_timeframe_operation: {},

@@ -31,6 +31,7 @@
         "drefFormNationalSocietiesActionsDescription": "Please indicate a description of the ongoing response with if possible: Branches involved, number of volunteers/staff involved in actions, assets deployed/distributed, number of people reach. Impact/added value of the NS in the response already ongoing.",
         "drefFormNationalSocietiesActionsLabel": "Select the actions that apply.",
         "drefFormNeedsIdentified": "Needs (Gaps) Identified",
+        "drefFormUploadTargetingSupportingDescription": "Assessment report file types: pdf, docx, pptx, xlsx",
         "drefFormNSAnticipatoryAction": "National Society anticipatory actions started",
         "drefFormNsResponseStarted": "Start date of National Society actions",
         "drefFormPartnerNationalSociety": "Participating National Societies",
