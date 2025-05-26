@@ -1,5 +1,15 @@
 # go-web-app
 
+## 7.16.2
+
+### Patch Changes
+
+- c086629: Update Learn > Resources > Montandon page
+  - Update styling of 'API Access' buttons
+  - Reword 'Access API' link to 'Access Montandon API'
+  - Reword 'Explore Radiant Earth API' to 'Explore data in STAC browser'
+- 2ee6a1e: Remove a broken image from Catalogue of Surge Services > Health > ERU Hospital page
+
 ## 7.16.1
 
 ### Patch Changes
