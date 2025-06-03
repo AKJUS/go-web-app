@@ -80,6 +80,8 @@
         "hasChildRiskCompleted": "Has the child safeguarding risk analysis assessment been completed?",
         "plannedInterventionSectionHeading": "Planned Intervention",
         "targetedPersonsLabel": "Targeted Persons",
+        "targetedMaleLabel": "Targeted Male",
+        "targetedFemaleLabel": "Targeted Female",
         "budgetLabel": "Budget",
         "indicatorsHeading": "Indicators",
         "indicatorTitleLabel": "Title",

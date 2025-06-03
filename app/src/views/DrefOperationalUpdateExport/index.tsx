@@ -1068,6 +1068,18 @@ export function Component() {
                                         valueType="number"
                                         strongLabel
                                     />
+                                    <TextOutput
+                                        label={strings.targetedMaleLabel}
+                                        value={plannedIntervention.male}
+                                        valueType="number"
+                                        strongLabel
+                                    />
+                                    <TextOutput
+                                        label={strings.targetedFemaleLabel}
+                                        value={plannedIntervention.female}
+                                        valueType="number"
+                                        strongLabel
+                                    />
                                 </Container>
                                 <Container
                                     heading={strings.indicatorsHeading}

@@ -4,6 +4,7 @@ import {
     addCondition,
     emailCondition,
     greaterThanOrEqualToCondition,
+    lengthSmallerThanCondition,
     lessThanOrEqualToCondition,
     nullValue,
     type ObjectSchema,
@@ -41,9 +42,9 @@ function max500CharCondition(value: string | undefined) {
         : undefined;
 }
 
-function lessThanEqualToTwoImagesCondition<T>(value: T[] | undefined) {
-    return isDefined(value) && Array.isArray(value) && value.length > 2
-        ? 'Only two images are allowed'
+function lessThanEqualToFourImagesCondition<T>(value: T[] | undefined) {
+    return isDefined(value) && Array.isArray(value) && value.length > 4
+        ? 'Maximum four images are allowed'
         : undefined;
 }
 
@@ -371,10 +372,12 @@ const schema: DrefFormSchema = {
                                 fields: (): ImageFileFields => ({
                                     client_id: {},
                                     id: { defaultValue: undefinedValue },
-                                    caption: {},
+                                    caption: {
+                                        validations: [lengthSmallerThanCondition(80)],
+                                    },
                                 }),
                             }),
-                            validations: [lessThanEqualToTwoImagesCondition],
+                            validation: lessThanEqualToFourImagesCondition,
                         },
                     };
                 }

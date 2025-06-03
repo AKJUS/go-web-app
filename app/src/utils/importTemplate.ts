@@ -355,6 +355,13 @@ export function getValueFromImportTemplate<
             // TODO: we need to find a better solution to this
             return `https://${value}`;
         }
+        // NOTE: Checks for anything between planned_interventions and description
+        const plannedInterventionsDescriptionRegex = /^planned_interventions__[^_]+(?:_[^_]+)*__description$/;
+        if (plannedInterventionsDescriptionRegex.test(fieldName) && (typeof value === 'string')) {
+            // NOTE: Replaces all the * followed by new line with new line and bullet point
+            const updatedValue = value.replace(/(^|\n)\s*\*/g, '$1•');
+            return updatedValue;
+        }
         // TODO: add validation from schema.validation
         return value;
     }

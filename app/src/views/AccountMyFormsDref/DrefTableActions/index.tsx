@@ -31,6 +31,7 @@ import {
     DREF_TYPE_IMMINENT,
     DREF_TYPE_LOAN,
     type DrefStatus,
+    type TypeOfDrefEnum,
 } from '#utils/constants';
 import {
     type GoApiBody,
@@ -48,6 +49,7 @@ export interface Props {
     status: DrefStatus | null | undefined;
 
     applicationType: 'DREF' | 'OPS_UPDATE' | 'FINAL_REPORT';
+    drefType?: TypeOfDrefEnum;
     canAddOpsUpdate: boolean;
     canCreateFinalReport: boolean;
     hasPermissionToApprove?: boolean;
@@ -61,6 +63,7 @@ function DrefTableActions(props: Props) {
         drefId: drefIdFromProps,
         status,
         applicationType,
+        drefType,
         canAddOpsUpdate,
         canCreateFinalReport,
         hasPermissionToApprove,
@@ -72,6 +75,7 @@ function DrefTableActions(props: Props) {
     const alert = useAlert();
 
     const strings = useTranslation(i18n);
+
     const [showExportModal, {
         setTrue: setShowExportModalTrue,
         setFalse: setShowExportModalFalse,
@@ -133,7 +137,7 @@ function DrefTableActions(props: Props) {
                 disasterType: response?.disaster_type_details?.name,
                 responseType:
                     response?.type_of_dref_display === 'Imminent'
-                    // FIXME: can't compare imminent with Imminent Crisis directly
+                        // FIXME: can't compare imminent with Imminent Crisis directly
                         ? 'Imminent Crisis'
                         : response?.type_of_onset_display,
                 nsRequestDate: response?.ns_request_date,
@@ -145,7 +149,7 @@ function DrefTableActions(props: Props) {
                 noOfPeopleTargeted: response?.number_of_people_targeted,
                 toBeAllocatedFrom:
                     response?.type_of_dref_display === 'Imminent'
-                    // FIXME: can't compare imminent with Anticipatory Pillar
+                        // FIXME: can't compare imminent with Anticipatory Pillar
                         ? 'Anticipatory Pillar'
                         : 'Response Pillar',
                 focalPointName: response?.regional_focal_point_name,
@@ -449,16 +453,18 @@ function DrefTableActions(props: Props) {
                     >
                         {strings.dropdownActionShareLabel}
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                        name={undefined}
-                        type="button"
-                        icons={<DocumentPdfLineIcon className={styles.icon} />}
-                        onClick={handleExportClick}
-                        disabled={disabled}
-                        persist
-                    >
-                        {strings.dropdownActionExportLabel}
-                    </DropdownMenuItem>
+                    {drefType !== DREF_TYPE_LOAN && (
+                        <DropdownMenuItem
+                            name={undefined}
+                            type="button"
+                            icons={<DocumentPdfLineIcon className={styles.icon} />}
+                            onClick={handleExportClick}
+                            disabled={disabled}
+                            persist
+                        >
+                            {strings.dropdownActionExportLabel}
+                        </DropdownMenuItem>
+                    )}
                 </>
             )}
         >

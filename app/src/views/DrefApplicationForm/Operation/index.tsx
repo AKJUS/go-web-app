@@ -136,10 +136,6 @@ function Operation(props: Props) {
 
         const w = [];
 
-        if (value?.num_assisted !== value?.total_targeted_population) {
-            w.push(strings.drefFormTotalTargeted);
-        }
-
         if (sumSafe([
             value?.women,
             value?.men,
@@ -151,9 +147,7 @@ function Operation(props: Props) {
 
         return w;
     }, [
-        strings.drefFormTotalTargeted,
         strings.drefFormTotalTargetedPopulation,
-        value?.num_assisted,
         value?.women,
         value?.men,
         value?.girls,
@@ -228,7 +222,7 @@ function Operation(props: Props) {
                         onChange={setFieldValue}
                         value={value.operation_objective}
                         error={error?.operation_objective}
-                        placeholder={strings.drefFormObjectiveOperationPlaceholder}
+                        hint={strings.drefFormObjectiveOperationPlaceholder}
                         disabled={disabled}
                     />
                 </InputSection>
@@ -266,7 +260,7 @@ function Operation(props: Props) {
                         onChange={setFieldValue}
                         value={value.response_strategy}
                         error={error?.response_strategy}
-                        placeholder={strings.drefFormResponseRationalePlaceholder}
+                        hint={strings.drefFormResponseRationalePlaceholder}
                         disabled={disabled}
                     />
                 </InputSection>
@@ -301,7 +295,9 @@ function Operation(props: Props) {
                         disabled={disabled}
                     />
                 </InputSection>
-                <InputSection title={strings.drefFormUploadTargetingSupportingDocument}>
+                <InputSection
+                    title={strings.drefFormUploadTargetingSupportingDocument}
+                >
                     <GoSingleFileInput
                         name="targeting_strategy_support_file"
                         accept=".pdf, .docx, .pptx"

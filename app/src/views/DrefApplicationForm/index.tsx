@@ -549,7 +549,7 @@ export function Component() {
                                 onImport={setValue}
                             />
                         )}
-                        {isDefined(drefId) && (
+                        {value.type_of_dref !== TYPE_LOAN && isDefined(drefId) && (
                             <Button
                                 name={undefined}
                                 onClick={setShowExportModalTrue}

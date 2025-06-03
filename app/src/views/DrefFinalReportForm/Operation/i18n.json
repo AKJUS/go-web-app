@@ -76,6 +76,7 @@
         "drefFinalReportRequestAmountDescriptionPoint3": "Keep in mind that more indicators can mean more work. Each indicator selected requires monitoring, tracking, and reporting, so be sure to choose the ones that best reflect the key outcomes of your actions.",
         "drefFinalReportRequestAmountDescriptionPoint4": "Consider the type of indicator unit. For example, it’s often simpler and clearer to track and report on the “number of people” rather than a “percentage of people.”",
         "drefFinalReportRequestAmountDescriptionPoint5": "For each indicator, set a target. This helps track progress and measure whether the operation is achieving its key objectives, making it easier to report results later on.",
+        "drefFormUploadTargetingSupportingDescription": "Financial report file types: pdf",
         "drefFormMen": "Men",
         "drefFinalReportTotalTargeted": "Total targeted population is not equal to sum of other population fields"
     }

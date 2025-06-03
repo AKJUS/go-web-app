@@ -410,6 +410,22 @@ function EventDetail(props: Props) {
                     {/* NOTE: Empty div to preserve the layout */}
                     <div />
                 </InputSection>
+                {value.type_of_dref === TYPE_LOAN && (
+                    <Container>
+                        <InputSection
+                            title={strings.drefFormRequestAmountForTypeLoan}
+                            description={strings.drefFormRequestAmountDescriptionForTypeLoan}
+                        >
+                            <NumberInput
+                                name="amount_requested"
+                                value={value?.amount_requested}
+                                onChange={setFieldValue}
+                                error={error?.amount_requested}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                    </Container>
+                )}
                 {value.type_of_dref !== TYPE_LOAN && (
                     <InputSection
                         title={

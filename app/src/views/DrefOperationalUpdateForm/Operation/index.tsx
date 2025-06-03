@@ -251,7 +251,7 @@ function Operation(props: Props) {
                         onChange={setFieldValue}
                         value={value.operation_objective}
                         error={error?.operation_objective}
-                        placeholder={strings.drefFormObjectiveOperationPlaceholder}
+                        hint={strings.drefFormObjectiveOperationPlaceholder}
                         disabled={disabled}
                     />
                 </InputSection>
