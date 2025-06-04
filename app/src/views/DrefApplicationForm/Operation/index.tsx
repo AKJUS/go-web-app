@@ -696,12 +696,12 @@ function Operation(props: Props) {
                     />
                 </InputSection>
                 <InputSection
-                    description={!plannedBudgetMatchRequestedAmount && (
+                    description={!plannedBudgetMatchRequestedAmount ? (
                         <div className={styles.warning}>
                             <ErrorWarningFillIcon className={styles.icon} />
                             {strings.drefFormResponseTotalAmountOfPlannedBudget}
                         </div>
-                    )}
+                    ) : <div />}
                 >
                     <div className={styles.interventionSelectionContainer}>
                         <SelectInput
