@@ -1,5 +1,14 @@
 # go-web-app
 
+## 7.17.1
+
+### Patch Changes
+
+- 215030a: Update DREF forms
+
+  - Move Response strategy description from placeholder to below the input
+  - Add DREF allocation field in event details for the Loan type Ops. update form
+
 ## 7.17.0
 
 ### Minor Changes
