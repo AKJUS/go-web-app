@@ -7,6 +7,7 @@
         "drefOperationalUpdateSummaryAreYouChangingTargetPopulation": "Are you changing the target population of the operation",
         "drefOperationalUpdateSummaryAreYouChangingGeographicalLocation": "Are you changing the geographical location",
         "drefOperationalUpdateSummaryAreYouChangingBudget": "Are you making changes to the budget",
+        "drefOperationalUpdateAllocationSoFarForTypeLoan": "Budget Allocated so far",
         "drefOperationalUpdateSummaryRequestForSecondAllocation": "Are you requesting an additional allocation?",
         "drefOperationalUpdateEventMaterialize": "Has the forecasted event materialize?",
         "drefOperationalUpdateEventMaterializeExplain": "Please explain how is the operation is transitioning from Anticipatory to Response",

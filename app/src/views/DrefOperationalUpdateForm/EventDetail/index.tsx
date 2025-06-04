@@ -366,6 +366,21 @@ function EventDetail(props: Props) {
                     {/* NOTE: Empty div to preserve the layout */}
                     <div />
                 </InputSection>
+                {value.type_of_dref === TYPE_LOAN && (
+                    <Container>
+                        <InputSection
+                            title={strings.drefOperationalUpdateAllocationSoFarForTypeLoan}
+                        >
+                            <NumberInput
+                                name="total_dref_allocation"
+                                value={value?.total_dref_allocation}
+                                onChange={setFieldValue}
+                                error={error?.total_dref_allocation}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                    </Container>
+                )}
                 {value.type_of_dref !== TYPE_LOAN && (
                     <InputSection
                         title={
