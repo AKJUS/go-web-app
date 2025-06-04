@@ -242,7 +242,7 @@ function Operation(props: Props) {
                         onChange={setFieldValue}
                         value={value.response_strategy}
                         error={error?.response_strategy}
-                        placeholder={strings.drefFormResponseRationalePlaceholder}
+                        hint={strings.drefFormResponseRationalePlaceholder}
                         disabled={disabled}
                     />
                 </InputSection>
