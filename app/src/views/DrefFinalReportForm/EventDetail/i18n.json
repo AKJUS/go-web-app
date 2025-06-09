@@ -29,8 +29,6 @@
         "drefFormEstimatedPeopleInNeed": "Estimated people in need (Optional)",
         "drefFormPeopleInNeed": "People in need (Optional)",
         "drefFormPeopleInNeedDescriptionImminent": "Include all those whose physical security, basic rights, dignity, living conditions or livelihoods are threatened or have been disrupted, and whose current level of access to basic services, goods and social protection will be inadequate to re-establish normal living conditions without additional assistance",
-        "drefFormPeopleAssisted": "Number of people assisted",
-        "drefFormPeopleAssistedDescription": "Include all those whose the National Society assisted",
         "drefFormPeopleInNeedDescriptionSlowSudden": "People in Need (PIN) are those members whose physical security, basic rights, dignity, living conditions or livelihoods are threatened or have been disrupted, and whose current level of access to basic services, goods and social protection is inadequate to re-establish normal living conditions without additional assistance.",
         "drefFormSourceInformationAddButton": "Add New Source Information",
         "drefFormSourceInformationTitle": "Source Information",

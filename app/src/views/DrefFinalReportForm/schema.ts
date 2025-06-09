@@ -505,10 +505,10 @@ const schema: FinalReportFormSchema = {
         );
 
         const operationDrefTypeRelatedFields = [
-            'women',
-            'men',
-            'girls',
-            'boys',
+            'assisted_num_of_women',
+            'assisted_num_of_men',
+            'assisted_num_of_girls_under_18',
+            'assisted_num_of_boys_under_18',
             'people_targeted_with_early_actions',
         ] as const;
         type OperationDrefTypeRelatedFields = Pick<
@@ -522,19 +522,19 @@ const schema: FinalReportFormSchema = {
             operationDrefTypeRelatedFields,
             (val): OperationDrefTypeRelatedFields => {
                 let conditionalFields: OperationDrefTypeRelatedFields = {
-                    women: { forceValue: nullValue },
-                    men: { forceValue: nullValue },
-                    girls: { forceValue: nullValue },
-                    boys: { forceValue: nullValue },
+                    assisted_num_of_women: { forceValue: nullValue },
+                    assisted_num_of_men: { forceValue: nullValue },
+                    assisted_num_of_girls_under_18: { forceValue: nullValue },
+                    assisted_num_of_boys_under_18: { forceValue: nullValue },
                     people_targeted_with_early_actions: { forceValue: nullValue },
                 };
                 if (val?.type_of_dref !== TYPE_ASSESSMENT) {
                     conditionalFields = {
                         ...conditionalFields,
-                        women: { validations: [positiveIntegerCondition] },
-                        men: { validations: [positiveIntegerCondition] },
-                        girls: { validations: [positiveIntegerCondition] },
-                        boys: { validations: [positiveIntegerCondition] },
+                        assisted_num_of_women: { validations: [positiveIntegerCondition] },
+                        assisted_num_of_men: { validations: [positiveIntegerCondition] },
+                        assisted_num_of_girls_under_18: { validations: [positiveIntegerCondition] },
+                        assisted_num_of_boys_under_18: { validations: [positiveIntegerCondition] },
                     };
                 }
                 if (val?.type_of_dref === TYPE_IMMINENT) {

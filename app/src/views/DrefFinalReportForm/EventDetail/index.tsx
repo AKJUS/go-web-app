@@ -45,7 +45,6 @@ interface Props {
 
 const totalPopulationRiskImminentLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
 const totalPeopleAffectedSlowSuddenLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
-const peopleTargetedLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
 const peopleInNeedLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
 
 function EventDetail(props: Props) {
@@ -217,28 +216,6 @@ function EventDetail(props: Props) {
                         error={error?.estimated_number_of_affected_boys_under_18}
                         disabled={disabled}
                     />
-                    <NumberInput
-                        label={(
-                            <>
-                                {strings.drefFormPeopleAssisted}
-                                <Link
-                                    title={strings.drefFormClickEmergencyResponseFramework}
-                                    href={peopleTargetedLink}
-                                    external
-                                >
-                                    <WikiHelpSectionLineIcon />
-                                </Link>
-                            </>
-                        )}
-                        name="num_assisted"
-                        value={value?.num_assisted}
-                        onChange={setFieldValue}
-                        error={error?.num_assisted}
-                        hint={strings.drefFormPeopleAssistedDescription}
-                        disabled={disabled}
-                    />
-                    {/* NOTE: Empty div to preserve the layout */}
-                    <div />
                 </InputSection>
                 <InputSection
                     title={

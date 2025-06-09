@@ -3,7 +3,10 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { ErrorWarningFillIcon } from '@ifrc-go/icons';
+import {
+    ErrorWarningFillIcon,
+    WikiHelpSectionLineIcon,
+} from '@ifrc-go/icons';
 import {
     BooleanInput,
     Button,
@@ -59,6 +62,8 @@ type RiskSecurityFormFields = NonNullable<PartialFinalReport['risk_security']>[n
 function plannedInterventionKeySelector(option: PlannedInterventionOption) {
     return option.key;
 }
+
+const peopleTargetedLink = 'https://ifrcorg.sharepoint.com/sites/IFRCSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF%2FHum%20Pop%20Definitions%20for%20DREF%20Form%5F21072022%2Epdf&parent=%2Fsites%2FIFRCSharing%2FShared%20Documents%2FDREF&p=true&ga=1';
 
 interface Props {
     value: Value;
@@ -123,29 +128,29 @@ function Operation(props: Props) {
     }, [setFieldValue, setSelectedIntervention]);
 
     const warnings = useMemo(() => {
-        if (isNotDefined(value?.total_targeted_population)) {
+        if (isNotDefined(value?.num_assisted)) {
             return [];
         }
 
         const w = [];
 
         if (sumSafe([
-            value?.women,
-            value?.men,
-            value?.girls,
-            value?.boys,
-        ]) !== value?.total_targeted_population) {
+            value?.assisted_num_of_women,
+            value?.assisted_num_of_men,
+            value?.assisted_num_of_girls_under_18,
+            value?.assisted_num_of_boys_under_18,
+        ]) !== value?.num_assisted) {
             w.push(strings.drefFinalReportTotalTargeted);
         }
 
         return w;
     }, [
         strings.drefFinalReportTotalTargeted,
-        value?.women,
-        value?.men,
-        value?.girls,
-        value?.boys,
-        value?.total_targeted_population,
+        value?.assisted_num_of_women,
+        value?.assisted_num_of_men,
+        value?.assisted_num_of_girls_under_18,
+        value?.assisted_num_of_boys_under_18,
+        value?.num_assisted,
     ]);
 
     const interventionMap = useMemo(() => (
@@ -328,38 +333,60 @@ function Operation(props: Props) {
                         <>
                             <NumberInput
                                 label={strings.drefFormWomen}
-                                name="women"
-                                value={value.women}
+                                name="assisted_num_of_women"
+                                value={value.assisted_num_of_women}
                                 onChange={setFieldValue}
-                                error={error?.women}
+                                error={error?.assisted_num_of_women}
                                 disabled={disabled}
                             />
                             <NumberInput
                                 label={strings.drefFormMen}
-                                name="men"
-                                value={value.men}
+                                name="assisted_num_of_men"
+                                value={value.assisted_num_of_men}
                                 onChange={setFieldValue}
-                                error={error?.men}
+                                error={error?.assisted_num_of_men}
                                 disabled={disabled}
                             />
                             <NumberInput
                                 label={strings.drefFormGirls}
-                                name="girls"
-                                value={value.girls}
+                                name="assisted_num_of_girls_under_18"
+                                value={value.assisted_num_of_girls_under_18}
                                 onChange={setFieldValue}
-                                error={error?.girls}
+                                error={error?.assisted_num_of_girls_under_18}
                                 disabled={disabled}
                             />
                             <NumberInput
                                 label={strings.drefFormBoys}
-                                name="boys"
-                                value={value.boys}
+                                name="assisted_num_of_boys_under_18"
+                                value={value.assisted_num_of_boys_under_18}
                                 onChange={setFieldValue}
                                 error={error?.boys}
                                 disabled={disabled}
                             />
                         </>
                     )}
+                    <NumberInput
+                        label={(
+                            <>
+                                {strings.drefFormPeopleAssisted}
+                                <Link
+                                    title={strings.drefFormOperationClickEmergencyResponseFramework}
+                                    href={peopleTargetedLink}
+                                    external
+                                >
+                                    <WikiHelpSectionLineIcon />
+                                </Link>
+                            </>
+                        )}
+                        name="num_assisted"
+                        value={value?.num_assisted}
+                        onChange={setFieldValue}
+                        error={error?.num_assisted}
+                        hint={strings.drefFormPeopleAssistedDescription}
+                        disabled={disabled}
+                    />
+                    {/* NOTE: Empty div to preserve the layout */}
+                    <div />
                     <NumberInput
                         label={strings.drefFormTotal}
                         name="total_targeted_population"
