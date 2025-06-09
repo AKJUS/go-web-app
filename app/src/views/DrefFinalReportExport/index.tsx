@@ -386,14 +386,6 @@ export function Component() {
                 />
                 <TextOutput
                     className={styles.metaItem}
-                    label={strings.peopleAssistedLabel}
-                    value={drefResponse?.num_assisted}
-                    suffix={strings.peopleSuffix}
-                    valueType="number"
-                    strongValue
-                />
-                <TextOutput
-                    className={styles.metaItem}
                     label={strings.eventOnsetLabel}
                     value={drefResponse?.type_of_onset_display}
                     strongValue
@@ -718,7 +710,7 @@ export function Component() {
                 {drefResponse?.type_of_dref !== DREF_TYPE_ASSESSMENT && (
                     <BlockTextOutput
                         label={strings.womenLabel}
-                        value={drefResponse?.women}
+                        value={drefResponse?.assisted_num_of_women}
                         valueType="number"
                         strongValue
                     />
@@ -733,7 +725,7 @@ export function Component() {
                 {drefResponse?.type_of_dref !== DREF_TYPE_ASSESSMENT && (
                     <BlockTextOutput
                         label={strings.girlsLabel}
-                        value={drefResponse?.girls}
+                        value={drefResponse?.assisted_num_of_girls_under_18}
                         valueType="number"
                         strongValue
                     />
@@ -748,7 +740,7 @@ export function Component() {
                 {drefResponse?.type_of_dref !== DREF_TYPE_ASSESSMENT && (
                     <BlockTextOutput
                         label={strings.menLabel}
-                        value={drefResponse?.men}
+                        value={drefResponse?.assisted_num_of_men}
                         valueType="number"
                         strongValue
                     />
@@ -764,11 +756,20 @@ export function Component() {
                 {drefResponse?.type_of_dref !== DREF_TYPE_ASSESSMENT && (
                     <BlockTextOutput
                         label={strings.boysLabel}
-                        value={drefResponse?.boys}
+                        value={drefResponse?.assisted_num_of_boys_under_18}
                         valueType="number"
                         strongValue
                     />
                 )}
+                <div className={styles.emptyBlock} />
+                <BlockTextOutput
+                    className={styles.metaItem}
+                    label={strings.peopleAssistedLabel}
+                    value={drefResponse?.num_assisted}
+                    suffix={strings.peopleSuffix}
+                    valueType="number"
+                    strongValue
+                />
                 <div className={styles.emptyBlock} />
                 <BlockTextOutput
                     label={strings.targetedPopulationLabel}
