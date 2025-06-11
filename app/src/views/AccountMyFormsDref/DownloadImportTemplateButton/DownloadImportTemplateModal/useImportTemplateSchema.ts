@@ -592,56 +592,56 @@ function useImportTemplateSchema() {
                 type: 'input',
                 validation: 'number',
                 label: 'Targeted Population: <b>Women</b>',
-                description: '<i>Number, e.g. XX,XXX.</i>',
+                description: '<i>Number, e.g. XX,XXX.</i> If 0, leave the box empty.',
             },
 
             men: {
                 type: 'input',
                 validation: 'number',
                 label: 'Targeted Population: <b>Men</b>',
-                description: '<i>Number, e.g. XX,XXX.</i>',
+                description: '<i>Number, e.g. XX,XXX.</i> If 0, leave the box empty.',
             },
 
             girls: {
                 type: 'input',
                 validation: 'number',
                 label: 'Targeted Population: <b>Girls (under 18)</b>',
-                description: '<i>Number, e.g. XX,XXX.</i>',
+                description: '<i>Number, e.g. XX,XXX.</i> If 0, leave the box empty.',
             },
 
             boys: {
                 type: 'input',
                 validation: 'number',
                 label: 'Targeted Population: <b>Boys (under 18)</b>',
-                description: '<i>Number, e.g. XX,XXX.</i>',
+                description: '<i>Number, e.g. XX,XXX.</i> If 0, leave the box empty.',
             },
 
             total_targeted_population: {
                 type: 'input',
                 validation: 'number',
                 label: 'Targeted Population: <b>Total</b>',
-                description: '<i>Number, e.g. XX,XXX.</i>',
+                description: '<i>Number, e.g. XX,XXX.</i> If 0, leave the box empty.',
             },
 
             disability_people_per: {
                 type: 'input',
                 validation: 'number',
                 label: 'Estimated Percentage: <b>People with Disability</b>',
-                description: '<i>Percentage, e.g. XX%.</i>',
+                description: '<i>Percentage, e.g. XX%.</i> If 0, leave the box empty.',
             },
 
             people_per_urban: {
                 type: 'input',
                 validation: 'number',
                 label: 'Estimated Percentage: <b>Urban</b>',
-                description: '<i>Percentage, e.g. XX%.</i>',
+                description: '<i>Percentage, e.g. XX%.</i> If 0, leave the box empty.',
             },
 
             people_per_local: {
                 type: 'input',
                 validation: 'number',
                 label: 'Estimated Percentage: <b>Rural</b>',
-                description: '<i>Percentage, e.g. XX%.</i>',
+                description: '<i>Percentage, e.g. XX%.</i> If 0, leave the box empty.',
             },
 
             displaced_people: {
