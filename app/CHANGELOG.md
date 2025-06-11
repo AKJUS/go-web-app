@@ -1,5 +1,13 @@
 # go-web-app
 
+## 7.17.2
+
+### Patch Changes
+
+- 54df6ff: Update DREF final report form
+
+  - The DREF final report form and export now include a new "Assisted Population" field, replacing the "Targeted Population" field.
+
 ## 7.17.1
 
 ### Patch Changes
