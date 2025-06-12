@@ -53,7 +53,7 @@
         "drefFormSelectionCriteriaDescription": "Explain the rational and logic behind which groups are being targeted and why and address vulnerable groups",
         "drefFormTargetedPopulation": "Assisted Population",
         "drefFormTargetingStrategy": "Targeting Strategy",
-        "drefFormTotal": "Total Population",
+        "drefFormTotal": "Total Targeted Population",
         "drefFormWomen": "Assisted Women",
         "drefFormResponseAddButton": "Add",
         "drefFormAssistedPopulation": "Total Assisted Population",
@@ -79,7 +79,7 @@
         "drefFormUploadTargetingSupportingDescription": "Financial report file types: pdf",
         "drefFormMen": "Assisted Men",
         "drefFormPeopleAssistedDescription": "Include all those whose the National Society assisted",
-        "drefFormPeopleAssisted": "Total population assisted",
+        "drefFormPeopleAssisted": "Total Assisted Population",
         "drefFormOperationClickEmergencyResponseFramework": "Click to view Emergency Response Framework",
         "drefFinalReportTotalTargeted": "Total assisted population is not equal to sum of other population fields"
     }
