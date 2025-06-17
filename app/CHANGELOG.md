@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.17.4
+
+### Patch Changes
+
+- 14a7f2c: Update People assisted field label in the export of Dref final report.
+
 ## 7.17.3
 
 ### Patch Changes
