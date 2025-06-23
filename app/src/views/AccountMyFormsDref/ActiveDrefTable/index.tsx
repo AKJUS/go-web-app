@@ -243,7 +243,7 @@ function ActiveDrefTable(props: Props) {
                         // NOTE: Adding this to disable updates just for the old imminents
                         && (item.type_of_dref !== DREF_TYPE_IMMINENT
                             || (item.type_of_dref === DREF_TYPE_IMMINENT
-                                && isDefined(is_dref_imminent_v2))
+                                && !!is_dref_imminent_v2)
                         );
 
                     const canCreateFinalReport = !has_final_report
