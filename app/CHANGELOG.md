@@ -1,5 +1,29 @@
 # go-web-app
 
+## 7.18.0
+
+### Minor Changes
+
+- bfcaecf: Address [Dref imminent Application](https://github.com/IFRCGo/go-web-app/issues/1455)
+  - Update logic for creation of dref final report for imminent
+  - Update allocatioon form for dref imminent
+  - Add Activity input in proposed action for dref type imminent
+  - Add proposed actions icons
+  - Show proposed actions for existing imminent dref applications
+  - Hide unused sections for dref imminent export and preserve proposed actions order
+  - Prevent selection of past dates for the `hazard_date` in dref imminent
+  - Add auto total population calculation in dref
+  - Add a confirmation popup before creating ops. update from imminent dref
+
+### Patch Changes
+
+- ee1bd60: Add proper redirect for Non-sovereign country in the country ongoing emergencies page
+- 771d085: Community Based Surveillance updates (Surge CoS Health)
+  - Changed page: https://go.ifrc.org/surge/catalogue/health/community-based-surveillance
+  - The changes affect team size and some standard components (e.g. kit content)
+- Updated dependencies [bfcaecf]
+  - @ifrc-go/ui@1.5.1
+
 ## 7.17.4
 
 ### Patch Changes

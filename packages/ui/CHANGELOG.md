@@ -1,5 +1,11 @@
 # @ifrc-go/ui
 
+## 1.5.1
+
+### Patch Changes
+
+- bfcaecf: Add `addNumDaysToDate` and `ceilToEndOfMonth` date helper functions
+
 ## 1.5.0
 
 ### Minor Changes
