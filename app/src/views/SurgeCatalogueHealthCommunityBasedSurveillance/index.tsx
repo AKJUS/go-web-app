@@ -95,7 +95,7 @@ export function Component() {
                             {
                                 link: (
                                     <Link
-                                        href="https://www.cbsrc.org/"
+                                        href="https://rodekors.service-now.com/drm?id=hb_catalog&handbook=09f973a8db15f4103408d7b2f39619ee&category=31fefb60dbb938503408d7b2f3961958"
                                         external
                                         withLinkIcon
                                     >
@@ -111,7 +111,7 @@ export function Component() {
                             {
                                 link: (
                                     <Link
-                                        href="https://rodekors.service-now.com/drm?id=hb_catalog&handbook=09f973a8db15f4103408d7b2f39619ee"
+                                        href="https://cbs.ifrc.org/"
                                         external
                                         withLinkIcon
                                     >
