@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.18.1
+
+### Patch Changes
+
+- 75bf525: Fix logic to disable ops update for old imminents
+
 ## 7.18.0
 
 ### Minor Changes
