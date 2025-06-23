@@ -1,9 +1,14 @@
 import {
     useCallback,
+    useContext,
     useMemo,
     useState,
 } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import {
+    generatePath,
+    Navigate,
+    useOutletContext,
+} from 'react-router-dom';
 import {
     ArtboardLineIcon,
     PencilFillIcon,
@@ -67,6 +72,7 @@ import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
 import WikiLink from '#components/WikiLink';
 import { adminUrl } from '#config';
+import RouteContext from '#contexts/route';
 import useAuth from '#hooks/domain/useAuth';
 import useCountryRaw from '#hooks/domain/useCountryRaw';
 import usePermissions from '#hooks/domain/usePermissions';
@@ -123,6 +129,7 @@ export function Component(props: BaseProps) {
         onPresentationModeButtonClick,
         presentationMode = false,
     } = props;
+    const { countryOngoingActivitiesEmergencies } = useContext(RouteContext);
 
     const strings = useTranslation(i18n);
     const { isAuthenticated } = useAuth();
@@ -130,7 +137,6 @@ export function Component(props: BaseProps) {
 
     const {
         countryId,
-        // Note: countryResponse is used only for bounds
         countryResponse,
     } = useOutletContext<CountryOutletContext>();
     const countryRawResponse = useCountryRaw();
@@ -442,6 +448,21 @@ export function Component(props: BaseProps) {
     const popupDetails = clickedPointProperties
         ? countryGroupedAppeal[clickedPointProperties.properties.iso3]
         : undefined;
+
+    if (countryResponse?.sovereign_state_id && countryResponse?.independent === false) {
+        const redirectCountryId = countryResponse.sovereign_state_id;
+        const countryPath = generatePath(
+            countryOngoingActivitiesEmergencies.absoluteForwardPath,
+            { countryId: redirectCountryId },
+        );
+
+        return (
+            <Navigate
+                to={countryPath}
+                replace
+            />
+        );
+    }
 
     return (
         <Container
