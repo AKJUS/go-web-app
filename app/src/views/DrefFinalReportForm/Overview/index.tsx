@@ -84,6 +84,7 @@ interface Props {
     setFieldValue: (...entries: EntriesAsList<PartialFinalReport>) => void;
     error: Error<PartialFinalReport> | undefined;
     disabled?: boolean;
+    isPreviousImminent: boolean;
 
     fileIdToUrlMap: Record<number, string>;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
@@ -96,6 +97,7 @@ function Overview(props: Props) {
     const {
         value,
         setFieldValue,
+        isPreviousImminent,
         error: formError,
         fileIdToUrlMap,
         setFileIdToUrlMap,
@@ -152,6 +154,12 @@ function Overview(props: Props) {
         userId,
         user,
     }), []);
+
+    const imminentFilteredTypeOfDrefOptions = useMemo(() => (
+        typeOfDrefOptions?.filter(
+            (option) => option.key !== TYPE_LOAN,
+        )
+    ), [typeOfDrefOptions]);
 
     const filteredTypeOfDrefOptions = useMemo(() => (
         typeOfDrefOptions?.filter(
@@ -241,7 +249,10 @@ function Overview(props: Props) {
                     <SelectInput
                         name="type_of_dref"
                         label={strings.drefFormTypeOfDref}
-                        options={filteredTypeOfDrefOptions}
+                        options={
+                            isPreviousImminent ? imminentFilteredTypeOfDrefOptions
+                                : filteredTypeOfDrefOptions
+                        }
                         keySelector={typeOfDrefKeySelector}
                         labelSelector={stringValueSelector}
                         onChange={setFieldValue}
