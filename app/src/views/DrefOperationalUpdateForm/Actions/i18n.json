@@ -3,6 +3,7 @@
     "strings": {
         "drefFormActionFieldsLabel": "Select the needs that apply.",
         "drefFormAssessmentReportUploadButtonLabel": "Upload assessment report",
+        "drefFormAssessmentReportUploadDescription": "Assessment report file type: pdf, docx, pptx, xlsx.",
         "drefFormAssessmentReportUploadLabel": "Assessment Report (Optional)",
         "drefFormCoordinationMechanism": "Are there major coordination mechanisms in place?",
         "drefFormCoordinationMechanismDescription": "List coordination mechanisms/platform in place at local/district and national level. Indicate the lead authorities/agencies. How the National Society is involved/positioned in this coordination. Does the NS in any lead/co-lead role? Any identified gap/overlap in the coordination (e.g., sector missing…)?",
