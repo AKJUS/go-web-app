@@ -497,7 +497,7 @@ function PrivateCountryPreparedness() {
                 />
                 <TextOutput
                     label={strings.typeOfAssessmentLabel}
-                    value={perOverview?.type_of_assessment.name}
+                    value={perOverview?.type_of_assessment?.name}
                     strongValue
                 />
                 <TextOutput

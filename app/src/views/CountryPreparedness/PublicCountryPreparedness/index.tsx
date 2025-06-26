@@ -204,7 +204,7 @@ function PublicCountryPreparedness() {
                 />
                 <TextOutput
                     label={strings.publicTypeOfAssessmentLabel}
-                    value={perStats?.type_of_assessment.name}
+                    value={perStats?.type_of_assessment?.name}
                     strongValue
                 />
                 <TextOutput
