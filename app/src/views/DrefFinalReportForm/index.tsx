@@ -38,6 +38,7 @@ import NonFieldError from '#components/NonFieldError';
 import Page from '#components/Page';
 import useCurrentLanguage from '#hooks/domain/useCurrentLanguage';
 import useAlert from '#hooks/useAlert';
+import { DREF_TYPE_IMMINENT } from '#utils/constants';
 import {
     type GoApiResponse,
     useLazyRequest,
@@ -97,6 +98,7 @@ export function Component() {
     const formContentRef = useRef<ElementRef<'div'>>(null);
 
     const [activeTab, setActiveTab] = useState<TabKeys>('overview');
+    const [isPreviousImminent, setIsPreviousImminent] = useState(false);
     const [fileIdToUrlMap, setFileIdToUrlMap] = useState<Record<number, string>>({});
     const [districtOptions, setDistrictOptions] = useState<
         DistrictItem[] | undefined | null
@@ -206,6 +208,7 @@ export function Component() {
         } : undefined,
         onSuccess: (response) => {
             handleFinalReportLoad(response);
+            setIsPreviousImminent(response.type_of_dref === DREF_TYPE_IMMINENT);
 
             const {
                 planned_interventions,
@@ -482,6 +485,7 @@ export function Component() {
                                 value={value}
                                 setFieldValue={setFieldValue}
                                 fileIdToUrlMap={fileIdToUrlMap}
+                                isPreviousImminent={isPreviousImminent}
                                 setFileIdToUrlMap={setFileIdToUrlMap}
                                 error={formError}
                                 disabled={disabled}

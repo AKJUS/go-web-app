@@ -52,6 +52,7 @@ export interface Props {
     canAddOpsUpdate: boolean;
     canCreateFinalReport: boolean;
     hasPermissionToApprove?: boolean;
+    isDrefImminentV2?: boolean;
 
     onPublishSuccess?: () => void;
     drefType?: TypeOfDrefEnum | null | undefined;
@@ -66,6 +67,7 @@ function DrefTableActions(props: Props) {
         canAddOpsUpdate,
         canCreateFinalReport,
         hasPermissionToApprove,
+        isDrefImminentV2,
         onPublishSuccess,
         drefType,
     } = props;
@@ -383,7 +385,7 @@ function DrefTableActions(props: Props) {
 
     const canApprove = status === DREF_STATUS_IN_PROGRESS && hasPermissionToApprove;
 
-    const shouldConfirmImminentAddOpsUpdate = drefType === DREF_TYPE_IMMINENT;
+    const shouldConfirmImminentAddOpsUpdate = drefType === DREF_TYPE_IMMINENT && isDrefImminentV2;
 
     const disabled = fetchingDref
         || fetchingOpsUpdate

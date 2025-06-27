@@ -57,6 +57,7 @@ import {
 import Actions from './Actions';
 import {
     checkTabErrors,
+    TYPE_IMMINENT,
     TYPE_LOAN,
     type TypeOfDrefEnum,
 } from './common';
@@ -120,6 +121,7 @@ export function Component() {
     const formContentRef = useRef<ElementRef<'div'>>(null);
 
     const [activeTab, setActiveTab] = useState<TabKeys>('overview');
+    const [isPreviousImminent, setIsPreviousImminent] = useState(false);
     const [fileIdToUrlMap, setFileIdToUrlMap] = useState<Record<number, string>>({});
     const [
         showObsoletePayloadModal,
@@ -256,6 +258,7 @@ export function Component() {
                 // is_assessment_report,
                 ...otherValues
             } = removeNull(response);
+            setIsPreviousImminent(response.type_of_dref === TYPE_IMMINENT);
             setValue({
                 ...otherValues,
                 planned_interventions: planned_interventions?.map(
@@ -695,6 +698,7 @@ export function Component() {
                         <TabPanel name="overview">
                             <Overview
                                 value={value}
+                                isPreviousImminent={isPreviousImminent}
                                 setFieldValue={setFieldValue}
                                 fileIdToUrlMap={fileIdToUrlMap}
                                 setFileIdToUrlMap={setFileIdToUrlMap}

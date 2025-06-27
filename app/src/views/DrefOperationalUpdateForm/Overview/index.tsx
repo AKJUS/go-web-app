@@ -93,6 +93,7 @@ const userKeySelector = (item: User) => item.id;
 
 interface Props {
     value: PartialOpsUpdate;
+    isPreviousImminent: boolean;
     setFieldValue: (...entries: EntriesAsList<PartialOpsUpdate>) => void;
     error: Error<PartialOpsUpdate> | undefined;
     disabled?: boolean;
@@ -107,6 +108,7 @@ interface Props {
 function Overview(props: Props) {
     const {
         value,
+        isPreviousImminent,
         setFieldValue,
         error: formError,
         fileIdToUrlMap,
@@ -220,6 +222,7 @@ function Overview(props: Props) {
     return (
         <div className={styles.operationOverview}>
             {state?.isNewOpsUpdate
+                && !isPreviousImminent
                 && showChangeDrefTypeModal
                 && value?.type_of_dref === TYPE_ASSESSMENT && (
                 <Modal
@@ -245,22 +248,6 @@ function Overview(props: Props) {
                     )}
                 >
                     {strings.isDrefChangingToResponse}
-                </Modal>
-            )}
-            {value.type_of_dref === TYPE_IMMINENT && (
-                <Modal
-                    size="sm"
-                    heading={strings.overviewChangeTypeHeading}
-                    footerActions={(
-                        <Button
-                            name={undefined}
-                            onClick={handleChangeToResponse}
-                        >
-                            {strings.overviewChangeTypeButtonLabel}
-                        </Button>
-                    )}
-                >
-                    {strings.overviewChangeTypeMessage}
                 </Modal>
             )}
             <Container
@@ -321,7 +308,11 @@ function Overview(props: Props) {
                     <SelectInput
                         name="type_of_dref"
                         label={strings.drefFormTypeOfDref}
-                        options={typeOfDrefOptionsWithoutImminent}
+                        options={
+                            isPreviousImminent
+                                ? typeOfDrefOptions
+                                : typeOfDrefOptionsWithoutImminent
+                        }
                         keySelector={typeOfDrefKeySelector}
                         labelSelector={stringValueSelector}
                         onChange={setFieldValue}

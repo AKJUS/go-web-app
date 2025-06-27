@@ -389,19 +389,19 @@ function Submission(props: Props) {
                         disabled={disabled}
                     />
                     <TextInput
-                        label={strings.drefFormIntegrityContactEmailLabel}
-                        name="national_society_integrity_contact_email"
-                        value={value.national_society_integrity_contact_email}
-                        onChange={setFieldValue}
-                        error={error?.national_society_integrity_contact_email}
-                        disabled={disabled}
-                    />
-                    <TextInput
                         label={strings.drefFormIntegrityContactTitleLabel}
                         name="national_society_integrity_contact_title"
                         value={value.national_society_integrity_contact_title}
                         onChange={setFieldValue}
                         error={error?.national_society_integrity_contact_title}
+                        disabled={disabled}
+                    />
+                    <TextInput
+                        label={strings.drefFormIntegrityContactEmailLabel}
+                        name="national_society_integrity_contact_email"
+                        value={value.national_society_integrity_contact_email}
+                        onChange={setFieldValue}
+                        error={error?.national_society_integrity_contact_email}
                         disabled={disabled}
                     />
                     <TextInput

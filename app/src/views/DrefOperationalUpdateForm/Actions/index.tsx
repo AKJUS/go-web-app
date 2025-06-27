@@ -273,6 +273,7 @@ function Actions(props: Props) {
                             >
                                 {strings.drefFormAssessmentReportUploadButtonLabel}
                             </GoSingleFileInput>
+                            {strings.drefFormAssessmentReportUploadDescription}
                         </InputSection>
                     )}
                     <InputSection

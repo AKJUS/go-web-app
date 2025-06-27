@@ -30,7 +30,6 @@ import {
 import useUserMe from '#hooks/domain/useUserMe';
 import useFilterState from '#hooks/useFilterState';
 import {
-    DREF_TYPE_IMMINENT,
     DREF_TYPE_LOAN,
     type TypeOfDrefEnum,
 } from '#utils/constants';
@@ -239,12 +238,7 @@ function ActiveDrefTable(props: Props) {
                     const canAddOpsUpdate = (is_published ?? false)
                         && (applicationType === 'DREF' || applicationType === 'OPS_UPDATE')
                         && !has_final_report
-                        && unpublished_op_update_count === 0
-                        // NOTE: Adding this to disable updates just for the old imminents
-                        && (item.type_of_dref !== DREF_TYPE_IMMINENT
-                            || (item.type_of_dref === DREF_TYPE_IMMINENT
-                                && !!is_dref_imminent_v2)
-                        );
+                        && unpublished_op_update_count === 0;
 
                     const canCreateFinalReport = !has_final_report
                         && (applicationType === 'DREF' || applicationType === 'OPS_UPDATE')
@@ -268,6 +262,7 @@ function ActiveDrefTable(props: Props) {
                         drefId: originalDref.id,
                         drefType,
                         status: item.status,
+                        isDrefImminentV2: is_dref_imminent_v2,
                         applicationType,
                         canAddOpsUpdate,
                         canCreateFinalReport,
