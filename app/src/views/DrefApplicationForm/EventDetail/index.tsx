@@ -498,13 +498,25 @@ function EventDetail(props: Props) {
                 {value.type_of_dref === TYPE_IMMINENT && (
                     <>
                         <InputSection
-                            title={strings.drefHazardExpectedTitle}
+                            title={strings.drefHazardExpectedLabel}
                         >
                             <DateInput
                                 name="hazard_date"
                                 onChange={setFieldValue}
                                 value={value.hazard_date}
                                 error={error?.hazard_date}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.drefHazardExpectedTitle}
+                            description={strings.drefHazardExpectedDescription}
+                        >
+                            <TextArea
+                                name="hazard_date_and_location"
+                                onChange={setFieldValue}
+                                value={value.hazard_date_and_location}
+                                error={error?.hazard_date_and_location}
                                 disabled={disabled}
                             />
                         </InputSection>
