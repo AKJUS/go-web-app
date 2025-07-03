@@ -276,8 +276,8 @@ export function Component() {
         || isDefinedScenarioAnalysisSupportingDocument
         || isDefined(drefResponse?.event_map_file?.file);
 
-    const isDefinedHazardDate = drefResponse?.type_of_dref === DREF_TYPE_IMMINENT
-        && isDefined(drefResponse?.hazard_date);
+    const isDefinedHazardDateAndLocation = drefResponse?.type_of_dref === DREF_TYPE_IMMINENT
+        && isDefined(drefResponse?.hazard_date_and_location);
     const isDefinedHazardRisk = drefResponse?.type_of_dref === DREF_TYPE_IMMINENT
         && drefResponse.hazard_vulnerabilities_and_risks;
 
@@ -292,7 +292,7 @@ export function Component() {
         return calculateProposedActionsCost(drefResponse);
     }, [drefResponse]);
 
-    const showScenarioAnalysis = isDefinedHazardDate
+    const showScenarioAnalysis = isDefinedHazardDateAndLocation
         || isDefinedHazardRisk
         || isDefinedSourceInformation;
 
@@ -760,12 +760,12 @@ export function Component() {
                             ? strings.eventDescriptionSectionHeading
                             : strings.scenarioAnalysis}
                     </Heading>
-                    {isDefinedHazardDate && (
+                    {isDefinedHazardDateAndLocation && (
                         <Container
                             heading={strings.hazardDate}
                         >
                             <DescriptionText>
-                                {drefResponse?.hazard_date}
+                                {drefResponse?.hazard_date_and_location}
                             </DescriptionText>
                             <DescriptionText>
                                 {riskRegions}
@@ -887,92 +887,6 @@ export function Component() {
                             >
                                 {strings.drefApplicationSupportingDocumentation}
                             </Link>
-                        </Container>
-                    )}
-                </>
-            )}
-            {showAboutSupportServicesSection && (
-                <>
-                    <Heading level={2}>
-                        {drefResponse?.type_of_dref !== DREF_TYPE_IMMINENT
-                            ? strings.aboutSupportServicesSectionHeading
-                            : strings.plan}
-                    </Heading>
-                    {humanResourceDefined && (
-                        <Container
-                            heading={strings.humanResourcesHeading}
-                        >
-                            <DescriptionText>
-                                {drefResponse?.human_resource}
-                            </DescriptionText>
-                        </Container>
-                    )}
-                    {isVolunteerTeamDiverseDefined && (
-                        <Container
-                            heading={strings.isVolunteerTeamDiverseHeading}
-                        >
-                            <DescriptionText>
-                                {drefResponse?.is_volunteer_team_diverse}
-                            </DescriptionText>
-                        </Container>
-                    )}
-                    {surgePersonnelDeployedDefined && (
-                        <Container
-                            heading={strings.surgePersonnelDeployedHeading}
-                        >
-                            <DescriptionText>
-                                {drefResponse?.is_surge_personnel_deployed
-                                    ? strings.yes : strings.no}
-                            </DescriptionText>
-                            <DescriptionText>
-                                {drefResponse?.surge_personnel_deployed}
-                            </DescriptionText>
-                        </Container>
-                    )}
-                    {humanitarianImpactsDefined && (
-                        <Container
-                            heading={strings.humanitarianImpactsHeading}
-                        >
-                            <DescriptionText>
-                                {drefResponse?.addressed_humanitarian_impacts}
-                            </DescriptionText>
-                        </Container>
-                    )}
-                    {contingencyPlanDocument && (
-                        <Container>
-                            <Link href={
-                                drefResponse?.contingency_plans_supporting_document_details?.file
-                            }
-                            >
-                                {strings.contingencyPlanDocument}
-                            </Link>
-                        </Container>
-                    )}
-                    {logisticCapacityOfNsDefined && (
-                        <Container
-                            heading={strings.logisticCapacityHeading}
-                        >
-                            <DescriptionText>
-                                {drefResponse?.logistic_capacity_of_ns}
-                            </DescriptionText>
-                        </Container>
-                    )}
-                    {pmerDefined && (
-                        <Container
-                            heading={strings.pmerHeading}
-                        >
-                            <DescriptionText>
-                                {drefResponse?.pmer}
-                            </DescriptionText>
-                        </Container>
-                    )}
-                    {communicationDefined && (
-                        <Container
-                            heading={strings.communicationHeading}
-                        >
-                            <DescriptionText>
-                                {drefResponse?.communication}
-                            </DescriptionText>
                         </Container>
                     )}
                 </>
@@ -1252,109 +1166,6 @@ export function Component() {
                     )}
                 </>
             )}
-            {showProposedActions && (
-                <Container
-                    heading={strings.proposedActions}
-                    headingLevel={3}
-                    childrenContainerClassName={styles.proposedActions}
-                >
-                    <div className={styles.actionTitleLabel} />
-                    <div className={styles.actionTitleLabel}>
-                        {strings.proposedActionsSector}
-                    </div>
-                    <div className={styles.actionTitleLabel}>
-                        {strings.proposedActionsActivities}
-                    </div>
-                    <div className={styles.actionTitleLabel}>
-                        {strings.priorityActionsBudget}
-                    </div>
-                    {groupedProposedActions.map((proposedAction) => (
-                        <Fragment key={proposedAction.key}>
-                            <div
-                                className={styles.proposedAction}
-                                style={{
-                                    gridRow: `span ${proposedAction.numActivities}`,
-                                }}
-                            >
-                                <img
-                                    className={styles.icon}
-                                    src={proposedAction.icon}
-                                    alt=""
-                                />
-                                <div className={styles.title}>
-                                    {proposedAction.title}
-                                </div>
-                            </div>
-                            {proposedAction.actions.map((action) => (
-                                <Fragment key={action.id}>
-                                    {action.activities.map((activity, i) => (
-                                        <Fragment key={activity.id}>
-                                            <SelectOutput
-                                                className={styles.sector}
-                                                options={primarySectorOptions}
-                                                label={undefined}
-                                                labelSelector={primarySectoryLabelSelector}
-                                                keySelector={primarySectoryKeySelector}
-                                                value={activity.sector}
-                                            />
-                                            <div className={styles.activity}>
-                                                {activity.activity}
-                                            </div>
-                                            {i === 0 && (
-                                                <div
-                                                    className={styles.budget}
-                                                    style={{ gridRow: `span ${action.activities.length}` }}
-                                                >
-                                                    <NumberOutput
-                                                        value={action.total_budget}
-                                                        prefix={strings.chfPrefix}
-                                                    />
-                                                </div>
-                                            )}
-                                        </Fragment>
-                                    ))}
-                                </Fragment>
-                            ))}
-                        </Fragment>
-                    ))}
-                    <div className={styles.costLabel}>
-                        {strings.priorityActionsSubTotal}
-                    </div>
-                    <NumberOutput
-                        className={styles.costValue}
-                        value={drefResponse?.sub_total_cost}
-                        prefix={strings.chfPrefix}
-                    />
-                    {isDefined(drefResponse?.surge_deployment_cost) && (
-                        <>
-                            <div className={styles.costLabel}>
-                                {strings.priorityActionsSurgeDeployment}
-                            </div>
-                            <NumberOutput
-                                className={styles.costValue}
-                                value={drefResponse.surge_deployment_cost}
-                                prefix={strings.chfPrefix}
-                            />
-                        </>
-                    )}
-                    <div className={styles.costLabel}>
-                        {strings.priorityActionsIndirectCost}
-                    </div>
-                    <NumberOutput
-                        className={styles.costValue}
-                        value={drefResponse?.indirect_cost}
-                        prefix={strings.chfPrefix}
-                    />
-                    <div className={styles.costLabel}>
-                        {strings.priorityActionsTotal}
-                    </div>
-                    <NumberOutput
-                        className={styles.costValue}
-                        value={drefResponse?.total_cost}
-                        prefix={strings.chfPrefix}
-                    />
-                </Container>
-            )}
             {drefResponse?.type_of_dref !== DREF_TYPE_IMMINENT && (
                 <Container
                     heading={strings.targetPopulationSectionHeading}
@@ -1580,6 +1391,195 @@ export function Component() {
                         </Fragment>
                     ))}
                 </>
+            )}
+            {showAboutSupportServicesSection && (
+                <>
+                    <Heading level={2}>
+                        {drefResponse?.type_of_dref !== DREF_TYPE_IMMINENT
+                            ? strings.aboutSupportServicesSectionHeading
+                            : strings.plan}
+                    </Heading>
+                    {humanResourceDefined && (
+                        <Container
+                            heading={strings.humanResourcesHeading}
+                        >
+                            <DescriptionText>
+                                {drefResponse?.human_resource}
+                            </DescriptionText>
+                        </Container>
+                    )}
+                    {isVolunteerTeamDiverseDefined && (
+                        <Container
+                            heading={strings.isVolunteerTeamDiverseHeading}
+                        >
+                            <DescriptionText>
+                                {drefResponse?.is_volunteer_team_diverse}
+                            </DescriptionText>
+                        </Container>
+                    )}
+                    {surgePersonnelDeployedDefined && (
+                        <Container
+                            heading={strings.surgePersonnelDeployedHeading}
+                        >
+                            <DescriptionText>
+                                {drefResponse?.is_surge_personnel_deployed
+                                    ? strings.yes : strings.no}
+                            </DescriptionText>
+                            <DescriptionText>
+                                {drefResponse?.surge_personnel_deployed}
+                            </DescriptionText>
+                        </Container>
+                    )}
+                    {humanitarianImpactsDefined && (
+                        <Container
+                            heading={strings.humanitarianImpactsHeading}
+                        >
+                            <DescriptionText>
+                                {drefResponse?.addressed_humanitarian_impacts}
+                            </DescriptionText>
+                        </Container>
+                    )}
+                    {contingencyPlanDocument && (
+                        <Container>
+                            <Link href={
+                                drefResponse?.contingency_plans_supporting_document_details?.file
+                            }
+                            >
+                                {strings.contingencyPlanDocument}
+                            </Link>
+                        </Container>
+                    )}
+                    {logisticCapacityOfNsDefined && (
+                        <Container
+                            heading={strings.logisticCapacityHeading}
+                        >
+                            <DescriptionText>
+                                {drefResponse?.logistic_capacity_of_ns}
+                            </DescriptionText>
+                        </Container>
+                    )}
+                    {pmerDefined && (
+                        <Container
+                            heading={strings.pmerHeading}
+                        >
+                            <DescriptionText>
+                                {drefResponse?.pmer}
+                            </DescriptionText>
+                        </Container>
+                    )}
+                    {communicationDefined && (
+                        <Container
+                            heading={strings.communicationHeading}
+                        >
+                            <DescriptionText>
+                                {drefResponse?.communication}
+                            </DescriptionText>
+                        </Container>
+                    )}
+                </>
+            )}
+            {showProposedActions && (
+                <Container
+                    heading={strings.proposedActions}
+                    headingLevel={3}
+                    childrenContainerClassName={styles.proposedActions}
+                >
+                    <div className={styles.actionTitleLabel} />
+                    <div className={styles.actionTitleLabel}>
+                        {strings.proposedActionsSector}
+                    </div>
+                    <div className={styles.actionTitleLabel}>
+                        {strings.proposedActionsActivities}
+                    </div>
+                    <div className={styles.actionTitleLabel}>
+                        {strings.priorityActionsBudget}
+                    </div>
+                    {groupedProposedActions.map((proposedAction) => (
+                        <Fragment key={proposedAction.key}>
+                            <div
+                                className={styles.proposedAction}
+                                style={{
+                                    gridRow: `span ${proposedAction.numActivities}`,
+                                }}
+                            >
+                                <img
+                                    className={styles.icon}
+                                    src={proposedAction.icon}
+                                    alt=""
+                                />
+                                <div className={styles.title}>
+                                    {proposedAction.title}
+                                </div>
+                            </div>
+                            {proposedAction.actions.map((action) => (
+                                <Fragment key={action.id}>
+                                    {action.activities.map((activity, i) => (
+                                        <Fragment key={activity.id}>
+                                            <SelectOutput
+                                                className={styles.sector}
+                                                options={primarySectorOptions}
+                                                label={undefined}
+                                                labelSelector={primarySectoryLabelSelector}
+                                                keySelector={primarySectoryKeySelector}
+                                                value={activity.sector}
+                                            />
+                                            <div className={styles.activity}>
+                                                {activity.activity}
+                                            </div>
+                                            {i === 0 && (
+                                                <div
+                                                    className={styles.budget}
+                                                    style={{ gridRow: `span ${action.activities.length}` }}
+                                                >
+                                                    <NumberOutput
+                                                        value={action.total_budget}
+                                                        prefix={strings.chfPrefix}
+                                                    />
+                                                </div>
+                                            )}
+                                        </Fragment>
+                                    ))}
+                                </Fragment>
+                            ))}
+                        </Fragment>
+                    ))}
+                    <div className={styles.costLabel}>
+                        {strings.priorityActionsSubTotal}
+                    </div>
+                    <NumberOutput
+                        className={styles.costValue}
+                        value={drefResponse?.sub_total_cost}
+                        prefix={strings.chfPrefix}
+                    />
+                    {isDefined(drefResponse?.surge_deployment_cost) && (
+                        <>
+                            <div className={styles.costLabel}>
+                                {strings.priorityActionsSurgeDeployment}
+                            </div>
+                            <NumberOutput
+                                className={styles.costValue}
+                                value={drefResponse.surge_deployment_cost}
+                                prefix={strings.chfPrefix}
+                            />
+                        </>
+                    )}
+                    <div className={styles.costLabel}>
+                        {strings.priorityActionsIndirectCost}
+                    </div>
+                    <NumberOutput
+                        className={styles.costValue}
+                        value={drefResponse?.indirect_cost}
+                        prefix={strings.chfPrefix}
+                    />
+                    <div className={styles.costLabel}>
+                        {strings.priorityActionsTotal}
+                    </div>
+                    <NumberOutput
+                        className={styles.costValue}
+                        value={drefResponse?.total_cost}
+                        prefix={strings.chfPrefix}
+                    />
+                </Container>
             )}
             {showBudgetOverview && (
                 <>

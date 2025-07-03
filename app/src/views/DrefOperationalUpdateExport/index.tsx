@@ -42,7 +42,6 @@ import {
 } from '#utils/constants';
 import {
     identifiedNeedsAndGapsOrder,
-    nsActionsOrder,
     plannedInterventionOrder,
 } from '#utils/domain/dref';
 import { useRequest } from '#utils/restRequest';
@@ -136,16 +135,6 @@ export function Component() {
         [drefResponse?.needs_identified],
     );
 
-    const filteredNsActions = useMemo(
-        () => drefResponse?.national_society_actions?.map((nsAction) => {
-            if (isNotDefined(nsAction.title)) {
-                return undefined;
-            }
-            return { ...nsAction, title: nsAction.title };
-        }).filter(isDefined),
-        [drefResponse?.national_society_actions],
-    );
-
     const sortedPlannedInterventions = useMemo(
         () => filteredPlannedIntervention?.sort(
 
@@ -160,14 +149,6 @@ export function Component() {
             (a, b) => identifiedNeedsAndGapsOrder[a.title] - identifiedNeedsAndGapsOrder[b.title],
         ),
         [filteredIdentifiedNeedsAndGaps],
-    );
-
-    const sortedNsActions = useMemo(
-        () => filteredNsActions?.sort((a, b) => (
-
-            nsActionsOrder[a.title] - nsActionsOrder[b.title]
-        )),
-        [filteredNsActions],
     );
 
     const eventDescriptionDefined = isTruthyString(drefResponse?.event_description?.trim());
@@ -209,14 +190,6 @@ export function Component() {
         || isDefined(drefResponse?.changing_operation_strategy)
         || isDefined(drefResponse?.changing_target_population_of_operation)
         || isDefined(drefResponse?.request_for_second_allocation);
-
-    const nsActionImagesDefined = isDefined(drefResponse)
-        && drefResponse.photos_file
-        && drefResponse.photos_file.length > 0;
-    const nsActionsDefined = isDefined(drefResponse)
-        && isDefined(drefResponse.national_society_actions)
-        && drefResponse.national_society_actions.length > 0;
-    const showNsActionsSection = nsActionsDefined || nsActionImagesDefined;
 
     const icrcActionsDefined = isTruthyString(drefResponse?.icrc?.trim());
 
@@ -666,61 +639,6 @@ export function Component() {
                         />
                     )}
                 </Container>
-            )}
-            {showNsActionsSection && (
-                <>
-                    <Heading level={2}>
-                        {strings.currentNationalSocietyActionsHeading}
-                    </Heading>
-                    <Container>
-                        {drefResponse?.ns_respond_date && (
-                            <Container
-                                heading={
-                                    drefResponse?.type_of_dref === DREF_TYPE_IMMINENT
-                                        ? strings.nationalSocietyActionsHeading
-                                        : strings.drefFormNsResponseStarted
-                                }
-                            >
-                                <DateOutput
-                                    value={drefResponse?.ns_respond_date}
-                                    format={DEFAULT_PRINT_DATE_FORMAT}
-                                />
-                            </Container>
-                        )}
-                    </Container>
-                    {nsActionImagesDefined && (
-                        <Container childrenContainerClassName={styles.nsActionsImages}>
-                            {drefResponse?.photos_file?.map(
-                                (nsActionImage) => (
-                                    <Image
-                                        key={nsActionImage.id}
-                                        src={nsActionImage.file}
-                                        caption={nsActionImage.caption}
-                                    />
-                                ),
-                            )}
-                        </Container>
-                    )}
-                    {nsActionsDefined && (
-                        <Container>
-                            <Container
-                                childrenContainerClassName={styles.nsActionsList}
-                            >
-                                {sortedNsActions?.map(
-                                    (nsAction) => (
-                                        <BlockTextOutput
-                                            key={nsAction.id}
-                                            label={nsAction.title_display}
-                                            value={nsAction.description}
-                                            valueType="text"
-                                            strongLabel
-                                        />
-                                    ),
-                                )}
-                            </Container>
-                        </Container>
-                    )}
-                </>
             )}
             {showMovementPartnersActionsSection && (
                 <Container

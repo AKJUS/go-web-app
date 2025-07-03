@@ -327,6 +327,7 @@ const schema: DrefFormSchema = {
             'images_file',
             'source_information',
             'hazard_date',
+            'hazard_date_and_location',
             'hazard_vulnerabilities_and_risks',
         ] as const;
         type EventDetailDrefTypeRelatedFields = Pick<
@@ -358,6 +359,7 @@ const schema: DrefFormSchema = {
                     event_description: { forceValue: nullValue },
                     images_file: { forceValue: [] },
                     hazard_date: { forceValue: nullValue },
+                    hazard_date_and_location: { forceValue: nullValue },
                     hazard_vulnerabilities_and_risks: { forceValue: nullValue },
                 };
 
@@ -381,6 +383,7 @@ const schema: DrefFormSchema = {
                         hazard_date: {
                             validations: [dateGreaterThanOrEqualCondition(encodeDate(today))],
                         },
+                        hazard_date_and_location: {},
                         hazard_vulnerabilities_and_risks: {},
                         source_information: {
                             keySelector: (source) => source.client_id,
