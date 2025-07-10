@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.20.2
+
+### Patch Changes
+
+- 8090b9a: Fix other action section visibility condition in DREF export
+
 ## 7.20.1
 
 ### Patch Changes
