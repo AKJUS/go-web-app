@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.20.1-beta.0
+
+### Patch Changes
+
+- 4418171: Fix DREF form to properly save major coordination mechanism [#1928](https://github.com/IFRCGo/go-web-app/issues/1928)
+
 ## 7.20.0
 
 ### Minor Changes
