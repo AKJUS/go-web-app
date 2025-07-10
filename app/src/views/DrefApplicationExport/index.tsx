@@ -336,11 +336,10 @@ export function Component() {
     const majorCoordinationMechanismDefined = isDefined(
         drefResponse?.major_coordination_mechanism?.trim(),
     );
-    const showOtherActorsActionsSection = (governmentRequestedAssistanceDefined
-        && isDefined(drefResponse)
-        && drefResponse?.type_of_dref !== DREF_TYPE_IMMINENT)
+    const showOtherActorsActionsSection = drefResponse?.type_of_dref !== DREF_TYPE_IMMINENT
         && (
-            nationalAuthoritiesDefined
+            governmentRequestedAssistanceDefined
+            || nationalAuthoritiesDefined
             || unOrOtherActorDefined
             || majorCoordinationMechanismDefined
         );
