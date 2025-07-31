@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import {
     Container,
     HtmlOutput,
+    InfoPopup,
     KeyFigure,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -193,6 +194,20 @@ export function Component() {
                                 <SeverityIndicator
                                     level={emergencyResponse.ifrc_severity_level}
                                 />
+                                {emergencyResponse.ifrc_severity_level_update_date && (
+                                    <InfoPopup
+                                        description={(
+                                            <TextOutput
+                                                label={strings.severityLevelUpdateDateLabel}
+                                                value={
+                                                    emergencyResponse
+                                                        .ifrc_severity_level_update_date
+                                                }
+                                                valueType="date"
+                                            />
+                                        )}
+                                    />
+                                )}
                             </>
                         )}
                         valueClassName={styles.disasterCategoryValue}

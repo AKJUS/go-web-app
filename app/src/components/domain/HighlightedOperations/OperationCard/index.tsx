@@ -54,6 +54,7 @@ function OperationCard(props: Props) {
             id,
             name,
             ifrc_severity_level,
+            ifrc_severity_level_update_date,
             ifrc_severity_level_display,
             updated_at,
             appeals,
@@ -139,15 +140,26 @@ function OperationCard(props: Props) {
                     <Tooltip
                         description={(
                             <>
-                                <TextOutput
-                                    label={(
-                                        <SeverityIndicator
-                                            level={ifrc_severity_level}
+                                <div className={styles.severityContainer}>
+                                    <TextOutput
+                                        label={(
+                                            <SeverityIndicator
+                                                level={ifrc_severity_level}
+                                            />
+                                        )}
+                                        value={ifrc_severity_level_display}
+                                        withoutLabelColon
+                                    />
+                                    {ifrc_severity_level_update_date && ','}
+                                    {ifrc_severity_level_update_date && (
+                                        <TextOutput
+                                            className={styles.date}
+                                            value={ifrc_severity_level_update_date}
+                                            valueType="date"
+                                            withoutLabelColon
                                         />
                                     )}
-                                    value={ifrc_severity_level_display}
-                                    withoutLabelColon
-                                />
+                                </div>
                                 <TextOutput
                                     label={<FocusLineIcon />}
                                     value={countriesInfoDisplay}
