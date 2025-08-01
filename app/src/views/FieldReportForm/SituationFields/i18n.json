@@ -47,7 +47,9 @@
         "fieldsStep2SituationFieldsEVTMissingDescription": "Number of people missing.",
         "fieldsStep2SituationFieldsEVTMissingLabel": "Missing",
         "fieldsStep2SourceOfFiguresLabel": "Source (of figures)",
-        "fieldReportFormNumericDetails": "Numeric Details (People)"
+        "fieldReportFormNumericDetails": "Numeric Details (People)",
+        "fieldReportOverviewConsentLabel": "All content published on IFRC platforms must adhere to the {fundamentalPrinciples} and align with the relevant Movement language and communications guidelines. Where content does not meet these standards, the IFRC will collaborate with the respective National Society to revise it accordingly.",
+        "fieldReportFundamentalPrinciplesLabel": "Fundamental Principles"
     }
 }
 

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import {
+    Checkbox,
     Container,
     DateInput,
     InputSection,
@@ -8,12 +9,14 @@ import {
     TextArea,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
+import { resolveToComponent } from '@ifrc-go/ui/utils';
 import {
     type EntriesAsList,
     type Error,
     getErrorObject,
 } from '@togglecorp/toggle-form';
 
+import Link from '#components/Link';
 import RichTextArea from '#components/RichTextArea';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import { type ReportType } from '#utils/constants';
@@ -52,6 +55,20 @@ function SituationFields(props: Props) {
     );
 
     const sectionHeading = strings.fieldReportFormNumericDetails;
+
+    const overviewConsentLabel = resolveToComponent(
+        strings.fieldReportOverviewConsentLabel,
+        {
+            fundamentalPrinciples: (
+                <Link
+                    href="https://www.ifrc.org/who-we-are/international-red-cross-and-red-crescent-movement/fundamental-principles"
+                    external
+                >
+                    {strings.fieldReportFundamentalPrinciplesLabel}
+                </Link>
+            ),
+        },
+    );
 
     if (reportType === 'COVID') {
         return (
@@ -500,12 +517,20 @@ function SituationFields(props: Props) {
                 title={strings.fieldsStep2DescriptionEVTLabel}
                 description={strings.fieldsStep2DescriptionEVTDescription}
             >
+                <Checkbox
+                    label={overviewConsentLabel}
+                    name="situationalOverviewConsented"
+                    value={value.situationalOverviewConsented}
+                    onChange={onValueChange}
+                    disabled={disabled}
+                    error={error?.situationalOverviewConsented}
+                />
                 <RichTextArea
                     name="description"
                     value={value.description}
                     onChange={onValueChange}
                     error={error?.description}
-                    disabled={disabled}
+                    disabled={disabled || !value.situationalOverviewConsented}
                     placeholder={strings.fieldsStep2DescriptionEVTPlaceholder}
                 />
             </InputSection>
