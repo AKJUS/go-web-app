@@ -21,6 +21,7 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     isDefined,
     isNotDefined,
+    isTruthyString,
     listToGroupList,
 } from '@togglecorp/fujs';
 import {
@@ -210,7 +211,12 @@ export function Component() {
                     : [],
             );
             setDistrictOptions(response?.districts_details);
-            onValueSet(formValue);
+            // NOTE: We are setting situationalOverviewConsented here because its only-client
+            // value and if the field it filled it means that user consented to it
+            onValueSet({
+                ...formValue,
+                situationalOverviewConsented: isTruthyString(formValue.description),
+            });
         },
     });
 

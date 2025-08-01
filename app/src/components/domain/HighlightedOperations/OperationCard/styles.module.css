@@ -40,3 +40,12 @@
         }
     }
 }
+
+.severity-container {
+    display: flex;
+
+    .date {
+        padding-left: var(--go-ui-spacing-xs);
+    }
+}
+

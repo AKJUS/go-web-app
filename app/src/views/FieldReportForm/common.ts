@@ -2,6 +2,8 @@ import { type DeepReplace } from '@ifrc-go/ui/utils';
 import {
     isDefined,
     isNotDefined,
+    isTruthyString,
+    type Maybe,
 } from '@togglecorp/fujs';
 import {
     addCondition,
@@ -31,6 +33,12 @@ import {
 } from '#utils/form';
 import { type GoApiResponse } from '#utils/restRequest';
 
+function isTrueValue(value: Maybe<boolean>) {
+    // FIXME: use translations
+    return (isNotDefined(value) || value === false)
+        ? 'This field must be consented to if situational overview is filled.'
+        : undefined;
+}
 // FORM
 
 type FieldReportResponse = GoApiResponse<'/api/v2/field-report/{id}/'>;
@@ -50,6 +58,8 @@ export type FormValue = Omit<
     // FIXME: Why do we need to change countries to country
     // Fix this in the server later
     country: number,
+    // NOTE: This is not sent to server, only used from frontend validation
+    situationalOverviewConsented: boolean,
 };
 
 export type PartialFormValue = PurgeNull<PartialForm<FormValue, 'uuid' | 'ctype' | 'organization'>>;
@@ -155,6 +165,7 @@ const fieldsInContext = [
 ] satisfies (keyof PartialFormValue)[];
 const fieldsInSituation = [
     'affected_pop_centres',
+    'situationalOverviewConsented',
     'description',
     'epi_cases',
     'epi_cases_since_last_fr',
@@ -314,6 +325,7 @@ export const reportSchema: FormSchema = {
         const situationFields = [
             'affected_pop_centres',
             'description',
+            'situationalOverviewConsented',
             'epi_cases',
             'epi_cases_since_last_fr',
             'epi_confirmed_cases',
@@ -354,13 +366,15 @@ export const reportSchema: FormSchema = {
         baseSchema = addCondition(
             baseSchema,
             value,
-            ['status', 'is_covid_report', 'dtype'],
+            ['status', 'is_covid_report', 'dtype', 'description'],
             situationFields,
             (val): SituationSchema => {
                 const reportType = getReportType(val?.status, val?.is_covid_report, val?.dtype);
+                const consentRequired = isTruthyString(val?.description);
 
                 const baseSchemaTwo: SituationSchema = {
                     description: {},
+                    situationalOverviewConsented: {},
                     other_sources: {},
 
                     affected_pop_centres: { forceValue: nullValue },
@@ -402,6 +416,11 @@ export const reportSchema: FormSchema = {
                 if (reportType === 'EW') {
                     return {
                         ...baseSchemaTwo,
+                        situationalOverviewConsented: {
+                            validations: [
+                                consentRequired ? isTrueValue : undefined,
+                            ].filter(isDefined),
+                        },
                         num_potentially_affected: { validations: [positiveIntegerCondition] },
                         gov_num_potentially_affected: { validations: [positiveIntegerCondition] },
                         other_num_potentially_affected: { validations: [positiveIntegerCondition] },
@@ -443,6 +462,11 @@ export const reportSchema: FormSchema = {
                 // SITUATION - EVT
                 return {
                     ...baseSchemaTwo,
+                    situationalOverviewConsented: {
+                        validations: [
+                            consentRequired ? isTrueValue : undefined,
+                        ].filter(isDefined),
+                    },
                     num_injured: { validations: [positiveIntegerCondition] },
                     gov_num_injured: { validations: [positiveIntegerCondition] },
                     other_num_injured: { validations: [positiveIntegerCondition] },
