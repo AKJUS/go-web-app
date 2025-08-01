@@ -219,10 +219,12 @@ function ActiveDrefTable(props: Props) {
                         return {
                             id,
                             drefId: id,
+                            drefType,
                             status: item.status,
                             applicationType,
                             canAddOpsUpdate: false,
                             canCreateFinalReport: false,
+                            hasPermissionToApprove: false,
                         };
                     }
 
@@ -242,9 +244,6 @@ function ActiveDrefTable(props: Props) {
 
                     const canCreateFinalReport = !has_final_report
                         && (applicationType === 'DREF' || applicationType === 'OPS_UPDATE')
-                        // TODO: Remove me after immplementation of DrefFinalReport for imminent
-                        && ((isDefined(is_dref_imminent_v2) && has_ops_update)
-                                || !is_dref_imminent_v2)
                         && (is_published ?? false)
                         && (item.type_of_dref !== DREF_TYPE_LOAN)
                         && (

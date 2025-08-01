@@ -31,6 +31,7 @@ import {
     type Error,
     getErrorObject,
     getErrorString,
+    type SetBaseValueArg,
 } from '@togglecorp/toggle-form';
 
 import CountrySelectInput from '#components/domain/CountrySelectInput';
@@ -52,6 +53,7 @@ import {
 } from '#utils/restRequest';
 
 import {
+    ONSET_SUDDEN,
     TYPE_IMMINENT,
     TYPE_LOAN,
 } from '../common';
@@ -85,7 +87,7 @@ interface Props {
     error: Error<PartialFinalReport> | undefined;
     disabled?: boolean;
     isPreviousImminent: boolean;
-
+    setValue: (value: SetBaseValueArg<PartialFinalReport>, partialUpdate?: boolean) => void;
     fileIdToUrlMap: Record<number, string>;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     districtOptions: DistrictItem[] | null | undefined;
@@ -100,6 +102,7 @@ function Overview(props: Props) {
         isPreviousImminent,
         error: formError,
         fileIdToUrlMap,
+        setValue,
         setFileIdToUrlMap,
         disabled,
         districtOptions,
@@ -186,6 +189,20 @@ function Overview(props: Props) {
         setShowShareModalFalse,
     ]);
 
+    const handleTypeofDrefChange = useCallback((
+        typeOfDref: DrefTypeOption['key'] | undefined,
+        name: 'type_of_dref',
+    ) => {
+        setFieldValue(typeOfDref, name);
+        if (typeOfDref === TYPE_IMMINENT) {
+            setValue((oldValue) => ({
+                ...oldValue,
+                [name]: typeOfDref,
+                ...(typeOfDref === TYPE_IMMINENT ? { type_of_onset: ONSET_SUDDEN } : {}),
+            }));
+        }
+    }, [setFieldValue, setValue]);
+
     const error = getErrorObject(formError);
 
     return (
@@ -255,7 +272,7 @@ function Overview(props: Props) {
                         }
                         keySelector={typeOfDrefKeySelector}
                         labelSelector={stringValueSelector}
-                        onChange={setFieldValue}
+                        onChange={handleTypeofDrefChange}
                         value={value?.type_of_dref}
                         error={error?.type_of_dref}
                         disabled={disabled}
@@ -292,48 +309,35 @@ function Overview(props: Props) {
                         error={error?.type_of_onset}
                         disabled={disabled}
                         withAsterisk
+                        readOnly={
+                            value?.type_of_dref === TYPE_IMMINENT
+                        }
                     />
-                    {/* (value?.disaster_type === DISASTER_FIRE
-                    || value?.disaster_type === DISASTER_FLASH_FLOOD
-                    || value?.disaster_type === DISASTER_FLOOD)
-                    ? (
-                        <BooleanInput
-                            name="is_man_made_event"
-                            label={strings.drefFormManMadeEvent}
-                            value={value?.is_man_made_event}
+                    {value?.type_of_dref !== TYPE_IMMINENT && (
+                        <SelectInput
+                            name="disaster_category"
+                            label={(
+                                <>
+                                    strings.drefFormDisasterCategoryLabel
+                                    <Link
+                                        title={strings.drefFormClickEmergencyResponseFrameworkLabel}
+                                        href={disasterCategoryLink}
+                                        external
+                                        variant="tertiary"
+                                    >
+                                        <WikiHelpSectionLineIcon />
+                                    </Link>
+                                </>
+                            )}
+                            options={drefDisasterCategoryOptions}
+                            keySelector={disasterCategoryKeySelector}
+                            labelSelector={stringValueSelector}
+                            value={value?.disaster_category}
                             onChange={setFieldValue}
-                            error={error?.is_man_made_event}
+                            error={error?.disaster_category}
                             disabled={disabled}
                         />
-                    ) : (
-                        <div />
-                    ) */}
-                    <SelectInput
-                        name="disaster_category"
-                        label={(
-                            <>
-                                {value?.type_of_dref === TYPE_IMMINENT
-
-                                    ? strings.drefFormImminentDisasterCategoryLabel
-                                    : strings.drefFormDisasterCategoryLabel}
-                                <Link
-                                    title={strings.drefFormClickEmergencyResponseFrameworkLabel}
-                                    href={disasterCategoryLink}
-                                    external
-                                    variant="tertiary"
-                                >
-                                    <WikiHelpSectionLineIcon />
-                                </Link>
-                            </>
-                        )}
-                        options={drefDisasterCategoryOptions}
-                        keySelector={disasterCategoryKeySelector}
-                        labelSelector={stringValueSelector}
-                        value={value?.disaster_category}
-                        onChange={setFieldValue}
-                        error={error?.disaster_category}
-                        disabled={disabled}
-                    />
+                    )}
                 </InputSection>
                 <InputSection
                     title={
@@ -363,6 +367,7 @@ function Overview(props: Props) {
                         disabled={disabled}
                         onOptionsChange={setDistrictOptions}
                         error={getErrorString(error?.district)}
+                        withAsterisk
                     />
                 </InputSection>
                 <InputSection title={strings.drefFormTitle}>
@@ -391,24 +396,26 @@ function Overview(props: Props) {
                         </Button>
                     </div>
                 </InputSection>
-                <InputSection
-                    title={strings.drefFormUploadMap}
-                    description={strings.drefFormUploadMapDescription}
-                    contentSectionClassName={styles.imageInputContent}
-                    numPreferredColumns={2}
-                >
-                    <ImageWithCaptionInput
-                        name="event_map_file"
-                        url="/api/v2/dref-files/"
-                        value={value?.event_map_file}
-                        onChange={setFieldValue}
-                        error={getErrorObject(error?.event_map_file)}
-                        fileIdToUrlMap={fileIdToUrlMap}
-                        setFileIdToUrlMap={setFileIdToUrlMap}
-                        label={strings.drefFormUploadAnImageLabel}
-                        disabled={disabled}
-                    />
-                </InputSection>
+                {value?.type_of_dref !== TYPE_IMMINENT && (
+                    <InputSection
+                        title={strings.drefFormUploadMap}
+                        description={strings.drefFormUploadMapDescription}
+                        contentSectionClassName={styles.imageInputContent}
+                        numPreferredColumns={2}
+                    >
+                        <ImageWithCaptionInput
+                            name="event_map_file"
+                            url="/api/v2/dref-files/"
+                            value={value?.event_map_file}
+                            onChange={setFieldValue}
+                            error={getErrorObject(error?.event_map_file)}
+                            fileIdToUrlMap={fileIdToUrlMap}
+                            setFileIdToUrlMap={setFileIdToUrlMap}
+                            label={strings.drefFormUploadAnImageLabel}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                )}
                 <InputSection
                     title={strings.drefFormUploadCoverImage}
                     description={strings.drefFormUploadCoverImageDescription}

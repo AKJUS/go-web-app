@@ -32,7 +32,9 @@ import {
     type EntriesAsList,
     type Error,
     getErrorObject,
+    isCallable,
     type SetBaseValueArg,
+    type SetValueArg,
     useFormArray,
 } from '@togglecorp/toggle-form';
 
@@ -40,15 +42,18 @@ import GoSingleFileInput from '#components/domain/GoSingleFileInput';
 import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
+import { DREF_TYPE_IMMINENT } from '#utils/constants';
 import { type GoApiResponse } from '#utils/restRequest';
 
 import {
+    calculateProposedActionsCost,
     calculateTotalAssistedPopulation,
     TYPE_ASSESSMENT,
     TYPE_IMMINENT,
 } from '../common';
 import { type PartialFinalReport } from '../schema';
 import InterventionInput from './InterventionInput';
+import ProposedActionsInput from './ProposedActionsInput';
 import RiskSecurityInput from './RiskSecurityInput';
 
 import i18n from './i18n.json';
@@ -60,6 +65,7 @@ type PlannedInterventionOption = NonNullable<GlobalEnumsResponse['dref_planned_i
 type Value = PartialFinalReport;
 type PlannedInterventionFormFields = NonNullable<PartialFinalReport['planned_interventions']>[number];
 type RiskSecurityFormFields = NonNullable<PartialFinalReport['risk_security']>[number];
+type ProposedActionsFormFields = NonNullable<PartialFinalReport['proposed_action']>[number];
 
 function plannedInterventionKeySelector(option: PlannedInterventionOption) {
     return option.key;
@@ -151,6 +157,34 @@ function Operation(props: Props) {
         setValue,
     ]);
 
+    const handleProposedActionChange = useCallback(
+        (val: SetValueArg<ProposedActionsFormFields>, index: number | undefined) => {
+            setValue((oldVal) => {
+                const newProposedValue = [...(oldVal.proposed_action ?? [])];
+                if (isNotDefined(index)) {
+                    newProposedValue.push(
+                        isCallable(val) ? val(undefined) : val,
+                    );
+                } else {
+                    newProposedValue[index] = isCallable(val)
+                        ? val(newProposedValue[index])
+                        : val;
+                }
+
+                const newValue = {
+                    ...oldVal,
+                    proposed_action: newProposedValue,
+                };
+
+                return {
+                    ...newValue,
+                    ...calculateProposedActionsCost(newValue),
+                };
+            }, true);
+        },
+        [setValue],
+    );
+
     const warnings = useMemo(() => {
         if (isNotDefined(value?.num_assisted)) {
             return [];
@@ -220,120 +254,126 @@ function Operation(props: Props) {
 
     return (
         <div className={styles.operation}>
-            <Container
-                heading={strings.drefFormObjectiveAndStrategy}
-                className={styles.objectiveRationale}
-            >
-                <InputSection
-                    title={strings.drefFormObjectiveOperation}
-                    description={strings.drefFormObjectiveOperationDescription}
+            {value?.type_of_dref !== DREF_TYPE_IMMINENT && (
+                <Container
+                    heading={strings.drefFormObjectiveAndStrategy}
+                    className={styles.objectiveRationale}
                 >
-                    <TextArea
-                        name="operation_objective"
-                        onChange={setFieldValue}
-                        value={value.operation_objective}
-                        error={error?.operation_objective}
-                        hint={strings.drefFormObjectiveOperationPlaceholder}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormResponseRationale}
-                    description={(
-                        <>
-                            <p>
-                                {strings.drefFormResponseRationaleDescription}
-                            </p>
-                            <ul>
-                                <li>
-                                    {strings.drefFormResponseRationaleDescriptionPoint1}
-                                </li>
-                                <li>
-                                    {strings.drefFormResponseRationaleDescriptionPoint2}
-                                </li>
-                                <li>
-                                    {strings.drefFormResponseRationaleDescriptionPoint3}
-                                </li>
-                                <li>
-                                    {strings.drefFormResponseRationaleDescriptionPoint4}
-                                </li>
-                                {value?.type_of_dref === TYPE_ASSESSMENT && (
-                                    <li>
-                                        {strings.drefFormResponseRationaleForAssessment}
-                                    </li>
-                                )}
-                            </ul>
-                        </>
-                    )}
-                >
-                    <TextArea
-                        name="response_strategy"
-                        onChange={setFieldValue}
-                        value={value.response_strategy}
-                        error={error?.response_strategy}
-                        hint={strings.drefFormResponseRationalePlaceholder}
-                        disabled={disabled}
-                    />
-                </InputSection>
-            </Container>
-            <Container
-                heading={strings.drefFormTargetingStrategy}
-                className={styles.targetingStrategy}
-            >
-                <InputSection
-                    title={strings.drefFormPeopleAssistedThroughOperation}
-                    description={strings.drefFormPeopleAssistedThroughOperationDescription}
-                >
-                    <TextArea
-                        label={strings.drefFormOperationDescription}
-                        name="people_assisted"
-                        onChange={setFieldValue}
-                        value={value.people_assisted}
-                        error={error?.people_assisted}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormSelectionCriteria}
-                    description={strings.drefFormSelectionCriteriaDescription}
-                >
-                    <TextArea
-                        label={strings.drefFormOperationDescription}
-                        name="selection_criteria"
-                        onChange={setFieldValue}
-                        value={value.selection_criteria}
-                        error={error?.selection_criteria}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.finalReportChangeToOperationStrategy}
-                >
-                    <BooleanInput
-                        name="change_in_operational_strategy"
-                        value={value.change_in_operational_strategy}
-                        onChange={setFieldValue}
-                        error={error?.change_in_operational_strategy}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                {value.change_in_operational_strategy && (
                     <InputSection
-                        title={strings.finalReportChangeToOperationStrategyExplain}
+                        title={strings.drefFormObjectiveOperation}
+                        description={strings.drefFormObjectiveOperationDescription}
                     >
                         <TextArea
-                            label={strings.drefFormDescription}
-                            name="change_in_operational_strategy_text"
+                            name="operation_objective"
                             onChange={setFieldValue}
-                            value={value.change_in_operational_strategy_text}
-                            error={error?.change_in_operational_strategy_text}
+                            value={value.operation_objective}
+                            error={error?.operation_objective}
+                            hint={strings.drefFormObjectiveOperationPlaceholder}
                             disabled={disabled}
                         />
                     </InputSection>
-                )}
-            </Container>
+                    <InputSection
+                        title={strings.drefFormResponseRationale}
+                        description={(
+                            <>
+                                <p>
+                                    {strings.drefFormResponseRationaleDescription}
+                                </p>
+                                <ul>
+                                    <li>
+                                        {strings.drefFormResponseRationaleDescriptionPoint1}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormResponseRationaleDescriptionPoint2}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormResponseRationaleDescriptionPoint3}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormResponseRationaleDescriptionPoint4}
+                                    </li>
+                                    {value?.type_of_dref === TYPE_ASSESSMENT && (
+                                        <li>
+                                            {strings.drefFormResponseRationaleForAssessment}
+                                        </li>
+                                    )}
+                                </ul>
+                            </>
+                        )}
+                    >
+                        <TextArea
+                            name="response_strategy"
+                            onChange={setFieldValue}
+                            value={value.response_strategy}
+                            error={error?.response_strategy}
+                            hint={strings.drefFormResponseRationalePlaceholder}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                </Container>
+            )}
+            {value?.type_of_dref !== DREF_TYPE_IMMINENT && (
+                <Container
+                    heading={strings.drefFormTargetingStrategy}
+                    className={styles.targetingStrategy}
+                >
+                    <InputSection
+                        title={strings.drefFormPeopleAssistedThroughOperation}
+                        description={strings.drefFormPeopleAssistedThroughOperationDescription}
+                    >
+                        <TextArea
+                            label={strings.drefFormOperationDescription}
+                            name="people_assisted"
+                            onChange={setFieldValue}
+                            value={value.people_assisted}
+                            error={error?.people_assisted}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormSelectionCriteria}
+                        description={strings.drefFormSelectionCriteriaDescription}
+                    >
+                        <TextArea
+                            label={strings.drefFormOperationDescription}
+                            name="selection_criteria"
+                            onChange={setFieldValue}
+                            value={value.selection_criteria}
+                            error={error?.selection_criteria}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.finalReportChangeToOperationStrategy}
+                    >
+                        <BooleanInput
+                            name="change_in_operational_strategy"
+                            value={value.change_in_operational_strategy}
+                            onChange={setFieldValue}
+                            error={error?.change_in_operational_strategy}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    {value.change_in_operational_strategy && (
+                        <InputSection
+                            title={strings.finalReportChangeToOperationStrategyExplain}
+                        >
+                            <TextArea
+                                label={strings.drefFormDescription}
+                                name="change_in_operational_strategy_text"
+                                onChange={setFieldValue}
+                                value={value.change_in_operational_strategy_text}
+                                error={error?.change_in_operational_strategy_text}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                    )}
+                </Container>
+            )}
             <Container
-                heading={strings.drefFormAssistedPopulation}
+                heading={value?.type_of_dref !== TYPE_IMMINENT
+                    ? strings.drefFormAssistedPopulation
+                    : strings.drefFormPopulationAssisted}
                 // NOTE: This condition was not present
                 headerDescription={(
                     value?.type_of_dref !== TYPE_ASSESSMENT
@@ -475,277 +515,427 @@ function Operation(props: Props) {
                     )}
                 </InputSection>
             </Container>
-            <Container
-                heading={strings.drefFormRiskSecurity}
-            >
-                <InputSection
-                    title={strings.drefFormRiskDoesNSHaveAntiFraudPolicy}
+            {value?.type_of_dref !== DREF_TYPE_IMMINENT && (
+                <Container
+                    heading={strings.drefFormRiskSecurity}
                 >
-                    <BooleanInput
-                        name="has_anti_fraud_corruption_policy"
-                        value={value.has_anti_fraud_corruption_policy}
-                        onChange={setFieldValue}
-                        error={error?.has_anti_fraud_corruption_policy}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormRiskDoesNSHaveSexualAbusePolicy}
-                >
-                    <BooleanInput
-                        name="has_sexual_abuse_policy"
-                        value={value.has_sexual_abuse_policy}
-                        onChange={setFieldValue}
-                        error={error?.has_sexual_abuse_policy}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormRiskDoesNSHaveChildProtectionPolicy}
-                >
-                    <BooleanInput
-                        name="has_child_protection_policy"
-                        value={value.has_child_protection_policy}
-                        onChange={setFieldValue}
-                        error={error?.has_child_protection_policy}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormRiskDoesNSHaveWhistleblowerPolicy}
-                >
-                    <BooleanInput
-                        name="has_whistleblower_protection_policy"
-                        value={value.has_whistleblower_protection_policy}
-                        onChange={setFieldValue}
-                        error={error?.has_whistleblower_protection_policy}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormRiskDoesNSHaveAntiSexualHarassmentPolicy}
-                >
-                    <BooleanInput
-                        name="has_anti_sexual_harassment_policy"
-                        value={value.has_anti_sexual_harassment_policy}
-                        onChange={setFieldValue}
-                        error={error?.has_anti_sexual_harassment_policy}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormRiskSecurityPotentialRisk}
-                    description={(
-                        <>
-                            {value?.type_of_dref === TYPE_ASSESSMENT
-                                && strings.drefFormRiskSecurityPotentialRiskAssessmentDescription}
-                            {strings.drefFormRiskSecurityPotentialRiskDescription}
-                            <Link
-                                href="https://github.com/user-attachments/files/18903662/Annex.III.Risk.Categories.1.pdf"
-                                withLinkIcon
-                                external
+                    <InputSection
+                        title={strings.drefFormRiskDoesNSHaveAntiFraudPolicy}
+                    >
+                        <BooleanInput
+                            name="has_anti_fraud_corruption_policy"
+                            value={value.has_anti_fraud_corruption_policy}
+                            onChange={setFieldValue}
+                            error={error?.has_anti_fraud_corruption_policy}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormRiskDoesNSHaveSexualAbusePolicy}
+                    >
+                        <BooleanInput
+                            name="has_sexual_abuse_policy"
+                            value={value.has_sexual_abuse_policy}
+                            onChange={setFieldValue}
+                            error={error?.has_sexual_abuse_policy}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormRiskDoesNSHaveChildProtectionPolicy}
+                    >
+                        <BooleanInput
+                            name="has_child_protection_policy"
+                            value={value.has_child_protection_policy}
+                            onChange={setFieldValue}
+                            error={error?.has_child_protection_policy}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormRiskDoesNSHaveWhistleblowerPolicy}
+                    >
+                        <BooleanInput
+                            name="has_whistleblower_protection_policy"
+                            value={value.has_whistleblower_protection_policy}
+                            onChange={setFieldValue}
+                            error={error?.has_whistleblower_protection_policy}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormRiskDoesNSHaveAntiSexualHarassmentPolicy}
+                    >
+                        <BooleanInput
+                            name="has_anti_sexual_harassment_policy"
+                            value={value.has_anti_sexual_harassment_policy}
+                            onChange={setFieldValue}
+                            error={error?.has_anti_sexual_harassment_policy}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormRiskSecurityPotentialRisk}
+                        description={(
+                            <>
+                                {value?.type_of_dref === TYPE_ASSESSMENT
+                                    && strings.drefFormRiskSecurityPotentialRiskAssessment}
+                                {strings.drefFormRiskSecurityPotentialRiskDescription}
+                                <Link
+                                    href="https://github.com/user-attachments/files/18903662/Annex.III.Risk.Categories.1.pdf"
+                                    withLinkIcon
+                                    external
+                                >
+                                    {strings.drefFormRiskSecurityRiskCategoriesLinkLabel}
+                                </Link>
+                                {(value.risk_security?.length ?? 0) > 0 && (
+                                    <>
+                                        <p>
+                                            {strings.drefFormRiskSecurityRiskSelectedDescription}
+                                        </p>
+                                        <ul>
+                                            <li>
+                                                {strings.drefFormRiskSecurityRiskSelectedPoint1}
+                                            </li>
+                                            <li>
+                                                {strings.drefFormRiskSecurityRiskSelectedPoint2}
+                                            </li>
+                                            <li>
+                                                {strings.drefFormRiskSecurityRiskSelectedPoint3}
+                                            </li>
+                                            <li>
+                                                {strings.drefFormRiskSecurityRiskSelectedPoint4}
+                                            </li>
+                                            <li>
+                                                {strings.drefFormRiskSecurityRiskSelectedPoint5}
+                                            </li>
+                                        </ul>
+                                    </>
+                                )}
+                            </>
+                        )}
+                    >
+                        <NonFieldError error={getErrorObject(error?.risk_security)} />
+                        {value.risk_security?.map((rs, i) => (
+                            <RiskSecurityInput
+                                key={rs.client_id}
+                                index={i}
+                                value={rs}
+                                onChange={onRiskSecurityChange}
+                                onRemove={onRiskSecurityRemove}
+                                error={getErrorObject(error?.risk_security)}
+                                disabled={disabled}
+                            />
+                        ))}
+                        <div className={styles.actions}>
+                            <Button
+                                name={undefined}
+                                onClick={handleRiskSecurityAdd}
+                                variant="secondary"
+                                disabled={disabled}
                             >
-                                {strings.drefFormRiskSecurityRiskCategoriesLinkLabel}
-                            </Link>
-                            {(value.risk_security?.length ?? 0) > 0 && (
-                                <>
-                                    <p>
-                                        {strings.drefFormRiskSecurityRiskSelectedDescription}
-                                    </p>
-                                    <ul>
-                                        <li>
-                                            {strings.drefFormRiskSecurityRiskSelectedPoint1}
-                                        </li>
-                                        <li>
-                                            {strings.drefFormRiskSecurityRiskSelectedPoint2}
-                                        </li>
-                                        <li>
-                                            {strings.drefFormRiskSecurityRiskSelectedPoint3}
-                                        </li>
-                                        <li>
-                                            {strings.drefFormRiskSecurityRiskSelectedPoint4}
-                                        </li>
-                                        <li>
-                                            {strings.drefFormRiskSecurityRiskSelectedPoint5}
-                                        </li>
-                                    </ul>
-                                </>
-                            )}
-                        </>
-                    )}
+                                {strings.drefFormRiskSecurityAddButton}
+                            </Button>
+                        </div>
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormRiskSecuritySafetyConcern}
+                        description={(
+                            <>
+                                <p>
+                                    {strings.drefFormRiskSecuritySafetyConcernDescription}
+                                </p>
+                                <ul>
+                                    <li>
+                                        {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint1}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint2}
+                                    </li>
+                                    <li>
+                                        {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint3}
+                                    </li>
+                                </ul>
+                            </>
+                        )}
+                    >
+                        <TextArea
+                            name="risk_security_concern"
+                            value={value.risk_security_concern}
+                            error={error?.risk_security_concern}
+                            onChange={setFieldValue}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormRiskSecurityHasChildRiskCompleted}
+                        description={(
+                            <>
+                                {strings.drefFormRiskSecurityHasChildRiskCompletedDescription}
+                                <Link
+                                    href="https://www.ifrc.org/document/child-safeguarding-policy"
+                                    withLinkIcon
+                                    external
+                                >
+                                    {strings.drefChildSafeguardingPolicyDescription}
+                                </Link>
+                                <Link
+                                    href="https://pgi.ifrc.org/resources/qa-child-safeguarding-risk-analysis-ifrc-programmes"
+                                    withLinkIcon
+                                    external
+                                >
+                                    {strings.drefChildSafeguardingRiskAnalysisDescription}
+                                </Link>
+                            </>
+                        )}
+                    >
+                        <BooleanInput
+                            name="has_child_safeguarding_risk_analysis_assessment"
+                            value={value.has_child_safeguarding_risk_analysis_assessment}
+                            onChange={setFieldValue}
+                            error={error?.has_child_safeguarding_risk_analysis_assessment}
+                        />
+                    </InputSection>
+                </Container>
+            )}
+            {value?.type_of_dref === TYPE_IMMINENT && (
+                <Container
+                    heading={strings.drefFormProposedActions}
                 >
-                    <NonFieldError error={getErrorObject(error?.risk_security)} />
-                    {value.risk_security?.map((rs, i) => (
-                        <RiskSecurityInput
-                            key={rs.client_id}
+                    <NonFieldError error={getErrorObject(error?.proposed_action)} />
+                    {value.proposed_action?.map((action, i) => (
+                        <ProposedActionsInput
+                            key={action.client_id}
                             index={i}
-                            value={rs}
-                            onChange={onRiskSecurityChange}
-                            onRemove={onRiskSecurityRemove}
-                            error={getErrorObject(error?.risk_security)}
+                            value={action}
+                            onChange={handleProposedActionChange}
+                            error={getErrorObject(error?.proposed_action)}
+                        />
+                    ))}
+                    <InputSection
+                        description={(
+                            <div className={styles.warning}>
+                                <ErrorWarningFillIcon className={styles.icon} />
+                                {strings.drefFormProposedActionSelectBudgetNote}
+                            </div>
+                        )}
+                    >
+                        <div className={styles.expenditure}>
+                            <NumberInput
+                                required
+                                name="sub_total_cost"
+                                readOnly
+                                onChange={setFieldValue}
+                                label={strings.drefFormProposedActionSubTotal}
+                                value={value.sub_total_cost}
+                                disabled={disabled}
+                                error={error?.sub_total_cost}
+                            />
+                            <NumberInput
+                                required
+                                name="sub_total_expenditure_cost"
+                                readOnly
+                                onChange={setFieldValue}
+                                label={strings.drefFinalReportSubTotalExpenditure}
+                                value={value.sub_total_expenditure_cost}
+                                disabled={disabled}
+                                error={error?.sub_total_expenditure_cost}
+                            />
+                        </div>
+                        {value.surge_deployment_cost && (
+                            <div className={styles.expenditure}>
+                                <NumberInput
+                                    required
+                                    readOnly
+                                    name="surge_deployment_cost"
+                                    onChange={setFieldValue}
+                                    label={strings.drefFormProposedActionSurgeDeployment}
+                                    value={value.surge_deployment_cost}
+                                    error={error?.surge_deployment_cost}
+                                    disabled={disabled}
+                                />
+                                <NumberInput
+                                    required
+                                    readOnly
+                                    name="surge_deployment_expenditure_cost"
+                                    onChange={setFieldValue}
+                                    label={strings.drefFormProposedActionSurgeDeployment}
+                                    value={value.surge_deployment_cost}
+                                    error={error?.surge_deployment_cost}
+                                    disabled={disabled}
+                                />
+                            </div>
+                        )}
+                        <div className={styles.expenditure}>
+                            <NumberInput
+                                required
+                                readOnly
+                                name="indirect_cost"
+                                onChange={setFieldValue}
+                                label={strings.drefFormProposedActionIndirectCost}
+                                value={value.indirect_cost}
+                                error={error?.indirect_cost}
+                                disabled={disabled}
+                            />
+                            <NumberInput
+                                required
+                                readOnly
+                                name="indirect_expenditure_cost"
+                                onChange={setFieldValue}
+                                label={strings.drefFinalReportIndirectCostExpenditure}
+                                value={value.indirect_expenditure_cost}
+                                error={error?.indirect_expenditure_cost}
+                                disabled={disabled}
+                            />
+                        </div>
+                        <div className={styles.expenditure}>
+                            <NumberInput
+                                required
+                                readOnly
+                                name="total_cost"
+                                onChange={setFieldValue}
+                                label={strings.drefFormProposedActionTotal}
+                                value={value.total_cost}
+                                error={error?.total_cost}
+                                disabled={disabled}
+                            />
+                            <NumberInput
+                                required
+                                readOnly
+                                name="total_expenditure_cost"
+                                onChange={setFieldValue}
+                                label={strings.drefFinalReportTotalExpenditure}
+                                value={value.total_expenditure_cost}
+                                error={error?.total_expenditure_cost}
+                                disabled={disabled}
+                            />
+                        </div>
+                    </InputSection>
+                </Container>
+            )}
+            {value?.type_of_dref === DREF_TYPE_IMMINENT && (
+                <Container
+                    heading={strings.drefFormActionTaken}
+                >
+                    <InputSection
+                        title={strings.drefFinalReportMitigationEfforts}
+                        description={strings.drefFinalReportMitigationEffortsDescription}
+                    >
+                        <TextArea
+                            label={strings.drefFormOperationDescription}
+                            name="mitigation_efforts_and_achievements"
+                            onChange={setFieldValue}
+                            value={value.mitigation_efforts_and_achievements}
+                            error={error?.mitigation_efforts_and_achievements}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFinalReportLessonsLearnt}
+                    >
+                        <TextArea
+                            label={strings.drefFormOperationDescription}
+                            name="lessons_learned_and_challenges"
+                            onChange={setFieldValue}
+                            value={value.lessons_learned_and_challenges}
+                            error={error?.lessons_learned_and_challenges}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                </Container>
+            )}
+            {value?.type_of_dref !== DREF_TYPE_IMMINENT && (
+                <Container
+                    heading={strings.drefFormPlannedIntervention}
+                    className={styles.plannedIntervention}
+                >
+                    <InputSection
+                        title={strings.finalReportTotalAllocation}
+                        description={(
+                            <>
+                                {strings.drefFinalReportRequestAmountDescription}
+                                <ul>
+                                    <li>
+                                        {resolveToComponent(
+                                            strings.drefFinalReportRequestAmountDescriptionPoint1,
+                                            {
+                                                indicatorDatabankLink: (
+                                                    <Link
+                                                        href="https://github.com/user-attachments/files/18903662/Annex.III.Risk.Categories.1.pdf"
+                                                        withLinkIcon
+                                                        external
+                                                    >
+                                                        {strings.drefIndicatorDataLinkLabel}
+                                                    </Link>
+                                                ),
+                                            },
+                                        )}
+                                    </li>
+                                    <li>
+                                        {strings.drefFinalReportRequestAmountDescriptionPoint2}
+                                    </li>
+                                    <li>
+                                        {strings.drefFinalReportRequestAmountDescriptionPoint3}
+                                    </li>
+                                    <li>
+                                        {strings.drefFinalReportRequestAmountDescriptionPoint4}
+                                    </li>
+                                    <li>
+                                        {strings.drefFinalReportRequestAmountDescriptionPoint5}
+                                    </li>
+                                </ul>
+                            </>
+                        )}
+
+                    >
+                        <NumberInput
+                            name="total_dref_allocation"
+                            value={value.total_dref_allocation}
+                            error={error?.total_dref_allocation}
+                            onChange={undefined}
+                            readOnly
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                    <InputSection>
+                        <div className={styles.interventionSelectionContainer}>
+                            <SelectInput
+                                className={styles.input}
+                                name={undefined}
+                                label={strings.drefFormInterventionsLabel}
+                                options={filteredInterventionOptions}
+                                keySelector={plannedInterventionKeySelector}
+                                labelSelector={stringValueSelector}
+                                onChange={setSelectedIntervention}
+                                value={selectedIntervention}
+                                disabled={disabled}
+                            />
+                            <Button
+                                className={styles.action}
+                                variant="secondary"
+                                name={selectedIntervention}
+                                onClick={handleInterventionAddButtonClick}
+                                disabled={isNotDefined(selectedIntervention) || disabled}
+                            >
+                                {strings.drefFormResponseAddButton}
+                            </Button>
+                        </div>
+                    </InputSection>
+                    <NonFieldError error={getErrorObject(error?.planned_interventions)} />
+                    {value?.planned_interventions?.map((intervention, i) => (
+                        <InterventionInput
+                            key={intervention.client_id}
+                            index={i}
+                            value={intervention}
+                            onChange={onInterventionChange}
+                            onRemove={onInterventionRemove}
+                            error={getErrorObject(error?.planned_interventions)}
+                            titleMap={interventionTitleMap}
                             disabled={disabled}
                         />
                     ))}
-                    <div className={styles.actions}>
-                        <Button
-                            name={undefined}
-                            onClick={handleRiskSecurityAdd}
-                            variant="secondary"
-                            disabled={disabled}
-                        >
-                            {strings.drefFormRiskSecurityAddButton}
-                        </Button>
-                    </div>
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormRiskSecuritySafetyConcern}
-                    description={(
-                        <>
-                            <p>
-                                {strings.drefFormRiskSecuritySafetyConcernDescription}
-                            </p>
-                            <ul>
-                                <li>
-                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint1}
-                                </li>
-                                <li>
-                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint2}
-                                </li>
-                                <li>
-                                    {strings.drefFormRiskSecuritySafetyConcernDescriptionPoint3}
-                                </li>
-                            </ul>
-                        </>
-                    )}
-                >
-                    <TextArea
-                        name="risk_security_concern"
-                        value={value.risk_security_concern}
-                        error={error?.risk_security_concern}
-                        onChange={setFieldValue}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormRiskSecurityHasChildRiskCompleted}
-                    description={(
-                        <>
-                            {strings.drefFormRiskSecurityHasChildRiskCompletedDescription}
-                            <Link
-                                href="https://www.ifrc.org/document/child-safeguarding-policy"
-                                withLinkIcon
-                                external
-                            >
-                                {strings.drefChildSafeguardingPolicyDescription}
-                            </Link>
-                            <Link
-                                href="https://pgi.ifrc.org/resources/qa-child-safeguarding-risk-analysis-ifrc-programmes"
-                                withLinkIcon
-                                external
-                            >
-                                {strings.drefChildSafeguardingRiskAnalysisDescription}
-                            </Link>
-                        </>
-                    )}
-                >
-                    <BooleanInput
-                        name="has_child_safeguarding_risk_analysis_assessment"
-                        value={value.has_child_safeguarding_risk_analysis_assessment}
-                        onChange={setFieldValue}
-                        error={error?.has_child_safeguarding_risk_analysis_assessment}
-                    />
-                </InputSection>
-            </Container>
-            <Container
-                heading={strings.drefFormPlannedIntervention}
-                className={styles.plannedIntervention}
-            >
-                <InputSection
-                    title={strings.finalReportTotalAllocation}
-                    description={(
-                        <>
-                            {strings.drefFinalReportRequestAmountDescription}
-                            <ul>
-                                <li>
-                                    {resolveToComponent(
-                                        strings.drefFinalReportRequestAmountDescriptionPoint1,
-                                        {
-                                            indicatorDatabankLink: (
-                                                <Link
-                                                    href="https://github.com/user-attachments/files/18903662/Annex.III.Risk.Categories.1.pdf"
-                                                    withLinkIcon
-                                                    external
-                                                >
-                                                    {strings.drefIndicatorDataLinkLabel}
-                                                </Link>
-                                            ),
-                                        },
-                                    )}
-                                </li>
-                                <li>
-                                    {strings.drefFinalReportRequestAmountDescriptionPoint2}
-                                </li>
-                                <li>
-                                    {strings.drefFinalReportRequestAmountDescriptionPoint3}
-                                </li>
-                                <li>
-                                    {strings.drefFinalReportRequestAmountDescriptionPoint4}
-                                </li>
-                                <li>
-                                    {strings.drefFinalReportRequestAmountDescriptionPoint5}
-                                </li>
-                            </ul>
-                        </>
-                    )}
-
-                >
-                    <NumberInput
-                        name="total_dref_allocation"
-                        value={value.total_dref_allocation}
-                        error={error?.total_dref_allocation}
-                        onChange={undefined}
-                        readOnly
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection>
-                    <div className={styles.interventionSelectionContainer}>
-                        <SelectInput
-                            className={styles.input}
-                            name={undefined}
-                            label={strings.drefFormInterventionsLabel}
-                            options={filteredInterventionOptions}
-                            keySelector={plannedInterventionKeySelector}
-                            labelSelector={stringValueSelector}
-                            onChange={setSelectedIntervention}
-                            value={selectedIntervention}
-                            disabled={disabled}
-                        />
-                        <Button
-                            className={styles.action}
-                            variant="secondary"
-                            name={selectedIntervention}
-                            onClick={handleInterventionAddButtonClick}
-                            disabled={isNotDefined(selectedIntervention) || disabled}
-                        >
-                            {strings.drefFormResponseAddButton}
-                        </Button>
-                    </div>
-                </InputSection>
-                <NonFieldError error={getErrorObject(error?.planned_interventions)} />
-                {value?.planned_interventions?.map((intervention, i) => (
-                    <InterventionInput
-                        key={intervention.client_id}
-                        index={i}
-                        value={intervention}
-                        onChange={onInterventionChange}
-                        onRemove={onInterventionRemove}
-                        error={getErrorObject(error?.planned_interventions)}
-                        titleMap={interventionTitleMap}
-                        disabled={disabled}
-                    />
-                ))}
-            </Container>
+                </Container>
+            )}
             <Container
                 heading={strings.finalReportFinancialReport}
             >
@@ -766,7 +956,13 @@ function Operation(props: Props) {
                     </GoSingleFileInput>
                     {strings.drefFormUploadTargetingSupportingDescription}
                 </InputSection>
-                <InputSection title={strings.finalReportFinancialReportVariances}>
+                <InputSection
+                    title={value?.type_of_dref !== TYPE_IMMINENT
+                        ? strings.finalReportFinancialReportVariances
+                        : strings.finalReportFinancialReportVariancesImminent}
+                    description={value?.type_of_dref === TYPE_IMMINENT
+                        && strings.finalReportFinancialReportVariancesImminentDescription}
+                >
                     <TextArea
                         name="financial_report_description"
                         value={value.financial_report_description}
