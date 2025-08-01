@@ -2,5 +2,7 @@
 "go-web-app": minor
 ---
 
-- Added updated date for crisis categorization in emergency page.
-- Added consent checkbox over situational overview in field report form.
+Add Crisis categorization update date
+
+- Add updated date for crisis categorization in emergency page.
+- Add consent checkbox over situational overview in field report form.
