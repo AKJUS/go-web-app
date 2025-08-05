@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.21.0-beta.2
+
+### Patch Changes
+
+- b949fcd: Fix use of operational timeframe date in imminent final report form
+
 ## 7.21.0-beta.1
 
 ### Patch Changes
