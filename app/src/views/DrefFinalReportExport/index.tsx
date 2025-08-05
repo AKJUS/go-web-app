@@ -669,6 +669,8 @@ export function Component() {
                     headingLevel={3}
                     childrenContainerClassName={styles.proposedActions}
                 >
+                    {/* NOTE: Leaving this empty for empty header */}
+                    <div className={styles.logoHeader} />
                     <div className={styles.actionTitleLabel}>
                         {strings.proposedActionsSector}
                     </div>

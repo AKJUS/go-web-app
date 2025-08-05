@@ -14,7 +14,7 @@
         "situationalOverviewTitle": "Situational Overview",
         "linksTitle": "Links",
         "emergencyMapTitle": "Affected Provinces",
-        "severityLevelUpdateDateLabel": "Updated date",
+        "severityLevelUpdateDateLabel": "Last update",
         "exportMap": "Export",
         "contactsTitle": "Contacts",
         "sourceLabel": "Source {source}"
