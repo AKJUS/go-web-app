@@ -1,5 +1,13 @@
 # go-web-app
 
+## 7.21.0-beta.1
+
+### Patch Changes
+
+- 84b4802: - Fix calculation of Operation End date in Final report form
+  - Fix icon position issue in the implementation table of DREF PDF export
+  - Update the label for last update date in the crisis categorization pop-up
+
 ## 7.21.0-beta.0
 
 ### Minor Changes
