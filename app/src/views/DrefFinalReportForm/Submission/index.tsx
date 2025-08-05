@@ -10,12 +10,10 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     addNumDaysToDate,
     addNumMonthsToDate,
+    ceilToEndOfMonth,
     encodeDate,
 } from '@ifrc-go/ui/utils';
-import {
-    isDefined,
-    isNotDefined,
-} from '@togglecorp/fujs';
+import { isDefined } from '@togglecorp/fujs';
 import {
     type EntriesAsList,
     type Error,
@@ -70,9 +68,11 @@ function Submission(props: Props) {
             setFieldValue(val, name);
             let endDate;
             if (value.type_of_dref === TYPE_IMMINENT) {
-                endDate = addNumDaysToDate(
-                    val,
-                    value.total_operation_timeframe,
+                endDate = ceilToEndOfMonth(
+                    addNumDaysToDate(
+                        val,
+                        value.total_operation_timeframe_imminent,
+                    ),
                 );
             } else {
                 endDate = addNumMonthsToDate(
@@ -80,11 +80,16 @@ function Submission(props: Props) {
                     value.total_operation_timeframe,
                 );
             }
-            if (isNotDefined(endDate)) {
+            if (isDefined(endDate)) {
                 setFieldValue(encodeDate(endDate), 'operation_end_date');
             }
         },
-        [setFieldValue, value.total_operation_timeframe, value.type_of_dref],
+        [
+            setFieldValue,
+            value.total_operation_timeframe,
+            value.total_operation_timeframe_imminent,
+            value.type_of_dref,
+        ],
     );
 
     return (
