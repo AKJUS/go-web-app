@@ -234,6 +234,7 @@
         grid-template-columns: 4fr 5fr 5fr 4fr 4fr;
         page-break-inside: avoid;
 
+        .logo-header,
         .action-title-label {
             background-color: var(--go-ui-color-element-background);
             padding: var(--go-ui-spacing-sm);

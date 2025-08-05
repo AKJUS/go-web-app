@@ -8,10 +8,14 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    addNumDaysToDate,
     addNumMonthsToDate,
     encodeDate,
 } from '@ifrc-go/ui/utils';
-import { isDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 import {
     type EntriesAsList,
     type Error,
@@ -64,15 +68,23 @@ function Submission(props: Props) {
     const handleOperationStartDateChange = useCallback(
         (val: string | undefined, name: 'operation_start_date') => {
             setFieldValue(val, name);
-            const endDate = addNumMonthsToDate(
-                val,
-                value.total_operation_timeframe,
-            );
-            if (isDefined(endDate)) {
+            let endDate;
+            if (value.type_of_dref === TYPE_IMMINENT) {
+                endDate = addNumDaysToDate(
+                    val,
+                    value.total_operation_timeframe,
+                );
+            } else {
+                endDate = addNumMonthsToDate(
+                    val,
+                    value.total_operation_timeframe,
+                );
+            }
+            if (isNotDefined(endDate)) {
                 setFieldValue(encodeDate(endDate), 'operation_end_date');
             }
         },
-        [setFieldValue, value.total_operation_timeframe],
+        [setFieldValue, value.total_operation_timeframe, value.type_of_dref],
     );
 
     return (
