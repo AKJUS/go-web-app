@@ -1,5 +1,26 @@
 # go-web-app
 
+## 7.21.0
+
+### Minor Changes
+
+- 039c488: Add Crisis categorization update date
+
+  - Add updated date for crisis categorization in emergency page.
+  - Add consent checkbox over situational overview in field report form.
+
+- 3ee9979: Add support for DREF imminent v2 in final report
+
+  - Add a separate route for the old dref final report form
+  - Update dref final report to accomodate imminent v2 changes
+
+### Patch Changes
+
+- b949fcd: Fix use of operational timeframe date in imminent final report form
+- 84b4802: - Fix calculation of Operation End date in Final report form
+  - Fix icon position issue in the implementation table of DREF PDF export
+  - Update the label for last update date in the crisis categorization pop-up
+
 ## 7.21.0-beta.2
 
 ### Patch Changes
