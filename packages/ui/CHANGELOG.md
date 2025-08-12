@@ -1,5 +1,12 @@
 # @ifrc-go/ui
 
+## 1.5.2-beta.0
+
+### Patch Changes
+
+- 7e470bc: - Update `name` prop in Switch component to support number
+  - Update value of `--go-ui-color-semantic-yellow`
+
 ## 1.5.1
 
 ### Patch Changes
