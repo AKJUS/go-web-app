@@ -1,25 +1,29 @@
 import { useMemo } from 'react';
-import { TextOutput } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { isNotDefined } from '@togglecorp/fujs';
+
+import SelectOutput from '#components/SelectOutput';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-interface Props<VALUE> {
+interface Props<VALUE, OPTION> {
     diffContainerClassName?: string;
-    value?: VALUE | undefined;
+    value: VALUE | undefined;
     oldValue?: VALUE | undefined;
+    options: OPTION[] | undefined;
+    keySelector: (datum: OPTION) => VALUE;
+    labelSelector: (datum: OPTION) => React.ReactNode;
     children: React.ReactNode;
     enabled: boolean;
     showOnlyDiff?: boolean;
     showPreviousValue?: boolean;
 }
 
-function DiffWrapper<
-    VALUE extends string | number | boolean | null
+function SelectDiffWrapper<
+    VALUE, OPTION
 >(
-    props: Props<VALUE>,
+    props: Props<VALUE, OPTION>,
 ) {
     const {
         diffContainerClassName,
@@ -29,6 +33,9 @@ function DiffWrapper<
         enabled = false,
         showOnlyDiff,
         showPreviousValue,
+        options,
+        keySelector,
+        labelSelector,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -58,16 +65,18 @@ function DiffWrapper<
     return (
         <div className={diffContainerClassName}>
             {children}
-            {showPreviousValue
-                && (
-                    <TextOutput
-                        className={styles.previousValue}
-                        label={strings.previousValueLabel}
-                        value={oldValue}
-                    />
-                )}
+            {showPreviousValue && (
+                <SelectOutput
+                    className={styles.selectPreviousValue}
+                    label={strings.selectPreviousValueLabel}
+                    value={oldValue}
+                    options={options}
+                    keySelector={keySelector}
+                    labelSelector={labelSelector}
+                />
+            )}
         </div>
     );
 }
 
-export default DiffWrapper;
+export default SelectDiffWrapper;

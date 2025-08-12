@@ -1,0 +1,16 @@
+{
+    "namespace": "countryNsOverviewContextAndStructure",
+    "strings": {
+        "localUnitsUploadHeading": "Upload History",
+        "uploadHistoryBulkUploadFormat": "Bulk Upload File Format",
+        "uploadHistoryBulkUploadHealthFormat": "Bulk Upload Health File Format",
+        "bulkUploadFileFormatDescription": "Here's the format template for reference.",
+        "tableFileNameLabel": "File Name",
+        "tableSizeLabel": "Size",
+        "tableUploadedByLabel": "Uploaded By",
+        "tableUploadedDateLabel": "Uploaded Date",
+        "tableStatusLabel": "Status",
+        "tableActionsLabel": "Actions",
+        "uploadCountryLabel": "Country"
+    }
+}

@@ -1,7 +1,20 @@
-export type Validation = 'Validated' | 'Not Validated';
+import { type GoApiResponse } from '#utils/restRequest';
+
+type GlobalEnumsResponse = GoApiResponse<'/api/v2/global-enums/'>;
+export type ValidationOption = NonNullable<GlobalEnumsResponse['local_units_status']>[number];
+type ValidationStatusKey = ValidationOption['key'];
 type RequestType = 'authenticated' | 'public';
 
-export const VALIDATED = 'Validated' satisfies Validation;
-export const NOT_VALIDATED = 'Not Validated' satisfies Validation;
+export type ManageResponse = Record<number, {
+    enabled: boolean | undefined,
+    externallyManagedId: number,
+}> | undefined;
+
+export const VALIDATED = 1 satisfies ValidationStatusKey;
+
+// NOTE not need for now might need in the future.
+// export const UNVALIDATED = 2 satisfies ValidationStatusKey;
+// export const PENDING_VALIDATION = 3 satisfies ValidationStatusKey;
+
 export const AUTHENTICATED = 'authenticated' satisfies RequestType;
 export const PUBLIC = 'public' satisfies RequestType;

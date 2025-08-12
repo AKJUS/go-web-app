@@ -28,7 +28,7 @@ import {
     useRequest,
 } from '#utils/restRequest';
 
-import { VALIDATED } from '../common';
+import { type ManageResponse } from '../common';
 import type { FilterValue } from '../Filters';
 import LocalUnitsTableActions, { type Props as LocalUnitsTableActionsProps } from './LocalUnitTableActions';
 
@@ -43,21 +43,34 @@ type LocalUnitsTableListItem = NonNullable<LocalUnitsTableResponse['results']>[n
 interface Props {
     filter: FilterValue;
     filtered: boolean;
+    manageResponse: ManageResponse;
 }
 
 function LocalUnitsTable(props: Props) {
     const {
         filter,
         filtered,
+        manageResponse,
     } = props;
 
     const strings = useTranslation(i18n);
-    const { isSuperUser, isCountryAdmin, isRegionAdmin } = usePermissions();
+    const {
+        isSuperUser,
+        isCountryAdmin,
+        isLocalUnitGlobalValidator,
+        isLocalUnitRegionValidator,
+        isLocalUnitCountryValidator,
+    } = usePermissions();
+
     const { countryResponse } = useOutletContext<CountryOutletContext>();
 
-    const hasAddEditLocalUnitPermission = isSuperUser
-        || isCountryAdmin(countryResponse?.id)
-        || isRegionAdmin(Number(countryResponse?.region));
+    const hasPermission = isSuperUser
+        || isLocalUnitGlobalValidator()
+        || isLocalUnitCountryValidator(countryResponse?.id)
+        || isLocalUnitRegionValidator(countryResponse?.region ?? undefined);
+
+    const hasAddEditLocalUnitPermission = isCountryAdmin(countryResponse?.id)
+        || hasPermission;
 
     const {
         limit,
@@ -87,8 +100,7 @@ function LocalUnitsTable(props: Props) {
             limit,
             offset,
             type__code: filter?.type,
-            validated: isDefined(filter?.isValidated)
-                ? filter.isValidated === VALIDATED : undefined,
+            status: filter?.status,
             search: filter?.search,
             country__iso3: isDefined(countryResponse?.iso3) ? countryResponse?.iso3 : undefined,
         },
@@ -142,8 +154,12 @@ function LocalUnitsTable(props: Props) {
                     (_, item) => ({
                         countryId: item.country,
                         localUnitId: item.id,
-                        isValidated: item.validated,
                         isLocked: item.is_locked,
+                        status: item.status,
+                        statusDetails: item.status_details,
+                        localUnitType: item.type,
+                        isBulkUploadLocalUnit: isDefined(item.bulk_upload),
+                        manageResponse,
                         localUnitName: getFirstTruthyString(
                             item.local_branch_name,
                             item.english_branch_name,
@@ -180,12 +196,16 @@ function LocalUnitsTable(props: Props) {
                 (_, item) => ({
                     countryId: item.country,
                     localUnitId: item.id,
-                    isValidated: item.validated,
                     isLocked: item.is_locked,
+                    status: item.status,
+                    statusDetails: item.status_details,
+                    isBulkUploadLocalUnit: isDefined(item.bulk_upload),
+                    manageResponse,
                     localUnitName: getFirstTruthyString(
                         item.local_branch_name,
                         item.english_branch_name,
                     ),
+                    localUnitType: item.type,
                     onDeleteActionSuccess: refetchLocalUnits,
                     onValidationActionSuccess: refetchLocalUnits,
                 }),
@@ -193,6 +213,7 @@ function LocalUnitsTable(props: Props) {
             ),
         ];
     }, [
+        manageResponse,
         hasAddEditLocalUnitPermission,
         strings.localUnitsTableAddress,
         strings.localUnitsTableName,

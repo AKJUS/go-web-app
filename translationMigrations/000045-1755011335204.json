@@ -1,0 +1,390 @@
+{
+    "parent": "000044-1754370962181.json",
+    "actions": [
+        {
+            "action": "add",
+            "key": "multiSelectPreviousValueLabel",
+            "namespace": "common",
+            "value": "Previous Value"
+        },
+        {
+            "action": "add",
+            "key": "previousValueLabel",
+            "namespace": "common",
+            "value": "Previous Value"
+        },
+        {
+            "action": "add",
+            "key": "selectPreviousValueLabel",
+            "namespace": "common",
+            "value": "Previous Value"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Upload"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadConfirmHeading",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Bulk Upload Confirmation"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadConfirmMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Are you sure you want to bulk upload the Local Unit?"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadCountryLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Country"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadFailedMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Failed to upload {type} Local Units data for {country} due to errors. Please review the details in the errors.csv file"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadFileFormatDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Here's the format template for reference."
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadFormat",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Bulk Upload File Format"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadFormatDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "If you want to look at the format template, see here."
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadHealthFormat",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Bulk Upload Health File Format"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Upload Local Unit"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadModalHeading",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Bulk Upload Form"
+        },
+        {
+            "action": "add",
+            "key": "bulkUploadSuccessMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "{type} Local Units data for {country} uploaded and updated successfully."
+        },
+        {
+            "action": "add",
+            "key": "cancelButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Cancel"
+        },
+        {
+            "action": "add",
+            "key": "confirmationFailedMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "LocalUnits externally managed failed"
+        },
+        {
+            "action": "add",
+            "key": "confirmationModalDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Are you sure you want to externally manage this? As it can erase all the previously uploaded local units files?"
+        },
+        {
+            "action": "add",
+            "key": "confirmationModalHeading",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Confirmation"
+        },
+        {
+            "action": "add",
+            "key": "confirmationSuccessMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "LocalUnits externally managed enabled"
+        },
+        {
+            "action": "add",
+            "key": "confirmButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Confirm"
+        },
+        {
+            "action": "add",
+            "key": "countryLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Country"
+        },
+        {
+            "action": "add",
+            "key": "errorsFileLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Errors.csv"
+        },
+        {
+            "action": "add",
+            "key": "errorsLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Errors.csv"
+        },
+        {
+            "action": "add",
+            "key": "failedCountLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Failed count"
+        },
+        {
+            "action": "add",
+            "key": "localUnitActionsLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Manage Externally"
+        },
+        {
+            "action": "add",
+            "key": "localUnitsUploadHeading",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Upload History"
+        },
+        {
+            "action": "add",
+            "key": "localUnitType",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Local unit type"
+        },
+        {
+            "action": "add",
+            "key": "localUnitTypeTableLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Local Unit Type"
+        },
+        {
+            "action": "add",
+            "key": "localUnitViewNoChanges",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "No changes found"
+        },
+        {
+            "action": "add",
+            "key": "manageLocalUnitLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Manage Local Units"
+        },
+        {
+            "action": "add",
+            "key": "manageLocalUnitModalHeading",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Manage Local Unit Types"
+        },
+        {
+            "action": "add",
+            "key": "noBothPermissionAddFormError",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "You do not have permission to add this Local Unit and it is externally managed"
+        },
+        {
+            "action": "add",
+            "key": "noBothPermissionEditFormError",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "You do not have permission to edit this Local Unit and it is externally managed"
+        },
+        {
+            "action": "add",
+            "key": "noLocalUnitAddPermission",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "You do not have permission to add this Local Unit"
+        },
+        {
+            "action": "add",
+            "key": "noLocalUnitEditPermission",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "You do not have permission to Edit this Local Unit"
+        },
+        {
+            "action": "add",
+            "key": "noPermissionBothDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "You don't have permission and this unit is not externally managed."
+        },
+        {
+            "action": "add",
+            "key": "noPermissionErrorDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "You do not have the permission to upload local unit data"
+        },
+        {
+            "action": "add",
+            "key": "noPermissionExternallyManaged",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "You do not have the permission to upload local unit data it is not externally managed"
+        },
+        {
+            "action": "add",
+            "key": "noPermissionFormExternallyManaged",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "This local unit is externally managed and cannot be created manually."
+        },
+        {
+            "action": "add",
+            "key": "noPermissionFormUpdateExternallyManaged",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "This local unit is externally managed and cannot be updated manually."
+        },
+        {
+            "action": "add",
+            "key": "onCloseButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Close"
+        },
+        {
+            "action": "add",
+            "key": "originalFileLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Original File"
+        },
+        {
+            "action": "add",
+            "key": "selectLocalUnitTypeDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Please select local unit to upload the CSV file"
+        },
+        {
+            "action": "add",
+            "key": "societyNameTextLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Enter your National Society name"
+        },
+        {
+            "action": "add",
+            "key": "successCountLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Success count"
+        },
+        {
+            "action": "add",
+            "key": "tableActionsLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Actions"
+        },
+        {
+            "action": "add",
+            "key": "tableFileNameLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "File Name"
+        },
+        {
+            "action": "add",
+            "key": "tableSizeLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Size"
+        },
+        {
+            "action": "add",
+            "key": "tableStatusLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Status"
+        },
+        {
+            "action": "add",
+            "key": "tableUploadedByLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Uploaded By"
+        },
+        {
+            "action": "add",
+            "key": "tableUploadedDateLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Uploaded Date"
+        },
+        {
+            "action": "add",
+            "key": "updateReasonOverviewLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Explain the reason why the local unit is being updated"
+        },
+        {
+            "action": "add",
+            "key": "uploadButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Select a file"
+        },
+        {
+            "action": "add",
+            "key": "uploadCountryLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Country"
+        },
+        {
+            "action": "add",
+            "key": "uploadDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Please select CSV file containing local unit data, make sure the file is in the correct format."
+        },
+        {
+            "action": "add",
+            "key": "uploadHistoryBulkUploadFormat",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Bulk Upload File Format"
+        },
+        {
+            "action": "add",
+            "key": "uploadHistoryBulkUploadHealthFormat",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Bulk Upload Health File Format"
+        },
+        {
+            "action": "add",
+            "key": "viewChangesLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "View Changes"
+        },
+        {
+            "action": "add",
+            "key": "viewUploadsLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "View Uploads"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitsNotValidated",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitsValidate",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitsValidated",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "notValidated",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "validated",
+            "namespace": "countryNsOverviewContextAndStructure"
+        }
+    ]
+}

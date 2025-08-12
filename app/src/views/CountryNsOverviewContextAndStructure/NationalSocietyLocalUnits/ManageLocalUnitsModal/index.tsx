@@ -1,0 +1,151 @@
+import {
+    useCallback,
+    useMemo,
+    useState,
+} from 'react';
+import { useOutletContext } from 'react-router-dom';
+import {
+    Modal,
+    Table,
+    TextOutput,
+} from '@ifrc-go/ui';
+import {
+    useBooleanState,
+    useTranslation,
+} from '@ifrc-go/ui/hooks';
+import {
+    createElementColumn,
+    createStringColumn,
+    numericIdSelector,
+} from '@ifrc-go/ui/utils';
+import { isDefined } from '@togglecorp/fujs';
+
+import { type CountryOutletContext } from '#utils/outletContext';
+import {
+    type GoApiResponse,
+    useRequest,
+} from '#utils/restRequest';
+
+import { type ManageResponse } from '../common';
+import ConfirmationModal, { type ManageLocalUnitsValues } from './ConfirmationModal';
+import SwitchWrapper, { type Props as SwitchProps } from './SwitchWrapper';
+
+import i18n from './i18n.json';
+
+type LocalUnitOptions = NonNullable<GoApiResponse<'/api/v2/local-units-options/'>['type']>[number]
+
+interface Props {
+    onClose: () => void;
+    manageResponse: ManageResponse;
+    pending: boolean;
+    onUpdate: () => void;
+}
+
+function ManageLocalUnitsModal(props: Props) {
+    const {
+        onClose,
+        manageResponse,
+        pending,
+        onUpdate,
+    } = props;
+
+    const [manageLocalUnitsValues, setManageLocalUnitsValues] = useState<ManageLocalUnitsValues>();
+
+    const { countryResponse } = useOutletContext<CountryOutletContext>();
+    const strings = useTranslation(i18n);
+
+    const [showConfirmationModal, {
+        setTrue: setShowConfirmationModalTrue,
+        setFalse: setShowConfirmationModalFalse,
+    }] = useBooleanState(false);
+
+    const handleLocalUnitSwitchChange = useCallback((value: boolean, name: number) => {
+        if (isDefined(manageResponse) && isDefined(countryResponse)) {
+            setManageLocalUnitsValues({
+                id: manageResponse[name]?.externallyManagedId,
+                country: countryResponse.id,
+                local_unit_type: name,
+                enabled: value,
+            });
+        }
+        setShowConfirmationModalTrue();
+    }, [
+        setManageLocalUnitsValues,
+        manageResponse,
+        countryResponse,
+        setShowConfirmationModalTrue,
+    ]);
+
+    const isNewManageLocalUnit = useMemo(() => {
+        if (isDefined(manageResponse) && isDefined(manageLocalUnitsValues)) {
+            return !(manageLocalUnitsValues.local_unit_type in manageResponse);
+        }
+        return false;
+    }, [manageResponse, manageLocalUnitsValues]);
+
+    const {
+        response: localUnitsOptions,
+        pending: localUnitsOptionsPending,
+    } = useRequest({
+        url: '/api/v2/local-units-options/',
+    });
+
+    const columns = useMemo(() => ([
+        createStringColumn<LocalUnitOptions, number>(
+            'type',
+            strings.localUnitTypeTableLabel,
+            (item) => item.name,
+        ),
+        createElementColumn<LocalUnitOptions, number, SwitchProps>(
+            'actions',
+            strings.localUnitActionsLabel,
+            SwitchWrapper,
+            (_, item) => ({
+                value: manageResponse && manageResponse[item.id]?.enabled,
+                name: item.id,
+                formId: item.id,
+                pending,
+                onChange: handleLocalUnitSwitchChange,
+            }),
+        ),
+    ]), [
+        pending,
+        manageResponse,
+        handleLocalUnitSwitchChange,
+        strings.localUnitTypeTableLabel,
+        strings.localUnitActionsLabel,
+    ]);
+
+    return (
+        <Modal
+            heading={strings.manageLocalUnitModalHeading}
+            onClose={onClose}
+            size="md"
+            headingLevel={2}
+            headerDescription={(
+                <TextOutput
+                    label={strings.countryLabel}
+                    value={countryResponse?.name}
+                />
+            )}
+        >
+            <Table
+                pending={localUnitsOptionsPending}
+                filtered={false}
+                columns={columns}
+                keySelector={numericIdSelector}
+                data={localUnitsOptions?.type}
+            />
+            {showConfirmationModal && (
+                <ConfirmationModal
+                    onUpdate={onUpdate}
+                    isNewManageLocalUnit={isNewManageLocalUnit}
+                    manageLocalUnitsValues={manageLocalUnitsValues}
+                    onClose={setShowConfirmationModalFalse}
+                />
+            )}
+        </Modal>
+    );
+}
+
+export default ManageLocalUnitsModal;

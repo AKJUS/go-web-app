@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { SearchLineIcon } from '@ifrc-go/icons';
 import {
     Button,
@@ -7,31 +6,23 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    stringLabelSelector,
     stringNameSelector,
+    stringValueSelector,
 } from '@ifrc-go/ui/utils';
 import { type EntriesAsList } from '@togglecorp/toggle-form';
 
+import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import { type GoApiResponse } from '#utils/restRequest';
 
-import {
-    NOT_VALIDATED,
-    VALIDATED,
-    type Validation,
-} from '../common';
+import { type ValidationOption } from '../common';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-interface ValidationOption {
-    key: Validation
-    label: string;
-}
-
 export interface FilterValue {
     search?: string | undefined;
     type?: number | undefined;
-    isValidated?: Validation | undefined;
+    status?: ValidationOption['key'] | undefined;
 }
 
 type LocalUnitOptions = GoApiResponse<'/api/v2/local-units-options/'>;
@@ -63,16 +54,7 @@ function Filters(props: Props) {
     } = props;
     const strings = useTranslation(i18n);
 
-    const validationOptions = useMemo((): ValidationOption[] => ([
-        {
-            key: VALIDATED,
-            label: strings.validated,
-        },
-        {
-            key: NOT_VALIDATED,
-            label: strings.notValidated,
-        },
-    ]), [strings.validated, strings.notValidated]);
+    const { local_units_status: validationOptions } = useGlobalEnums();
 
     return (
         <>
@@ -89,11 +71,11 @@ function Filters(props: Props) {
             <SelectInput
                 placeholder={strings.localUnitsFilterValidatedPlaceholder}
                 label={strings.localUnitsFilterValidatedLabel}
-                name="isValidated"
-                value={value.isValidated}
+                name="status"
+                value={value.status}
                 onChange={onChange}
                 keySelector={validationKeySelector}
-                labelSelector={stringLabelSelector}
+                labelSelector={stringValueSelector}
                 options={validationOptions}
             />
             <TextInput

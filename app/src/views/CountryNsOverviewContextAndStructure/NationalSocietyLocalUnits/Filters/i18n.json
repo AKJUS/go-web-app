@@ -1,8 +1,6 @@
 {
     "namespace": "countryNsOverviewContextAndStructure",
     "strings": {
-        "validated": "Validated",
-        "notValidated": "Not Validated",
         "localUnitsFilterTypePlaceholder": "Type (All)",
         "localUnitsFilterTypeLabel": "Type",
         "localUnitsFilterClear": "Clear filters",

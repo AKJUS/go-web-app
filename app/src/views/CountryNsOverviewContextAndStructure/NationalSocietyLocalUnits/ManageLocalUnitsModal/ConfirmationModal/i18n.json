@@ -1,0 +1,12 @@
+{
+    "namespace": "countryNsOverviewContextAndStructure",
+    "strings": {
+        "confirmationModalHeading": "Confirmation",
+        "confirmationModalDescription": "Are you sure you want to externally manage this? As it can erase all the previously uploaded local units files?",
+        "confirmButtonLabel": "Confirm",
+        "societyNameTextLabel": "Enter your National Society name",
+        "confirmationSuccessMessage": "LocalUnits externally managed enabled",
+        "confirmationFailedMessage": "LocalUnits externally managed failed",
+        "cancelButtonLabel": "Cancel"
+    }
+}

@@ -1,25 +1,29 @@
 import { useMemo } from 'react';
-import { TextOutput } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { isNotDefined } from '@togglecorp/fujs';
+
+import MultiSelectOutput from '../MultiSelectOutput';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-interface Props<VALUE> {
+interface Props<VALUE, OPTION> {
+    value: VALUE[] | undefined;
+    oldValue: VALUE[] | undefined;
+    options: OPTION[] | undefined;
+    keySelector: (datum: OPTION) => VALUE;
+    labelSelector: (datum: OPTION) => React.ReactNode;
     diffContainerClassName?: string;
-    value?: VALUE | undefined;
-    oldValue?: VALUE | undefined;
     children: React.ReactNode;
     enabled: boolean;
     showOnlyDiff?: boolean;
     showPreviousValue?: boolean;
 }
 
-function DiffWrapper<
-    VALUE extends string | number | boolean | null
+function MultiSelectDiffWrapper<
+    VALUE extends number | string, OPTION
 >(
-    props: Props<VALUE>,
+    props: Props<VALUE, OPTION>,
 ) {
     const {
         diffContainerClassName,
@@ -29,6 +33,9 @@ function DiffWrapper<
         enabled = false,
         showOnlyDiff,
         showPreviousValue,
+        options,
+        keySelector,
+        labelSelector,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -60,14 +67,17 @@ function DiffWrapper<
             {children}
             {showPreviousValue
                 && (
-                    <TextOutput
+                    <MultiSelectOutput
                         className={styles.previousValue}
-                        label={strings.previousValueLabel}
+                        label={strings.multiSelectPreviousValueLabel}
                         value={oldValue}
+                        options={options}
+                        keySelector={keySelector}
+                        labelSelector={labelSelector}
                     />
                 )}
         </div>
     );
 }
 
-export default DiffWrapper;
+export default MultiSelectDiffWrapper;

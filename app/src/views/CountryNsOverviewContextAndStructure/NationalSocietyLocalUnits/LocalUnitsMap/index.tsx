@@ -32,6 +32,7 @@ import {
 } from '@togglecorp/fujs';
 import {
     MapBounds,
+    MapCenter,
     MapImage,
     MapLayer,
     MapSource,
@@ -62,10 +63,10 @@ import {
     useRequest,
 } from '#utils/restRequest';
 
+import { type ManageResponse } from '../common';
 import {
     AUTHENTICATED,
     PUBLIC,
-    VALIDATED,
 } from '../common';
 import type { FilterValue } from '../Filters';
 import LocalUnitsFormModal from '../LocalUnitsFormModal';
@@ -74,7 +75,13 @@ import { TYPE_HEALTH_CARE } from '../LocalUnitsFormModal/LocalUnitsForm/schema';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
+type LocationGeoJson = {
+    type: 'Point',
+    coordinates: [number, number],
+};
+
 const LOCAL_UNIT_ICON_KEY = 'local-units';
+
 const HEALTHCARE_ICON_KEY = 'healthcare';
 
 function iconSourceSelector({ image_url }: { image_url?: string | undefined }) {
@@ -113,7 +120,7 @@ const sourceOption: mapboxgl.GeoJSONSourceRaw = {
 interface ClickedPoint {
     id: string;
     localUnitId: number;
-    lngLat: mapboxgl.LngLatLike;
+    center: [number, number];
 }
 
 function emailKeySelector(email: string) {
@@ -125,6 +132,7 @@ interface Props {
     presentationMode?: boolean;
     filter: FilterValue;
     localUnitsOptions: GoApiResponse<'/api/v2/local-units-options/'> | undefined;
+    manageResponse: ManageResponse;
 }
 
 function LocalUnitsMap(props: Props) {
@@ -133,6 +141,7 @@ function LocalUnitsMap(props: Props) {
         presentationMode = false,
         filter,
         localUnitsOptions,
+        manageResponse,
     } = props;
     const { countryResponse } = useOutletContext<CountryOutletContext>();
     const { isAuthenticated } = useAuth();
@@ -146,8 +155,7 @@ function LocalUnitsMap(props: Props) {
         () => ({
             limit: MAX_PAGE_LIMIT,
             type__code: filter.type,
-            validated: isDefined(filter.isValidated)
-                ? filter.isValidated === VALIDATED : undefined,
+            status: filter.status,
             search: filter.search,
             country__iso3: isDefined(countryResponse?.iso3) ? countryResponse?.iso3 : undefined,
         }),
@@ -272,21 +280,25 @@ function LocalUnitsMap(props: Props) {
             features: localUnits?.results?.map(
                 (localUnit) => ({
                     type: 'Feature' as const,
-                    geometry: localUnit.location_geojson as unknown as {
-                        type: 'Point',
-                        coordinates: [number, number],
-                    },
+                    geometry: localUnit.location_geojson as unknown as LocationGeoJson,
                     properties: {
                         id: localUnit.id,
                         localUnitId: localUnit.id,
                         // NOTE: we're adding radius here because of some bug in mapbox (not sure)
                         // which doesn't render circle if there aren't any expressions
+                        lng: (
+                            localUnit.location_geojson as unknown as LocationGeoJson
+                        ).coordinates[0],
+                        lat: (
+                            localUnit.location_geojson as unknown as LocationGeoJson
+                        ).coordinates[1],
                         radius: 12,
                         type: localUnit.type,
                         subType: localUnit.type === TYPE_HEALTH_CARE
                             ? localUnit.health_details?.health_facility_type
                             : undefined,
-                        iconKey: isDefined(localUnit.health_details)
+                        iconKey: ((isDefined(filter.type) && filter.type === TYPE_HEALTH_CARE)
+                            && isDefined(localUnit.health_details))
                             ? getIconKey(
                                 localUnit.health_details?.health_facility_type,
                                 HEALTHCARE_ICON_KEY,
@@ -295,15 +307,15 @@ function LocalUnitsMap(props: Props) {
                 }),
             ) ?? [],
         }),
-        [localUnits],
+        [localUnits, filter.type],
     );
 
     const handlePointClick = useCallback(
-        (feature: mapboxgl.MapboxGeoJSONFeature, lngLat: mapboxgl.LngLat) => {
+        (feature: mapboxgl.MapboxGeoJSONFeature) => {
             setClickedPointProperties({
                 id: feature.properties?.id,
                 localUnitId: feature.properties?.localUnitId,
-                lngLat,
+                center: [feature.properties?.lng, feature.properties?.lat],
             });
             return true;
         },
@@ -381,17 +393,26 @@ function LocalUnitsMap(props: Props) {
                     )}
                     mapOptions={{ bounds: countryBounds }}
                 >
+                    {clickedPointProperties && (
+                        <MapCenter
+                            center={clickedPointProperties?.center}
+                            centerOptions={{
+                                zoom: 18,
+                                duration: DURATION_MAP_ZOOM,
+                            }}
+                        />
+                    )}
                     <MapContainerWithDisclaimer
                         className={styles.mapContainer}
                     />
-                    {countryBounds && (
+                    {countryBounds && !clickedPointProperties && (
                         <MapBounds
                             duration={DURATION_MAP_ZOOM}
                             padding={DEFAULT_MAP_PADDING}
                             bounds={countryBounds}
                         />
                     )}
-                    {localUnitsOptions?.type.map(
+                    {(localUnitsOptions?.type.map(
                         (typeOption) => (
                             <MapImage
                                 key={typeOption.id}
@@ -401,7 +422,7 @@ function LocalUnitsMap(props: Props) {
                                 imageOptions={mapImageOption}
                             />
                         ),
-                    )}
+                    ))}
                     {localUnitsOptions?.health_facility_type?.map(
                         (healthTypeOption) => (
                             <MapImage
@@ -441,10 +462,10 @@ function LocalUnitsMap(props: Props) {
                             />
                         )}
                     </MapSource>
-                    {isDefined(clickedPointProperties) && clickedPointProperties.lngLat && (
+                    {isDefined(clickedPointProperties) && clickedPointProperties.center && (
                         <MapPopup
                             popupClassName={styles.mapPopup}
-                            coordinates={clickedPointProperties.lngLat}
+                            coordinates={clickedPointProperties.center}
                             onCloseButtonClick={handlePointClose}
                             heading={(
                                 <Button
@@ -583,6 +604,7 @@ function LocalUnitsMap(props: Props) {
             )}
             {(showLocalUnitModal && (
                 <LocalUnitsFormModal
+                    manageResponse={manageResponse}
                     onClose={handleLocalUnitsFormModalClose}
                     localUnitId={clickedPointProperties?.localUnitId}
                     readOnly={readOnlyLocalUnitModal}

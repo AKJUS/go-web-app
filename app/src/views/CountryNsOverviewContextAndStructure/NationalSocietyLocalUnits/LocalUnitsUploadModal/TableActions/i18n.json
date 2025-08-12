@@ -1,0 +1,7 @@
+{
+    "namespace": "countryNsOverviewContextAndStructure",
+    "strings": {
+        "errorsLabel": "Errors.csv",
+        "originalFileLabel": "Original File"
+    }
+}

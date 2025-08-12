@@ -38,12 +38,7 @@ export type PartialLocalUnits = PartialForm<
     'client_id'
 >;
 
-// const TYPE_ADMINISTRATIVE = 1 satisfies TypeOfLocalUnits;
 export const TYPE_HEALTH_CARE = 2 satisfies TypeOfLocalUnits;
-// const TYPE_EMERGENCY_RESPONSE = 3 satisfies TypeOfLocalUnits;
-// const TYPE_HUMANITARIAN_ASSISTANCE_CENTERS = 4 satisfies TypeOfLocalUnits;
-// const TYPE_TRAINING_AND_EDUCATION = 5 satisfies TypeOfLocalUnits;
-// const TYPE_OTHER = 6 satisfies TypeOfLocalUnits;
 
 export type PartialLocalUnitsRevertForm = PartialForm<LocalUnitsRevertRequestPostBody>;
 type LocalUnitsRevertFormSchema = ObjectSchema<PartialLocalUnitsRevertForm>;
@@ -59,7 +54,7 @@ export const revertSchema: LocalUnitsRevertFormSchema = {
 };
 
 type LocalUnitsFormSchema = ObjectSchema<PartialLocalUnits>;
-type LocalUnitsFormSchemaFields = ReturnType<LocalUnitsFormSchema['fields']>;
+type LocalUnitsFormSchemaFields = ReturnType<LocalUnitsFormSchema['fields']>
 type LocalUnitsHealthFormSchema = ObjectSchema<NonNullable<PartialLocalUnits['health']>>;
 type LocalUnitsHealthFormSchemaFields = ReturnType<LocalUnitsHealthFormSchema['fields']>;
 
@@ -74,6 +69,7 @@ const schema: LocalUnitsFormSchema = {
             },
             local_branch_name: {
                 required: true,
+                requiredValidation: requiredStringCondition,
                 validations: [lengthSmallerThanCondition(200)],
             },
             english_branch_name: {
@@ -162,7 +158,9 @@ const schema: LocalUnitsFormSchema = {
                                     validations: [lengthSmallerThanCondition(50)],
                                 },
                                 focal_point_phone_number: {
-                                    validations: [lengthSmallerThanCondition(50)],
+                                    validations: [
+                                        lengthSmallerThanCondition(50),
+                                    ],
                                 },
                                 hospital_type: {},
                                 specialized_medical_beyond_primary_level: { required: true },
@@ -257,6 +255,7 @@ const schema: LocalUnitsFormSchema = {
                 }
                 return {
                     focal_person_loc: {
+                        requiredValidation: requiredStringCondition,
                         validations: [lengthSmallerThanCondition(200)],
                         required: true,
                     },

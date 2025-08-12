@@ -3,6 +3,7 @@ import { TextOutput } from '@ifrc-go/ui';
 import { listToMap } from '@togglecorp/fujs';
 
 interface Props<VALUE, OPTION> {
+    className?: string;
     value: VALUE[] | undefined;
     options: OPTION[] | undefined;
     keySelector: (datum: OPTION) => VALUE;
@@ -12,6 +13,7 @@ interface Props<VALUE, OPTION> {
 
 function MultiSelectOutput<VALUE extends string | number, OPTION>(props: Props<VALUE, OPTION>) {
     const {
+        className,
         value,
         options,
         keySelector,
@@ -37,6 +39,7 @@ function MultiSelectOutput<VALUE extends string | number, OPTION>(props: Props<V
 
     return (
         <TextOutput
+            className={className}
             label={label}
             value={valueLabel}
             strongLabel

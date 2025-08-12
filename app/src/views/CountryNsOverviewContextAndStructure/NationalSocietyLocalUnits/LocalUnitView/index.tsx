@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
     Container,
     TextOutput,
@@ -14,10 +15,13 @@ import {
 } from '@togglecorp/fujs';
 
 import DiffWrapper from '#components/DiffWrapper';
+import MultiSelectDiffWrapper from '#components/MultiSelectDiffWrapper';
 import MultiSelectOutput from '#components/MultiSelectOutput';
+import SelectDiffWrapper from '#components/SelectDiffWrapper';
 import SelectOutput from '#components/SelectOutput';
 import useCountry from '#hooks/domain/useCountry';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
+import hasDifferences, { getFormFields } from '#utils/localUnits';
 import {
     type GoApiResponse,
     useRequest,
@@ -68,7 +72,6 @@ function LocalUnitView(props: Props) {
     const {
         response: localUnitPreviousResponse,
         pending: localUnitPreviousResponsePending,
-        // error: localUnitPreviousResponseError,
     } = useRequest({
         skip: isDefined(locallyChangedValue) || isNotDefined(localUnitId),
         url: '/api/v2/local-units/{id}/latest-change-request/',
@@ -82,19 +85,32 @@ function LocalUnitView(props: Props) {
         ? localUnitResponse
         : (localUnitPreviousResponse?.previous_data_details as unknown as LocalUnitResponse);
 
-    // FIXME: Handle case when there is no change.
-    // We need to display message to the user
+    const hasDifference = useMemo(() => {
+        if (isNotDefined(newValue) || isNotDefined(oldValue)) {
+            return false;
+        }
+
+        const newFormFields = getFormFields(newValue);
+        const oldFormFields = getFormFields(oldValue);
+
+        return hasDifferences(newFormFields, oldFormFields);
+    }, [newValue, oldValue]);
 
     return (
         <Container
             contentViewType="vertical"
             pending={localUnitResponsePending || localUnitPreviousResponsePending}
             errored={!!localUnitResponseError}
+            empty={!hasDifference}
+            emptyMessage={strings.localUnitViewNoChanges}
         >
-            <DiffWrapper
+            <SelectDiffWrapper
                 showOnlyDiff
                 value={newValue?.type}
                 oldValue={oldValue?.type}
+                options={localUnitsOptions?.type}
+                keySelector={numericIdSelector}
+                labelSelector={stringNameSelector}
                 enabled
             >
                 <SelectOutput
@@ -104,11 +120,14 @@ function LocalUnitView(props: Props) {
                     keySelector={numericIdSelector}
                     labelSelector={stringNameSelector}
                 />
-            </DiffWrapper>
-            <DiffWrapper
+            </SelectDiffWrapper>
+            <SelectDiffWrapper
                 showOnlyDiff
                 value={newValue?.visibility}
                 oldValue={oldValue?.visibility}
+                options={visibilityOptions}
+                keySelector={visibilityKeySelector}
+                labelSelector={stringValueSelector}
                 enabled
             >
                 <SelectOutput
@@ -118,7 +137,7 @@ function LocalUnitView(props: Props) {
                     keySelector={visibilityKeySelector}
                     labelSelector={stringValueSelector}
                 />
-            </DiffWrapper>
+            </SelectDiffWrapper>
             <DiffWrapper
                 showOnlyDiff
                 enabled
@@ -195,10 +214,13 @@ function LocalUnitView(props: Props) {
                 />
             </DiffWrapper>
             {newValue?.type !== TYPE_HEALTH_CARE && (
-                <DiffWrapper
+                <SelectDiffWrapper
                     showOnlyDiff
                     value={newValue?.level}
                     oldValue={oldValue?.level}
+                    options={localUnitsOptions?.level}
+                    keySelector={numericIdSelector}
+                    labelSelector={stringNameSelector}
                     enabled
                 >
                     <SelectOutput
@@ -208,7 +230,7 @@ function LocalUnitView(props: Props) {
                         keySelector={numericIdSelector}
                         labelSelector={stringNameSelector}
                     />
-                </DiffWrapper>
+                </SelectDiffWrapper>
             )}
             {newValue?.type !== TYPE_HEALTH_CARE && (
                 <>
@@ -268,10 +290,13 @@ function LocalUnitView(props: Props) {
             )}
             {newValue?.type === TYPE_HEALTH_CARE && (
                 <>
-                    <DiffWrapper
+                    <SelectDiffWrapper
                         showOnlyDiff
                         value={newValue?.health?.affiliation}
                         oldValue={oldValue?.health?.affiliation}
+                        options={localUnitsOptions?.affiliation}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
                         enabled
                     >
                         <SelectOutput
@@ -281,7 +306,7 @@ function LocalUnitView(props: Props) {
                             keySelector={numericIdSelector}
                             labelSelector={stringNameSelector}
                         />
-                    </DiffWrapper>
+                    </SelectDiffWrapper>
                     <DiffWrapper
                         showOnlyDiff
                         value={newValue?.health?.other_affiliation}
@@ -294,10 +319,13 @@ function LocalUnitView(props: Props) {
                             value={newValue?.health?.other_affiliation}
                         />
                     </DiffWrapper>
-                    <DiffWrapper
+                    <SelectDiffWrapper
                         showOnlyDiff
                         value={newValue?.health?.functionality}
                         oldValue={oldValue?.health?.functionality}
+                        options={localUnitsOptions?.functionality}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
                         enabled
                     >
                         <SelectOutput
@@ -307,11 +335,14 @@ function LocalUnitView(props: Props) {
                             keySelector={numericIdSelector}
                             labelSelector={stringNameSelector}
                         />
-                    </DiffWrapper>
-                    <DiffWrapper
+                    </SelectDiffWrapper>
+                    <SelectDiffWrapper
                         showOnlyDiff
                         value={newValue?.health?.hospital_type}
                         oldValue={oldValue?.health?.hospital_type}
+                        options={localUnitsOptions?.hospital_type}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
                         enabled
                     >
                         <SelectOutput
@@ -321,7 +352,7 @@ function LocalUnitView(props: Props) {
                             keySelector={numericIdSelector}
                             labelSelector={stringNameSelector}
                         />
-                    </DiffWrapper>
+                    </SelectDiffWrapper>
                     <DiffWrapper
                         showOnlyDiff
                         value={newValue?.health?.is_teaching_hospital}
@@ -367,10 +398,13 @@ function LocalUnitView(props: Props) {
                             valueType="boolean"
                         />
                     </DiffWrapper>
-                    <DiffWrapper
+                    <SelectDiffWrapper
                         showOnlyDiff
                         value={newValue?.country}
                         oldValue={oldValue?.country}
+                        options={countries}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
                         enabled
                     >
                         <SelectOutput
@@ -380,7 +414,7 @@ function LocalUnitView(props: Props) {
                             keySelector={numericIdSelector}
                             labelSelector={stringNameSelector}
                         />
-                    </DiffWrapper>
+                    </SelectDiffWrapper>
                 </>
             )}
             <DiffWrapper
@@ -485,10 +519,13 @@ function LocalUnitView(props: Props) {
             )}
             {newValue?.type === TYPE_HEALTH_CARE && (
                 <>
-                    <DiffWrapper
+                    <SelectDiffWrapper
                         showOnlyDiff
                         value={newValue?.health?.health_facility_type}
                         oldValue={oldValue?.health?.health_facility_type}
+                        options={localUnitsOptions?.health_facility_type}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
                         enabled
                     >
                         <SelectOutput
@@ -498,11 +535,55 @@ function LocalUnitView(props: Props) {
                             keySelector={numericIdSelector}
                             labelSelector={stringNameSelector}
                         />
-                    </DiffWrapper>
+                    </SelectDiffWrapper>
                     <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.other_facility_type}
+                        oldValue={oldValue?.health?.other_facility_type}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewOtherFacilityType}
+                            value={newValue?.health?.other_facility_type}
+                        />
+                    </DiffWrapper>
+                    <SelectDiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.primary_health_care_center}
+                        oldValue={oldValue?.health?.primary_health_care_center}
+                        options={localUnitsOptions?.primary_health_care_center}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
+                        enabled
+                    >
+                        <SelectOutput
+                            label={strings.localUnitViewPrimaryHealthCareCenter}
+                            options={localUnitsOptions?.primary_health_care_center}
+                            value={newValue?.health?.primary_health_care_center}
+                            keySelector={numericIdSelector}
+                            labelSelector={stringNameSelector}
+                        />
+                    </SelectDiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.speciality}
+                        oldValue={oldValue?.health?.speciality}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewSpecialties}
+                            value={newValue?.health?.speciality}
+                        />
+                    </DiffWrapper>
+                    <MultiSelectDiffWrapper
                         showOnlyDiff
                         value={newValue?.health?.general_medical_services}
                         oldValue={oldValue?.health?.general_medical_services}
+                        options={localUnitsOptions?.general_medical_services}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
                         enabled
                     >
                         <MultiSelectOutput
@@ -511,6 +592,288 @@ function LocalUnitView(props: Props) {
                             value={newValue?.health?.general_medical_services}
                             keySelector={numericIdSelector}
                             labelSelector={stringNameSelector}
+                        />
+                    </MultiSelectDiffWrapper>
+                    <MultiSelectDiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.specialized_medical_beyond_primary_level}
+                        oldValue={oldValue?.health?.specialized_medical_beyond_primary_level}
+                        options={localUnitsOptions?.specialized_medical_beyond_primary_level}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
+                        enabled
+                    >
+                        <MultiSelectOutput
+                            label={strings.localUnitViewSpecializedMedicalService}
+                            options={localUnitsOptions?.specialized_medical_beyond_primary_level}
+                            value={newValue?.health?.specialized_medical_beyond_primary_level}
+                            keySelector={numericIdSelector}
+                            labelSelector={stringNameSelector}
+                        />
+                    </MultiSelectDiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.other_services}
+                        oldValue={oldValue?.health?.other_services}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewOtherServices}
+                            value={newValue?.health?.other_services}
+                        />
+                    </DiffWrapper>
+                    <MultiSelectDiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.blood_services}
+                        oldValue={oldValue?.health?.blood_services}
+                        options={localUnitsOptions?.blood_services}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
+                        enabled
+                    >
+                        <MultiSelectOutput
+                            label={strings.localUnitViewBloodServices}
+                            options={localUnitsOptions?.blood_services}
+                            value={newValue?.health?.blood_services}
+                            keySelector={numericIdSelector}
+                            labelSelector={stringNameSelector}
+                        />
+                    </MultiSelectDiffWrapper>
+                    <MultiSelectDiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.professional_training_facilities}
+                        oldValue={oldValue?.health?.professional_training_facilities}
+                        options={localUnitsOptions?.professional_training_facilities}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
+                        enabled
+                    >
+                        <MultiSelectOutput
+                            label={strings.localUnitViewProfessionalTrainingFacilities}
+                            options={localUnitsOptions?.professional_training_facilities}
+                            value={newValue?.health?.professional_training_facilities}
+                            keySelector={numericIdSelector}
+                            labelSelector={stringNameSelector}
+                        />
+                    </MultiSelectDiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.number_of_isolation_rooms}
+                        oldValue={oldValue?.health?.number_of_isolation_rooms}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewNumberOfIsolationRooms}
+                            value={newValue?.health?.number_of_isolation_rooms}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.maximum_capacity}
+                        oldValue={oldValue?.health?.maximum_capacity}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewMaximumCapacity}
+                            value={newValue?.health?.maximum_capacity}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.is_warehousing}
+                        oldValue={oldValue?.health?.is_warehousing}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            valueType="boolean"
+                            label={strings.localUnitViewWarehousing}
+                            value={newValue?.health?.is_warehousing}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.is_cold_chain}
+                        oldValue={oldValue?.health?.is_cold_chain}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            valueType="boolean"
+                            label={strings.localUnitViewColdChain}
+                            value={newValue?.health?.is_cold_chain}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.ambulance_type_a}
+                        oldValue={oldValue?.health?.ambulance_type_a}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewAmbulanceTypeA}
+                            value={newValue?.health?.ambulance_type_a}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.ambulance_type_b}
+                        oldValue={oldValue?.health?.ambulance_type_b}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewAmbulanceTypeB}
+                            value={newValue?.health?.ambulance_type_b}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.ambulance_type_c}
+                        oldValue={oldValue?.health?.ambulance_type_c}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewAmbulanceTypeC}
+                            value={newValue?.health?.ambulance_type_c}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.total_number_of_human_resource}
+                        oldValue={oldValue?.health?.total_number_of_human_resource}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewTotalNumberOfHumanResources}
+                            value={newValue?.health?.total_number_of_human_resource}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.general_practitioner}
+                        oldValue={oldValue?.health?.general_practitioner}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewGeneralPractitioner}
+                            value={newValue?.health?.general_practitioner}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.specialist}
+                        oldValue={oldValue?.health?.specialist}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewSpecialist}
+                            value={newValue?.health?.specialist}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.residents_doctor}
+                        oldValue={oldValue?.health?.residents_doctor}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewResidentsDoctor}
+                            value={newValue?.health?.residents_doctor}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.nurse}
+                        oldValue={oldValue?.health?.nurse}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewNurse}
+                            value={newValue?.health?.nurse}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.dentist}
+                        oldValue={oldValue?.health?.dentist}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewDentist}
+                            value={newValue?.health?.dentist}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.nursing_aid}
+                        oldValue={oldValue?.health?.nursing_aid}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewNursingAid}
+                            value={newValue?.health?.nursing_aid}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.midwife}
+                        oldValue={oldValue?.health?.midwife}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewMidwife}
+                            value={newValue?.health?.midwife}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.other_profiles}
+                        oldValue={oldValue?.health?.other_profiles}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewOtherProfiles}
+                            value={newValue?.health?.other_profiles}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.other_medical_heal}
+                        oldValue={oldValue?.health?.other_medical_heal}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            valueType="boolean"
+                            label={strings.localUnitViewOtherMedicalHeal}
+                            value={newValue?.health?.other_medical_heal}
+                        />
+                    </DiffWrapper>
+                    <DiffWrapper
+                        showOnlyDiff
+                        value={newValue?.health?.feedback}
+                        oldValue={oldValue?.health?.feedback}
+                        enabled
+                    >
+                        <TextOutput
+                            strongLabel
+                            label={strings.localUnitViewCommentsNS}
+                            value={newValue?.health?.feedback}
                         />
                     </DiffWrapper>
                     <DiffWrapper

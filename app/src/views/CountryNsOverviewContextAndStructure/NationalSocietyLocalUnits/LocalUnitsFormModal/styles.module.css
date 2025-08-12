@@ -1,4 +1,8 @@
 .local-units-form-modal {
+    .action-container {
+        display: flex;
+        gap: var(--go-ui-spacing-sm);
+    }
     .heading-container {
         flex-direction: column;
         gap: var(--go-ui-spacing-sm);

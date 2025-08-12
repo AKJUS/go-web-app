@@ -23,19 +23,26 @@ import {
     _cs,
     isDefined,
     isNotDefined,
+    listToMap,
 } from '@togglecorp/fujs';
 
-import { environment } from '#config';
 import useAuth from '#hooks/domain/useAuth';
 import usePermissions from '#hooks/domain/usePermissions';
 import useFilterState from '#hooks/useFilterState';
 import { type CountryOutletContext } from '#utils/outletContext';
-import { useRequest } from '#utils/restRequest';
+import {
+    useLazyRequest,
+    useRequest,
+} from '#utils/restRequest';
 
+import { type ManageResponse } from './common';
 import Filters, { type FilterValue } from './Filters';
+import LocalUnitBulkUploadModal from './LocalUnitBulkUploadModal';
 import LocalUnitsFormModal from './LocalUnitsFormModal';
 import LocalUnitsMap from './LocalUnitsMap';
 import LocalUnitsTable from './LocalUnitsTable';
+import LocalUnitsUploadModal from './LocalUnitsUploadModal';
+import ManageLocalUnitsModal from './ManageLocalUnitsModal';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -49,14 +56,22 @@ function NationalSocietyLocalUnits(props: Props) {
         className,
     } = props;
 
-    const [activeTab, setActiveTab] = useState<'map'| 'table'>('map');
+    const [activeTab, setActiveTab] = useState<'map' | 'table'>('map');
     const { isAuthenticated } = useAuth();
     const { countryResponse } = useOutletContext<CountryOutletContext>();
-    const { isSuperUser, isCountryAdmin, isGuestUser } = usePermissions();
+    const {
+        isSuperUser,
+        isGuestUser,
+        isLocalUnitGlobalValidator,
+        isLocalUnitRegionValidator,
+        isLocalUnitCountryValidator,
+    } = usePermissions();
     const containerRef = useRef<HTMLDivElement>(null);
 
     // NOTE: key is used to refresh the page when local unit data is updated
     const [localUnitUpdateKey, setLocalUnitUpdateKey] = useState(0);
+    const [manageResponse, setManageResponse] = useState<ManageResponse>();
+
     const [
         presentationMode,
         setFullScreenMode,
@@ -65,6 +80,21 @@ function NationalSocietyLocalUnits(props: Props) {
     const [showAddEditModal, {
         setTrue: setShowAddEditModalTrue,
         setFalse: setShowAddEditModalFalse,
+    }] = useBooleanState(false);
+
+    const [showBulkUploadModal, {
+        setTrue: setShowBulkUploadModalTrue,
+        setFalse: setShowBulkUploadModalFalse,
+    }] = useBooleanState(false);
+
+    const [showManageLocalUnitModal, {
+        setTrue: setShowManageLocalUnitModalTrue,
+        setFalse: setShowManageLocalUnitModalFalse,
+    }] = useBooleanState(false);
+
+    const [showUploadsModal, {
+        setTrue: setShowUploadsModalTrue,
+        setFalse: setShowUploadsModalFalse,
     }] = useBooleanState(false);
 
     const handleFullScreenChange = useCallback(() => {
@@ -84,10 +114,30 @@ function NationalSocietyLocalUnits(props: Props) {
 
     const {
         response: localUnitsOptions,
-        // pending: localUnitsOptionsResponsePending,
+        pending: localUnitsOptionsPending,
     } = useRequest({
         url: '/api/v2/local-units-options/',
     });
+
+    const {
+        trigger: manageLocalUnits,
+        pending: manageLocalUnitsPending,
+    } = useLazyRequest({
+        url: '/api/v2/externally-managed-local-unit/',
+        query: {
+            country__id: countryResponse?.id,
+        },
+        onSuccess: (response) => {
+            const data = listToMap(
+                response.results,
+                (res) => res.local_unit_type_details.id,
+                (res) => ({ enabled: res.enabled, externallyManagedId: res.id }),
+            );
+            setManageResponse(data);
+        },
+    });
+
+    const pending = localUnitsOptionsPending || manageLocalUnitsPending;
 
     const handleFullScreenToggleClick = useCallback(() => {
         if (isNotDefined(containerRef.current)) {
@@ -101,6 +151,37 @@ function NationalSocietyLocalUnits(props: Props) {
         }
     }, [presentationMode]);
 
+    const handleLocalUnitsUpdate = useCallback(
+        () => {
+            manageLocalUnits({});
+        },
+        [manageLocalUnits],
+    );
+
+    const handleBulkUploadModalOpen = useCallback(
+        () => {
+            handleLocalUnitsUpdate();
+            setShowBulkUploadModalTrue();
+        },
+        [handleLocalUnitsUpdate, setShowBulkUploadModalTrue],
+    );
+
+    const handleLocalUnitAddEditModalOpen = useCallback(
+        () => {
+            handleLocalUnitsUpdate();
+            setShowAddEditModalTrue();
+        },
+        [handleLocalUnitsUpdate, setShowAddEditModalTrue],
+    );
+
+    const handleManageLocalUnitsModalOpen = useCallback(
+        () => {
+            handleLocalUnitsUpdate();
+            setShowManageLocalUnitModalTrue();
+        },
+        [handleLocalUnitsUpdate, setShowManageLocalUnitModalTrue],
+    );
+
     const handleLocalUnitFormModalClose = useCallback(
         () => {
             setShowAddEditModalFalse();
@@ -109,9 +190,20 @@ function NationalSocietyLocalUnits(props: Props) {
         [setShowAddEditModalFalse],
     );
 
+    const handleTabChanges = useCallback(
+        (name: 'map' | 'table') => {
+            handleLocalUnitsUpdate();
+            setActiveTab(name);
+        },
+        [handleLocalUnitsUpdate],
+    );
+
     const strings = useTranslation(i18n);
 
-    const hasAddEditLocalUnitPermission = isCountryAdmin(countryResponse?.id) || isSuperUser;
+    const canSeeUploadButton = isSuperUser
+        || isLocalUnitGlobalValidator()
+        || isLocalUnitCountryValidator(countryResponse?.id)
+        || isLocalUnitRegionValidator(countryResponse?.region ?? undefined);
 
     useEffect(() => {
         document.addEventListener('fullscreenchange', handleFullScreenChange);
@@ -123,7 +215,7 @@ function NationalSocietyLocalUnits(props: Props) {
 
     return (
         <Tabs
-            onChange={setActiveTab}
+            onChange={handleTabChanges}
             value={activeTab}
             variant="tertiary"
         >
@@ -147,15 +239,45 @@ function NationalSocietyLocalUnits(props: Props) {
                         filtered={filtered}
                     />
                 )}
-                // NOTE: disable local units add/edit for now
-                actions={hasAddEditLocalUnitPermission && (environment !== 'production') && (
-                    <Button
-                        name={undefined}
-                        variant="secondary"
-                        onClick={setShowAddEditModalTrue}
-                    >
-                        {strings.addLocalUnitLabel}
-                    </Button>
+                actions={(
+                    <>
+                        {isAuthenticated && isSuperUser && (
+                            <Button
+                                name={undefined}
+                                variant="secondary"
+                                onClick={handleManageLocalUnitsModalOpen}
+                            >
+                                {strings.manageLocalUnitLabel}
+                            </Button>
+                        )}
+                        {canSeeUploadButton && (
+                            <>
+                                <Button
+                                    name={undefined}
+                                    variant="secondary"
+                                    onClick={setShowUploadsModalTrue}
+                                >
+                                    {strings.viewUploadsLabel}
+                                </Button>
+                                <Button
+                                    name={undefined}
+                                    variant="secondary"
+                                    onClick={handleBulkUploadModalOpen}
+                                >
+                                    {strings.bulkUploadLabel}
+                                </Button>
+                            </>
+                        )}
+                        {isAuthenticated && (
+                            <Button
+                                name={undefined}
+                                variant="secondary"
+                                onClick={handleLocalUnitAddEditModalOpen}
+                            >
+                                {strings.addLocalUnitLabel}
+                            </Button>
+                        )}
+                    </>
                 )}
             >
                 <TabPanel name="map">
@@ -175,6 +297,7 @@ function NationalSocietyLocalUnits(props: Props) {
                         )}
                     >
                         <LocalUnitsMap
+                            manageResponse={manageResponse}
                             key={localUnitUpdateKey}
                             onPresentationModeButtonClick={handleFullScreenToggleClick}
                             presentationMode={presentationMode}
@@ -185,6 +308,7 @@ function NationalSocietyLocalUnits(props: Props) {
                 </TabPanel>
                 <TabPanel name="table">
                     <LocalUnitsTable
+                        manageResponse={manageResponse}
                         key={localUnitUpdateKey}
                         filter={filter}
                         filtered={filtered}
@@ -192,7 +316,29 @@ function NationalSocietyLocalUnits(props: Props) {
                 </TabPanel>
                 {showAddEditModal && (
                     <LocalUnitsFormModal
+                        manageResponse={manageResponse}
                         onClose={handleLocalUnitFormModalClose}
+                    />
+                )}
+                {showBulkUploadModal && (
+                    <LocalUnitBulkUploadModal
+                        manageResponse={manageResponse}
+                        onClose={setShowBulkUploadModalFalse}
+                    />
+                )}
+                {showUploadsModal && isDefined(countryResponse?.name) && (
+                    <LocalUnitsUploadModal
+                        onClose={setShowUploadsModalFalse}
+                        country={countryResponse.name}
+                        countryId={countryResponse.id}
+                    />
+                )}
+                {showManageLocalUnitModal && (
+                    <ManageLocalUnitsModal
+                        onClose={setShowManageLocalUnitModalFalse}
+                        pending={pending}
+                        onUpdate={handleLocalUnitsUpdate}
+                        manageResponse={manageResponse}
                     />
                 )}
             </Container>
