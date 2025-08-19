@@ -1,0 +1,28 @@
+{
+    "parent": "000048-1758003668158.json",
+    "actions": [
+        {
+            "action": "add",
+            "key": "eventERULabel",
+            "namespace": "fieldReportDetails",
+            "value": "Emergency Response Units"
+        },
+        {
+            "action": "remove",
+            "key": "eventIfrcStaffLabel",
+            "namespace": "fieldReportDetails"
+        },
+        {
+            "action": "update",
+            "key": "fieldsStep4PlannedResponseRowsIFRCStaffEVTEPIEWLabel",
+            "newKey": "fieldsStep4PlannedResponseRowsERUEVTEPIEWLabel",
+            "namespace": "fieldReportForm"
+        },
+        {
+            "action": "update",
+            "key": "fieldsStep4PlannedResponseRowsIFRCStaffValueFieldLabel",
+            "newKey": "fieldsStep4PlannedResponseRowsERUValueFieldLabel",
+            "namespace": "fieldReportForm"
+        }
+    ]
+}
