@@ -51,6 +51,8 @@ function ManageLocalUnitsModal(props: Props) {
 
     const [manageLocalUnitsValues, setManageLocalUnitsValues] = useState<ManageLocalUnitsValues>();
 
+    const [localUnitType, setLocalUnitType] = useState<number>();
+
     const { countryResponse } = useOutletContext<CountryOutletContext>();
     const strings = useTranslation(i18n);
 
@@ -60,6 +62,7 @@ function ManageLocalUnitsModal(props: Props) {
     }] = useBooleanState(false);
 
     const handleLocalUnitSwitchChange = useCallback((value: boolean, name: number) => {
+        setLocalUnitType(name);
         if (isDefined(manageResponse) && isDefined(countryResponse)) {
             setManageLocalUnitsValues({
                 id: manageResponse[name]?.externallyManagedId,
@@ -107,6 +110,10 @@ function ManageLocalUnitsModal(props: Props) {
                 pending,
                 onChange: handleLocalUnitSwitchChange,
             }),
+            {
+                headerInfoTitle: strings.localUnitActionsLabel,
+                headerInfoDescription: strings.externallyManagedDescription,
+            },
         ),
     ]), [
         pending,
@@ -114,7 +121,12 @@ function ManageLocalUnitsModal(props: Props) {
         handleLocalUnitSwitchChange,
         strings.localUnitTypeTableLabel,
         strings.localUnitActionsLabel,
+        strings.externallyManagedDescription,
     ]);
+
+    const localUnitName = localUnitsOptions?.type.find(
+        (unit) => unit.id === manageLocalUnitsValues?.local_unit_type,
+    )?.name;
 
     return (
         <Modal
@@ -136,9 +148,10 @@ function ManageLocalUnitsModal(props: Props) {
                 keySelector={numericIdSelector}
                 data={localUnitsOptions?.type}
             />
-            {showConfirmationModal && (
+            {showConfirmationModal && isDefined(localUnitType) && (
                 <ConfirmationModal
                     onUpdate={onUpdate}
+                    localUnitName={localUnitName}
                     isNewManageLocalUnit={isNewManageLocalUnit}
                     manageLocalUnitsValues={manageLocalUnitsValues}
                     onClose={setShowConfirmationModalFalse}

@@ -5,10 +5,15 @@ import {
     useState,
 } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { DownloadLineIcon } from '@ifrc-go/icons';
 import {
-    Button,
+    CheckFillIcon,
+    CloseFillIcon,
+    DownloadLineIcon,
+} from '@ifrc-go/icons';
+import {
     ConfirmButton,
+    Heading,
+    InputSection,
     Modal,
     RawFileInput,
     SelectInput,
@@ -39,7 +44,10 @@ import { transformObjectError } from '#utils/restRequest/error';
 
 import { type ManageResponse } from '../common';
 import FormGrid from '../FormGrid';
-import { type PartialLocalUnits } from '../LocalUnitsFormModal/LocalUnitsForm/schema';
+import {
+    type PartialLocalUnits,
+    TYPE_HEALTH_CARE,
+} from '../LocalUnitsFormModal/LocalUnitsForm/schema';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -208,7 +216,6 @@ function LocalUnitBulkUploadModal(props: Props) {
             heading={strings.bulkUploadModalHeading}
             headingLevel={2}
             pending={pending}
-            size="xl"
             withHeaderBorder
             onClose={onClose}
             headerDescriptionContainerClassName={styles.headerDescriptionContent}
@@ -236,53 +243,74 @@ function LocalUnitBulkUploadModal(props: Props) {
                     </FormGrid>
                 </>
             )}
-            footerActions={(
-                <Button
-                    name={undefined}
-                    onClick={onClose}
-                >
-                    {strings.onCloseButtonLabel}
-                </Button>
-            )}
         >
             <div className={styles.uploadContainer}>
-                {isDefined(localUnitType) ? (
-                    <>
-                        {isDefined(permissionError) && (
-                            <NonFieldError error={permissionError} />
+                {isDefined(localUnitType) && isDefined(permissionError) && (
+                    <NonFieldError
+                        className={styles.nonFieldError}
+                        error={permissionError}
+                    />
+                )}
+                <div
+                    className={styles.uploadInputSection}
+                >
+                    <div className={styles.uploadDescription}>
+                        <div>
+                            <Heading level={4}>
+                                {strings.uploadFileTitle}
+                            </Heading>
+                            <p>{strings.uploadFileDescription1}</p>
+                            <p>{strings.uploadFileDescription2}</p>
+                        </div>
+                        {isDefined(bulkUploadFile) && (
+                            <ConfirmButton
+                                name="file"
+                                disabled={isNotDefined(bulkUploadFile)}
+                                confirmHeading={strings.bulkUploadConfirmHeading}
+                                confirmMessage={strings.bulkUploadConfirmMessage}
+                                onConfirm={handleConfirmButton}
+                            >
+                                {strings.bulkUploadButtonLabel}
+                            </ConfirmButton>
+                        )}
+                    </div>
+                    <div className={styles.fileInputSection}>
+                        {bulkUploadFile?.name}
+                        {isDefined(uploadResponse?.file) && (
+                            <Link
+                                external
+                                href={uploadResponse?.file}
+                                variant="tertiary"
+                                className={styles.downloadLink}
+                                icons={<DownloadLineIcon className={styles.icon} />}
+                            >
+                                {uploadResponse?.file_name}
+                            </Link>
                         )}
                         <RawFileInput
                             name="file"
                             accept=".csv"
                             onChange={setBulkUploadFile}
                             variant="secondary"
-                            disabled={!hasBulkUploadPermission || !isExternallyManaged || pending}
+                            disabled={
+                                !hasBulkUploadPermission
+                                || !isExternallyManaged
+                                || pending
+                                || isDefined(uploadResponse?.file)
+                            }
                         >
-                            {strings.uploadButtonLabel}
+                            {strings.selectFileButtonLabel}
                         </RawFileInput>
-                        {bulkUploadFile?.name}
-                        {isNotDefined(bulkUploadFile) && (
-                            <div className={styles.uploadDescription}>
-                                {strings.uploadDescription}
-                                <NonFieldError error={error as Error<PartialLocalUnits>} />
-                            </div>
-                        )}
-                        <ConfirmButton
-                            name="file"
-                            disabled={isNotDefined(bulkUploadFile)}
-                            confirmHeading={strings.bulkUploadConfirmHeading}
-                            confirmMessage={strings.bulkUploadConfirmMessage}
-                            onConfirm={handleConfirmButton}
-                        >
-                            {strings.bulkUploadButtonLabel}
-                        </ConfirmButton>
-                    </>
-                ) : (
-                    <div>{strings.selectLocalUnitTypeDescription}</div>
-                )}
+                        <NonFieldError
+                            className={styles.nonFieldError}
+                            error={error as Error<PartialLocalUnits>}
+                        />
+                    </div>
+                </div>
             </div>
             {isDefined(uploadResponse) && isDefined(uploadResponse.error_message) && (
                 <NonFieldError
+                    className={styles.nonFieldError}
                     error={uploadResponse.error_message}
                 />
             )}
@@ -301,6 +329,7 @@ function LocalUnitBulkUploadModal(props: Props) {
                     )}
                     {uploadResponse?.status === BULK_UPLOAD_FAILED && (
                         <NonFieldError
+                            className={styles.nonFieldError}
                             error={resolveToString(
                                 strings.bulkUploadFailedMessage,
                                 {
@@ -311,36 +340,34 @@ function LocalUnitBulkUploadModal(props: Props) {
                         />
                     )}
                     <div className={styles.responseInformation}>
-                        <div className={styles.countAndFile}>
-                            <TextOutput
-                                valueType="number"
-                                strongLabel
-                                label={strings.successCountLabel}
-                                value={uploadResponse?.success_count}
-                            />
-                            <TextOutput
-                                valueType="number"
-                                strongLabel
-                                label={strings.failedCountLabel}
-                                value={uploadResponse?.failed_count}
-                            />
-                        </div>
-                        <div className={styles.countAndFile}>
-                            {isDefined(uploadResponse?.file) && (
-                                <Link
-                                    external
-                                    href={uploadResponse?.file}
-                                    variant="secondary"
-                                    icons={<DownloadLineIcon className={styles.icon} />}
-                                >
-                                    {uploadResponse?.file_name}
-                                </Link>
-                            )}
+                        <Heading level={4}>
+                            {strings.uploadedResultsHeading}
+                        </Heading>
+                        <div className={styles.uploadedResultsContent}>
+                            <div className={styles.uploadedResults}>
+                                <CheckFillIcon className={styles.successIcons} />
+                                {resolveToString(
+                                    strings.successCountLabel,
+                                    {
+                                        success_count: uploadResponse.success_count,
+                                    },
+                                )}
+                            </div>
+                            <div className={styles.uploadedResults}>
+                                <CloseFillIcon className={styles.failedIcons} />
+                                {resolveToString(
+                                    strings.failedCountLabel,
+                                    {
+                                        failed_count: uploadResponse.failed_count,
+                                    },
+                                )}
+                            </div>
                             {isDefined(uploadResponse?.error_file) && (
                                 <Link
                                     external
                                     href={uploadResponse?.error_file}
                                     variant="secondary"
+                                    className={styles.downloadLink}
                                     icons={<DownloadLineIcon className={styles.icon} />}
                                 >
                                     {strings.errorsFileLabel}
@@ -351,26 +378,42 @@ function LocalUnitBulkUploadModal(props: Props) {
                 </div>
             )}
             <div className={styles.uploadFormat}>
-                <div>{strings.bulkUploadFormatDescription}</div>
+                <div className={styles.descriptionText}>{strings.bulkUploadFormatDescription}</div>
+                <div className={styles.descriptionBorder} />
                 <div className={styles.uploadContent}>
-                    <Link
-                        external
-                        href={bulkUploadDefaultTemplate?.template_url}
-                        variant="secondary"
-                        icons={<DownloadLineIcon className={styles.icon} />}
-                    >
-                        {strings.bulkUploadFormat}
-                    </Link>
-                    <Link
-                        external
-                        href={bulkUploadHealthTemplate?.template_url}
-                        variant="secondary"
-                        // FIXME fix styling
-                        iconsContainerClassName={styles.downloadLink}
-                        icons={<DownloadLineIcon className={styles.icon} />}
-                    >
-                        {strings.bulkUploadHealthFormat}
-                    </Link>
+                    {localUnitType === TYPE_HEALTH_CARE ? (
+                        <Link
+                            external
+                            disabled={
+                                isNotDefined(localUnitType)
+                                || !hasBulkUploadPermission
+                                || !isExternallyManaged
+                                || pending
+                            }
+                            href={bulkUploadHealthTemplate?.template_url}
+                            variant="secondary"
+                            iconsContainerClassName={styles.downloadLink}
+                            icons={<DownloadLineIcon className={styles.icon} />}
+                        >
+                            {strings.bulkUploadHealthFormat}
+                        </Link>
+                    ) : (
+                        <Link
+                            external
+                            disabled={
+                                isNotDefined(localUnitType)
+                                || !hasBulkUploadPermission
+                                || !isExternallyManaged
+                                || pending
+                            }
+                            href={bulkUploadDefaultTemplate?.template_url}
+                            variant="secondary"
+                            iconsContainerClassName={styles.downloadLink}
+                            icons={<DownloadLineIcon className={styles.icon} />}
+                        >
+                            {strings.bulkUploadFormat}
+                        </Link>
+                    )}
                 </div>
             </div>
         </Modal>

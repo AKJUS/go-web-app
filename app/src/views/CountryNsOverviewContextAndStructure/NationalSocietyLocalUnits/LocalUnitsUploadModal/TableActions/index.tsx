@@ -7,12 +7,10 @@ import styles from './styles.module.css';
 
 export interface Props {
     errorsLink?: string | null;
-    originalFileLink?: string;
 }
 
 function TableActions(props: Props) {
     const {
-        originalFileLink,
         errorsLink,
     } = props;
 
@@ -26,15 +24,6 @@ function TableActions(props: Props) {
                     href={errorsLink}
                 >
                     {strings.errorsLabel}
-                </Link>
-            )}
-            {originalFileLink && (
-                <Link
-                    external
-                    href={originalFileLink}
-                    variant="secondary"
-                >
-                    {strings.originalFileLabel}
                 </Link>
             )}
         </div>

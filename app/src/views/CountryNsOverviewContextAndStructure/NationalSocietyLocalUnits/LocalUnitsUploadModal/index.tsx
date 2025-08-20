@@ -20,6 +20,7 @@ import Link from '#components/Link';
 import SelectOutput, { type Props as SelectOutputProps } from '#components/SelectOutput';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import useFilterState from '#hooks/useFilterState';
+import { createLinkColumn } from '#utils/domain/tableHelpers';
 import {
     type GoApiResponse,
     useRequest,
@@ -87,10 +88,14 @@ function LocalUnitsUploadModal(props: Props) {
     });
 
     const columns = useMemo(() => ([
-        createStringColumn<UploadHistoryData, number>(
+        createLinkColumn<UploadHistoryData, number>(
             'name',
             strings.tableFileNameLabel,
             (item) => item.file_name,
+            (item) => ({
+                external: true,
+                href: item.file,
+            }),
         ),
         createNumberColumn<UploadHistoryData, number>(
             'size',
@@ -132,7 +137,6 @@ function LocalUnitsUploadModal(props: Props) {
             TableActions,
             (_, item) => ({
                 errorsLink: item?.error_file,
-                originalFileLink: item?.file,
             }),
         ),
     ]), [
@@ -174,29 +178,6 @@ function LocalUnitsUploadModal(props: Props) {
                 keySelector={numericIdSelector}
                 data={uploadHistoryResponse?.results}
             />
-            <div className={styles.uploadFormat}>
-                <div>{strings.bulkUploadFileFormatDescription}</div>
-                <div className={styles.uploadFormatContent}>
-                    <Link
-                        external
-                        href={bulkUploadDefaultTemplate?.template_url}
-                        variant="secondary"
-                        icons={<DownloadLineIcon className={styles.icon} />}
-                    >
-                        {strings.uploadHistoryBulkUploadFormat}
-                    </Link>
-                    <Link
-                        external
-                        href={bulkUploadHealthTemplate?.template_url}
-                        variant="secondary"
-                        // FIXME fix styling
-                        iconsContainerClassName={styles.downloadLink}
-                        icons={<DownloadLineIcon className={styles.icon} />}
-                    >
-                        {strings.uploadHistoryBulkUploadHealthFormat}
-                    </Link>
-                </div>
-            </div>
         </Modal>
     );
 }

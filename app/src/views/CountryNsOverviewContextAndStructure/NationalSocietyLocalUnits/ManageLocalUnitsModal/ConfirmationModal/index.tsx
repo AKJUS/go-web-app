@@ -9,6 +9,7 @@ import {
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
+import { resolveToString } from '@ifrc-go/ui/utils';
 
 import useAlert from '#hooks/useAlert';
 import { type CountryOutletContext } from '#utils/outletContext';
@@ -27,6 +28,7 @@ interface Props {
     onClose: () => void;
     manageLocalUnitsValues?: ManageLocalUnitsValues;
     isNewManageLocalUnit: boolean;
+    localUnitName?: string;
     onUpdate: () => void;
 }
 
@@ -35,6 +37,7 @@ function ConfirmationModal(props: Props) {
         onClose,
         manageLocalUnitsValues,
         isNewManageLocalUnit,
+        localUnitName,
         onUpdate,
     } = props;
     const alert = useAlert();
@@ -55,7 +58,9 @@ function ConfirmationModal(props: Props) {
         body: (values: ManageLocalUnitsValues) => values,
         onSuccess: () => {
             alert.show(
-                strings.confirmationSuccessMessage,
+                manageLocalUnitsValues?.enabled
+                    ? strings.confirmationSuccessEnabledMessage
+                    : strings.confirmationSuccessDisabledMessage,
                 { variant: 'success' },
             );
             onUpdate();
@@ -89,7 +94,9 @@ function ConfirmationModal(props: Props) {
         pathVariables: manageLocalUnitsValues && { id: manageLocalUnitsValues?.id },
         onSuccess: () => {
             alert.show(
-                strings.confirmationSuccessMessage,
+                manageLocalUnitsValues?.enabled
+                    ? strings.confirmationSuccessEnabledMessage
+                    : strings.confirmationSuccessDisabledMessage,
                 { variant: 'success' },
             );
             onUpdate();
@@ -110,7 +117,14 @@ function ConfirmationModal(props: Props) {
         <Modal
             onClose={onClose}
             heading={strings.confirmationModalHeading}
-            headerDescription={strings.confirmationModalDescription}
+            headerDescription={
+                resolveToString(
+                    strings.confirmationModalDescription,
+                    {
+                        localUnitType: localUnitName,
+                    },
+                )
+            }
             size="sm"
             footerActions={(
                 <>
