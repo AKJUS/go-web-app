@@ -1,0 +1,21 @@
+.bulk-upload-history-modal {
+    .expanded-cell {
+        background-color: var(--go-ui-color-background);
+        padding: var(--go-ui-spacing-sm);
+    }
+
+    .expanded-row {
+        td {
+            border-bottom: unset;
+            background-color: var(--go-ui-color-background);
+        }
+    }
+
+    .row {
+        &:last-child {
+            td {
+                border-bottom: unset;
+            }
+        }
+    }
+}

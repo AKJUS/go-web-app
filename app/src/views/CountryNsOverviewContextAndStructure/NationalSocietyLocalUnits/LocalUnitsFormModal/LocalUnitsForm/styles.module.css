@@ -32,16 +32,20 @@
     display: flex;
     gap: var(--go-ui-spacing-md);
     align-self: end;
+    flex-grow: 1;
     flex-wrap: wrap;
     justify-content: flex-end;
+    border: 1px solid red;
 }
 
-.last-update-label {
-    color: var(--go-ui-color-text-light);
+/* NOTE: this element is portaled */
+.header-description {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--go-ui-spacing-md);
 
-    .new-local-unit {
-        color: var(--go-ui-color-positive);
+    .last-update-label {
+        color: var(--go-ui-color-text-light);
     }
-
 }
 

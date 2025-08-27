@@ -12,7 +12,6 @@ import {
     Container,
     DateInput,
     DateOutput,
-    Modal,
     MultiSelectInput,
     NumberInput,
     Portal,
@@ -36,7 +35,6 @@ import {
     isNotDefined,
 } from '@togglecorp/fujs';
 import {
-    createSubmitHandler,
     getErrorObject,
     getErrorString,
     removeNull,
@@ -72,15 +70,13 @@ import {
 } from '../../common';
 import FormGrid from '../../FormGrid';
 import LocalUnitDeleteModal from '../../LocalUnitDeleteModal';
+import LocalUnitStatus from '../../LocalUnitStatus';
 import LocalUnitValidateButton from '../../LocalUnitValidateButton';
 import LocalUnitValidateModal from '../../LocalUnitValidateModal';
 import LocalUnitViewModal from '../../LocalUnitViewModal';
 import schema, {
     type LocalUnitsRequestPostBody,
-    type LocalUnitsRevertRequestPostBody,
     type PartialLocalUnits,
-    type PartialLocalUnitsRevertForm,
-    revertSchema,
     TYPE_HEALTH_CARE,
 } from './schema';
 
@@ -94,7 +90,6 @@ type LocalUnitResponse = NonNullable<GoApiResponse<'/api/v2/local-units/{id}/'>>
 const visibilityKeySelector = (option: VisibilityOptions) => option.key;
 
 const defaultHealthValue = {};
-const defaultRevertChangesValue: PartialLocalUnitsRevertForm = {};
 
 interface FormColumnContainerProps {
     children: React.ReactNode;
@@ -159,11 +154,6 @@ function LocalUnitsForm(props: Props) {
         setFalse: setShowChangesModalFalse,
     }] = useBooleanState(false);
 
-    const [showRevertChangesModal, {
-        setTrue: setShowRevertChangesModalTrue,
-        setFalse: setShowRevertChangesModalFalse,
-    }] = useBooleanState(false);
-
     const alert = useAlert();
     const strings = useTranslation(i18n);
     const formFieldsContainerRef = useRef<HTMLDivElement>(null);
@@ -201,17 +191,6 @@ function LocalUnitsForm(props: Props) {
                 country: Number(countryId),
             },
         },
-    );
-
-    const {
-        value: revertChangesValue,
-        error: revertChangesError,
-        setFieldValue: setRevertChangesFieldValue,
-        validate: revertChangesValidate,
-        setError: setRevertChangesError,
-    } = useForm(
-        revertSchema,
-        { value: defaultRevertChangesValue },
     );
 
     const onHealthFieldChange = useFormObject<'health', HealthLocalUnitFormFields>(
@@ -294,7 +273,7 @@ function LocalUnitsForm(props: Props) {
                 },
             );
 
-            formFieldsContainerRef.current?.scrollIntoView({ block: 'start' });
+            // formFieldsContainerRef.current?.scrollIntoView({ block: 'start' });
         },
     });
 
@@ -338,7 +317,7 @@ function LocalUnitsForm(props: Props) {
                 },
             );
 
-            formFieldsContainerRef.current?.scrollIntoView({ block: 'start' });
+            // formFieldsContainerRef.current?.scrollIntoView({ block: 'start' });
             setShowChangesModalFalse();
         },
     });
@@ -350,7 +329,7 @@ function LocalUnitsForm(props: Props) {
         return false;
     }, [value.type, manageResponse]);
 
-    const hasPermission = isAuthenticated
+    const hasUpdatePermission = isAuthenticated
         && !isExternallyManaged
         && (isSuperUser
             || isLocalUnitGlobalValidatorByType(value.type)
@@ -358,14 +337,14 @@ function LocalUnitsForm(props: Props) {
             || isLocalUnitRegionValidatorByType(countryResponse?.region, value.type));
 
     const hasAddEditLocalUnitPermission = isCountryAdmin(countryResponse?.id)
-        || hasPermission;
+        || hasUpdatePermission;
 
     const handleFormSubmit = useCallback(
         () => {
             const result = validate();
             if (result.errored) {
                 setError(result.error);
-                formFieldsContainerRef.current?.scrollIntoView({ block: 'start' });
+                // formFieldsContainerRef.current?.scrollIntoView({ block: 'start' });
                 return;
             }
 
@@ -389,55 +368,12 @@ function LocalUnitsForm(props: Props) {
         ],
     );
 
-    const {
-        pending: revertChangesPending,
-        trigger: revertChanges,
-    } = useLazyRequest({
-        method: 'POST',
-        url: '/api/v2/local-units/{id}/revert/',
-        pathVariables: isDefined(localUnitId) ? { id: localUnitId } : undefined,
-        body: (formFields: LocalUnitsRevertRequestPostBody) => formFields,
-        onSuccess: () => {
-            alert.show(
-                strings.revertChangesSuccessMessage,
-                { variant: 'success' },
-            );
-            if (onSuccess) {
-                onSuccess();
-            }
-        },
-        onFailure: (error) => {
-            const {
-                value: {
-                    formErrors,
-                },
-            } = error;
-
-            setError(transformObjectError(formErrors, () => undefined));
-
-            alert.show(
-                strings.revertChangesFailedMessage,
-                {
-                    variant: 'danger',
-                },
-            );
-        },
-    });
-
-    const handleRevertChangesFormSubmit = useCallback(
-        (formValues: PartialLocalUnitsRevertForm) => {
-            revertChanges(formValues as LocalUnitsRevertRequestPostBody);
-            setShowRevertChangesModalFalse();
-        },
-        [revertChanges, setShowRevertChangesModalFalse],
-    );
-
     const onDoneButtonClick = useCallback(
         () => {
             const result = validate();
             if (result.errored) {
                 setError(result.error);
-                formFieldsContainerRef.current?.scrollIntoView({ block: 'start' });
+                // formFieldsContainerRef.current?.scrollIntoView({ block: 'start' });
                 return;
             }
             setShowChangesModalTrue();
@@ -451,7 +387,6 @@ function LocalUnitsForm(props: Props) {
 
     const error = getErrorObject(formError);
     const healthFormError = getErrorObject(error?.health);
-    const revertChangesFormError = getErrorObject(revertChangesError);
 
     const previousData = (
         localUnitPreviousResponse?.previous_data_details as unknown as LocalUnitResponse
@@ -466,36 +401,31 @@ function LocalUnitsForm(props: Props) {
         && !(localUnitDetailsResponse?.status === VALIDATED);
 
     const permissionError = useMemo(() => {
-        if (isExternallyManaged && isDefined(localUnitDetailsResponse?.bulk_upload)) {
-            return strings.noPermissionFormUpdateExternallyManaged;
-        }
-        if (isExternallyManaged && !hasAddEditLocalUnitPermission) {
-            if (isDefined(localUnitId)) {
-                return strings.noBothPermissionEditFormError;
-            }
-            return strings.noBothPermissionAddFormError;
-        }
         if (isExternallyManaged) {
+            if (isDefined(localUnitId)) {
+                return strings.noPermissionFormUpdateExternallyManaged;
+            }
+
             return strings.noPermissionFormExternallyManaged;
         }
+
         if (!hasAddEditLocalUnitPermission) {
             if (isDefined(localUnitId)) {
                 return strings.noLocalUnitEditPermission;
             }
+
             return strings.noLocalUnitAddPermission;
         }
+
         return undefined;
     }, [
         localUnitId,
         isExternallyManaged,
         hasAddEditLocalUnitPermission,
-        localUnitDetailsResponse?.bulk_upload,
         strings.noPermissionFormUpdateExternallyManaged,
         strings.noLocalUnitAddPermission,
         strings.noLocalUnitEditPermission,
         strings.noPermissionFormExternallyManaged,
-        strings.noBothPermissionAddFormError,
-        strings.noBothPermissionEditFormError,
     ]);
 
     const submitButton = readOnly ? null : (
@@ -534,16 +464,20 @@ function LocalUnitsForm(props: Props) {
                 </Portal>
             )}
             {isDefined(actionsContainerRef.current)
-                && showViewChanges && (
-                <Portal container={actionsContainerRef.current}>
-                    <Switch
-                        name="valueChanges"
-                        label={strings.viewChangesLabel}
-                        value={showValueChanges}
-                        onChange={setShowValueChanges}
-                    />
-                </Portal>
-            )}
+                && isDefined(localUnitDetailsResponse)
+                && hasUpdatePermission
+                && (environment !== 'production')
+                && (
+                    <Portal container={actionsContainerRef.current}>
+                        <Button
+                            name={undefined}
+                            onClick={setShowDeleteLocalUnitModalTrue}
+                            variant="secondary"
+                        >
+                            {strings.localUnitDeleteButtonLabel}
+                        </Button>
+                    </Portal>
+                )}
             {!readOnly && isDefined(localUnitId) && isDefined(actionsContainerRef.current) && (
                 <Portal container={actionsContainerRef.current}>
                     <Button
@@ -560,25 +494,49 @@ function LocalUnitsForm(props: Props) {
                     {submitButton}
                 </Portal>
             )}
-            {isDefined(headingDescriptionRef) && isDefined(headingDescriptionRef.current) && (
-                <Portal container={headingDescriptionRef.current}>
-                    <div className={styles.lastUpdateLabel}>
-                        {resolveToComponent(
-                            strings.lastUpdateLabel,
-                            {
-                                modifiedAt: (
-                                    <DateOutput
-                                        value={localUnitDetailsResponse?.modified_at}
-                                    />
-                                ),
-                                modifiedBy: getUserName(
-                                    localUnitDetailsResponse?.modified_by_details,
-                                ),
-                            },
-                        )}
-                    </div>
-                </Portal>
-            )}
+            {isDefined(headingDescriptionRef)
+                && isDefined(headingDescriptionRef.current)
+                && isDefined(localUnitId)
+                && (
+                    <Portal container={headingDescriptionRef.current}>
+                        <div className={styles.headerDescription}>
+                            <div className={styles.lastUpdateLabel}>
+                                {resolveToComponent(
+                                    strings.lastUpdateLabel,
+                                    {
+                                        modifiedAt: (
+                                            <DateOutput
+                                                value={localUnitDetailsResponse?.modified_at}
+                                            />
+                                        ),
+                                        modifiedBy: getUserName(
+                                            localUnitDetailsResponse?.modified_by_details,
+                                        ),
+                                    },
+                                )}
+                            </div>
+                            <LocalUnitStatus
+                                value={localUnitDetailsResponse?.status}
+                                valueDisplay={localUnitDetailsResponse?.status_details}
+                            />
+                            {isDefined(localUnitDetailsResponse) && hasUpdatePermission && environment !== 'production' && (
+                                <LocalUnitValidateButton
+                                    onClick={setShowValidateLocalUnitModalTrue}
+                                    status={localUnitDetailsResponse.status}
+                                    hasValidatePermission={hasUpdatePermission}
+                                />
+                            )}
+                            {showViewChanges && (
+                                <Switch
+                                    name="valueChanges"
+                                    label={strings.viewChangesLabel}
+                                    value={showValueChanges}
+                                    onChange={setShowValueChanges}
+                                />
+                            )}
+                        </div>
+                    </Portal>
+                )}
             {isDefined(headerDescriptionRef.current) && (
                 <Portal container={headerDescriptionRef.current}>
                     <FormGrid>
@@ -633,43 +591,6 @@ function LocalUnitsForm(props: Props) {
                                     error={error?.type}
                                 />
                             </SelectDiffWrapper>
-                            {isDefined(localUnitDetailsResponse)
-                                && (environment !== 'production')
-                                && (
-                                    <div className={styles.actions}>
-                                        {(hasPermission
-                                            && isNotDefined(localUnitDetailsResponse.bulk_upload))
-                                            && (
-                                                <Button
-                                                    name={undefined}
-                                                    onClick={setShowDeleteLocalUnitModalTrue}
-                                                >
-                                                    {strings.localUnitDeleteButtonLabel}
-                                                </Button>
-                                            )}
-                                        {hasPermission && (
-                                            <LocalUnitValidateButton
-                                                onClick={setShowValidateLocalUnitModalTrue}
-                                                status={localUnitDetailsResponse.status}
-                                                statusDetails={
-                                                    localUnitDetailsResponse.status_details
-                                                }
-                                                hasValidatePermission={hasPermission}
-                                            />
-                                        )}
-                                        {hasPermission && localUnitDetailsResponse.is_locked
-                                            && isNotDefined(localUnitDetailsResponse.bulk_upload)
-                                            && !localUnitDetailsResponse?.is_new_local_unit && (
-                                            <Button
-                                                name={undefined}
-                                                onClick={setShowRevertChangesModalTrue}
-                                                variant="secondary"
-                                            >
-                                                {strings.revertButtonLabel}
-                                            </Button>
-                                        )}
-                                    </div>
-                                )}
                         </FormGrid>
                     </FormGrid>
                 </Portal>
@@ -691,10 +612,6 @@ function LocalUnitsForm(props: Props) {
                 {isDefined(permissionError) && (
                     <NonFieldError error={permissionError} />
                 )}
-                {/* NOTE: this should be moved to health specific section */}
-                <NonFieldError
-                    error={error?.health}
-                />
                 <FormGrid>
                     <FormColumnContainer>
                         <DiffWrapper
@@ -1308,6 +1225,11 @@ function LocalUnitsForm(props: Props) {
                             heading={strings.specialitiesAndCapacityTitle}
                             withHeaderBorder
                             contentViewType="vertical"
+                            headerDescription={(
+                                <NonFieldError
+                                    error={error?.health}
+                                />
+                            )}
                         >
                             <FormGrid>
                                 <FormColumnContainer>
@@ -1918,35 +1840,6 @@ function LocalUnitsForm(props: Props) {
                     onDeleteActionSuccess={onDeleteActionSuccess}
                     localUnitId={localUnitId}
                 />
-            )}
-            {showRevertChangesModal && (
-                <Modal
-                    heading={strings.revertChangesModalHeading}
-                    headerDescription={strings.revertChangesContentQuestion}
-                    onClose={setShowRevertChangesModalFalse}
-                    footerActions={(
-                        <Button
-                            name={undefined}
-                            onClick={createSubmitHandler(
-                                revertChangesValidate,
-                                setRevertChangesError,
-                                handleRevertChangesFormSubmit,
-                            )}
-                            disabled={revertChangesPending}
-                        >
-                            {strings.submitButtonLabel}
-                        </Button>
-                    )}
-                >
-                    <TextArea
-                        name="reason"
-                        required
-                        label={strings.reasonLabel}
-                        value={revertChangesValue.reason}
-                        onChange={setRevertChangesFieldValue}
-                        error={getErrorString(revertChangesFormError?.reason)}
-                    />
-                </Modal>
             )}
             {showChangesModal && (
                 <LocalUnitViewModal

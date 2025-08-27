@@ -1,0 +1,20 @@
+.local-unit-status {
+    display: flex;
+    gap: var(--go-ui-spacing-xs);
+
+    .icon {
+        font-size: var(--go-ui-height-icon-multiplier);
+    }
+
+    &.validated {
+        color: var(--go-ui-color-green);
+    }
+
+    &.unvalidated {
+        color: var(--go-ui-color-red);
+    }
+
+    &.pending-validation {
+        color: var(--go-ui-color-blue);
+    }
+}

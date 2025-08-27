@@ -5,9 +5,9 @@ import {
 } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import {
+    Button,
     Modal,
     Table,
-    TextOutput,
 } from '@ifrc-go/ui';
 import {
     useBooleanState,
@@ -17,6 +17,7 @@ import {
     createElementColumn,
     createStringColumn,
     numericIdSelector,
+    resolveToString,
 } from '@ifrc-go/ui/utils';
 import { isDefined } from '@togglecorp/fujs';
 
@@ -41,7 +42,7 @@ interface Props {
     onUpdate: () => void;
 }
 
-function ManageLocalUnitsModal(props: Props) {
+function ConfigureLocalUnitsModal(props: Props) {
     const {
         onClose,
         manageResponse,
@@ -130,15 +131,21 @@ function ManageLocalUnitsModal(props: Props) {
 
     return (
         <Modal
-            heading={strings.manageLocalUnitModalHeading}
+            heading={resolveToString(
+                strings.modalHeading,
+                { countryName: countryResponse?.name ?? '--' },
+            )}
             onClose={onClose}
-            size="md"
-            headingLevel={2}
-            headerDescription={(
-                <TextOutput
-                    label={strings.countryLabel}
-                    value={countryResponse?.name}
-                />
+            withHeaderBorder
+            contentViewType="vertical"
+            footerActions={(
+                <Button
+                    name={undefined}
+                    onClick={onClose}
+                    variant="secondary"
+                >
+                    {strings.closeButtonLabel}
+                </Button>
             )}
         >
             <Table
@@ -161,4 +168,4 @@ function ManageLocalUnitsModal(props: Props) {
     );
 }
 
-export default ManageLocalUnitsModal;
+export default ConfigureLocalUnitsModal;

@@ -1,18 +1,7 @@
 {
     "namespace": "countryNsOverviewContextAndStructure",
     "strings": {
-        "localUnitViewLastUpdateLabel": "Last update: {modifiedAt} by {modifiedBy}",
-        "localUnitViewSuccessMessage": "Local unit added successfully!",
-        "localUnitViewRevertChangesSuccessMessage": "Local unit reverted successfully!",
-        "localUnitViewFailedMessage": "Failed to add local unit",
-        "localUnitViewRevertChangesFailedMessage": "Failed to revert changes in the local unit",
-        "localUnitViewUpdateMessage": "Local unit updated successfully!",
-        "localUnitViewUpdateFailedMessage": "Failed to update local unit",
-        "localUnitViewSpecialitiesAndCapacityTitle": "Specialities & Capacity",
         "localUnitViewSubtype": "Sub-type",
-        "localUnitViewSubtypeDescription": "(e.g. hospital)",
-        "localUnitViewEnglishLabel": "English",
-        "localUnitViewLocalLabel": "Local",
         "localUnitViewLocalUnitNameEn": "Local unit name (En)",
         "localUnitViewLocalUnitNameLocal": "Local unit name (Local)",
         "localUnitViewCoverage": "Coverage",

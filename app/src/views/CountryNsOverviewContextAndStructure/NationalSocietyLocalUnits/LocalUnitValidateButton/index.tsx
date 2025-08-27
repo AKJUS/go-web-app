@@ -1,4 +1,3 @@
-import { CheckboxCircleLineIcon } from '@ifrc-go/icons';
 import { Button } from '@ifrc-go/ui';
 import { _cs } from '@togglecorp/fujs';
 
@@ -8,19 +7,22 @@ import styles from './styles.module.css';
 
 interface Props {
     status: number | undefined;
-    statusDetails: string;
     onClick: () => void;
     hasValidatePermission: boolean;
 }
 function LocalUnitValidateButton(props: Props) {
     const {
         status,
-        statusDetails,
+        // statusDetails,
         onClick,
         hasValidatePermission,
     } = props;
 
     const isValidated = status === VALIDATED;
+
+    if (isValidated || !hasValidatePermission) {
+        return null;
+    }
 
     return (
         <Button
@@ -34,16 +36,9 @@ function LocalUnitValidateButton(props: Props) {
                 !hasValidatePermission
                 || isValidated
             }
-            icons={
-                isValidated
-                && (
-                    <CheckboxCircleLineIcon
-                        className={styles.icon}
-                    />
-                )
-            }
+            // FIXME: use translations
         >
-            {statusDetails}
+            Review
         </Button>
     );
 }

@@ -1,0 +1,12 @@
+{
+    "namespace": "localUnitImportSummary",
+    "strings": {
+        "heading": "Import summary",
+        "statusLabel": "Status",
+        "errorDetailsLabel": "Error details",
+        "downloadErrorDetailFileLabel": "Download error details",
+        "downloadAttachedFileLabel": "Download attached file",
+        "rowsSuccessLabel": "{numRows} of {total} rows processed successfully!",
+        "rowsFailedLabel": "{numRows} rows could not be processed!"
+    }
+}

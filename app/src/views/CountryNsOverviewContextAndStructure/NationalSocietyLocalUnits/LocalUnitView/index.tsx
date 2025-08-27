@@ -98,11 +98,12 @@ function LocalUnitView(props: Props) {
 
     return (
         <Container
-            contentViewType="vertical"
             pending={localUnitResponsePending || localUnitPreviousResponsePending}
             errored={!!localUnitResponseError}
             empty={!hasDifference}
             emptyMessage={strings.localUnitViewNoChanges}
+            contentViewType="grid"
+            numPreferredGridContentColumns={3}
         >
             <SelectDiffWrapper
                 showOnlyDiff
@@ -145,7 +146,7 @@ function LocalUnitView(props: Props) {
                 value={newValue?.location_json?.lat}
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLatitude}
                     value={newValue?.location_json?.lat}
                     valueType="number"
@@ -158,7 +159,7 @@ function LocalUnitView(props: Props) {
                 value={newValue?.location_json?.lng}
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLongitude}
                     value={newValue?.location_json?.lng}
                     valueType="number"
@@ -171,7 +172,7 @@ function LocalUnitView(props: Props) {
                 enabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewDateOfUpdate}
                     value={newValue?.date_of_data}
                     valueType="date"
@@ -184,7 +185,7 @@ function LocalUnitView(props: Props) {
                 enabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewSubtype}
                     value={newValue?.subtype}
                 />
@@ -196,7 +197,7 @@ function LocalUnitView(props: Props) {
                 enabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLocalUnitNameEn}
                     value={newValue?.english_branch_name}
                 />
@@ -208,7 +209,7 @@ function LocalUnitView(props: Props) {
                 enabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLocalUnitNameLocal}
                     value={newValue?.local_branch_name}
                 />
@@ -241,7 +242,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPersonEn}
                             value={newValue?.focal_person_en}
                         />
@@ -253,7 +254,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPersonLocal}
                             value={newValue?.focal_person_loc}
                         />
@@ -269,7 +270,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewSourceEn}
                             value={newValue?.source_en}
                         />
@@ -281,7 +282,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewSourceLocal}
                             value={newValue?.source_loc}
                         />
@@ -314,7 +315,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewOtherAffiliation}
                             value={newValue?.health?.other_affiliation}
                         />
@@ -362,7 +363,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewTeachingHospital}
                             value={newValue?.health?.is_teaching_hospital}
                             valueType="boolean"
@@ -377,7 +378,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewInPatientCapacity}
                             value={newValue?.health?.is_in_patient_capacity}
                             valueType="boolean"
@@ -392,7 +393,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewIsolationRoomsWards}
                             value={newValue?.health?.is_isolation_rooms_wards}
                             valueType="boolean"
@@ -424,7 +425,7 @@ function LocalUnitView(props: Props) {
                 enabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewAddressEn}
                     value={newValue?.address_en}
                 />
@@ -436,7 +437,7 @@ function LocalUnitView(props: Props) {
                 enabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewAddressLocal}
                     value={newValue?.address_loc}
                 />
@@ -448,7 +449,7 @@ function LocalUnitView(props: Props) {
                 enabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLocalityEn}
                     value={newValue?.city_en}
                 />
@@ -460,7 +461,7 @@ function LocalUnitView(props: Props) {
                 enabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLocalityLocal}
                     value={newValue?.city_loc}
                 />
@@ -472,7 +473,7 @@ function LocalUnitView(props: Props) {
                 enabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewPostCode}
                     value={newValue?.postcode}
                 />
@@ -486,7 +487,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewPhone}
                             value={newValue?.phone}
                         />
@@ -498,7 +499,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewEmail}
                             value={newValue?.email}
                         />
@@ -510,7 +511,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewWebsite}
                             value={newValue?.link}
                         />
@@ -543,7 +544,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewOtherFacilityType}
                             value={newValue?.health?.other_facility_type}
                         />
@@ -572,7 +573,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewSpecialties}
                             value={newValue?.health?.speciality}
                         />
@@ -618,7 +619,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewOtherServices}
                             value={newValue?.health?.other_services}
                         />
@@ -664,7 +665,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewNumberOfIsolationRooms}
                             value={newValue?.health?.number_of_isolation_rooms}
                         />
@@ -676,7 +677,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewMaximumCapacity}
                             value={newValue?.health?.maximum_capacity}
                         />
@@ -688,7 +689,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             valueType="boolean"
                             label={strings.localUnitViewWarehousing}
                             value={newValue?.health?.is_warehousing}
@@ -701,7 +702,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             valueType="boolean"
                             label={strings.localUnitViewColdChain}
                             value={newValue?.health?.is_cold_chain}
@@ -714,7 +715,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewAmbulanceTypeA}
                             value={newValue?.health?.ambulance_type_a}
                         />
@@ -726,7 +727,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewAmbulanceTypeB}
                             value={newValue?.health?.ambulance_type_b}
                         />
@@ -738,7 +739,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewAmbulanceTypeC}
                             value={newValue?.health?.ambulance_type_c}
                         />
@@ -750,7 +751,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewTotalNumberOfHumanResources}
                             value={newValue?.health?.total_number_of_human_resource}
                         />
@@ -762,7 +763,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewGeneralPractitioner}
                             value={newValue?.health?.general_practitioner}
                         />
@@ -774,7 +775,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewSpecialist}
                             value={newValue?.health?.specialist}
                         />
@@ -786,7 +787,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewResidentsDoctor}
                             value={newValue?.health?.residents_doctor}
                         />
@@ -798,7 +799,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewNurse}
                             value={newValue?.health?.nurse}
                         />
@@ -810,7 +811,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewDentist}
                             value={newValue?.health?.dentist}
                         />
@@ -822,7 +823,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewNursingAid}
                             value={newValue?.health?.nursing_aid}
                         />
@@ -834,7 +835,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewMidwife}
                             value={newValue?.health?.midwife}
                         />
@@ -846,7 +847,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewOtherProfiles}
                             value={newValue?.health?.other_profiles}
                         />
@@ -858,7 +859,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             valueType="boolean"
                             label={strings.localUnitViewOtherMedicalHeal}
                             value={newValue?.health?.other_medical_heal}
@@ -871,7 +872,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewCommentsNS}
                             value={newValue?.health?.feedback}
                         />
@@ -883,7 +884,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPointPosition}
                             value={newValue?.health?.focal_point_position}
                         />
@@ -895,7 +896,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPointEmail}
                             value={newValue?.health?.focal_point_email}
                         />
@@ -907,7 +908,7 @@ function LocalUnitView(props: Props) {
                         enabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPointPhoneNumber}
                             value={newValue?.health?.focal_point_phone_number}
                         />

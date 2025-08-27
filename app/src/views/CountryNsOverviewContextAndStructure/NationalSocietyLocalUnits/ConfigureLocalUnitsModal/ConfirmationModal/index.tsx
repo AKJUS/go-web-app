@@ -130,16 +130,17 @@ function ConfirmationModal(props: Props) {
                 <>
                     <Button
                         name={undefined}
+                        onClick={onClose}
+                        variant="secondary"
+                    >
+                        {strings.cancelButtonLabel}
+                    </Button>
+                    <Button
+                        name={undefined}
                         onClick={handleConfirmButtonChange}
                         disabled={pending || !nationalSocietyValid}
                     >
                         {strings.confirmButtonLabel}
-                    </Button>
-                    <Button
-                        name={undefined}
-                        onClick={onClose}
-                    >
-                        {strings.cancelButtonLabel}
                     </Button>
                 </>
             )}

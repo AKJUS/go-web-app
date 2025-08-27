@@ -30,7 +30,6 @@ export interface Props {
     localUnitType: number;
     isBulkUploadLocalUnit: boolean;
     status: number | undefined;
-    statusDetails: string;
     onDeleteActionSuccess: () => void;
     onValidationActionSuccess: () => void;
     manageResponse: ManageResponse;
@@ -44,7 +43,6 @@ function LocalUnitsTableActions(props: Props) {
         localUnitId,
         localUnitType,
         status,
-        statusDetails,
         isBulkUploadLocalUnit,
         onValidationActionSuccess,
         onDeleteActionSuccess,
@@ -190,7 +188,6 @@ function LocalUnitsTableActions(props: Props) {
                     <LocalUnitValidateButton
                         onClick={handleValidateLocalUnitClick}
                         status={status}
-                        statusDetails={statusDetails}
                         hasValidatePermission={hasPermission}
                     />
                 )}

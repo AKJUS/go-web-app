@@ -1,6 +1,7 @@
 {
     "namespace": "countryNsOverviewContextAndStructure",
     "strings": {
-        "localUnitsModalHeading": "Local Unit Form"
+        "localUnitsModalHeading": "Local Unit form",
+        "localUnitsModalReadOnlyHeading": "Local Unit"
     }
 }

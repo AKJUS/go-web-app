@@ -55,7 +55,9 @@ function LocalUnitsFormModal(props: Props) {
     return (
         <Modal
             className={styles.localUnitsFormModal}
-            heading={strings.localUnitsModalHeading}
+            heading={readOnly
+                ? strings.localUnitsModalReadOnlyHeading
+                : strings.localUnitsModalHeading}
             onClose={onClose}
             size="pageWidth"
             withHeaderBorder

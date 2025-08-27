@@ -7,9 +7,9 @@
         "localUnitsMapView": "Map view",
         "localUnitsListView": "List view",
         "addLocalUnitLabel": "Add a Local Unit",
-        "bulkUploadLabel": "Upload Local Unit",
-        "manageLocalUnitLabel": "Manage Local Units",
-        "viewUploadsLabel": "View Uploads",
+        "importDropdownLabel": "Import Local Units",
+        "configureDropdownLabel": "Configure Local Units",
+        "viewPreviousImportsDropdownLabel": "View previous imports",
         "closePresentationLabel": "Close"
     }
 }

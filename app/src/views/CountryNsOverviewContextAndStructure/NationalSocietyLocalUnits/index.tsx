@@ -5,10 +5,17 @@ import {
     useState,
 } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { CloseLineIcon } from '@ifrc-go/icons';
+import {
+    CloseLineIcon,
+    EpoaIcon,
+    MoreTwoFillIcon,
+    SettingsIcon,
+    UploadTwoFillIcon,
+} from '@ifrc-go/icons';
 import {
     Button,
     Container,
+    DropdownMenu,
     IconButton,
     Tab,
     TabList,
@@ -26,6 +33,7 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+import DropdownMenuItem from '#components/DropdownMenuItem';
 import useAuth from '#hooks/domain/useAuth';
 import usePermissions from '#hooks/domain/usePermissions';
 import useFilterState from '#hooks/useFilterState';
@@ -36,13 +44,13 @@ import {
 } from '#utils/restRequest';
 
 import { type ManageResponse } from './common';
+import ConfigureLocalUnitsModal from './ConfigureLocalUnitsModal';
 import Filters, { type FilterValue } from './Filters';
-import LocalUnitBulkUploadModal from './LocalUnitBulkUploadModal';
+import LocalUnitImportHistoryModal from './LocalUnitImportHistoryModal';
+import LocalUnitImportModal from './LocalUnitImportModal';
 import LocalUnitsFormModal from './LocalUnitsFormModal';
 import LocalUnitsMap from './LocalUnitsMap';
 import LocalUnitsTable from './LocalUnitsTable';
-import LocalUnitsUploadModal from './LocalUnitsUploadModal';
-import ManageLocalUnitsModal from './ManageLocalUnitsModal';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -92,9 +100,9 @@ function NationalSocietyLocalUnits(props: Props) {
         setFalse: setShowManageLocalUnitModalFalse,
     }] = useBooleanState(false);
 
-    const [showUploadsModal, {
-        setTrue: setShowUploadsModalTrue,
-        setFalse: setShowUploadsModalFalse,
+    const [showUploadHistoryModal, {
+        setTrue: setShowUploadHistoryModalTrue,
+        setFalse: setShowUploadHistoryModalFalse,
     }] = useBooleanState(false);
 
     const handleFullScreenChange = useCallback(() => {
@@ -200,10 +208,12 @@ function NationalSocietyLocalUnits(props: Props) {
 
     const strings = useTranslation(i18n);
 
-    const canSeeUploadButton = isSuperUser
+    const isValidator = isSuperUser
         || isLocalUnitGlobalValidator()
         || isLocalUnitCountryValidator(countryResponse?.id)
         || isLocalUnitRegionValidator(countryResponse?.region ?? undefined);
+
+    const canSeeMoreOptions = isSuperUser || isValidator;
 
     useEffect(() => {
         document.addEventListener('fullscreenchange', handleFullScreenChange);
@@ -239,43 +249,54 @@ function NationalSocietyLocalUnits(props: Props) {
                         filtered={filtered}
                     />
                 )}
-                actions={(
+                actions={isAuthenticated && (
                     <>
-                        {isAuthenticated && isSuperUser && (
-                            <Button
-                                name={undefined}
-                                variant="secondary"
-                                onClick={handleManageLocalUnitsModalOpen}
+                        <Button
+                            name={undefined}
+                            variant="secondary"
+                            onClick={handleLocalUnitAddEditModalOpen}
+                        >
+                            {strings.addLocalUnitLabel}
+                        </Button>
+                        {canSeeMoreOptions && (
+                            <DropdownMenu
+                                variant="tertiary"
+                                withoutDropdownIcon
+                                label={<MoreTwoFillIcon className={styles.icon} />}
+                                // label="More options"
+                                persistent
                             >
-                                {strings.manageLocalUnitLabel}
-                            </Button>
-                        )}
-                        {canSeeUploadButton && (
-                            <>
-                                <Button
-                                    name={undefined}
-                                    variant="secondary"
-                                    onClick={setShowUploadsModalTrue}
-                                >
-                                    {strings.viewUploadsLabel}
-                                </Button>
-                                <Button
-                                    name={undefined}
-                                    variant="secondary"
-                                    onClick={handleBulkUploadModalOpen}
-                                >
-                                    {strings.bulkUploadLabel}
-                                </Button>
-                            </>
-                        )}
-                        {isAuthenticated && (
-                            <Button
-                                name={undefined}
-                                variant="secondary"
-                                onClick={handleLocalUnitAddEditModalOpen}
-                            >
-                                {strings.addLocalUnitLabel}
-                            </Button>
+                                {isSuperUser && (
+                                    <DropdownMenuItem
+                                        type="button"
+                                        name={undefined}
+                                        onClick={handleManageLocalUnitsModalOpen}
+                                        icons={<SettingsIcon className={styles.icon} />}
+                                    >
+                                        {strings.configureDropdownLabel}
+                                    </DropdownMenuItem>
+                                )}
+                                {isValidator && (
+                                    <>
+                                        <DropdownMenuItem
+                                            type="button"
+                                            name={undefined}
+                                            onClick={handleBulkUploadModalOpen}
+                                            icons={<UploadTwoFillIcon className={styles.icon} />}
+                                        >
+                                            {strings.importDropdownLabel}
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            type="button"
+                                            name={undefined}
+                                            onClick={setShowUploadHistoryModalTrue}
+                                            icons={<EpoaIcon className={styles.icon} />}
+                                        >
+                                            {strings.viewPreviousImportsDropdownLabel}
+                                        </DropdownMenuItem>
+                                    </>
+                                )}
+                            </DropdownMenu>
                         )}
                     </>
                 )}
@@ -321,20 +342,20 @@ function NationalSocietyLocalUnits(props: Props) {
                     />
                 )}
                 {showBulkUploadModal && (
-                    <LocalUnitBulkUploadModal
+                    <LocalUnitImportModal
                         manageResponse={manageResponse}
                         onClose={setShowBulkUploadModalFalse}
                     />
                 )}
-                {showUploadsModal && isDefined(countryResponse?.name) && (
-                    <LocalUnitsUploadModal
-                        onClose={setShowUploadsModalFalse}
+                {showUploadHistoryModal && isDefined(countryResponse?.name) && (
+                    <LocalUnitImportHistoryModal
+                        onClose={setShowUploadHistoryModalFalse}
                         country={countryResponse.name}
                         countryId={countryResponse.id}
                     />
                 )}
                 {showManageLocalUnitModal && (
-                    <ManageLocalUnitsModal
+                    <ConfigureLocalUnitsModal
                         onClose={setShowManageLocalUnitModalFalse}
                         pending={pending}
                         onUpdate={handleLocalUnitsUpdate}

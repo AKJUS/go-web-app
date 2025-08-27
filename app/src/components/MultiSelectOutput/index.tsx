@@ -42,7 +42,7 @@ function MultiSelectOutput<VALUE extends string | number, OPTION>(props: Props<V
             className={className}
             label={label}
             value={valueLabel}
-            strongLabel
+            strongValue
         />
     );
 }
