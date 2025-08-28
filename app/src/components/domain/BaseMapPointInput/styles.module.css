@@ -3,20 +3,9 @@
     flex-direction: column;
     gap: var(--go-ui-spacing-md);
 
-    .diff-container{
-        .changes {
-            background-color: var(--go-ui-color-semantic-yellow) !important;
-        }
-    }
-
     .location-inputs {
-        display: flex;
+        display: grid;
         gap: var(--go-ui-spacing-sm);
-        flex-wrap: wrap;
-
-        .input {
-            flex-grow: 1;
-            min-width: 16rem;
-        }
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     }
 }

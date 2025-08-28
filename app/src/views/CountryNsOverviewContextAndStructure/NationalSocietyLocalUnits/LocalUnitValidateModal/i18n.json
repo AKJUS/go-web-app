@@ -1,5 +1,5 @@
 {
-    "namespace": "countryNsOverviewContextAndStructure",
+    "namespace": "localUnitValidateModal",
     "strings": {
         "validationSuccessMessage": "{localUnitName} was validated.",
         "validationFailureMessage": "Failed to validate {localUnitName}",

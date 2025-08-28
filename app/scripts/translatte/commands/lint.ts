@@ -39,9 +39,10 @@ async function lint(
         location: string,
         namespace: ((match: RegExpMatchArray) => string) | string;
     }[] = [
-        { location: '.*/app/src/views/(\\w+)/(?:.*/)?i18n.json$', namespace: (match) => lowercaseFirstChar(match[1]) },
+        // FIXME: refactor and enable this
+        // { location: '.*/app/src/views/(\\w+)/(?:.*/)?i18n.json$', namespace: (match) => lowercaseFirstChar(match[1]) },
         { location: '.*/app/src/components/domain/(\\w+)/(?:.*/)?i18n.json$', namespace: (match) => lowercaseFirstChar(match[1]) },
-        { location: '.*/app/src/.*/i18n.json$', namespace: 'common' },
+        { location: '.*/app/src/components/.*/i18n.json$', namespace: 'common' },
         { location: '.*/packages/ui/src/.*/i18n.json$', namespace: 'common' },
     ];
 

@@ -329,15 +329,15 @@ function LocalUnitsForm(props: Props) {
         return false;
     }, [value.type, manageResponse]);
 
-    const hasUpdatePermission = isAuthenticated
+    const hasValidatePermission = isAuthenticated
         && !isExternallyManaged
         && (isSuperUser
             || isLocalUnitGlobalValidatorByType(value.type)
             || isLocalUnitCountryValidatorByType(countryResponse?.id, value.type)
             || isLocalUnitRegionValidatorByType(countryResponse?.region, value.type));
 
-    const hasAddEditLocalUnitPermission = isCountryAdmin(countryResponse?.id)
-        || hasUpdatePermission;
+    const hasUpdatePermission = isCountryAdmin(countryResponse?.id)
+        || hasValidatePermission;
 
     const handleFormSubmit = useCallback(
         () => {
@@ -389,7 +389,7 @@ function LocalUnitsForm(props: Props) {
     const healthFormError = getErrorObject(error?.health);
 
     const previousData = (
-        localUnitPreviousResponse?.previous_data_details as unknown as LocalUnitResponse
+        localUnitPreviousResponse?.previous_data_details as unknown as LocalUnitResponse | undefined
     );
 
     const showChanges = !localUnitDetailsResponse?.is_new_local_unit
@@ -409,7 +409,7 @@ function LocalUnitsForm(props: Props) {
             return strings.noPermissionFormExternallyManaged;
         }
 
-        if (!hasAddEditLocalUnitPermission) {
+        if (!hasUpdatePermission) {
             if (isDefined(localUnitId)) {
                 return strings.noLocalUnitEditPermission;
             }
@@ -421,7 +421,7 @@ function LocalUnitsForm(props: Props) {
     }, [
         localUnitId,
         isExternallyManaged,
-        hasAddEditLocalUnitPermission,
+        hasUpdatePermission,
         strings.noPermissionFormUpdateExternallyManaged,
         strings.noLocalUnitAddPermission,
         strings.noLocalUnitEditPermission,
@@ -435,7 +435,7 @@ function LocalUnitsForm(props: Props) {
             disabled={
                 addLocalUnitsPending
                 || updateLocalUnitsPending
-                || !hasAddEditLocalUnitPermission
+                || !hasUpdatePermission
                 || isExternallyManaged
                 || (isDefined(localUnitId) && isNotDefined(updateReason))
             }
@@ -446,52 +446,48 @@ function LocalUnitsForm(props: Props) {
 
     return (
         <div className={styles.localUnitsForm}>
-            {isDefined(localUnitDetailsResponse)
-                && readOnlyFromProps
-                && !localUnitDetailsResponse.is_locked
-                && isDefined(actionsContainerRef.current) && (
+            {isDefined(actionsContainerRef.current) && (
                 <Portal container={actionsContainerRef.current}>
-                    {(environment !== 'production') && (
+                    {isDefined(localUnitDetailsResponse) && environment !== 'production' && (
+                        <>
+                            {hasUpdatePermission && (
+                                <Button
+                                    name={undefined}
+                                    onClick={setShowDeleteLocalUnitModalTrue}
+                                    variant="secondary"
+                                >
+                                    {strings.localUnitDeleteButtonLabel}
+                                </Button>
+                            )}
+                            {hasValidatePermission && (
+                                <LocalUnitValidateButton
+                                    onClick={setShowValidateLocalUnitModalTrue}
+                                    status={localUnitDetailsResponse.status}
+                                    hasValidatePermission={hasValidatePermission}
+                                />
+                            )}
+                            {readOnlyFromProps
+                                && !localUnitDetailsResponse.is_locked
+                                && hasUpdatePermission && (
+                                <Button
+                                    name={undefined}
+                                    onClick={onEditButtonClick}
+                                >
+                                    {strings.editButtonLabel}
+                                </Button>
+                            )}
+                        </>
+                    )}
+                    {!readOnly && isNotDefined(localUnitId) && submitButton}
+                    {!readOnly && isDefined(localUnitId) && (
                         <Button
                             name={undefined}
-                            onClick={onEditButtonClick}
-                            disabled={!hasAddEditLocalUnitPermission}
+                            onClick={onDoneButtonClick}
+                            disabled={!hasUpdatePermission}
                         >
-                            {strings.editButtonLabel}
+                            {strings.doneButtonLabel}
                         </Button>
                     )}
-
-                </Portal>
-            )}
-            {isDefined(actionsContainerRef.current)
-                && isDefined(localUnitDetailsResponse)
-                && hasUpdatePermission
-                && (environment !== 'production')
-                && (
-                    <Portal container={actionsContainerRef.current}>
-                        <Button
-                            name={undefined}
-                            onClick={setShowDeleteLocalUnitModalTrue}
-                            variant="secondary"
-                        >
-                            {strings.localUnitDeleteButtonLabel}
-                        </Button>
-                    </Portal>
-                )}
-            {!readOnly && isDefined(localUnitId) && isDefined(actionsContainerRef.current) && (
-                <Portal container={actionsContainerRef.current}>
-                    <Button
-                        name={undefined}
-                        onClick={onDoneButtonClick}
-                        disabled={!hasAddEditLocalUnitPermission}
-                    >
-                        {strings.doneButtonLabel}
-                    </Button>
-                </Portal>
-            )}
-            {!readOnly && isNotDefined(localUnitId) && isDefined(actionsContainerRef.current) && (
-                <Portal container={actionsContainerRef.current}>
-                    {submitButton}
                 </Portal>
             )}
             {isDefined(headingDescriptionRef)
@@ -500,6 +496,10 @@ function LocalUnitsForm(props: Props) {
                 && (
                     <Portal container={headingDescriptionRef.current}>
                         <div className={styles.headerDescription}>
+                            <LocalUnitStatus
+                                value={localUnitDetailsResponse?.status}
+                                valueDisplay={localUnitDetailsResponse?.status_details}
+                            />
                             <div className={styles.lastUpdateLabel}>
                                 {resolveToComponent(
                                     strings.lastUpdateLabel,
@@ -515,25 +515,6 @@ function LocalUnitsForm(props: Props) {
                                     },
                                 )}
                             </div>
-                            <LocalUnitStatus
-                                value={localUnitDetailsResponse?.status}
-                                valueDisplay={localUnitDetailsResponse?.status_details}
-                            />
-                            {isDefined(localUnitDetailsResponse) && hasUpdatePermission && environment !== 'production' && (
-                                <LocalUnitValidateButton
-                                    onClick={setShowValidateLocalUnitModalTrue}
-                                    status={localUnitDetailsResponse.status}
-                                    hasValidatePermission={hasUpdatePermission}
-                                />
-                            )}
-                            {showViewChanges && (
-                                <Switch
-                                    name="valueChanges"
-                                    label={strings.viewChangesLabel}
-                                    value={showValueChanges}
-                                    onChange={setShowValueChanges}
-                                />
-                            )}
                         </div>
                     </Portal>
                 )}
@@ -551,7 +532,7 @@ function LocalUnitsForm(props: Props) {
                             diffContainerClassName={styles.diffContainer}
                         >
                             <SelectInput
-                                inputSectionClassName={styles.changes}
+                                inputSectionClassName={styles.inputSection}
                                 label={strings.type}
                                 required
                                 name="type"
@@ -577,7 +558,7 @@ function LocalUnitsForm(props: Props) {
                                 diffContainerClassName={styles.diffContainer}
                             >
                                 <SelectInput
-                                    inputSectionClassName={styles.changes}
+                                    inputSectionClassName={styles.inputSection}
                                     label={strings.visibility}
                                     name="visibility"
                                     required
@@ -591,6 +572,15 @@ function LocalUnitsForm(props: Props) {
                                     error={error?.type}
                                 />
                             </SelectDiffWrapper>
+                            {showViewChanges && (
+                                <Switch
+                                    className={styles.toggleViewChanges}
+                                    name="valueChanges"
+                                    label={strings.viewChangesLabel}
+                                    value={showValueChanges}
+                                    onChange={setShowValueChanges}
+                                />
+                            )}
                         </FormGrid>
                     </FormGrid>
                 </Portal>
@@ -617,13 +607,13 @@ function LocalUnitsForm(props: Props) {
                         <DiffWrapper
                             showPreviousValue={showValueChanges}
                             value={value.date_of_data}
-                            oldValue={previousData?.date_of_data}
-                            enabled={showChanges}
-                            diffContainerClassName={styles.diffContainer}
+                            previousValue={previousData?.date_of_data}
+                            diffViewEnabled={showChanges}
+                            className={styles.diffContainer}
                         >
                             <DateInput
                                 required
-                                inputSectionClassName={styles.changes}
+                                inputSectionClassName={styles.inputSection}
                                 name="date_of_data"
                                 label={strings.dateOfUpdate}
                                 value={value.date_of_data}
@@ -635,12 +625,12 @@ function LocalUnitsForm(props: Props) {
                         <DiffWrapper
                             showPreviousValue={showValueChanges}
                             value={value.subtype}
-                            oldValue={previousData?.subtype}
-                            enabled={showChanges}
-                            diffContainerClassName={styles.diffContainer}
+                            previousValue={previousData?.subtype}
+                            diffViewEnabled={showChanges}
+                            className={styles.diffContainer}
                         >
                             <TextInput
-                                inputSectionClassName={styles.changes}
+                                inputSectionClassName={styles.inputSection}
                                 label={strings.subtype}
                                 placeholder={strings.subtypeDescription}
                                 name="subtype"
@@ -653,12 +643,12 @@ function LocalUnitsForm(props: Props) {
                         <DiffWrapper
                             showPreviousValue={showValueChanges}
                             value={value.english_branch_name}
-                            oldValue={previousData?.english_branch_name}
-                            enabled={showChanges}
-                            diffContainerClassName={styles.diffContainer}
+                            previousValue={previousData?.english_branch_name}
+                            diffViewEnabled={showChanges}
+                            className={styles.diffContainer}
                         >
                             <TextInput
-                                inputSectionClassName={styles.changes}
+                                inputSectionClassName={styles.inputSection}
                                 label={strings.localUnitNameEn}
                                 name="english_branch_name"
                                 value={value.english_branch_name}
@@ -670,12 +660,12 @@ function LocalUnitsForm(props: Props) {
                         <DiffWrapper
                             showPreviousValue={showValueChanges}
                             value={value.local_branch_name}
-                            oldValue={previousData?.local_branch_name}
-                            enabled={showChanges}
-                            diffContainerClassName={styles.diffContainer}
+                            previousValue={previousData?.local_branch_name}
+                            diffViewEnabled={showChanges}
+                            className={styles.diffContainer}
                         >
                             <TextInput
-                                inputSectionClassName={styles.changes}
+                                inputSectionClassName={styles.inputSection}
                                 name="local_branch_name"
                                 required
                                 label={strings.localUnitNameLocal}
@@ -697,7 +687,7 @@ function LocalUnitsForm(props: Props) {
                                 diffContainerClassName={styles.diffContainer}
                             >
                                 <SelectInput
-                                    inputSectionClassName={styles.changes}
+                                    inputSectionClassName={styles.inputSection}
                                     label={strings.coverage}
                                     name="level"
                                     options={localUnitsOptions?.level}
@@ -710,17 +700,17 @@ function LocalUnitsForm(props: Props) {
                                 />
                             </SelectDiffWrapper>
                         )}
-                        {value.type !== TYPE_HEALTH_CARE && hasAddEditLocalUnitPermission && (
+                        {value.type !== TYPE_HEALTH_CARE && hasUpdatePermission && (
                             <>
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.focal_person_en}
-                                    oldValue={previousData?.focal_person_en}
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    previousValue={previousData?.focal_person_en}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <TextInput
-                                        inputSectionClassName={styles.changes}
+                                        inputSectionClassName={styles.inputSection}
                                         name="focal_person_en"
                                         label={strings.focalPersonEn}
                                         value={value.focal_person_en}
@@ -732,12 +722,12 @@ function LocalUnitsForm(props: Props) {
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.focal_person_loc}
-                                    oldValue={previousData?.focal_person_loc}
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    previousValue={previousData?.focal_person_loc}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <TextInput
-                                        inputSectionClassName={styles.changes}
+                                        inputSectionClassName={styles.inputSection}
                                         required
                                         label={strings.focalPersonLocal}
                                         name="focal_person_loc"
@@ -754,12 +744,12 @@ function LocalUnitsForm(props: Props) {
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.source_en}
-                                    oldValue={previousData?.source_en}
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    previousValue={previousData?.source_en}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <TextInput
-                                        inputSectionClassName={styles.changes}
+                                        inputSectionClassName={styles.inputSection}
                                         name="source_en"
                                         label={strings.sourceEn}
                                         value={value.source_en}
@@ -771,12 +761,12 @@ function LocalUnitsForm(props: Props) {
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.source_loc}
-                                    oldValue={previousData?.source_loc}
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    previousValue={previousData?.source_loc}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <TextInput
-                                        inputSectionClassName={styles.changes}
+                                        inputSectionClassName={styles.inputSection}
                                         name="source_loc"
                                         label={strings.sourceLocal}
                                         value={value.source_loc}
@@ -800,7 +790,7 @@ function LocalUnitsForm(props: Props) {
                                     labelSelector={stringNameSelector}
                                 >
                                     <SelectInput
-                                        inputSectionClassName={styles.changes}
+                                        inputSectionClassName={styles.inputSection}
                                         label={strings.affiliation}
                                         required
                                         name="affiliation"
@@ -816,12 +806,12 @@ function LocalUnitsForm(props: Props) {
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.health?.other_affiliation}
-                                    oldValue={previousData?.health?.other_affiliation}
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    previousValue={previousData?.health?.other_affiliation}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <TextInput
-                                        inputSectionClassName={styles.changes}
+                                        inputSectionClassName={styles.inputSection}
                                         label={strings.otherAffiliation}
                                         name="other_affiliation"
                                         value={value.health?.other_affiliation}
@@ -841,7 +831,7 @@ function LocalUnitsForm(props: Props) {
                                     labelSelector={stringNameSelector}
                                 >
                                     <SelectInput
-                                        inputSectionClassName={styles.changes}
+                                        inputSectionClassName={styles.inputSection}
                                         required
                                         label={strings.functionality}
                                         name="functionality"
@@ -865,7 +855,7 @@ function LocalUnitsForm(props: Props) {
                                     diffContainerClassName={styles.diffContainer}
                                 >
                                     <SelectInput
-                                        inputSectionClassName={styles.changes}
+                                        inputSectionClassName={styles.inputSection}
                                         label={strings.hospitalType}
                                         name="hospital_type"
                                         options={localUnitsOptions?.hospital_type}
@@ -880,14 +870,14 @@ function LocalUnitsForm(props: Props) {
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.health?.is_teaching_hospital}
-                                    oldValue={
+                                    previousValue={
                                         previousData?.health?.is_teaching_hospital
                                     }
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <BooleanInput
-                                        className={styles.changes}
+                                        className={styles.inputSection}
                                         required
                                         label={strings.teachingHospital}
                                         name="is_teaching_hospital"
@@ -900,14 +890,14 @@ function LocalUnitsForm(props: Props) {
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.health?.is_in_patient_capacity}
-                                    oldValue={
+                                    previousValue={
                                         previousData?.health?.is_in_patient_capacity
                                     }
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <BooleanInput
-                                        className={styles.changes}
+                                        className={styles.inputSection}
                                         required
                                         label={strings.inPatientCapacity}
                                         name="is_in_patient_capacity"
@@ -920,14 +910,14 @@ function LocalUnitsForm(props: Props) {
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.health?.is_isolation_rooms_wards}
-                                    oldValue={
+                                    previousValue={
                                         previousData?.health?.is_isolation_rooms_wards
                                     }
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <BooleanInput
-                                        className={styles.changes}
+                                        className={styles.inputSection}
                                         required
                                         label={strings.isolationRoomsWards}
                                         name="is_isolation_rooms_wards"
@@ -944,12 +934,12 @@ function LocalUnitsForm(props: Props) {
                         <DiffWrapper
                             showPreviousValue={showValueChanges}
                             value={value.country}
-                            oldValue={previousData?.country}
-                            enabled={showChanges}
-                            diffContainerClassName={styles.diffContainer}
+                            previousValue={previousData?.country}
+                            diffViewEnabled={showChanges}
+                            className={styles.diffContainer}
                         >
                             <CountrySelectInput
-                                inputSectionClassName={styles.changes}
+                                inputSectionClassName={styles.inputSection}
                                 required
                                 label={strings.country}
                                 name="country"
@@ -961,35 +951,22 @@ function LocalUnitsForm(props: Props) {
                         <NonFieldError
                             error={error?.location_json}
                         />
-                        <DiffWrapper
+                        <BaseMapPointInput
+                            diffWrapperClassName={styles.diffContainer}
+                            latitudeInputSectionClassName={styles.inputSection}
+                            longitudeInputSectionClassName={styles.inputSection}
+                            country={Number(countryId)}
+                            name="location_json"
+                            mapContainerClassName={styles.pointInputMap}
+                            value={value.location_json}
+                            previousValue={previousData?.location_json}
+                            onChange={setFieldValue}
+                            readOnly={readOnly}
+                            error={getErrorObject(error?.location_json)}
+                            showChanges={showChanges}
                             showPreviousValue={showValueChanges}
-                            diffContainerClassName={styles.latitudeDiffWrapper}
-                            value={value.location_json?.lat}
-                            oldValue={previousData?.location_json?.lat}
-                            enabled={showChanges}
-                        >
-                            <DiffWrapper
-                                showPreviousValue={showValueChanges}
-                                diffContainerClassName={styles.longitudeDiffWrapper}
-                                value={value.location_json?.lng}
-                                oldValue={previousData?.location_json?.lng}
-                                enabled={showChanges}
-                            >
-                                <BaseMapPointInput
-                                    latitudeInputSectionClassName={styles.latitudeChanges}
-                                    longitudeInputSectionClassName={styles.longitudeChanges}
-                                    country={Number(countryId)}
-                                    name="location_json"
-                                    mapContainerClassName={styles.pointInputMap}
-                                    value={value.location_json}
-                                    onChange={setFieldValue}
-                                    readOnly={readOnly}
-                                    error={getErrorObject(error?.location_json)}
-                                    showChanges={showChanges}
-                                    required
-                                />
-                            </DiffWrapper>
-                        </DiffWrapper>
+                            required
+                        />
                     </FormColumnContainer>
                 </FormGrid>
                 <Container
@@ -1004,12 +981,12 @@ function LocalUnitsForm(props: Props) {
                             <DiffWrapper
                                 showPreviousValue={showValueChanges}
                                 value={value.address_en}
-                                oldValue={previousData?.address_en}
-                                enabled={showChanges}
-                                diffContainerClassName={styles.diffContainer}
+                                previousValue={previousData?.address_en}
+                                diffViewEnabled={showChanges}
+                                className={styles.diffContainer}
                             >
                                 <TextInput
-                                    inputSectionClassName={styles.changes}
+                                    inputSectionClassName={styles.inputSection}
                                     name="address_en"
                                     label={strings.addressEn}
                                     value={value.address_en}
@@ -1021,12 +998,12 @@ function LocalUnitsForm(props: Props) {
                             <DiffWrapper
                                 showPreviousValue={showValueChanges}
                                 value={value.address_loc}
-                                oldValue={previousData?.address_loc}
-                                enabled={showChanges}
-                                diffContainerClassName={styles.diffContainer}
+                                previousValue={previousData?.address_loc}
+                                diffViewEnabled={showChanges}
+                                className={styles.diffContainer}
                             >
                                 <TextInput
-                                    inputSectionClassName={styles.changes}
+                                    inputSectionClassName={styles.inputSection}
                                     name="address_loc"
                                     label={strings.addressLocal}
                                     value={value.address_loc}
@@ -1038,12 +1015,12 @@ function LocalUnitsForm(props: Props) {
                             <DiffWrapper
                                 showPreviousValue={showValueChanges}
                                 value={value.city_en}
-                                oldValue={previousData?.city_en}
-                                enabled={showChanges}
-                                diffContainerClassName={styles.diffContainer}
+                                previousValue={previousData?.city_en}
+                                diffViewEnabled={showChanges}
+                                className={styles.diffContainer}
                             >
                                 <TextInput
-                                    inputSectionClassName={styles.changes}
+                                    inputSectionClassName={styles.inputSection}
                                     label={strings.localityEn}
                                     name="city_en"
                                     value={value.city_en}
@@ -1055,12 +1032,12 @@ function LocalUnitsForm(props: Props) {
                             <DiffWrapper
                                 showPreviousValue={showValueChanges}
                                 value={value.city_loc}
-                                oldValue={previousData?.city_loc}
-                                enabled={showChanges}
-                                diffContainerClassName={styles.diffContainer}
+                                previousValue={previousData?.city_loc}
+                                diffViewEnabled={showChanges}
+                                className={styles.diffContainer}
                             >
                                 <TextInput
-                                    inputSectionClassName={styles.changes}
+                                    inputSectionClassName={styles.inputSection}
                                     label={strings.localityLocal}
                                     name="city_loc"
                                     value={value.city_loc}
@@ -1072,12 +1049,12 @@ function LocalUnitsForm(props: Props) {
                             <DiffWrapper
                                 showPreviousValue={showValueChanges}
                                 value={value.postcode}
-                                oldValue={previousData?.postcode}
-                                enabled={showChanges}
-                                diffContainerClassName={styles.diffContainer}
+                                previousValue={previousData?.postcode}
+                                diffViewEnabled={showChanges}
+                                className={styles.diffContainer}
                             >
                                 <TextInput
-                                    inputSectionClassName={styles.changes}
+                                    inputSectionClassName={styles.inputSection}
                                     label={strings.postCode}
                                     name="postcode"
                                     value={value.postcode}
@@ -1093,17 +1070,17 @@ function LocalUnitsForm(props: Props) {
                         >
                             {value.type !== TYPE_HEALTH_CARE && (
                                 <>
-                                    {hasAddEditLocalUnitPermission && (
+                                    {hasUpdatePermission && (
                                         <>
                                             <DiffWrapper
                                                 showPreviousValue={showValueChanges}
                                                 value={value.phone}
-                                                oldValue={previousData?.phone}
-                                                enabled={showChanges}
-                                                diffContainerClassName={styles.diffContainer}
+                                                previousValue={previousData?.phone}
+                                                diffViewEnabled={showChanges}
+                                                className={styles.diffContainer}
                                             >
                                                 <TextInput
-                                                    inputSectionClassName={styles.changes}
+                                                    inputSectionClassName={styles.inputSection}
                                                     label={strings.phone}
                                                     name="phone"
                                                     value={value.phone}
@@ -1115,12 +1092,12 @@ function LocalUnitsForm(props: Props) {
                                             <DiffWrapper
                                                 showPreviousValue={showValueChanges}
                                                 value={value.email}
-                                                oldValue={previousData?.email}
-                                                enabled={showChanges}
-                                                diffContainerClassName={styles.diffContainer}
+                                                previousValue={previousData?.email}
+                                                diffViewEnabled={showChanges}
+                                                className={styles.diffContainer}
                                             >
                                                 <TextInput
-                                                    inputSectionClassName={styles.changes}
+                                                    inputSectionClassName={styles.inputSection}
                                                     label={strings.email}
                                                     name="email"
                                                     value={value.email}
@@ -1134,12 +1111,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.link}
-                                        oldValue={previousData?.link}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.link}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <TextInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.website}
                                             name="link"
                                             value={value.link}
@@ -1155,14 +1132,14 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.focal_point_position}
-                                        oldValue={
+                                        previousValue={
                                             previousData?.health?.focal_point_position
                                         }
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <TextInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.focalPointPosition}
                                             name="focal_point_position"
                                             value={value.health?.focal_point_position}
@@ -1171,17 +1148,18 @@ function LocalUnitsForm(props: Props) {
                                             error={healthFormError?.focal_point_position}
                                         />
                                     </DiffWrapper>
-                                    {hasAddEditLocalUnitPermission && (
+                                    {hasUpdatePermission && (
                                         <>
                                             <DiffWrapper
                                                 showPreviousValue={showValueChanges}
                                                 value={value.health?.focal_point_email}
-                                                oldValue={previousData?.health?.focal_point_email}
-                                                enabled={showChanges}
-                                                diffContainerClassName={styles.diffContainer}
+                                                previousValue={previousData
+                                                    ?.health?.focal_point_email}
+                                                diffViewEnabled={showChanges}
+                                                className={styles.diffContainer}
                                             >
                                                 <TextInput
-                                                    inputSectionClassName={styles.changes}
+                                                    inputSectionClassName={styles.inputSection}
                                                     label={strings.focalPointEmail}
                                                     required
                                                     name="focal_point_email"
@@ -1194,14 +1172,14 @@ function LocalUnitsForm(props: Props) {
                                             <DiffWrapper
                                                 showPreviousValue={showValueChanges}
                                                 value={value.health?.focal_point_phone_number}
-                                                oldValue={
+                                                previousValue={
                                                     previousData?.health?.focal_point_phone_number
                                                 }
-                                                enabled={showChanges}
-                                                diffContainerClassName={styles.diffContainer}
+                                                diffViewEnabled={showChanges}
+                                                className={styles.diffContainer}
                                             >
                                                 <TextInput
-                                                    inputSectionClassName={styles.changes}
+                                                    inputSectionClassName={styles.inputSection}
                                                     label={strings.focalPointPhoneNumber}
                                                     name="focal_point_phone_number"
                                                     value={value.health?.focal_point_phone_number}
@@ -1244,7 +1222,7 @@ function LocalUnitsForm(props: Props) {
                                         options={localUnitsOptions?.health_facility_type}
                                     >
                                         <SelectInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.healthFacilityType}
                                             required
                                             name="health_facility_type"
@@ -1260,12 +1238,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.other_facility_type}
-                                        oldValue={previousData?.health?.other_facility_type}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.other_facility_type}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <TextInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.otherFacilityType}
                                             name="other_facility_type"
                                             value={value.health?.other_facility_type}
@@ -1285,7 +1263,7 @@ function LocalUnitsForm(props: Props) {
                                         labelSelector={stringNameSelector}
                                     >
                                         <SelectInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.primaryHealthCareCenter}
                                             name="primary_health_care_center"
                                             options={localUnitsOptions?.primary_health_care_center}
@@ -1300,12 +1278,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.speciality}
-                                        oldValue={previousData?.health?.speciality}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.speciality}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <TextInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.specialities}
                                             name="speciality"
                                             value={value.health?.speciality}
@@ -1325,7 +1303,7 @@ function LocalUnitsForm(props: Props) {
                                         diffContainerClassName={styles.diffContainer}
                                     >
                                         <MultiSelectInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             required
                                             label={strings.generalMedicalServices}
                                             name="general_medical_services"
@@ -1357,7 +1335,7 @@ function LocalUnitsForm(props: Props) {
                                         diffContainerClassName={styles.diffContainer}
                                     >
                                         <MultiSelectInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.specializedMedicalService}
                                             required
                                             name="specialized_medical_beyond_primary_level"
@@ -1378,12 +1356,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.other_services}
-                                        oldValue={previousData?.health?.other_services}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.other_services}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <TextInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.otherServices}
                                             name="other_services"
                                             value={value.health?.other_services}
@@ -1403,7 +1381,7 @@ function LocalUnitsForm(props: Props) {
                                         options={localUnitsOptions?.blood_services}
                                     >
                                         <MultiSelectInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.bloodServices}
                                             required
                                             name="blood_services"
@@ -1430,7 +1408,7 @@ function LocalUnitsForm(props: Props) {
                                             ?.professional_training_facilities}
                                     >
                                         <MultiSelectInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.professionalTrainingFacilities}
                                             name="professional_training_facilities"
                                             options={localUnitsOptions
@@ -1448,15 +1426,15 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.number_of_isolation_rooms}
-                                        oldValue={
+                                        previousValue={
                                             previousData
                                                 ?.health?.number_of_isolation_rooms
                                         }
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.numberOfIsolationRooms}
                                             name="number_of_isolation_rooms"
                                             value={value.health?.number_of_isolation_rooms}
@@ -1472,14 +1450,14 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.maximum_capacity}
-                                        oldValue={
+                                        previousValue={
                                             previousData?.health?.maximum_capacity
                                         }
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.maximumCapacity}
                                             name="maximum_capacity"
                                             value={value.health?.maximum_capacity}
@@ -1493,12 +1471,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.is_warehousing}
-                                        oldValue={previousData?.health?.is_warehousing}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.is_warehousing}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <BooleanInput
-                                            className={styles.changes}
+                                            className={styles.inputSection}
                                             clearable
                                             label={strings.warehousing}
                                             name="is_warehousing"
@@ -1513,12 +1491,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.is_cold_chain}
-                                        oldValue={previousData?.health?.is_cold_chain}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.is_cold_chain}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <BooleanInput
-                                            className={styles.changes}
+                                            className={styles.inputSection}
                                             clearable
                                             label={strings.coldChain}
                                             name="is_cold_chain"
@@ -1533,14 +1511,14 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.ambulance_type_a}
-                                        oldValue={
+                                        previousValue={
                                             previousData?.health?.ambulance_type_a
                                         }
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.ambulanceTypeA}
                                             name="ambulance_type_a"
                                             value={value.health?.ambulance_type_a}
@@ -1554,14 +1532,14 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.ambulance_type_b}
-                                        oldValue={
+                                        previousValue={
                                             previousData?.health?.ambulance_type_b
                                         }
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.ambulanceTypeB}
                                             name="ambulance_type_b"
                                             value={value.health?.ambulance_type_b}
@@ -1575,14 +1553,14 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.ambulance_type_c}
-                                        oldValue={
+                                        previousValue={
                                             previousData?.health?.ambulance_type_c
                                         }
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.ambulanceTypeC}
                                             name="ambulance_type_c"
                                             value={value.health?.ambulance_type_c}
@@ -1606,14 +1584,14 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.total_number_of_human_resource}
-                                        oldValue={
+                                        previousValue={
                                             previousData?.health?.total_number_of_human_resource
                                         }
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             required
                                             label={strings.totalNumberOfHumanResources}
                                             name="total_number_of_human_resource"
@@ -1628,14 +1606,14 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.general_practitioner}
-                                        oldValue={
+                                        previousValue={
                                             previousData?.health?.general_practitioner
                                         }
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.generalPractitioner}
                                             name="general_practitioner"
                                             value={value.health?.general_practitioner}
@@ -1649,12 +1627,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.specialist}
-                                        oldValue={previousData?.health?.specialist}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.specialist}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.specialist}
                                             name="specialist"
                                             value={value.health?.specialist}
@@ -1668,14 +1646,14 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.residents_doctor}
-                                        oldValue={
+                                        previousValue={
                                             previousData?.health?.residents_doctor
                                         }
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.residentsDoctor}
                                             name="residents_doctor"
                                             value={value.health?.residents_doctor}
@@ -1689,12 +1667,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.nurse}
-                                        oldValue={previousData?.health?.nurse}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.nurse}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.nurse}
                                             name="nurse"
                                             value={value.health?.nurse}
@@ -1710,12 +1688,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.dentist}
-                                        oldValue={previousData?.health?.dentist}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.dentist}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.dentist}
                                             name="dentist"
                                             value={value.health?.dentist}
@@ -1729,12 +1707,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.nursing_aid}
-                                        oldValue={previousData?.health?.nursing_aid}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.nursing_aid}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.nursingAid}
                                             name="nursing_aid"
                                             value={value.health?.nursing_aid}
@@ -1748,12 +1726,12 @@ function LocalUnitsForm(props: Props) {
                                     <DiffWrapper
                                         showPreviousValue={showValueChanges}
                                         value={value.health?.midwife}
-                                        oldValue={previousData?.health?.midwife}
-                                        enabled={showChanges}
-                                        diffContainerClassName={styles.diffContainer}
+                                        previousValue={previousData?.health?.midwife}
+                                        diffViewEnabled={showChanges}
+                                        className={styles.diffContainer}
                                     >
                                         <NumberInput
-                                            inputSectionClassName={styles.changes}
+                                            inputSectionClassName={styles.inputSection}
                                             label={strings.midwife}
                                             name="midwife"
                                             value={value.health?.midwife}
@@ -1770,12 +1748,12 @@ function LocalUnitsForm(props: Props) {
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.health?.other_profiles}
-                                    oldValue={previousData?.health?.other_profiles}
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    previousValue={previousData?.health?.other_profiles}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <TextInput
-                                        inputSectionClassName={styles.changes}
+                                        inputSectionClassName={styles.inputSection}
                                         label={strings.otherProfiles}
                                         name="other_profiles"
                                         value={value.health?.other_profiles}
@@ -1787,12 +1765,12 @@ function LocalUnitsForm(props: Props) {
                                 <DiffWrapper
                                     showPreviousValue={showValueChanges}
                                     value={value.health?.other_medical_heal}
-                                    oldValue={previousData?.health?.other_medical_heal}
-                                    enabled={showChanges}
-                                    diffContainerClassName={styles.diffContainer}
+                                    previousValue={previousData?.health?.other_medical_heal}
+                                    diffViewEnabled={showChanges}
+                                    className={styles.diffContainer}
                                 >
                                     <BooleanInput
-                                        className={styles.changes}
+                                        className={styles.inputSection}
                                         clearable
                                         label={strings.otherMedicalHeal}
                                         name="other_medical_heal"
@@ -1810,12 +1788,12 @@ function LocalUnitsForm(props: Props) {
                             <DiffWrapper
                                 showPreviousValue={showValueChanges}
                                 value={value.health?.feedback}
-                                oldValue={previousData?.health?.feedback}
-                                enabled={showChanges}
-                                diffContainerClassName={styles.diffContainer}
+                                previousValue={previousData?.health?.feedback}
+                                diffViewEnabled={showChanges}
+                                className={styles.diffContainer}
                             >
                                 <TextArea
-                                    inputSectionClassName={styles.changes}
+                                    inputSectionClassName={styles.inputSection}
                                     label={strings.commentsNS}
                                     name="feedback"
                                     value={value.health?.feedback}

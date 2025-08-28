@@ -6,22 +6,8 @@
 
 }
 
-.latitude-diff-wrapper {
-    .latitude-changes {
-        /* NOTE: normal override not possible without force */
-        background-color: var(--go-ui-color-semantic-yellow) !important;
-    }
-}
-
-.longitude-diff-wrapper {
-    .longitude-changes {
-        /* NOTE: normal override not possible without force */
-        background-color: var(--go-ui-color-semantic-yellow) !important;
-    }
-}
-
 .diff-container {
-    .changes {
+    .input-section {
         /* NOTE: normal override not possible without force */
         background-color: var(--go-ui-color-semantic-yellow) !important;
     }
@@ -35,7 +21,10 @@
     flex-grow: 1;
     flex-wrap: wrap;
     justify-content: flex-end;
-    border: 1px solid red;
+}
+
+.toggle-view-changes {
+    align-self: end;
 }
 
 /* NOTE: this element is portaled */
@@ -46,6 +35,7 @@
 
     .last-update-label {
         color: var(--go-ui-color-text-light);
+        font-size: var(--go-ui-font-size-sm);
     }
 }
 

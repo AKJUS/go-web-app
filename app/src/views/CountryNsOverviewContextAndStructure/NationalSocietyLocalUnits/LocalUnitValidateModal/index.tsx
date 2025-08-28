@@ -31,7 +31,7 @@ import LocalUnitView from '../LocalUnitView';
 
 import i18n from './i18n.json';
 
-export type LocalUnitsRevertRequestPostBody = GoApiBody<'/api/v2/local-units/{id}/revert/', 'POST'>;
+type LocalUnitsRevertRequestPostBody = GoApiBody<'/api/v2/local-units/{id}/revert/', 'POST'>;
 
 type ReviewAction = 'accept' | 'reject';
 type ReviewActionOption = {

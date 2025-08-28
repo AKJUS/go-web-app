@@ -1,0 +1,589 @@
+{
+    "parent": "000045-1755011335204.json",
+    "actions": [
+        {
+            "action": "add",
+            "key": "closeButtonLabel",
+            "namespace": "configureLocalUnitsModal",
+            "value": "Close"
+        },
+        {
+            "action": "add",
+            "key": "externallyManagedDescription",
+            "namespace": "configureLocalUnitsModal",
+            "value": "Local unit types that are externally managed cannot be directly created or modified within the GO platform. However, bulk upload is supported for these types."
+        },
+        {
+            "action": "add",
+            "key": "modalHeading",
+            "namespace": "configureLocalUnitsModal",
+            "value": "Configure Local Units for {countryName}"
+        },
+        {
+            "action": "add",
+            "key": "configureDropdownLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Configure Local Units"
+        },
+        {
+            "action": "add",
+            "key": "confirmationSuccessDisabledMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Successfully disabled Local Unit Type to manage externally!"
+        },
+        {
+            "action": "add",
+            "key": "confirmationSuccessEnabledMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Successfully enabled Local Unit Type to manage externally!"
+        },
+        {
+            "action": "add",
+            "key": "importDropdownLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Import Local Units"
+        },
+        {
+            "action": "add",
+            "key": "localUnitsModalReadOnlyHeading",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Local Unit"
+        },
+        {
+            "action": "add",
+            "key": "viewPreviousImportsDropdownLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "View previous imports"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadConfirmHeading",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadConfirmMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadCountryLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadFailedMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadFileFormatDescription",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadFormat",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadFormatDescription",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadHealthFormat",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadModalHeading",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "bulkUploadSuccessMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "confirmationSuccessMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "countryLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "errorsFileLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "errorsLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "failedCountLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitsUploadHeading",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitType",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewEnglishLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewFailedMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewLastUpdateLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewLocalLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewRevertChangesFailedMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewRevertChangesSuccessMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewSpecialitiesAndCapacityTitle",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewSubtypeDescription",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewSuccessMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewUpdateFailedMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewUpdateMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "manageLocalUnitLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "manageLocalUnitModalHeading",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "noBothPermissionAddFormError",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "noBothPermissionEditFormError",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "noPermissionExternallyManaged",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "onCloseButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "originalFileLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "selectLocalUnitTypeDescription",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "successCountLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "tableActionsLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "tableFileNameLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "tableSizeLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "tableUploadedByLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "tableUploadedDateLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "uploadButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "uploadCountryLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "uploadDescription",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "uploadHistoryBulkUploadFormat",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "uploadHistoryBulkUploadHealthFormat",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "validateButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "validateLocalUnitHeading",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "viewUploadsLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "update",
+            "key": "confirmationFailedMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newValue": "Failed to update the manage externally status for the Local Unit Type"
+        },
+        {
+            "action": "update",
+            "key": "confirmationModalDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newValue": "Are you sure you want to manage this externally? It could let users erase all previously uploaded {localUnitType} Local Units during bulk import."
+        },
+        {
+            "action": "update",
+            "key": "localUnitActionsLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newNamespace": "configureLocalUnitsModal"
+        },
+        {
+            "action": "update",
+            "key": "localUnitsModalHeading",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newValue": "Local Unit form"
+        },
+        {
+            "action": "update",
+            "key": "localUnitTypeTableLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newNamespace": "configureLocalUnitsModal"
+        },
+        {
+            "action": "update",
+            "key": "noLocalUnitAddPermission",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newValue": "You do not have permission to add this Local Unit type"
+        },
+        {
+            "action": "update",
+            "key": "noLocalUnitEditPermission",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newValue": "You do not have permission to Edit this Local Unit type"
+        },
+        {
+            "action": "update",
+            "key": "noPermissionBothDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newNamespace": "localUnitImportModal"
+        },
+        {
+            "action": "update",
+            "key": "noPermissionErrorDescription",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newNamespace": "localUnitImportModal"
+        },
+        {
+            "action": "update",
+            "key": "noPermissionFormExternallyManaged",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newValue": "This local unit type is externally managed and cannot be created here."
+        },
+        {
+            "action": "update",
+            "key": "noPermissionFormUpdateExternallyManaged",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newValue": "This local unit is externally managed and cannot be updated here."
+        },
+        {
+            "action": "update",
+            "key": "revertChangesFailedMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newNamespace": "localUnitValidateModal"
+        },
+        {
+            "action": "update",
+            "key": "revertChangesSuccessMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newNamespace": "localUnitValidateModal"
+        },
+        {
+            "action": "update",
+            "key": "tableStatusLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newNamespace": "localUnitImportHistoryModal"
+        },
+        {
+            "action": "update",
+            "key": "validationFailureMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newNamespace": "localUnitValidateModal"
+        },
+        {
+            "action": "update",
+            "key": "validationSuccessMessage",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newNamespace": "localUnitValidateModal"
+        },
+        {
+            "action": "update",
+            "key": "viewChangesLabel",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "newValue": "View previous values"
+        },
+        {
+            "action": "add",
+            "key": "modalHeading",
+            "namespace": "localUnitImportHistoryModal",
+            "value": "Previous imports for {countryName}"
+        },
+        {
+            "action": "add",
+            "key": "tableSizeLabel",
+            "namespace": "localUnitImportHistoryModal",
+            "value": "File size (KB)"
+        },
+        {
+            "action": "add",
+            "key": "tableUploadedByLabel",
+            "namespace": "localUnitImportHistoryModal",
+            "value": "User"
+        },
+        {
+            "action": "add",
+            "key": "tableUploadedDateLabel",
+            "namespace": "localUnitImportHistoryModal",
+            "value": "Date"
+        },
+        {
+            "action": "add",
+            "key": "cancelUploadButtonLabel",
+            "namespace": "localUnitImportModal",
+            "value": "Cancel"
+        },
+        {
+            "action": "add",
+            "key": "closeButtonLabel",
+            "namespace": "localUnitImportModal",
+            "value": "Close"
+        },
+        {
+            "action": "add",
+            "key": "contentStructureDescription",
+            "namespace": "localUnitImportModal",
+            "value": "The contents in the CSV should follow the structure provided in {templateLink}."
+        },
+        {
+            "action": "add",
+            "key": "localUnitTypeInputLabel",
+            "namespace": "localUnitImportModal",
+            "value": "Local unit type"
+        },
+        {
+            "action": "add",
+            "key": "modalDescription",
+            "namespace": "localUnitImportModal",
+            "value": "Please select a local unit type and upload the CSV file"
+        },
+        {
+            "action": "add",
+            "key": "modalHeading",
+            "namespace": "localUnitImportModal",
+            "value": "Import Local Units for {countryName}"
+        },
+        {
+            "action": "add",
+            "key": "modalImportPendingDescription",
+            "namespace": "localUnitImportModal",
+            "value": "Your file is currently being processed. You can close this modal and check the result from the upload history"
+        },
+        {
+            "action": "add",
+            "key": "noPermissionExternallyManaged",
+            "namespace": "localUnitImportModal",
+            "value": "The selected local unit type is not externally managed, only externally managed local units can be bulk uploaded!"
+        },
+        {
+            "action": "add",
+            "key": "selectFileButtonLabel",
+            "namespace": "localUnitImportModal",
+            "value": "Select a file"
+        },
+        {
+            "action": "add",
+            "key": "startUploadButtonLabel",
+            "namespace": "localUnitImportModal",
+            "value": "Upload"
+        },
+        {
+            "action": "add",
+            "key": "templateLinkLabel",
+            "namespace": "localUnitImportModal",
+            "value": "this template"
+        },
+        {
+            "action": "add",
+            "key": "uploadFileSectionDescription",
+            "namespace": "localUnitImportModal",
+            "value": "Please make sure to select a supported file format (csv) with size less than 10MB"
+        },
+        {
+            "action": "add",
+            "key": "uploadFileSectionTitle",
+            "namespace": "localUnitImportModal",
+            "value": "Upload CSV file"
+        },
+        {
+            "action": "add",
+            "key": "downloadAttachedFileLabel",
+            "namespace": "localUnitImportSummary",
+            "value": "Download attached file"
+        },
+        {
+            "action": "add",
+            "key": "downloadErrorDetailFileLabel",
+            "namespace": "localUnitImportSummary",
+            "value": "Download error details"
+        },
+        {
+            "action": "add",
+            "key": "errorDetailsLabel",
+            "namespace": "localUnitImportSummary",
+            "value": "Error details"
+        },
+        {
+            "action": "add",
+            "key": "heading",
+            "namespace": "localUnitImportSummary",
+            "value": "Import summary"
+        },
+        {
+            "action": "add",
+            "key": "rowsFailedLabel",
+            "namespace": "localUnitImportSummary",
+            "value": "{numRows} rows could not be processed!"
+        },
+        {
+            "action": "add",
+            "key": "rowsSuccessLabel",
+            "namespace": "localUnitImportSummary",
+            "value": "{numRows} of {total} rows processed successfully!"
+        },
+        {
+            "action": "add",
+            "key": "statusLabel",
+            "namespace": "localUnitImportSummary",
+            "value": "Status"
+        },
+        {
+            "action": "add",
+            "key": "rejectionReasonLabel",
+            "namespace": "localUnitValidateModal",
+            "value": "Reason for rejection"
+        },
+        {
+            "action": "add",
+            "key": "requestedChangesTitle",
+            "namespace": "localUnitValidateModal",
+            "value": "Requested changes"
+        },
+        {
+            "action": "add",
+            "key": "submitButtonLabel",
+            "namespace": "localUnitValidateModal",
+            "value": "Submit"
+        },
+        {
+            "action": "add",
+            "key": "validateLocalUnitHeading",
+            "namespace": "localUnitValidateModal",
+            "value": "Review \"{localUnitName}\"?"
+        }
+    ]
+}

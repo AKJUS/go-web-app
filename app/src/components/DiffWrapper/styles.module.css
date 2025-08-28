@@ -1,3 +1,5 @@
-.previous-value {
-    color: var(--go-ui-color-gray-70);
+.diff-wrapper {
+    .previous-value {
+        color: var(--go-ui-color-gray-70);
+    }
 }

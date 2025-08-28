@@ -178,14 +178,15 @@ function LocalUnitImportHistoryModal(props: Props) {
                 { countryName: country },
             )}
             footerActions={isDefined(uploadHistoryResponse)
-                && isDefined(uploadHistoryResponse.count) && (
-                <Pager
-                    activePage={page}
-                    itemsCount={uploadHistoryResponse.count}
-                    maxItemsPerPage={limit}
-                    onActivePageChange={setPage}
-                />
-            )}
+                && isDefined(uploadHistoryResponse.count)
+                && uploadHistoryResponse.count > limit ? (
+                    <Pager
+                        activePage={page}
+                        itemsCount={uploadHistoryResponse.count}
+                        maxItemsPerPage={limit}
+                        onActivePageChange={setPage}
+                    />
+                ) : undefined}
             size="md"
             onClose={onClose}
             childrenContainerClassName={styles.uploadContent}

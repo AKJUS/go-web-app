@@ -71,7 +71,7 @@ function LocalUnitsFormModal(props: Props) {
                 <div ref={headerDescriptionRef} />
             }
             withFooterBorder={!readOnly}
-            spacing="relaxed"
+            spacing="comfortable"
         >
             <LocalUnitsForm
                 manageResponse={manageResponse}
