@@ -1,5 +1,11 @@
 # @ifrc-go/ui
 
+## 1.5.2-beta.1
+
+### Patch Changes
+
+- b52d175: add info heading and description in element column in table component
+
 ## 1.5.2-beta.0
 
 ### Patch Changes

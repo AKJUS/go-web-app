@@ -1,5 +1,20 @@
 # go-web-app
 
+## 7.22.0-beta.1
+
+### Minor Changes
+
+- d710888: Improve overall review workflow of local units
+
+  - Add a separate column for status
+  - Rename "Validate" button to "Review"
+  - Add accept / reject input in review modal
+
+### Patch Changes
+
+- Updated dependencies [b52d175]
+  - @ifrc-go/ui@1.5.2-beta.1
+
 ## 7.22.0-beta.0
 
 ### Minor Changes
