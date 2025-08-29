@@ -15,3 +15,7 @@
     }
 }
 
+
+.icon {
+    font-size: var(--go-ui-height-icon-multiplier);
+}

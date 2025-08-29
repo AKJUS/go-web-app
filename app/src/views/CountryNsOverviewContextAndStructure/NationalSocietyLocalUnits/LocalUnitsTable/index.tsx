@@ -30,6 +30,7 @@ import {
 
 import { type ManageResponse } from '../common';
 import type { FilterValue } from '../Filters';
+import LocalUnitStatus, { type LocalUnitStatusProps } from '../LocalUnitStatus';
 import LocalUnitsTableActions, { type Props as LocalUnitsTableActionsProps } from './LocalUnitTableActions';
 
 import i18n from './i18n.json';
@@ -109,6 +110,16 @@ function LocalUnitsTable(props: Props) {
     const columns = useMemo(() => {
         if (hasAddEditLocalUnitPermission) {
             return [
+                createElementColumn<LocalUnitsTableListItem, number, LocalUnitStatusProps>(
+                    'status',
+                    '',
+                    LocalUnitStatus,
+                    (_, item) => ({
+                        value: item.status,
+                        valueDisplay: item.status_details,
+                        compact: true,
+                    }),
+                ),
                 createStringColumn<LocalUnitsTableListItem, number>(
                     'branch_name',
                     strings.localUnitsTableName,
@@ -156,7 +167,6 @@ function LocalUnitsTable(props: Props) {
                         localUnitId: item.id,
                         isLocked: item.is_locked,
                         status: item.status,
-                        statusDetails: item.status_details,
                         localUnitType: item.type,
                         isBulkUploadLocalUnit: isDefined(item.bulk_upload),
                         manageResponse,
@@ -198,7 +208,6 @@ function LocalUnitsTable(props: Props) {
                     localUnitId: item.id,
                     isLocked: item.is_locked,
                     status: item.status,
-                    statusDetails: item.status_details,
                     isBulkUploadLocalUnit: isDefined(item.bulk_upload),
                     manageResponse,
                     localUnitName: getFirstTruthyString(

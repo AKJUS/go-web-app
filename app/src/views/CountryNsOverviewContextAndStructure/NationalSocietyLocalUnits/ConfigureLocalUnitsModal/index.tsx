@@ -5,9 +5,9 @@ import {
 } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import {
+    Button,
     Modal,
     Table,
-    TextOutput,
 } from '@ifrc-go/ui';
 import {
     useBooleanState,
@@ -17,6 +17,7 @@ import {
     createElementColumn,
     createStringColumn,
     numericIdSelector,
+    resolveToString,
 } from '@ifrc-go/ui/utils';
 import { isDefined } from '@togglecorp/fujs';
 
@@ -41,7 +42,7 @@ interface Props {
     onUpdate: () => void;
 }
 
-function ManageLocalUnitsModal(props: Props) {
+function ConfigureLocalUnitsModal(props: Props) {
     const {
         onClose,
         manageResponse,
@@ -50,6 +51,8 @@ function ManageLocalUnitsModal(props: Props) {
     } = props;
 
     const [manageLocalUnitsValues, setManageLocalUnitsValues] = useState<ManageLocalUnitsValues>();
+
+    const [localUnitType, setLocalUnitType] = useState<number>();
 
     const { countryResponse } = useOutletContext<CountryOutletContext>();
     const strings = useTranslation(i18n);
@@ -60,6 +63,7 @@ function ManageLocalUnitsModal(props: Props) {
     }] = useBooleanState(false);
 
     const handleLocalUnitSwitchChange = useCallback((value: boolean, name: number) => {
+        setLocalUnitType(name);
         if (isDefined(manageResponse) && isDefined(countryResponse)) {
             setManageLocalUnitsValues({
                 id: manageResponse[name]?.externallyManagedId,
@@ -107,6 +111,10 @@ function ManageLocalUnitsModal(props: Props) {
                 pending,
                 onChange: handleLocalUnitSwitchChange,
             }),
+            {
+                headerInfoTitle: strings.localUnitActionsLabel,
+                headerInfoDescription: strings.externallyManagedDescription,
+            },
         ),
     ]), [
         pending,
@@ -114,19 +122,30 @@ function ManageLocalUnitsModal(props: Props) {
         handleLocalUnitSwitchChange,
         strings.localUnitTypeTableLabel,
         strings.localUnitActionsLabel,
+        strings.externallyManagedDescription,
     ]);
+
+    const localUnitName = localUnitsOptions?.type.find(
+        (unit) => unit.id === manageLocalUnitsValues?.local_unit_type,
+    )?.name;
 
     return (
         <Modal
-            heading={strings.manageLocalUnitModalHeading}
+            heading={resolveToString(
+                strings.modalHeading,
+                { countryName: countryResponse?.name ?? '--' },
+            )}
             onClose={onClose}
-            size="md"
-            headingLevel={2}
-            headerDescription={(
-                <TextOutput
-                    label={strings.countryLabel}
-                    value={countryResponse?.name}
-                />
+            withHeaderBorder
+            contentViewType="vertical"
+            footerActions={(
+                <Button
+                    name={undefined}
+                    onClick={onClose}
+                    variant="secondary"
+                >
+                    {strings.closeButtonLabel}
+                </Button>
             )}
         >
             <Table
@@ -136,9 +155,10 @@ function ManageLocalUnitsModal(props: Props) {
                 keySelector={numericIdSelector}
                 data={localUnitsOptions?.type}
             />
-            {showConfirmationModal && (
+            {showConfirmationModal && isDefined(localUnitType) && (
                 <ConfirmationModal
                     onUpdate={onUpdate}
+                    localUnitName={localUnitName}
                     isNewManageLocalUnit={isNewManageLocalUnit}
                     manageLocalUnitsValues={manageLocalUnitsValues}
                     onClose={setShowConfirmationModalFalse}
@@ -148,4 +168,4 @@ function ManageLocalUnitsModal(props: Props) {
     );
 }
 
-export default ManageLocalUnitsModal;
+export default ConfigureLocalUnitsModal;

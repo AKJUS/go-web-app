@@ -378,6 +378,8 @@ export function createElementColumn<DATUM, KEY, ELEMENT_PROPS>(
         headerCellRenderer: HeaderCell,
         headerCellRendererParams: {
             sortable: options?.sortable,
+            infoTitle: options?.headerInfoTitle,
+            infoDescription: options?.headerInfoDescription,
         },
         cellRenderer: renderer,
         cellRendererParams: rendererParams,

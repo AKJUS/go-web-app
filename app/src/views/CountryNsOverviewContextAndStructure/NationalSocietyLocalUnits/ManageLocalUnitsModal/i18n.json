@@ -1,9 +1,0 @@
-{
-    "namespace": "countryNsOverviewContextAndStructure",
-    "strings": {
-        "manageLocalUnitModalHeading": "Manage Local Unit Types",
-        "countryLabel": "Country",
-        "localUnitTypeTableLabel": "Local Unit Type",
-        "localUnitActionsLabel": "Manage Externally"
-    }
-}

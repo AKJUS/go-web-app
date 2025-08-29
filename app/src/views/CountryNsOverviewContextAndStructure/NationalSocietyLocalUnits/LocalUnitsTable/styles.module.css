@@ -7,7 +7,6 @@
     }
 
     .actions {
-        width: 11rem;
-        min-width: 11rem;
+        min-width: 6rem;
     }
 }

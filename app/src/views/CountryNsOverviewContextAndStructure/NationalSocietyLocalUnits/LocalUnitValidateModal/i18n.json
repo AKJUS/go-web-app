@@ -1,9 +1,13 @@
 {
-    "namespace": "countryNsOverviewContextAndStructure",
+    "namespace": "localUnitValidateModal",
     "strings": {
         "validationSuccessMessage": "{localUnitName} was validated.",
         "validationFailureMessage": "Failed to validate {localUnitName}",
-        "validateLocalUnitHeading": "Are you sure you want to validate \"{localUnitName}\"?",
-        "validateButtonLabel": "Validate"
+        "validateLocalUnitHeading": "Review \"{localUnitName}\"?",
+        "requestedChangesTitle": "Requested changes",
+        "rejectionReasonLabel": "Reason for rejection",
+        "revertChangesSuccessMessage": "Local unit reverted successfully!",
+        "revertChangesFailedMessage": "Failed to revert changes in the local unit",
+        "submitButtonLabel": "Submit"
     }
 }

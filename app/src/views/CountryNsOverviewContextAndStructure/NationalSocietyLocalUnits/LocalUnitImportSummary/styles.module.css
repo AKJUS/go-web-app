@@ -1,0 +1,31 @@
+.bulk-upload-status {
+    &.with-background {
+        background-color: var(--go-ui-color-background);
+    }
+
+    .icon {
+        font-size: var(--go-ui-height-icon-multiplier);
+    }
+
+    .key-figure {
+        padding: 0;
+
+        .suffix::before {
+            content: ' ';
+        }
+    }
+
+    .success-icon {
+        color: var(--go-ui-color-green);
+    }
+
+    .failure-icon {
+        color: var(--go-ui-color-red);
+    }
+
+    .content {
+        display: flex;
+        gap: var(--go-ui-spacing-sm) var(--go-ui-spacing-md);
+        flex-wrap: wrap;
+    }
+}

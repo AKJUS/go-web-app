@@ -2,7 +2,7 @@ import { type GoApiResponse } from '#utils/restRequest';
 
 type GlobalEnumsResponse = GoApiResponse<'/api/v2/global-enums/'>;
 export type ValidationOption = NonNullable<GlobalEnumsResponse['local_units_status']>[number];
-type ValidationStatusKey = ValidationOption['key'];
+export type ValidationStatusKey = ValidationOption['key'];
 type RequestType = 'authenticated' | 'public';
 
 export type ManageResponse = Record<number, {
@@ -11,10 +11,8 @@ export type ManageResponse = Record<number, {
 }> | undefined;
 
 export const VALIDATED = 1 satisfies ValidationStatusKey;
-
-// NOTE not need for now might need in the future.
-// export const UNVALIDATED = 2 satisfies ValidationStatusKey;
-// export const PENDING_VALIDATION = 3 satisfies ValidationStatusKey;
+export const UNVALIDATED = 2 satisfies ValidationStatusKey;
+export const PENDING_VALIDATION = 3 satisfies ValidationStatusKey;
 
 export const AUTHENTICATED = 'authenticated' satisfies RequestType;
 export const PUBLIC = 'public' satisfies RequestType;

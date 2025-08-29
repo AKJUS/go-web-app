@@ -1,17 +1,52 @@
 import {
+    useCallback,
+    useState,
+} from 'react';
+import {
     Button,
+    Container,
     Modal,
+    RadioInput,
+    TextArea,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { resolveToString } from '@ifrc-go/ui/utils';
-import { isDefined } from '@togglecorp/fujs';
+import {
+    resolveToString,
+    stringLabelSelector,
+} from '@ifrc-go/ui/utils';
+import {
+    isDefined,
+    isFalsyString,
+    isNotDefined,
+    isTruthyString,
+} from '@togglecorp/fujs';
 
 import useAlert from '#hooks/useAlert';
-import { useLazyRequest } from '#utils/restRequest';
+import {
+    type GoApiBody,
+    useLazyRequest,
+} from '#utils/restRequest';
 
 import LocalUnitView from '../LocalUnitView';
 
 import i18n from './i18n.json';
+
+type LocalUnitsRevertRequestPostBody = GoApiBody<'/api/v2/local-units/{id}/revert/', 'POST'>;
+
+type ReviewAction = 'accept' | 'reject';
+type ReviewActionOption = {
+    key: ReviewAction,
+    label: string,
+}
+
+function reviewActionKeySelector(option: ReviewActionOption) {
+    return option.key;
+}
+
+const reviewActionOptions: ReviewActionOption[] = [
+    { key: 'accept', label: 'Accept changes' },
+    { key: 'reject', label: 'Reject changes' },
+];
 
 interface Props {
     localUnitId: number;
@@ -73,10 +108,55 @@ function LocalUnitValidateModal(props: Props) {
         },
     });
 
+    const {
+        pending: revertChangesPending,
+        trigger: revertChanges,
+    } = useLazyRequest({
+        method: 'POST',
+        url: '/api/v2/local-units/{id}/revert/',
+        pathVariables: isDefined(localUnitId) ? { id: localUnitId } : undefined,
+        body: (formFields: LocalUnitsRevertRequestPostBody) => formFields,
+        onSuccess: () => {
+            alert.show(
+                strings.revertChangesSuccessMessage,
+                { variant: 'success' },
+            );
+            if (isDefined(onActionSuccess)) {
+                onActionSuccess();
+            }
+        },
+        onFailure: (error) => {
+            const {
+                value: {
+                    formErrors,
+                },
+            } = error;
+
+            alert.show(
+                strings.revertChangesFailedMessage,
+                {
+                    variant: 'danger',
+                    description: formErrors.non_field_errors,
+                },
+            );
+        },
+    });
+
+    const [reviewAction, setReviewAction] = useState<ReviewAction | undefined>();
+    const [rejectionReason, setRejectionReason] = useState<string | undefined>();
+
+    const handleSubmitButtonClick = useCallback((action: ReviewAction | undefined) => {
+        if (action === 'accept') {
+            validateLocalUnit(null);
+        } else if (action === 'reject' && isTruthyString(rejectionReason)) {
+            revertChanges({ reason: rejectionReason });
+        }
+    }, [validateLocalUnit, revertChanges, rejectionReason]);
+
     return (
         <Modal
             onClose={onClose}
-            size="auto"
+            size="lg"
             heading={
                 resolveToString(
                     strings.validateLocalUnitHeading,
@@ -85,17 +165,49 @@ function LocalUnitValidateModal(props: Props) {
             }
             footerActions={(
                 <Button
-                    name={null}
-                    onClick={validateLocalUnit}
-                    disabled={validateLocalUnitPending}
+                    name={reviewAction}
+                    onClick={handleSubmitButtonClick}
+                    disabled={validateLocalUnitPending
+                        || revertChangesPending
+                        || isNotDefined(reviewAction)
+                        || (reviewAction === 'reject' && isFalsyString(rejectionReason))}
                 >
-                    {strings.validateButtonLabel}
+                    {strings.submitButtonLabel}
                 </Button>
             )}
+            contentViewType="vertical"
+            spacing="comfortable"
+            withHeaderBorder
         >
-            <LocalUnitView
-                localUnitId={localUnitId}
+            <Container
+                heading={strings.requestedChangesTitle}
+                headingLevel={4}
+                withBorderAndHeaderBackground
+                spacing="cozy"
+            >
+                <LocalUnitView
+                    localUnitId={localUnitId}
+                />
+            </Container>
+            <div />
+            <RadioInput
+                name={undefined}
+                options={reviewActionOptions}
+                keySelector={reviewActionKeySelector}
+                labelSelector={stringLabelSelector}
+                value={reviewAction}
+                clearable
+                onChange={setReviewAction}
             />
+            {reviewAction === 'reject' && (
+                <TextArea
+                    name="reason"
+                    required
+                    label={strings.rejectionReasonLabel}
+                    value={rejectionReason}
+                    onChange={setRejectionReason}
+                />
+            )}
         </Modal>
     );
 }

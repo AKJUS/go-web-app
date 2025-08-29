@@ -6,22 +6,8 @@
 
 }
 
-.latitude-diff-wrapper {
-    .latitude-changes {
-        /* NOTE: normal override not possible without force */
-        background-color: var(--go-ui-color-semantic-yellow) !important;
-    }
-}
-
-.longitude-diff-wrapper {
-    .longitude-changes {
-        /* NOTE: normal override not possible without force */
-        background-color: var(--go-ui-color-semantic-yellow) !important;
-    }
-}
-
 .diff-container {
-    .changes {
+    .input-section {
         /* NOTE: normal override not possible without force */
         background-color: var(--go-ui-color-semantic-yellow) !important;
     }
@@ -32,16 +18,24 @@
     display: flex;
     gap: var(--go-ui-spacing-md);
     align-self: end;
+    flex-grow: 1;
     flex-wrap: wrap;
     justify-content: flex-end;
 }
 
-.last-update-label {
-    color: var(--go-ui-color-text-light);
+.toggle-view-changes {
+    align-self: end;
+}
 
-    .new-local-unit {
-        color: var(--go-ui-color-positive);
+/* NOTE: this element is portaled */
+.header-description {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--go-ui-spacing-md);
+
+    .last-update-label {
+        color: var(--go-ui-color-text-light);
+        font-size: var(--go-ui-font-size-sm);
     }
-
 }
 

@@ -1,0 +1,10 @@
+{
+    "namespace": "localUnitImportHistoryModal",
+    "strings": {
+        "modalHeading": "Previous imports for {countryName}",
+        "tableSizeLabel": "File size (KB)",
+        "tableUploadedByLabel": "User",
+        "tableUploadedDateLabel": "Date",
+        "tableStatusLabel": "Status"
+    }
+}

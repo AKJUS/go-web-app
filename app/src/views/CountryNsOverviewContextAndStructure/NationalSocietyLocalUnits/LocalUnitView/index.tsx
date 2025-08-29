@@ -98,11 +98,12 @@ function LocalUnitView(props: Props) {
 
     return (
         <Container
-            contentViewType="vertical"
             pending={localUnitResponsePending || localUnitPreviousResponsePending}
             errored={!!localUnitResponseError}
             empty={!hasDifference}
             emptyMessage={strings.localUnitViewNoChanges}
+            contentViewType="grid"
+            numPreferredGridContentColumns={3}
         >
             <SelectDiffWrapper
                 showOnlyDiff
@@ -139,76 +140,76 @@ function LocalUnitView(props: Props) {
                 />
             </SelectDiffWrapper>
             <DiffWrapper
-                showOnlyDiff
-                enabled
-                oldValue={oldValue?.location_json?.lat}
+                hideOnPristine
+                diffViewEnabled
+                previousValue={oldValue?.location_json?.lat}
                 value={newValue?.location_json?.lat}
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLatitude}
                     value={newValue?.location_json?.lat}
                     valueType="number"
                 />
             </DiffWrapper>
             <DiffWrapper
-                showOnlyDiff
-                enabled
-                oldValue={oldValue?.location_json?.lng}
+                hideOnPristine
+                diffViewEnabled
+                previousValue={oldValue?.location_json?.lng}
                 value={newValue?.location_json?.lng}
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLongitude}
                     value={newValue?.location_json?.lng}
                     valueType="number"
                 />
             </DiffWrapper>
             <DiffWrapper
-                showOnlyDiff
+                hideOnPristine
                 value={newValue?.date_of_data}
-                oldValue={oldValue?.date_of_data}
-                enabled
+                previousValue={oldValue?.date_of_data}
+                diffViewEnabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewDateOfUpdate}
                     value={newValue?.date_of_data}
                     valueType="date"
                 />
             </DiffWrapper>
             <DiffWrapper
-                showOnlyDiff
+                hideOnPristine
                 value={newValue?.subtype}
-                oldValue={oldValue?.subtype}
-                enabled
+                previousValue={oldValue?.subtype}
+                diffViewEnabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewSubtype}
                     value={newValue?.subtype}
                 />
             </DiffWrapper>
             <DiffWrapper
-                showOnlyDiff
+                hideOnPristine
                 value={newValue?.english_branch_name}
-                oldValue={oldValue?.english_branch_name}
-                enabled
+                previousValue={oldValue?.english_branch_name}
+                diffViewEnabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLocalUnitNameEn}
                     value={newValue?.english_branch_name}
                 />
             </DiffWrapper>
             <DiffWrapper
-                showOnlyDiff
+                hideOnPristine
                 value={newValue?.local_branch_name}
-                oldValue={oldValue?.local_branch_name}
-                enabled
+                previousValue={oldValue?.local_branch_name}
+                diffViewEnabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLocalUnitNameLocal}
                     value={newValue?.local_branch_name}
                 />
@@ -235,25 +236,25 @@ function LocalUnitView(props: Props) {
             {newValue?.type !== TYPE_HEALTH_CARE && (
                 <>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.focal_person_en}
-                        oldValue={oldValue?.focal_person_en}
-                        enabled
+                        previousValue={oldValue?.focal_person_en}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPersonEn}
                             value={newValue?.focal_person_en}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.focal_person_loc}
-                        oldValue={oldValue?.focal_person_loc}
-                        enabled
+                        previousValue={oldValue?.focal_person_loc}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPersonLocal}
                             value={newValue?.focal_person_loc}
                         />
@@ -263,25 +264,25 @@ function LocalUnitView(props: Props) {
             {newValue?.type !== TYPE_HEALTH_CARE && (
                 <>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.source_en}
-                        oldValue={oldValue?.source_en}
-                        enabled
+                        previousValue={oldValue?.source_en}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewSourceEn}
                             value={newValue?.source_en}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.source_loc}
-                        oldValue={oldValue?.source_loc}
-                        enabled
+                        previousValue={oldValue?.source_loc}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewSourceLocal}
                             value={newValue?.source_loc}
                         />
@@ -308,13 +309,13 @@ function LocalUnitView(props: Props) {
                         />
                     </SelectDiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.other_affiliation}
-                        oldValue={oldValue?.health?.other_affiliation}
-                        enabled
+                        previousValue={oldValue?.health?.other_affiliation}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewOtherAffiliation}
                             value={newValue?.health?.other_affiliation}
                         />
@@ -354,45 +355,45 @@ function LocalUnitView(props: Props) {
                         />
                     </SelectDiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.is_teaching_hospital}
-                        oldValue={
+                        previousValue={
                             oldValue?.health?.is_teaching_hospital
                         }
-                        enabled
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewTeachingHospital}
                             value={newValue?.health?.is_teaching_hospital}
                             valueType="boolean"
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.is_teaching_hospital}
-                        oldValue={
+                        previousValue={
                             oldValue?.health?.is_teaching_hospital
                         }
-                        enabled
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewInPatientCapacity}
                             value={newValue?.health?.is_in_patient_capacity}
                             valueType="boolean"
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.is_teaching_hospital}
-                        oldValue={
+                        previousValue={
                             oldValue?.health?.is_teaching_hospital
                         }
-                        enabled
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewIsolationRoomsWards}
                             value={newValue?.health?.is_isolation_rooms_wards}
                             valueType="boolean"
@@ -418,61 +419,61 @@ function LocalUnitView(props: Props) {
                 </>
             )}
             <DiffWrapper
-                showOnlyDiff
+                hideOnPristine
                 value={newValue?.address_en}
-                oldValue={oldValue?.address_en}
-                enabled
+                previousValue={oldValue?.address_en}
+                diffViewEnabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewAddressEn}
                     value={newValue?.address_en}
                 />
             </DiffWrapper>
             <DiffWrapper
-                showOnlyDiff
+                hideOnPristine
                 value={newValue?.address_loc}
-                oldValue={oldValue?.address_loc}
-                enabled
+                previousValue={oldValue?.address_loc}
+                diffViewEnabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewAddressLocal}
                     value={newValue?.address_loc}
                 />
             </DiffWrapper>
             <DiffWrapper
-                showOnlyDiff
+                hideOnPristine
                 value={newValue?.city_en}
-                oldValue={oldValue?.city_en}
-                enabled
+                previousValue={oldValue?.city_en}
+                diffViewEnabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLocalityEn}
                     value={newValue?.city_en}
                 />
             </DiffWrapper>
             <DiffWrapper
-                showOnlyDiff
+                hideOnPristine
                 value={newValue?.city_loc}
-                oldValue={oldValue?.city_loc}
-                enabled
+                previousValue={oldValue?.city_loc}
+                diffViewEnabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewLocalityLocal}
                     value={newValue?.city_loc}
                 />
             </DiffWrapper>
             <DiffWrapper
-                showOnlyDiff
+                hideOnPristine
                 value={newValue?.postcode}
-                oldValue={oldValue?.postcode}
-                enabled
+                previousValue={oldValue?.postcode}
+                diffViewEnabled
             >
                 <TextOutput
-                    strongLabel
+                    strongValue
                     label={strings.localUnitViewPostCode}
                     value={newValue?.postcode}
                 />
@@ -480,37 +481,37 @@ function LocalUnitView(props: Props) {
             {newValue?.type !== TYPE_HEALTH_CARE && (
                 <>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.phone}
-                        oldValue={oldValue?.phone}
-                        enabled
+                        previousValue={oldValue?.phone}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewPhone}
                             value={newValue?.phone}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.email}
-                        oldValue={oldValue?.email}
-                        enabled
+                        previousValue={oldValue?.email}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewEmail}
                             value={newValue?.email}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.link}
-                        oldValue={oldValue?.link}
-                        enabled
+                        previousValue={oldValue?.link}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewWebsite}
                             value={newValue?.link}
                         />
@@ -537,13 +538,13 @@ function LocalUnitView(props: Props) {
                         />
                     </SelectDiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.other_facility_type}
-                        oldValue={oldValue?.health?.other_facility_type}
-                        enabled
+                        previousValue={oldValue?.health?.other_facility_type}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewOtherFacilityType}
                             value={newValue?.health?.other_facility_type}
                         />
@@ -566,13 +567,13 @@ function LocalUnitView(props: Props) {
                         />
                     </SelectDiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.speciality}
-                        oldValue={oldValue?.health?.speciality}
-                        enabled
+                        previousValue={oldValue?.health?.speciality}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewSpecialties}
                             value={newValue?.health?.speciality}
                         />
@@ -612,13 +613,13 @@ function LocalUnitView(props: Props) {
                         />
                     </MultiSelectDiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.other_services}
-                        oldValue={oldValue?.health?.other_services}
-                        enabled
+                        previousValue={oldValue?.health?.other_services}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewOtherServices}
                             value={newValue?.health?.other_services}
                         />
@@ -658,256 +659,256 @@ function LocalUnitView(props: Props) {
                         />
                     </MultiSelectDiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.number_of_isolation_rooms}
-                        oldValue={oldValue?.health?.number_of_isolation_rooms}
-                        enabled
+                        previousValue={oldValue?.health?.number_of_isolation_rooms}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewNumberOfIsolationRooms}
                             value={newValue?.health?.number_of_isolation_rooms}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.maximum_capacity}
-                        oldValue={oldValue?.health?.maximum_capacity}
-                        enabled
+                        previousValue={oldValue?.health?.maximum_capacity}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewMaximumCapacity}
                             value={newValue?.health?.maximum_capacity}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.is_warehousing}
-                        oldValue={oldValue?.health?.is_warehousing}
-                        enabled
+                        previousValue={oldValue?.health?.is_warehousing}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             valueType="boolean"
                             label={strings.localUnitViewWarehousing}
                             value={newValue?.health?.is_warehousing}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.is_cold_chain}
-                        oldValue={oldValue?.health?.is_cold_chain}
-                        enabled
+                        previousValue={oldValue?.health?.is_cold_chain}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             valueType="boolean"
                             label={strings.localUnitViewColdChain}
                             value={newValue?.health?.is_cold_chain}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.ambulance_type_a}
-                        oldValue={oldValue?.health?.ambulance_type_a}
-                        enabled
+                        previousValue={oldValue?.health?.ambulance_type_a}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewAmbulanceTypeA}
                             value={newValue?.health?.ambulance_type_a}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.ambulance_type_b}
-                        oldValue={oldValue?.health?.ambulance_type_b}
-                        enabled
+                        previousValue={oldValue?.health?.ambulance_type_b}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewAmbulanceTypeB}
                             value={newValue?.health?.ambulance_type_b}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.ambulance_type_c}
-                        oldValue={oldValue?.health?.ambulance_type_c}
-                        enabled
+                        previousValue={oldValue?.health?.ambulance_type_c}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewAmbulanceTypeC}
                             value={newValue?.health?.ambulance_type_c}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.total_number_of_human_resource}
-                        oldValue={oldValue?.health?.total_number_of_human_resource}
-                        enabled
+                        previousValue={oldValue?.health?.total_number_of_human_resource}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewTotalNumberOfHumanResources}
                             value={newValue?.health?.total_number_of_human_resource}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.general_practitioner}
-                        oldValue={oldValue?.health?.general_practitioner}
-                        enabled
+                        previousValue={oldValue?.health?.general_practitioner}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewGeneralPractitioner}
                             value={newValue?.health?.general_practitioner}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.specialist}
-                        oldValue={oldValue?.health?.specialist}
-                        enabled
+                        previousValue={oldValue?.health?.specialist}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewSpecialist}
                             value={newValue?.health?.specialist}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.residents_doctor}
-                        oldValue={oldValue?.health?.residents_doctor}
-                        enabled
+                        previousValue={oldValue?.health?.residents_doctor}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewResidentsDoctor}
                             value={newValue?.health?.residents_doctor}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.nurse}
-                        oldValue={oldValue?.health?.nurse}
-                        enabled
+                        previousValue={oldValue?.health?.nurse}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewNurse}
                             value={newValue?.health?.nurse}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.dentist}
-                        oldValue={oldValue?.health?.dentist}
-                        enabled
+                        previousValue={oldValue?.health?.dentist}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewDentist}
                             value={newValue?.health?.dentist}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.nursing_aid}
-                        oldValue={oldValue?.health?.nursing_aid}
-                        enabled
+                        previousValue={oldValue?.health?.nursing_aid}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewNursingAid}
                             value={newValue?.health?.nursing_aid}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.midwife}
-                        oldValue={oldValue?.health?.midwife}
-                        enabled
+                        previousValue={oldValue?.health?.midwife}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewMidwife}
                             value={newValue?.health?.midwife}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.other_profiles}
-                        oldValue={oldValue?.health?.other_profiles}
-                        enabled
+                        previousValue={oldValue?.health?.other_profiles}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewOtherProfiles}
                             value={newValue?.health?.other_profiles}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.other_medical_heal}
-                        oldValue={oldValue?.health?.other_medical_heal}
-                        enabled
+                        previousValue={oldValue?.health?.other_medical_heal}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             valueType="boolean"
                             label={strings.localUnitViewOtherMedicalHeal}
                             value={newValue?.health?.other_medical_heal}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.feedback}
-                        oldValue={oldValue?.health?.feedback}
-                        enabled
+                        previousValue={oldValue?.health?.feedback}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewCommentsNS}
                             value={newValue?.health?.feedback}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.focal_point_position}
-                        oldValue={oldValue?.health?.focal_point_position}
-                        enabled
+                        previousValue={oldValue?.health?.focal_point_position}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPointPosition}
                             value={newValue?.health?.focal_point_position}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.focal_point_email}
-                        oldValue={oldValue?.health?.focal_point_email}
-                        enabled
+                        previousValue={oldValue?.health?.focal_point_email}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPointEmail}
                             value={newValue?.health?.focal_point_email}
                         />
                     </DiffWrapper>
                     <DiffWrapper
-                        showOnlyDiff
+                        hideOnPristine
                         value={newValue?.health?.focal_point_phone_number}
-                        oldValue={oldValue?.health?.focal_point_phone_number}
-                        enabled
+                        previousValue={oldValue?.health?.focal_point_phone_number}
+                        diffViewEnabled
                     >
                         <TextOutput
-                            strongLabel
+                            strongValue
                             label={strings.localUnitViewFocalPointPhoneNumber}
                             value={newValue?.health?.focal_point_phone_number}
                         />

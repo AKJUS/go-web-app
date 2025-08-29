@@ -30,7 +30,6 @@ export type LocalUnitsRequestPostBody = GoApiBody<'/api/v2/local-units/', 'POST'
     }
 };
 
-export type LocalUnitsRevertRequestPostBody = GoApiBody<'/api/v2/local-units/{id}/revert/', 'POST'>;
 type TypeOfLocalUnits = components<'read'>['schemas']['LocalUnitType']['code'];
 
 export type PartialLocalUnits = PartialForm<
@@ -39,19 +38,6 @@ export type PartialLocalUnits = PartialForm<
 >;
 
 export const TYPE_HEALTH_CARE = 2 satisfies TypeOfLocalUnits;
-
-export type PartialLocalUnitsRevertForm = PartialForm<LocalUnitsRevertRequestPostBody>;
-type LocalUnitsRevertFormSchema = ObjectSchema<PartialLocalUnitsRevertForm>;
-type LocalUnitRevertSchemaFields = ReturnType<LocalUnitsRevertFormSchema['fields']>;
-
-export const revertSchema: LocalUnitsRevertFormSchema = {
-    fields: (): LocalUnitRevertSchemaFields => ({
-        reason: {
-            required: true,
-            requiredValidation: requiredStringCondition,
-        },
-    }),
-};
 
 type LocalUnitsFormSchema = ObjectSchema<PartialLocalUnits>;
 type LocalUnitsFormSchemaFields = ReturnType<LocalUnitsFormSchema['fields']>

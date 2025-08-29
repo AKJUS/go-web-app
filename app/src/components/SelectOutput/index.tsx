@@ -36,7 +36,7 @@ function SelectOutput<VALUE, OPTION>(props: Props<VALUE, OPTION>) {
             className={className}
             label={label}
             value={valueLabel}
-            strongLabel
+            strongValue
         />
     );
 }

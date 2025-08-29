@@ -1,19 +1,22 @@
 import { useMemo } from 'react';
 import { TextOutput } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    _cs,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 interface Props<VALUE> {
-    diffContainerClassName?: string;
-    value?: VALUE | undefined;
-    oldValue?: VALUE | undefined;
     children: React.ReactNode;
-    enabled: boolean;
-    showOnlyDiff?: boolean;
+    className?: string;
+    diffViewEnabled: boolean;
+    hideOnPristine?: boolean;
+    previousValue?: VALUE | undefined;
     showPreviousValue?: boolean;
+    value?: VALUE | undefined;
 }
 
 function DiffWrapper<
@@ -22,13 +25,13 @@ function DiffWrapper<
     props: Props<VALUE>,
 ) {
     const {
-        diffContainerClassName,
-        oldValue,
-        value,
         children,
-        enabled = false,
-        showOnlyDiff,
+        className,
+        diffViewEnabled = false,
+        hideOnPristine,
+        previousValue,
         showPreviousValue,
+        value,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -36,18 +39,18 @@ function DiffWrapper<
     const hasChanged = useMemo(() => {
         // NOTE: we consider `null` and `undefined` as same for
         // this scenario
-        if (isNotDefined(oldValue) && isNotDefined(value)) {
+        if (isNotDefined(previousValue) && isNotDefined(value)) {
             return false;
         }
 
-        return JSON.stringify(oldValue) !== JSON.stringify(value);
-    }, [oldValue, value]);
+        return JSON.stringify(previousValue) !== JSON.stringify(value);
+    }, [previousValue, value]);
 
-    if (!enabled) {
+    if (!diffViewEnabled) {
         return children;
     }
 
-    if (!hasChanged && showOnlyDiff) {
+    if (!hasChanged && hideOnPristine) {
         return null;
     }
 
@@ -56,14 +59,19 @@ function DiffWrapper<
     }
 
     return (
-        <div className={diffContainerClassName}>
+        <div
+            className={_cs(
+                className,
+                styles.diffWrapper,
+            )}
+        >
             {children}
             {showPreviousValue
                 && (
                     <TextOutput
                         className={styles.previousValue}
                         label={strings.previousValueLabel}
-                        value={oldValue}
+                        value={previousValue}
                     />
                 )}
         </div>

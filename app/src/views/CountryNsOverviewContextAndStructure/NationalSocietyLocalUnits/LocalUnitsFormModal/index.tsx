@@ -55,7 +55,9 @@ function LocalUnitsFormModal(props: Props) {
     return (
         <Modal
             className={styles.localUnitsFormModal}
-            heading={strings.localUnitsModalHeading}
+            heading={readOnly
+                ? strings.localUnitsModalReadOnlyHeading
+                : strings.localUnitsModalHeading}
             onClose={onClose}
             size="pageWidth"
             withHeaderBorder
@@ -69,7 +71,7 @@ function LocalUnitsFormModal(props: Props) {
                 <div ref={headerDescriptionRef} />
             }
             withFooterBorder={!readOnly}
-            spacing="relaxed"
+            spacing="comfortable"
         >
             <LocalUnitsForm
                 manageResponse={manageResponse}
