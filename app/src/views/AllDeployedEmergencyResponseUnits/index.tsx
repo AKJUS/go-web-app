@@ -243,7 +243,7 @@ export function Component() {
                         options={eruTypeOptions}
                     />
                 )}
-                actions={(
+                headerActions={(
                     <ExportButton
                         onClick={handleExportClick}
                         progress={progress}

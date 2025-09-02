@@ -5,13 +5,13 @@ import {
 } from 'react';
 import {
     Container,
+    ListView,
     NumberOutput,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { maxSafe } from '@ifrc-go/ui/utils';
 import {
-    _cs,
     isDefined,
     isNotDefined,
     listToMap,
@@ -24,8 +24,9 @@ import {
 import { type CirclePaint } from 'mapbox-gl';
 
 import GlobalMap from '#components/domain/GlobalMap';
+import GoMapContainer from '#components/GoMapContainer';
+import GradientBar from '#components/GradientBar';
 import Link from '#components/Link';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
 import useCountry from '#hooks/domain/useCountry';
 import {
@@ -36,7 +37,6 @@ import { getCountryListBoundingBox } from '#utils/map';
 import { type GoApiResponse } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type OperationLearningStatsResponse = GoApiResponse<'/api/v2/ops-learning/stats/'>;
 const sourceOptions: mapboxgl.GeoJSONSourceRaw = {
@@ -58,16 +58,12 @@ const LEARNING_COUNT_LOW_COLOR = '#AEB7C2';
 const LEARNING_COUNT_HIGH_COLOR = '#011E41';
 
 interface Props {
-    className?: string;
     learningByCountry: OperationLearningStatsResponse['learning_by_country'] | undefined;
 }
 
 function OperationalLearningMap(props: Props) {
     const strings = useTranslation(i18n);
-    const {
-        className,
-        learningByCountry,
-    } = props;
+    const { learningByCountry } = props;
 
     const [
         clickedPointProperties,
@@ -181,87 +177,80 @@ function OperationalLearningMap(props: Props) {
     );
 
     return (
-        <Container
-            className={_cs(styles.operationLearningMap, className)}
-            footerClassName={styles.footer}
-            footerContent={(
-                <div className={styles.legend}>
-                    <div className={styles.legendLabel}>{strings.learningCount}</div>
-                    <div className={styles.legendContent}>
-                        <div
-                            className={styles.gradient}
-                            style={{ background: `linear-gradient(90deg, ${LEARNING_COUNT_LOW_COLOR}, ${LEARNING_COUNT_HIGH_COLOR})` }}
-                        />
-                        <div className={styles.labelList}>
-                            <NumberOutput
-                                value={MIN_LEARNING_COUNT}
-                            />
-                            <NumberOutput
-                                value={maxLearning}
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
-            childrenContainerClassName={styles.mainContent}
-        >
-            <GlobalMap>
-                <MapContainerWithDisclaimer
-                    className={styles.mapContainer}
-                    title={strings.downloadMapTitle}
-                />
-                {isDefined(learningCountGeoJSON) && (
-                    <MapSource
-                        sourceKey="points"
-                        sourceOptions={sourceOptions}
-                        geoJson={learningCountGeoJSON}
-                    >
-                        <MapLayer
-                            layerKey="points-circle"
-                            onClick={handlePointClick}
-                            layerOptions={{
-                                type: 'circle',
-                                paint: bluePointHaloCirclePaint,
-                            }}
-                        />
-                    </MapSource>
-                )}
-                {clickedPointProperties?.lngLat && (
-                    <MapPopup
-                        onCloseButtonClick={handlePointClose}
-                        coordinates={clickedPointProperties.lngLat}
-                        heading={(
-                            <Link
-                                to="countriesLayout"
-                                urlParams={{
-                                    countryId: clickedPointProperties.feature.properties.countryId,
-                                }}
+        <GlobalMap>
+            <GoMapContainer
+                title={strings.downloadMapTitle}
+                footer={(
+                    <TextOutput
+                        label={strings.learningCount}
+                        value={(
+                            <ListView
+                                layout="block"
+                                spacing="none"
                             >
-                                {clickedPointProperties.feature.properties.name}
-                            </Link>
+                                <GradientBar
+                                    startColor={LEARNING_COUNT_LOW_COLOR}
+                                    endColor={LEARNING_COUNT_HIGH_COLOR}
+                                />
+                                <ListView withSpaceBetweenContents>
+                                    <NumberOutput value={MIN_LEARNING_COUNT} />
+                                    <NumberOutput value={maxLearning} />
+                                </ListView>
+                            </ListView>
                         )}
-                        childrenContainerClassName={styles.popupContent}
-                    >
-                        <Container
-                            headingLevel={5}
-                        >
-                            <TextOutput
-                                value={clickedPointProperties.feature.properties.learningCount}
-                                label={strings.learningCount}
-                                valueType="number"
-                            />
-                        </Container>
-                    </MapPopup>
-                )}
-                {isDefined(bounds) && (
-                    <MapBounds
-                        duration={DURATION_MAP_ZOOM}
-                        bounds={bounds}
-                        padding={DEFAULT_MAP_PADDING}
                     />
                 )}
-            </GlobalMap>
-        </Container>
+            />
+            {isDefined(learningCountGeoJSON) && (
+                <MapSource
+                    sourceKey="points"
+                    sourceOptions={sourceOptions}
+                    geoJson={learningCountGeoJSON}
+                >
+                    <MapLayer
+                        layerKey="points-circle"
+                        onClick={handlePointClick}
+                        layerOptions={{
+                            type: 'circle',
+                            paint: bluePointHaloCirclePaint,
+                        }}
+                    />
+                </MapSource>
+            )}
+            {clickedPointProperties?.lngLat && (
+                <MapPopup
+                    onCloseButtonClick={handlePointClose}
+                    coordinates={clickedPointProperties.lngLat}
+                    heading={(
+                        <Link
+                            to="countriesLayout"
+                            urlParams={{
+                                countryId: clickedPointProperties.feature.properties.countryId,
+                            }}
+                        >
+                            {clickedPointProperties.feature.properties.name}
+                        </Link>
+                    )}
+                >
+                    <Container
+                        headingLevel={5}
+                    >
+                        <TextOutput
+                            value={clickedPointProperties.feature.properties.learningCount}
+                            label={strings.learningCount}
+                            valueType="number"
+                        />
+                    </Container>
+                </MapPopup>
+            )}
+            {isDefined(bounds) && (
+                <MapBounds
+                    duration={DURATION_MAP_ZOOM}
+                    bounds={bounds}
+                    padding={DEFAULT_MAP_PADDING}
+                />
+            )}
+        </GlobalMap>
     );
 }
 

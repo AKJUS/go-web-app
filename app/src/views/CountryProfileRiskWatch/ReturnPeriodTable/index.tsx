@@ -208,7 +208,6 @@ function ReturnPeriodTable(props: Props) {
                     nonClearable
                 />
             )}
-            headingLevel={2}
         >
             <Table
                 filtered={false}

@@ -1,4 +1,8 @@
-import { Container } from '@ifrc-go/ui';
+import {
+    Container,
+    Description,
+    ListView,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { _cs } from '@togglecorp/fujs';
 
@@ -27,14 +31,17 @@ function ThreeWDecommissionMessage(props: Props) {
                 heading={strings.pageHeading}
                 mainSectionClassName={styles.threeWDecommissionPage}
             >
-                {strings.description}
-                <Container
-                    heading={strings.rationaleHeading}
-                    headingLevel={4}
-                    spacing="condensed"
-                >
-                    {strings.rationale}
-                </Container>
+                <ListView layout="block">
+                    <Description>
+                        {strings.description}
+                    </Description>
+                    <Container
+                        heading={strings.rationaleHeading}
+                        headingLevel={4}
+                    >
+                        {strings.rationale}
+                    </Container>
+                </ListView>
             </Page>
         );
     }
@@ -43,17 +50,19 @@ function ThreeWDecommissionMessage(props: Props) {
         <Container
             className={_cs(className, styles.threeWDecommissionMessage)}
             heading={strings.heading}
-            contentViewType="vertical"
             withHeaderBorder
         >
-            {strings.description}
-            <Container
-                heading={strings.rationaleHeading}
-                headingLevel={4}
-                spacing="condensed"
-            >
-                {strings.rationale}
-            </Container>
+            <ListView layout="block">
+                <Description>
+                    {strings.description}
+                </Description>
+                <Container
+                    heading={strings.rationaleHeading}
+                    headingLevel={4}
+                >
+                    {strings.rationale}
+                </Container>
+            </ListView>
         </Container>
     );
 }

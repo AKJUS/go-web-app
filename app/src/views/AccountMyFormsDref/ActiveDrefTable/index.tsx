@@ -450,7 +450,7 @@ function ActiveDrefTable(props: Props) {
         <Container
             className={_cs(styles.activeDrefTable, className)}
             heading={strings.activeDrefTitle}
-            actions={actions}
+            headerActions={actions}
             footerActions={(
                 <Pager
                     activePage={page}

@@ -1,0 +1,22 @@
+.inline-frame {
+    margin: 0 auto;
+    border: none;
+    background-color: var(--go-ui-color-gray-30);
+    width: 100vw;
+    height: 90vh;
+
+    &.sm-size {
+        max-width: 20rem;
+        max-height: 10rem;
+    }
+
+    &.md-size {
+        max-width: 30rem;
+        max-height: 20rem;
+    }
+
+    &.lg-size {
+        max-width: 45rem;
+        max-height: 30rem;
+    }
+}

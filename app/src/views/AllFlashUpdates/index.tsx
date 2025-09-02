@@ -144,7 +144,6 @@ export function Component() {
         >
             <Container
                 className={styles.flashUpdatesTable}
-                headerDescriptionContainerClassName={styles.filters}
                 footerActions={(
                     <Pager
                         activePage={page}

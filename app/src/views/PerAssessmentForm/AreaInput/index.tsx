@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
+import { ListView } from '@ifrc-go/ui';
 import {
-    _cs,
     listToGroupList,
     listToMap,
 } from '@togglecorp/fujs';
@@ -21,8 +21,6 @@ import {
 import { type PartialAssessment } from '../schema';
 import ComponentInput from './ComponentInput';
 
-import styles from './styles.module.css';
-
 type PerOptionsResponse = GoApiResponse<'/api/v2/per-options/'>;
 type Value = NonNullable<PartialAssessment['area_responses']>[number];
 
@@ -40,7 +38,7 @@ interface Props {
     className?: string;
     error: Error<Value> | undefined;
     onChange: (value: SetValueArg<Value>, index: number | undefined) => void;
-    value: Value;
+    value: Value | undefined;
     index: number | undefined;
     questions: PerFormQuestion[] | undefined;
     components: PerFormComponent[] | undefined;
@@ -125,7 +123,10 @@ function AreaInput(props: Props) {
     );
 
     return (
-        <div className={_cs(styles.areaInput, className)}>
+        <ListView
+            layout="block"
+            className={className}
+        >
             <NonFieldError error={error} />
             <NonFieldError error={componentInputError} />
             {components?.map((component) => (
@@ -146,7 +147,7 @@ function AreaInput(props: Props) {
                     disabled={disabled}
                 />
             ))}
-        </div>
+        </ListView>
     );
 }
 export default AreaInput;

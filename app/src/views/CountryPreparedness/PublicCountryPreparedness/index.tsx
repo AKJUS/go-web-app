@@ -1,14 +1,10 @@
-import {
-    useCallback,
-    useMemo,
-} from 'react';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { ArrowLeftLineIcon } from '@ifrc-go/icons';
 import {
-    BlockLoading,
-    Button,
     Container,
-    Heading,
+    Label,
+    ListView,
     Message,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -20,13 +16,11 @@ import {
 } from '@togglecorp/fujs';
 
 import Link from '#components/Link';
-import WikiLink from '#components/WikiLink';
-import useRouting from '#hooks/useRouting';
+import TabPage from '#components/TabPage';
 import { getFormattedComponentName } from '#utils/domain/per';
 import { useRequest } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 function PublicCountryPreparedness() {
     const strings = useTranslation(i18n);
@@ -137,147 +131,145 @@ function PublicCountryPreparedness() {
         [prioritizationResponse],
     );
 
-    const { goBack } = useRouting();
-    const handleBackButtonClick = useCallback(() => {
-        goBack();
-    }, [goBack]);
-
     const pending = perStatsResponsePending
         || processStatusPending
         || assessmentResponsePending
         || prioritizationResponsePending;
 
     return (
-        <Container
-            className={styles.publicCountryPreparedness}
-            childrenContainerClassName={styles.preparednessContent}
-            heading={strings.publicNsPreparednessAndResponseCapacityHeading}
-            actionsContainerClassName={styles.actionsContainer}
-            headingLevel={2}
-            withHeaderBorder
-            actions={(
-                <div className={styles.perAction}>
-                    <TextOutput
-                        label={strings.publicLastUpdatedLabel}
-                        value={processStatusResponse?.updated_at}
-                        valueType="date"
-                        strongValue
-                    />
-                    <WikiLink
-                        href="user_guide/Preparedness#how-to-use-it"
-                    />
-                </div>
-            )}
-            icons={(
-                <Button
-                    name={undefined}
-                    onClick={handleBackButtonClick}
-                    variant="tertiary"
-                    title={strings.publicGoBackButtonTitle}
-                >
-                    <ArrowLeftLineIcon className={styles.backIcon} />
-                </Button>
-            )}
+        <TabPage
+            wikiLinkPathName="user_guide/Preparedness#how-to-use-it"
+            pending={pending}
         >
-            <div className={styles.perOverviewDetails}>
-                <TextOutput
-                    label={strings.publicStartDateLabel}
-                    value={perStats?.date_of_assessment}
-                    valueType="date"
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.publicPerPhaseLabel}
-                    value={processStatusResponse?.phase_display}
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.publicFocalPointNameLabel}
-                    value={perStats?.ns_focal_point_name}
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.publicPerCycleLabel}
-                    value={perStats?.assessment_number}
-                    valueType="number"
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.publicTypeOfAssessmentLabel}
-                    value={perStats?.type_of_assessment?.name}
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.publicFocalPointEmailTitle}
-                    value={perStats?.ns_focal_point_email}
-                    strongValue
-                />
-            </div>
-            {pending && (
-                <BlockLoading className={styles.pendingMessage} />
-            )}
-            {isDefined(topFiveRatedComponents) && (
+            <Link
+                to="countryNsOverviewCapacity"
+                urlParams={{ countryId }}
+                styleVariant="action"
+                before={<ArrowLeftLineIcon />}
+            >
+                {strings.publicGoBackButtonTitle}
+            </Link>
+            <Container
+                heading={strings.publicNsPreparednessAndResponseCapacityHeading}
+                withHeaderBorder
+            >
                 <Container
-                    heading={strings.publicHighlightedTopRatedComponentHeading}
-                    withHeaderBorder
-                    childrenContainerClassName={styles.topRatedComponentContent}
+                    headerDescription={(
+                        <TextOutput
+                            label={strings.publicLastUpdatedLabel}
+                            value={processStatusResponse?.updated_at}
+                            valueType="date"
+                            textSize="sm"
+                        />
+                    )}
                 >
-                    {topFiveRatedComponents.map(
-                        (component) => (
-                            <Container
-                                key={component.details.id}
-                                className={styles.topRatedComponent}
-                                withInternalPadding
-                                withoutWrapInHeading
-                                spacing="cozy"
-                            >
-                                {component.details.title}
-                            </Container>
-                        ),
-                    )}
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={3}
+                    >
+                        <TextOutput
+                            label={strings.publicStartDateLabel}
+                            value={perStats?.date_of_assessment}
+                            valueType="date"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.publicPerPhaseLabel}
+                            value={processStatusResponse?.phase_display}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.publicFocalPointNameLabel}
+                            value={perStats?.ns_focal_point_name}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.publicPerCycleLabel}
+                            value={perStats?.assessment_number}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.publicTypeOfAssessmentLabel}
+                            value={perStats?.type_of_assessment?.name}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.publicFocalPointEmailTitle}
+                            value={perStats?.ns_focal_point_email}
+                            strongValue
+                        />
+                    </ListView>
                 </Container>
-            )}
-            {isDefined(componentsToBeStrengthened) && (
-                <Container
-                    heading={strings.publicPriorityComponentToBeStrengthenedHeading}
-                    childrenContainerClassName={styles.priorityComponentsContent}
-                    withHeaderBorder
-                >
-                    {componentsToBeStrengthened.map(
-                        (priorityComponent) => (
-                            <Heading
-                                key={priorityComponent.id}
-                                className={styles.heading}
-                                level={5}
+            </Container>
+            {(isDefined(topFiveRatedComponents) || isDefined(componentsToBeStrengthened)) && (
+                <ListView layout="grid">
+                    {isDefined(topFiveRatedComponents) && (
+                        <Container
+                            heading={strings.publicHighlightedTopRatedComponentHeading}
+                            withHeaderBorder
+                        >
+                            <ListView
+                                layout="grid"
+                                numPreferredGridColumns={2}
                             >
-                                {getFormattedComponentName({
-                                    component_num: priorityComponent.componentNumber,
-                                    component_letter: priorityComponent.componentLetter,
-                                    title: priorityComponent.label,
-                                })}
-                            </Heading>
-                        ),
+                                {topFiveRatedComponents.map(
+                                    (component) => (
+                                        <Container
+                                            key={component.details.id}
+                                            withDarkBackground
+                                            withPadding
+                                        >
+                                            {component.details.title}
+                                        </Container>
+                                    ),
+                                )}
+                            </ListView>
+                        </Container>
                     )}
-                </Container>
-            )}
-            <div className={styles.limitedAccess}>
-                <Message
-                    title={strings.publicComponentLimitedAccess}
-                    description={strings.publicComponentLimitedAccessDescription}
-                    actions={(
-                        <div className={styles.contactContainer}>
-                            <Link
-                                href="mailto:PER.Team@ifrc.org"
-                                external
-                                variant="secondary"
+                    {isDefined(componentsToBeStrengthened) && (
+                        <Container
+                            heading={strings.publicPriorityComponentToBeStrengthenedHeading}
+                            withHeaderBorder
+                        >
+                            <ListView
+                                layout="block"
+                                withSpacingOpticalCorrection
                             >
-                                {strings.publicComponentRequestSeeMore}
-                            </Link>
-                        </div>
+                                {componentsToBeStrengthened.map(
+                                    (priorityComponent) => (
+                                        <Label
+                                            key={priorityComponent.id}
+                                            strong
+                                        >
+                                            {getFormattedComponentName({
+                                                component_num: priorityComponent.componentNumber,
+                                                component_letter: priorityComponent.componentLetter,
+                                                title: priorityComponent.label,
+                                            })}
+                                        </Label>
+                                    ),
+                                )}
+                            </ListView>
+                        </Container>
                     )}
-                />
-            </div>
-        </Container>
+                </ListView>
+            )}
+            <Message
+                title={strings.publicComponentLimitedAccess}
+                description={strings.publicComponentLimitedAccessDescription}
+                actions={(
+                    <Link
+                        href="mailto:PER.Team@ifrc.org"
+                        external
+                        colorVariant="primary"
+                        styleVariant="outline"
+                    >
+                        {strings.publicComponentRequestSeeMore}
+                    </Link>
+                )}
+            />
+        </TabPage>
     );
 }
 

@@ -20,46 +20,57 @@ function EarlyWarningNumericDetails(props: Props) {
             <KeyFigure
                 label={strings.earlyPotentiallyAffectedRCLabel}
                 value={value?.num_potentially_affected}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyPeopleAtHighestRiskGovernmentLabel}
                 value={value?.gov_num_highest_risk}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyAffectedPopCentresRCLabel}
                 value={Number(value?.affected_pop_centres)}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyAssistedRCLabel}
                 value={value?.num_assisted}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyPotentiallyAffectedGovernmentLabel}
                 value={value?.gov_num_potentially_affected}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyPeopleAtHighestRiskOtherLabel}
                 value={value?.other_num_highest_risk}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyAffectedGovernmentLabel}
                 value={Number(value?.gov_affected_pop_centres)}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyAssistedRCGovernmentLabel}
                 value={value?.gov_num_assisted}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyPotentiallyAffectedOtherLabel}
                 value={value?.other_num_potentially_affected}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyPeopleAtHighestRiskRcLabel}
                 value={value?.num_highest_risk}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.earlyAffectedPopCentersOtherLabel}
                 value={Number(value?.other_affected_pop_centres)}
+                valueType="number"
             />
         </>
     );

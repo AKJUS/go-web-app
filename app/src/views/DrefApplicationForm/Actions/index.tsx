@@ -8,7 +8,10 @@ import {
     Button,
     Container,
     DateInput,
+    Description,
+    InlineLayout,
     InputSection,
+    ListView,
     SelectInput,
     TextArea,
 } from '@ifrc-go/ui';
@@ -28,6 +31,7 @@ import {
 
 import GoSingleFileInput from '#components/domain/GoSingleFileInput';
 import NonFieldError from '#components/NonFieldError';
+import TabPage from '#components/TabPage';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import { type GoApiResponse } from '#utils/restRequest';
 
@@ -40,7 +44,6 @@ import NeedInput from './NeedInput';
 import NsActionInput from './NSActionInput';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type GlobalEnumsResponse = GoApiResponse<'/api/v2/global-enums/'>;
 type NsActionOption = NonNullable<GlobalEnumsResponse['dref_national_society_action_title']>[number];
@@ -193,114 +196,120 @@ function Actions(props: Props) {
     );
 
     return (
-        <div className={styles.actions}>
+        <TabPage>
             <Container
-                className={styles.nationalSocietyActions}
-                headerDescription={strings.drefFormNationalSocietiesActionsDescription}
                 heading={strings.drefFormNationalSocietiesActions}
+                headerDescription={strings.drefFormNationalSocietiesActionsDescription}
             >
-                <InputSection
-                    title={strings.drefFormDidNationalSocietyStartedSlow}
-                >
-                    <BooleanInput
-                        name="did_national_society"
-                        readOnly={readOnly}
-                        onChange={setFieldValue}
-                        value={value?.did_national_society}
-                        error={error?.did_national_society}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                {value.did_national_society && (
-                    <InputSection
-                        title={strings.drefFormNsResponseStarted}
-                    >
-                        <DateInput
-                            name="ns_respond_date"
+                <ListView layout="block">
+                    <InputSection title={strings.drefFormDidNationalSocietyStartedSlow}>
+                        <BooleanInput
+                            name="did_national_society"
                             readOnly={readOnly}
-                            value={value.ns_respond_date}
                             onChange={setFieldValue}
-                            error={error?.ns_respond_date}
+                            value={value?.did_national_society}
+                            error={error?.did_national_society}
                             disabled={disabled}
                         />
                     </InputSection>
-                )}
-                <InputSection
-                    numPreferredColumns={2}
-                    title=" "
-                >
-                    <SelectInput
-                        label={strings.drefFormNationalSocietiesActionsLabel}
-                        name={undefined}
-                        readOnly={readOnly}
-                        options={filteredNsActionOptions}
-                        value={selectedNsAction}
-                        keySelector={nsActionKeySelector}
-                        labelSelector={stringValueSelector}
-                        onChange={setSelectedNsAction}
-                        disabled={disabled}
-                    />
-                    <div className={styles.addButtonContainer}>
-                        <Button
-                            variant="secondary"
-                            name={selectedNsAction}
-                            onClick={handleNsActionAddButtonClick}
-                            disabled={readOnly || isNotDefined(selectedNsAction) || disabled}
+                    {value.did_national_society && (
+                        <InputSection
+                            title={strings.drefFormNsResponseStarted}
+                            numPreferredColumns={2}
                         >
-                            {strings.drefFormAddButton}
-                        </Button>
-                    </div>
-                </InputSection>
-                <NonFieldError
-                    error={getErrorObject(error?.national_society_actions)}
-                />
-                {value?.national_society_actions?.map((nsAction, i) => (
-                    <NsActionInput
-                        key={nsAction.client_id}
-                        index={i}
-                        value={nsAction}
-                        onChange={onNsActionChange}
-                        onRemove={onNsActionRemove}
-                        error={getErrorObject(error?.national_society_actions)}
-                        titleDisplayMap={nsActionTitleDisplayMap}
-                        disabled={readOnly || disabled}
-                    />
-                ))}
+                            <DateInput
+                                name="ns_respond_date"
+                                readOnly={readOnly}
+                                value={value.ns_respond_date}
+                                onChange={setFieldValue}
+                                error={error?.ns_respond_date}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                    )}
+                    <InputSection>
+                        <InlineLayout
+                            after={(
+                                <Button
+                                    name={selectedNsAction}
+                                    onClick={handleNsActionAddButtonClick}
+                                    disabled={isNotDefined(selectedNsAction)
+                                        || disabled
+                                        || readOnly}
+                                >
+                                    {strings.drefFormAddButton}
+                                </Button>
+                            )}
+                            contentAlignment="end"
+                        >
+                            <SelectInput
+                                label={strings.drefFormNationalSocietiesActionsLabel}
+                                name={undefined}
+                                readOnly={readOnly}
+                                options={filteredNsActionOptions}
+                                value={selectedNsAction}
+                                keySelector={nsActionKeySelector}
+                                labelSelector={stringValueSelector}
+                                onChange={setSelectedNsAction}
+                                disabled={disabled}
+                            />
+                        </InlineLayout>
+                    </InputSection>
+                    <ListView
+                        withBackground
+                        withPadding
+                    >
+                        <NonFieldError
+                            error={getErrorObject(error?.national_society_actions)}
+                        />
+                    </ListView>
+                    {value?.national_society_actions?.map((nsAction, i) => (
+                        <NsActionInput
+                            key={nsAction.client_id}
+                            index={i}
+                            value={nsAction}
+                            onChange={onNsActionChange}
+                            onRemove={onNsActionRemove}
+                            error={getErrorObject(error?.national_society_actions)}
+                            titleDisplayMap={nsActionTitleDisplayMap}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                    ))}
+                </ListView>
             </Container>
-            <Container
-                heading={strings.ifrcNetworkActionsHeading}
-            >
-                <InputSection
-                    title={strings.drefFormIfrc}
-                    description={strings.drefFormIfrcDescription}
-                >
-                    <TextArea
-                        label={strings.drefFormActionDescription}
-                        name="ifrc"
-                        readOnly={readOnly}
-                        onChange={setFieldValue}
-                        value={value.ifrc}
-                        error={error?.ifrc}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormPartnerNationalSociety}
-                    description={strings.drefFormPartnerNationalSocietyDescription}
-                >
-                    <TextArea
-                        name="partner_national_society"
-                        readOnly={readOnly}
-                        onChange={setFieldValue}
-                        value={value.partner_national_society}
-                        error={error?.partner_national_society}
-                        disabled={disabled}
-                    />
-                </InputSection>
+            <Container heading={strings.ifrcNetworkActionsHeading}>
+                <ListView layout="block">
+                    <InputSection
+                        title={strings.drefFormIfrc}
+                        description={strings.drefFormIfrcDescription}
+                    >
+                        <TextArea
+                            label={strings.drefFormActionDescription}
+                            name="ifrc"
+                            onChange={setFieldValue}
+                            value={value.ifrc}
+                            error={error?.ifrc}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormPartnerNationalSociety}
+                        description={strings.drefFormPartnerNationalSocietyDescription}
+                    >
+                        <TextArea
+                            name="partner_national_society"
+                            onChange={setFieldValue}
+                            value={value.partner_national_society}
+                            error={error?.partner_national_society}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                    </InputSection>
+                </ListView>
             </Container>
-            <Container
-                heading={strings.icrcActionsHeading}
-            >
+            <Container heading={strings.icrcActionsHeading}>
                 <InputSection
                     title={strings.drefFormIcrc}
                     description={strings.drefFormIcrcDescription}
@@ -308,200 +317,199 @@ function Actions(props: Props) {
                     <TextArea
                         label={strings.drefFormActionDescription}
                         name="icrc"
-                        readOnly={readOnly}
                         onChange={setFieldValue}
                         value={value.icrc}
                         error={error?.icrc}
                         disabled={disabled}
+                        readOnly={readOnly}
                     />
                 </InputSection>
             </Container>
-            <Container
-                heading={strings.drefFormNationalOtherActors}
-                className={styles.otherActors}
-            >
-                <InputSection
-                    title={strings.drefFormInternationalAssistance}
-                >
-                    <BooleanInput
-                        name="government_requested_assistance"
-                        readOnly={readOnly}
-                        value={value.government_requested_assistance}
-                        onChange={setFieldValue}
-                        error={error?.government_requested_assistance}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormNationalAuthorities}
-                    description={strings.drefFormNationalAuthoritiesDescription}
-                >
-                    <TextArea
-                        label={strings.drefFormActionDescription}
-                        name="national_authorities"
-                        readOnly={readOnly}
-                        onChange={setFieldValue}
-                        value={value.national_authorities}
-                        error={error?.national_authorities}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormUNorOtherActors}
-                    description={strings.drefFormUNorOtherActorsDescription}
-                >
-                    <TextArea
-                        label={strings.drefFormActionDescription}
-                        name="un_or_other_actor"
-                        readOnly={readOnly}
-                        onChange={setFieldValue}
-                        value={value.un_or_other_actor}
-                        error={error?.un_or_other_actor}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormCoordinationMechanism}
-                >
-                    <BooleanInput
-                        name="is_there_major_coordination_mechanism"
-                        readOnly={readOnly}
-                        value={value.is_there_major_coordination_mechanism}
-                        onChange={setFieldValue}
-                        error={error?.is_there_major_coordination_mechanism}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                {value.is_there_major_coordination_mechanism && (
+            <Container heading={strings.drefFormNationalOtherActors}>
+                <ListView layout="block">
+                    <InputSection title={strings.drefFormInternationalAssistance}>
+                        <BooleanInput
+                            name="government_requested_assistance"
+                            value={value.government_requested_assistance}
+                            onChange={setFieldValue}
+                            error={error?.government_requested_assistance}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                    </InputSection>
                     <InputSection
-                        description={strings.drefFormCoordinationMechanismDescription}
+                        title={strings.drefFormNationalAuthorities}
+                        description={strings.drefFormNationalAuthoritiesDescription}
                     >
                         <TextArea
                             label={strings.drefFormActionDescription}
-                            name="major_coordination_mechanism"
-                            readOnly={readOnly}
+                            name="national_authorities"
                             onChange={setFieldValue}
-                            value={value.major_coordination_mechanism}
-                            error={error?.major_coordination_mechanism}
+                            value={value.national_authorities}
+                            error={error?.national_authorities}
                             disabled={disabled}
-                        />
-                    </InputSection>
-                )}
-            </Container>
-            {value?.type_of_dref !== TYPE_ASSESSMENT && (
-                <Container
-                    className={styles.needsIdentified}
-                    heading={strings.drefFormNeedsIdentified}
-                >
-                    {/* NOTE: Only when RESPONSE */}
-                    {value?.type_of_dref !== TYPE_IMMINENT && (
-                        <InputSection
-                            title=" "
-                        >
-                            <GoSingleFileInput
-                                name="assessment_report"
-                                accept=".pdf, .docx, .pptx"
-                                onChange={setFieldValue}
-                                url="/api/v2/dref-files/"
-                                readOnly={readOnly}
-                                value={value?.assessment_report}
-                                error={error?.assessment_report}
-                                fileIdToUrlMap={fileIdToUrlMap}
-                                setFileIdToUrlMap={setFileIdToUrlMap}
-                                disabled={disabled}
-                                clearable
-                                useCurrentLanguageForMutation
-                            >
-                                {strings.drefFormAssessmentReportUploadButtonLabel}
-                            </GoSingleFileInput>
-                            {strings.drefFormUploadTargetingSupportingDescription}
-                        </InputSection>
-                    )}
-                    <InputSection
-                        title=" "
-                        numPreferredColumns={2}
-                    >
-                        <SelectInput
-                            className={styles.input}
                             readOnly={readOnly}
-                            label={strings.drefFormActionFieldsLabel}
-                            name={undefined}
-                            onChange={setSelectedNeed}
-                            keySelector={needOptionKeySelector}
-                            labelSelector={stringValueSelector}
-                            options={filteredNeedOptions}
-                            value={selectedNeed}
-                            disabled={disabled}
                         />
-                        <div className={styles.addButtonContainer}>
-                            <Button
-                                className={styles.action}
-                                variant="secondary"
-                                name={selectedNeed}
-                                onClick={handleNeedAddButtonClick}
-                                disabled={readOnly || isNotDefined(selectedNeed) || disabled}
-                            >
-                                {strings.drefFormAddButton}
-                            </Button>
-                        </div>
                     </InputSection>
-                    <NonFieldError
-                        error={getErrorObject(error?.needs_identified)}
-                    />
-                    {value?.needs_identified?.map((need, i) => (
-                        <NeedInput
-                            key={need.client_id}
-                            index={i}
-                            value={need}
-                            onChange={onNeedChange}
-                            onRemove={onNeedRemove}
-                            error={getErrorObject(error?.needs_identified)}
-                            titleDisplayMap={needsIdentifiedTitleDisplayMap}
-                            disabled={disabled || readOnly}
+                    <InputSection
+                        title={strings.drefFormUNorOtherActors}
+                        description={strings.drefFormUNorOtherActorsDescription}
+                    >
+                        <TextArea
+                            label={strings.drefFormActionDescription}
+                            name="un_or_other_actor"
+                            onChange={setFieldValue}
+                            value={value.un_or_other_actor}
+                            error={error?.un_or_other_actor}
+                            disabled={disabled}
+                            readOnly={readOnly}
                         />
-                    ))}
-                    {value?.type_of_dref !== TYPE_IMMINENT && (
+                    </InputSection>
+                    <InputSection
+                        title={strings.drefFormCoordinationMechanism}
+                    >
+                        <BooleanInput
+                            name="is_there_major_coordination_mechanism"
+                            value={value.is_there_major_coordination_mechanism}
+                            onChange={setFieldValue}
+                            error={error?.is_there_major_coordination_mechanism}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                    </InputSection>
+                    {value.is_there_major_coordination_mechanism && (
                         <InputSection
-                            title={strings.drefFormGapsInAssessment}
-                            description={(
-                                <>
-                                    <p>
-                                        {strings.drefFormGapsInAssessmentDescriptionHeading}
-                                    </p>
-                                    <ul>
-                                        <li>
-                                            {strings.drefFormGapsInAssessmentDescriptionPoint1}
-                                        </li>
-                                        <li>
-                                            {strings.drefFormGapsInAssessmentDescriptionPoint2}
-                                        </li>
-                                        <li>
-                                            {strings.drefFormGapsInAssessmentDescriptionPoint3}
-                                        </li>
-                                        <li>
-                                            {strings.drefFormGapsInAssessmentDescriptionPoint4}
-                                        </li>
-                                        <li>
-                                            {strings.drefFormGapsInAssessmentDescriptionPoint5}
-                                        </li>
-                                    </ul>
-                                </>
-                            )}
+                            description={strings.drefFormCoordinationMechanismDescription}
                         >
                             <TextArea
                                 label={strings.drefFormActionDescription}
-                                name="identified_gaps"
-                                readOnly={readOnly}
+                                name="major_coordination_mechanism"
                                 onChange={setFieldValue}
-                                value={value.identified_gaps}
-                                error={error?.identified_gaps}
+                                value={value.major_coordination_mechanism}
+                                error={error?.major_coordination_mechanism}
                                 disabled={disabled}
+                                readOnly={readOnly}
                             />
                         </InputSection>
                     )}
+                </ListView>
+            </Container>
+            {value?.type_of_dref !== TYPE_ASSESSMENT && (
+                <Container heading={strings.drefFormNeedsIdentified}>
+                    <ListView layout="block">
+                        {value?.type_of_dref !== TYPE_IMMINENT && (
+                            <InputSection>
+                                <GoSingleFileInput
+                                    name="assessment_report"
+                                    accept=".pdf, .docx, .pptx"
+                                    onChange={setFieldValue}
+                                    url="/api/v2/dref-files/"
+                                    value={value?.assessment_report}
+                                    error={error?.assessment_report}
+                                    fileIdToUrlMap={fileIdToUrlMap}
+                                    setFileIdToUrlMap={setFileIdToUrlMap}
+                                    disabled={disabled}
+                                    clearable
+                                    readOnly={readOnly}
+                                    useCurrentLanguageForMutation
+                                >
+                                    {strings.drefFormAssessmentReportUploadButtonLabel}
+                                </GoSingleFileInput>
+                                <Description>
+                                    {strings.drefFormUploadTargetingSupportingDescription}
+                                </Description>
+                            </InputSection>
+                        )}
+                        <InputSection>
+                            <InlineLayout
+                                after={(
+                                    <Button
+                                        name={selectedNeed}
+                                        onClick={handleNeedAddButtonClick}
+                                        disabled={isNotDefined(selectedNeed)
+                                            || disabled
+                                            || readOnly}
+                                    >
+                                        {strings.drefFormAddButton}
+                                    </Button>
+                                )}
+                            >
+                                <SelectInput
+                                    label={strings.drefFormActionFieldsLabel}
+                                    name={undefined}
+                                    onChange={setSelectedNeed}
+                                    keySelector={needOptionKeySelector}
+                                    labelSelector={stringValueSelector}
+                                    options={filteredNeedOptions}
+                                    value={selectedNeed}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            </InlineLayout>
+                        </InputSection>
+                        <NonFieldError
+                            error={getErrorObject(error?.needs_identified)}
+                        />
+                        {value?.needs_identified?.map((need, i) => (
+                            <NeedInput
+                                key={need.client_id}
+                                index={i}
+                                value={need}
+                                onChange={onNeedChange}
+                                onRemove={onNeedRemove}
+                                error={getErrorObject(error?.needs_identified)}
+                                titleDisplayMap={needsIdentifiedTitleDisplayMap}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        ))}
+                        {value?.type_of_dref !== TYPE_IMMINENT && (
+                            <InputSection
+                                title={strings.drefFormGapsInAssessment}
+                                description={(
+                                    <ListView
+                                        layout="block"
+                                        withSpacingOpticalCorrection
+                                        spacing="sm"
+                                    >
+                                        <p>
+                                            {strings.drefFormGapsInAssessmentDescriptionHeading}
+                                        </p>
+                                        <ul>
+                                            <li>
+                                                {strings.drefFormGapsInAssessmentDescriptionPoint1}
+                                            </li>
+                                            <li>
+                                                {strings.drefFormGapsInAssessmentDescriptionPoint2}
+                                            </li>
+                                            <li>
+                                                {strings.drefFormGapsInAssessmentDescriptionPoint3}
+                                            </li>
+                                            <li>
+                                                {strings.drefFormGapsInAssessmentDescriptionPoint4}
+                                            </li>
+                                            <li>
+                                                {strings.drefFormGapsInAssessmentDescriptionPoint5}
+                                            </li>
+                                        </ul>
+                                    </ListView>
+                                )}
+                            >
+                                <TextArea
+                                    label={strings.drefFormActionDescription}
+                                    name="identified_gaps"
+                                    onChange={setFieldValue}
+                                    value={value.identified_gaps}
+                                    error={error?.identified_gaps}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            </InputSection>
+                        )}
+                    </ListView>
                 </Container>
             )}
-        </div>
+        </TabPage>
     );
 }
 

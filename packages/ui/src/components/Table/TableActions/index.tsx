@@ -27,7 +27,8 @@ function TableActions(props: Props) {
             {extraActions && (
                 <DropdownMenu
                     withoutDropdownIcon
-                    variant="tertiary"
+                    labelColorVariant="text"
+                    labelStyleVariant="action"
                     label={<MoreFillIcon className={styles.moreIcon} />}
                     persistent={persistent}
                 >

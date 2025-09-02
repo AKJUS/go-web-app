@@ -12,7 +12,6 @@ export interface Props {
     infoLabel?: React.ReactNode;
     title?: React.ReactNode;
     description?: React.ReactNode;
-    descriptionClassName?: string;
     popupClassName?: string;
     className?: string;
 }
@@ -26,7 +25,6 @@ function InfoPopup(props: Props) {
         description,
         withoutIcon,
         popupClassName,
-        descriptionClassName,
     } = props;
 
     return (
@@ -43,13 +41,18 @@ function InfoPopup(props: Props) {
             )}
             popupClassName={_cs(styles.dropdownContainer, popupClassName)}
             className={_cs(styles.infoPopup, className)}
-            variant="tertiary"
+            labelStyleVariant="action"
+            labelColorVariant="text"
+            labelSpacing="none"
             withoutDropdownIcon
         >
             <Container
+                pending={false}
+                empty={false}
+                filtered={false}
+                errored={false}
                 heading={title}
-                childrenContainerClassName={_cs(descriptionClassName, styles.content)}
-                withInternalPadding
+                withPadding
             >
                 {description}
             </Container>

@@ -24,7 +24,7 @@ export function Component() {
             title={strings.accountPageTitle}
             actions={(
                 <WikiLink
-                    href="user_guide/account"
+                    pathName="user_guide/account"
                 />
             )}
             heading={

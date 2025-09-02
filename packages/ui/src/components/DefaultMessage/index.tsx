@@ -8,7 +8,7 @@ import useTranslation from '#hooks/useTranslation';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-interface Props {
+export interface Props {
     className?: string;
     compact?: boolean;
     pending: boolean;
@@ -21,6 +21,7 @@ interface Props {
     filteredEmptyMessage?: React.ReactNode;
     pendingMessage?: React.ReactNode;
     errorMessage?: React.ReactNode;
+    withoutIcon?: boolean;
 }
 
 function DefaultMessage(props: Props) {
@@ -37,6 +38,7 @@ function DefaultMessage(props: Props) {
         filteredEmptyMessage,
         pendingMessage,
         errorMessage,
+        withoutIcon,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -85,7 +87,7 @@ function DefaultMessage(props: Props) {
                 pending && overlayPending && styles.overlay,
                 className,
             )}
-            icon={<AnalysisIcon />}
+            icon={!withoutIcon && <AnalysisIcon />}
             compact={compact}
             title={messageTitle}
             pending={pending}

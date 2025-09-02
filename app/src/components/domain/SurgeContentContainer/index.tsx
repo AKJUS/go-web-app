@@ -1,6 +1,7 @@
-import { Container } from '@ifrc-go/ui';
-
-import styles from './styles.module.css';
+import {
+    Container,
+    ListView,
+} from '@ifrc-go/ui';
 
 interface Props {
     heading: React.ReactNode;
@@ -15,12 +16,15 @@ function SurgeContentContainer(props: Props) {
 
     return (
         <Container
-            className={styles.surgeContentContainer}
-            childrenContainerClassName={styles.content}
             heading={heading}
             withHeaderBorder
         >
-            {children}
+            <ListView
+                layout="block"
+                spacing="lg"
+            >
+                {children}
+            </ListView>
         </Container>
     );
 }

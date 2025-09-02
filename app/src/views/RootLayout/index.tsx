@@ -16,6 +16,7 @@ import {
     AlertContainer,
     Button,
     Container,
+    ListView,
     PageContainer,
 } from '@ifrc-go/ui';
 import { LanguageContext } from '@ifrc-go/ui/contexts';
@@ -460,32 +461,36 @@ export function Component() {
                         {isCookiesBannerVisible && (
                             <PageContainer className={styles.cookiesBanner}>
                                 <Container
-                                    withoutWrapInHeading
-                                    headingDescription={strings.cookiesBannerDescription}
-                                    icons={(
+                                    // FIXME: use translation and actual heading
+                                    heading="Cookie Policy"
+                                    headerIcons={(
                                         <AlertInformationLineIcon
                                             className={styles.alertInfoIcon}
                                         />
                                     )}
-                                    spacing="comfortable"
-                                    actions={(
-                                        <>
+                                    headerActions={(
+                                        <ListView>
                                             <Link
                                                 to="cookiePolicy"
-                                                variant="tertiary"
+                                                colorVariant="text-on-dark"
+                                                styleVariant="translucent"
+                                                withLinkIcon
                                             >
                                                 {strings.cookiesBannerLearnMore}
                                             </Link>
                                             <Button
                                                 name={undefined}
-                                                variant="primary"
+                                                colorVariant="primary"
+                                                styleVariant="filled"
                                                 onClick={handleClick}
                                             >
                                                 {strings.cookiesBannerIAccept}
                                             </Button>
-                                        </>
+                                        </ListView>
                                     )}
-                                />
+                                >
+                                    {strings.cookiesBannerDescription}
+                                </Container>
                             </PageContainer>
                         )}
                         {environment !== 'production' && (

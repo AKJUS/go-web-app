@@ -1,8 +1,4 @@
 .bulk-upload-status {
-    &.with-background {
-        background-color: var(--go-ui-color-background);
-    }
-
     .icon {
         font-size: var(--go-ui-height-icon-multiplier);
     }

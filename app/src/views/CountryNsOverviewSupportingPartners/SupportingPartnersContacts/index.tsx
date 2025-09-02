@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import {
     Container,
+    ListView,
     Table,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -110,23 +111,25 @@ function SupportingPartnersContacts(props: Props) {
             withHeaderBorder
             pending={supportingPartnerPending}
             empty={isNotDefined(groupedPartnersList) || groupedPartnersList.length === 0}
-            contentViewType="vertical"
-            spacing="comfortable"
+            errored={false}
+            filtered={false}
         >
-            {groupedPartnersList?.map((groupedPartner) => (
-                <Table
-                    key={groupedPartner.label}
-                    className={styles.table}
-                    caption={groupedPartner.label}
-                    captionClassName={styles.caption}
-                    columns={columns}
-                    data={groupedPartner.value}
-                    headersHidden
-                    filtered={false}
-                    keySelector={numericIdSelector}
-                    pending={false}
-                />
-            ))}
+            <ListView layout="block">
+                {groupedPartnersList?.map((groupedPartner) => (
+                    <Table
+                        key={groupedPartner.label}
+                        className={styles.table}
+                        caption={groupedPartner.label}
+                        captionClassName={styles.caption}
+                        columns={columns}
+                        data={groupedPartner.value}
+                        headersHidden
+                        filtered={false}
+                        keySelector={numericIdSelector}
+                        pending={false}
+                    />
+                ))}
+            </ListView>
         </Container>
     );
 }

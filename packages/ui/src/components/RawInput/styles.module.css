@@ -3,7 +3,7 @@
     outline: unset;
     border: unset;
     background-color: unset;
-    padding: unset;
+    padding: var(--go-ui-spacing-4xs) 0;
     width: 100%;
     color: inherit;
     font-family: inherit;

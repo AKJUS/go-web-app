@@ -14,7 +14,8 @@
             "#hooks/*": ["./src/hooks/*"],
             "#strings/*": ["./src/strings/*"],
             "#utils/*": ["./src/utils/*"],
-            "#views/*": ["./src/views/*"]
+            "#views/*": ["./src/views/*"],
+            "#routes": ["./src/App/routes"]
         },
 
         "target": "ESNext",

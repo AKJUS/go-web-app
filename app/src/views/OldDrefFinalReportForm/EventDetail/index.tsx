@@ -261,11 +261,9 @@ function EventDetail(props: Props) {
                         disabled={disabled}
                     />
                 </InputSection>
-
                 <InputSection
                     title={strings.drefFormUploadPhotos}
                     description={strings.drefFormUploadPhotosLimitation}
-                    contentSectionClassName={styles.imageInputContent}
                 >
                     <MultiImageWithCaptionInput
                         label={strings.drefFinalReportFormSelectImages}
@@ -317,7 +315,6 @@ function EventDetail(props: Props) {
                         className={styles.actions}
                         name={undefined}
                         onClick={handleSourceInformationAdd}
-                        variant="secondary"
                         disabled={disabled || readOnly}
                     >
                         {strings.drefFormSourceInformationAddButton}

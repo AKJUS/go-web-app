@@ -169,7 +169,7 @@ function ContextTab(props: Props) {
                     <div>
                         <Button
                             name={undefined}
-                            variant="secondary"
+                            colorVariant="primary"
                             onClick={handleAddCountryDistrict}
                             disabled={disabled}
                         >
@@ -208,7 +208,7 @@ function ContextTab(props: Props) {
                             name={undefined}
                             disabled={!value.country_district || !value.hazard_type}
                             onClick={handleTitleGenerateButtonClick}
-                            variant="tertiary"
+                            styleVariant="action"
                         >
                             {strings.flashUpdateFormGenerateButtonLabel}
                         </Button>
@@ -286,7 +286,6 @@ function ContextTab(props: Props) {
                 <div>
                     <Button
                         name={undefined}
-                        variant="secondary"
                         onClick={handleAddReference}
                         disabled={disabled}
                     >

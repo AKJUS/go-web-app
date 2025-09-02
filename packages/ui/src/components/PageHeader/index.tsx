@@ -1,8 +1,10 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import Container from '#components/Container';
+import Description from '#components/Description';
 import Heading from '#components/Heading';
+import InlineView from '#components/InlineView';
+import ListView from '#components/ListView';
 import PageContainer from '#components/PageContainer';
 
 import styles from './styles.module.css';
@@ -11,13 +13,10 @@ export interface Props {
     className?: string;
     heading?: React.ReactNode;
     description?: React.ReactNode;
-    descriptionContainerClassName?: string;
     actions?: React.ReactNode;
     breadCrumbs?: React.ReactNode;
     info?: React.ReactNode;
-    infoContainerClassName?: string;
     wikiLink?: React.ReactNode;
-    headerClassName?: string;
 }
 
 function PageHeader(props: Props) {
@@ -25,13 +24,10 @@ function PageHeader(props: Props) {
         className,
         heading,
         description,
-        descriptionContainerClassName,
         actions,
         breadCrumbs,
         info,
-        infoContainerClassName,
         wikiLink,
-        headerClassName,
     } = props;
 
     if (!(actions || breadCrumbs || info || description || heading)) {
@@ -46,36 +42,40 @@ function PageHeader(props: Props) {
                 className,
             )}
         >
-            <Container
-                className={styles.container}
-                icons={breadCrumbs}
-                iconsContainerClassName={styles.breadcrumbsContainer}
-                actions={(actions || wikiLink) && (
-                    <>
-                        {actions}
-                        {wikiLink}
-                    </>
-                )}
-                footerContent={info}
-                footerContentClassName={infoContainerClassName}
-                childrenContainerClassName={_cs(styles.header, headerClassName)}
+            <ListView
+                layout="block"
+                spacing="xl"
             >
-                {(heading || description) && (
-                    <>
-                        <Heading
-                            level={1}
-                            className={styles.heading}
+                <InlineView
+                    after={(actions || wikiLink) && (
+                        <ListView
+                            withWrap
+                            spacing="sm"
                         >
-                            { heading }
-                        </Heading>
-                        {description && (
-                            <div className={_cs(styles.description, descriptionContainerClassName)}>
-                                { description }
-                            </div>
-                        )}
-                    </>
-                )}
-            </Container>
+                            {actions}
+                            {wikiLink}
+                        </ListView>
+                    )}
+                >
+                    {breadCrumbs}
+                </InlineView>
+                <ListView
+                    layout="block"
+                >
+                    <Heading
+                        level={1}
+                        className={styles.heading}
+                    >
+                        { heading }
+                    </Heading>
+                    {description && (
+                        <Description withCenteredContent>
+                            { description }
+                        </Description>
+                    )}
+                </ListView>
+                {info}
+            </ListView>
         </PageContainer>
     );
 }

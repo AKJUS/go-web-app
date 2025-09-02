@@ -1,294 +1,275 @@
-import { useMemo } from 'react';
+import {
+    HTMLProps,
+    RefObject,
+} from 'react';
 import {
     _cs,
+    isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
 
+import BlockView from '#components/BlockView';
 import DefaultMessage from '#components/DefaultMessage';
-import FilterBar from '#components/FilterBar';
-import Footer from '#components/Footer';
-import Header, { Props as HeaderProps } from '#components/Header';
-import { Props as HeadingProps } from '#components/Heading';
-import type { SpacingType } from '#components/types';
-import useSpacingTokens from '#hooks/useSpacingTokens';
+import Description from '#components/Description';
+import Heading, { type Props as HeadingProps } from '#components/Heading';
+import InlineView from '#components/InlineView';
+import ListView from '#components/ListView';
+import useSpacingToken from '#hooks/useSpacingToken';
+import {
+    getSpacingValue,
+    paddingSpacings,
+    SpacingType,
+} from '#utils/style';
 
 import styles from './styles.module.css';
 
-type NumColumn = 2 | 3 | 4 | 5;
-const numColumnToClassNameMap: Record<NumColumn, string> = {
-    2: styles.twoColumns,
-    3: styles.threeColumns,
-    4: styles.fourColumns,
-    5: styles.fiveColumns,
-};
-
-export interface Props {
-    actions?: React.ReactNode;
-    actionsContainerClassName?: string;
-    children?: React.ReactNode;
-    childrenContainerClassName?: string,
+export interface Props extends Omit<HTMLProps<HTMLDivElement>, 'ref'>{
+    elementRef?: RefObject<HTMLDivElement>;
     className?: string;
-    contentViewType?: 'grid' | 'vertical' | 'default';
-    elementId?: string;
-    ellipsizeHeading?: boolean;
-    filters?: React.ReactNode;
-    filterActions?: React.ReactNode;
-    footerActions?: React.ReactNode;
-    footerActionsContainerClassName?: string;
-    footerClassName?: string;
-    footerContent?: React.ReactNode;
-    footerContentClassName?: string;
-    footerIcons?: React.ReactNode;
-    headerClassName?: string;
-    headerDescription?: React.ReactNode;
-    headerDescriptionContainerClassName?: string;
-    containerRef?: React.RefObject<HTMLDivElement>;
-    headerElementRef?: HeaderProps['elementRef'];
+
     heading?: React.ReactNode;
-    headingClassName?: string;
-    headingContainerClassName?: string;
-    headingDescription?: React.ReactNode;
-    withCenteredHeaderDescription?: boolean;
-    headingDescriptionContainerClassName?: string;
-    headingLevel?: HeadingProps['level'],
-    headingSectionClassName?: string;
-    icons?: React.ReactNode;
-    iconsContainerClassName?: string;
-    numPreferredGridContentColumns?: NumColumn;
-    spacing?: SpacingType;
+    withEllipsizedHeading?: boolean;
+    headingLevel?: HeadingProps['level'];
+    headerDescription?: React.ReactNode;
+    headerIcons?: React.ReactNode;
+    headerActions?: React.ReactNode;
     withHeaderBorder?: boolean;
+    withCenteredHeaderDescription?: boolean;
+    withCenteredHeading?: boolean;
+    withoutWrapInHeader?: boolean;
+
+    filters?: React.ReactNode;
+    children: React.ReactNode;
+    withContentOverflow?: boolean;
+    withContentWell?: boolean;
+
+    footerIcons?: React.ReactNode;
+    footerActions?: React.ReactNode;
+    footer?: React.ReactNode;
     withFooterBorder?: boolean;
-    withBorderAndHeaderBackground?: boolean;
-    withInternalPadding?: boolean;
-    withOverflowInContent?: boolean;
-    withoutWrapInHeading?: boolean;
-    withoutWrapInFooter?: boolean;
 
     pending?: boolean;
     overlayPending?: boolean;
     empty?: boolean;
-    errored?: boolean;
     filtered?: boolean;
-    compactMessage?: boolean;
-
+    errored?: boolean;
     emptyMessage?: React.ReactNode;
-    pendingMessage?: React.ReactNode;
-    errorMessage?: React.ReactNode;
     filteredEmptyMessage?: React.ReactNode;
+    errorMessage?: React.ReactNode;
+    pendingMessage?: React.ReactNode;
+    withoutMessageIcon?: boolean;
+    withCompactMessage?: boolean;
+
+    withBackground?: boolean;
+    withDarkBackground?: boolean;
+    withShadow?: boolean;
+    withPadding?: boolean;
+
+    spacing?: SpacingType;
+    spacingOffset?: number;
+    withoutSpacingOpticalCorrection?: boolean;
 }
 
 function Container(props: Props) {
     const {
-        actions,
-        actionsContainerClassName,
-        children,
-        childrenContainerClassName,
         className,
-        containerRef,
-        contentViewType = 'default',
-        elementId,
-        ellipsizeHeading,
-        filters,
-        filterActions,
-        footerActions,
-        footerActionsContainerClassName,
-        footerClassName,
-        footerContent,
-        footerContentClassName,
-        footerIcons,
-        headerClassName,
-        headerDescription: headerDescriptionFromProps,
-        withCenteredHeaderDescription,
-        headerDescriptionContainerClassName,
-        headerElementRef,
+        elementRef,
+
         heading,
-        headingClassName,
-        headingContainerClassName,
-        headingDescription,
-        headingDescriptionContainerClassName,
+        withEllipsizedHeading,
         headingLevel,
-        headingSectionClassName,
-        icons,
-        iconsContainerClassName,
-        numPreferredGridContentColumns = 2,
-        spacing = 'default',
-        withHeaderBorder = false,
-        withFooterBorder = false,
-        withBorderAndHeaderBackground = false,
-        withOverflowInContent = false,
-        withInternalPadding = false,
-        withoutWrapInHeading = false,
-        withoutWrapInFooter = false,
+        headerIcons,
+        headerActions,
+        headerDescription,
+        withHeaderBorder,
+        withCenteredHeading,
+        withCenteredHeaderDescription,
+        withoutWrapInHeader,
 
-        pending = false,
-        overlayPending = false,
+        filters,
+
+        footerIcons,
+        footer,
+        footerActions,
+        withFooterBorder,
+
+        children,
+        withContentOverflow,
+        withContentWell,
+
         empty = false,
-        errored = false,
         filtered = false,
-        compactMessage = false,
-
-        errorMessage,
+        pending = false,
+        overlayPending,
+        errored = false,
         emptyMessage,
-        pendingMessage,
         filteredEmptyMessage,
+        pendingMessage,
+        errorMessage,
+        withoutMessageIcon,
+        withCompactMessage,
+
+        withBackground,
+        withDarkBackground,
+        withShadow,
+        withPadding,
+        spacing,
+        spacingOffset = 0,
+        withoutSpacingOpticalCorrection,
+
+        ...divProps
     } = props;
 
-    const showFooter = footerIcons || footerContent || footerActions;
-    const showHeader = heading
-        || actions
-        || icons
-        || headerDescriptionFromProps
-        || headingDescription;
-    const gapSpacingTokens = useSpacingTokens({ spacing });
-    const horizontalPaddingSpacingTokens = useSpacingTokens({
+    const shouldShowHeadingRow = isDefined(heading)
+        || isDefined(headerIcons)
+        || isDefined(headerActions);
+    const shouldShowHeader = shouldShowHeadingRow
+        || isDefined(headerDescription);
+
+    const shouldShowFooter = isDefined(footer)
+        || isDefined(footerIcons)
+        || isDefined(footerActions);
+
+    const contentSpacingClassName = useSpacingToken({
         spacing,
-        mode: 'padding-h',
-    });
-    const verticalPaddingSpacingTokens = useSpacingTokens({
-        spacing,
-        mode: 'padding-v',
-    });
-    const childrenGapTokens = useSpacingTokens({
-        spacing,
-        mode: 'gap',
-        inner: true,
+        offset: spacingOffset,
+        modes: paddingSpacings,
+        withoutOpticalCorrection: withoutSpacingOpticalCorrection,
     });
 
-    const headerDescription = useMemo(
-        () => {
-            if (isNotDefined(headerDescriptionFromProps)) {
-                return null;
-            }
+    const spacingValue = getSpacingValue(spacing, spacingOffset);
 
-            if (!withCenteredHeaderDescription) {
-                return headerDescriptionFromProps;
-            }
+    const overflowChildren = (withContentOverflow && withPadding)
+        ? (
+            <div
+                className={styles.overflowContainer}
+                style={{
+                    padding: `0 ${spacingValue}`,
+                    margin: `0 calc(-1 * ${spacingValue})`,
+                }}
+            >
+                {children}
+            </div>
+        ) : children;
 
-            return (
-                <div className={styles.centeredDescription}>
-                    {headerDescriptionFromProps}
-                </div>
-            );
-        },
-        [headerDescriptionFromProps, withCenteredHeaderDescription],
+    const mainContent = (children || empty || pending || errored || filtered) && (
+        <>
+            <DefaultMessage
+                className={styles.message}
+                pending={pending}
+                filtered={filtered}
+                errored={errored}
+                empty={empty}
+                overlayPending={overlayPending}
+                emptyMessage={emptyMessage}
+                filteredEmptyMessage={filteredEmptyMessage}
+                pendingMessage={pendingMessage}
+                errorMessage={errorMessage}
+                withoutIcon={withoutMessageIcon}
+                compact={withCompactMessage}
+            />
+            {!empty && !errored && (!pending || overlayPending) && overflowChildren}
+        </>
     );
 
-    if (
-        !showHeader
-            && !filters
-            && !children
-            && !showFooter
-            && !empty
-            && !pending
-            && !errored
-            && !filtered
-    ) {
-        return null;
-    }
-
     return (
-        <section
-            id={elementId}
-            ref={containerRef}
+        <BlockView
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...divProps}
+            elementRef={elementRef}
             className={_cs(
                 styles.container,
-                !withBorderAndHeaderBackground && gapSpacingTokens,
-                withInternalPadding && verticalPaddingSpacingTokens,
-                withOverflowInContent && styles.withOverflowInContent,
-                withBorderAndHeaderBackground && styles.withBorderAndHeaderBackground,
-                contentViewType === 'grid' && styles.withGridView,
-                contentViewType === 'grid' && numColumnToClassNameMap[numPreferredGridContentColumns],
-                contentViewType === 'vertical' && styles.withVerticalView,
+                withBackground && styles.withBackground,
+                withDarkBackground && styles.withDarkBackground,
+                withShadow && styles.withShadow,
+                withContentWell && styles.withContentWell,
                 className,
             )}
+            spacing={spacing}
+            spacingOffset={spacingOffset}
+            withoutSpacingOpticalCorrection={withoutSpacingOpticalCorrection}
+            withPadding={withPadding}
+            before={shouldShowHeader && (
+                <ListView
+                    spacing={spacing}
+                    spacingOffset={spacingOffset}
+                    layout="block"
+                    withSpacingOpticalCorrection
+                >
+                    {shouldShowHeadingRow && (
+                        <InlineView
+                            spacing={spacing}
+                            spacingOffset={spacingOffset - 1}
+                            withoutSpacingOpticalCorrection={withoutSpacingOpticalCorrection}
+                            withoutWrap={withoutWrapInHeader}
+                            before={headerIcons}
+                            after={headerActions && (
+                                <ListView
+                                    spacing={spacing}
+                                    spacingOffset={spacingOffset - 1}
+                                    withSpacingOpticalCorrection={!withoutSpacingOpticalCorrection}
+                                >
+                                    {headerActions}
+                                </ListView>
+                            )}
+                        >
+                            <Heading
+                                level={headingLevel}
+                                ellipsize={withEllipsizedHeading}
+                                centerAligned={withCenteredHeading}
+                            >
+                                {heading}
+                            </Heading>
+                        </InlineView>
+                    )}
+                    {headerDescription && (
+                        <Description withCenteredContent={withCenteredHeaderDescription}>
+                            {headerDescription}
+                        </Description>
+                    )}
+                </ListView>
+            )}
+            after={shouldShowFooter && (
+                <InlineView
+                    spacing={spacing}
+                    spacingOffset={spacingOffset}
+                    withoutSpacingOpticalCorrection={withoutSpacingOpticalCorrection}
+                    before={footerIcons}
+                    after={footerActions}
+                >
+                    {footer}
+                </InlineView>
+            )}
+            withbeforeSeparator={withHeaderBorder}
+            withafterSeparator={withFooterBorder}
+            childrenContainerClassName={_cs(
+                styles.content,
+                overlayPending && styles.pendingOverlaid,
+                withContentOverflow && styles.withOverflow,
+                withPadding && withContentOverflow && styles.withPaddingOverflow,
+                withContentWell && contentSpacingClassName,
+            )}
         >
-            {showHeader && (
-                <Header
-                    actions={actions}
-                    className={_cs(
-                        styles.header,
-                        withBorderAndHeaderBackground && verticalPaddingSpacingTokens,
-                        (withInternalPadding || withBorderAndHeaderBackground)
-                            && horizontalPaddingSpacingTokens,
-                        headerClassName,
-                    )}
-                    elementRef={headerElementRef}
-                    actionsContainerClassName={actionsContainerClassName}
-                    ellipsizeHeading={ellipsizeHeading}
-                    heading={heading}
-                    headingLevel={headingLevel}
-                    icons={icons}
-                    iconsContainerClassName={iconsContainerClassName}
-                    childrenContainerClassName={_cs(
-                        withCenteredHeaderDescription && styles.centeredHeaderDescriptionContainer,
-                        headerDescriptionContainerClassName,
-                    )}
-                    headingSectionClassName={headingSectionClassName}
-                    headingClassName={headingClassName}
-                    headingContainerClassName={headingContainerClassName}
-                    wrapHeadingContent={!withoutWrapInHeading}
-                    headingDescription={headingDescription}
-                    headingDescriptionContainerClassName={headingDescriptionContainerClassName}
+            {isDefined(filters) && (
+                <ListView
+                    layout="block"
                     spacing={spacing}
+                    spacingOffset={spacingOffset}
                 >
-                    {headerDescription}
-                </Header>
+                    <ListView
+                        gridContentClassName={styles.filters}
+                        layout="grid"
+                        numPreferredGridColumns={6}
+                        spacing={spacing}
+                        spacingOffset={spacingOffset - 1}
+                    >
+                        {filters}
+                    </ListView>
+                    {mainContent}
+                </ListView>
             )}
-            {withHeaderBorder && <div className={styles.border} />}
-            <FilterBar
-                filters={filters}
-                filterActions={filterActions}
-                spacing={spacing}
-                className={_cs(withInternalPadding && horizontalPaddingSpacingTokens)}
-            />
-            {(children || empty || pending || errored || filtered) && (
-                <div
-                    className={_cs(
-                        styles.content,
-                        contentViewType !== 'default' && childrenGapTokens,
-                        (withInternalPadding || withBorderAndHeaderBackground)
-                            && horizontalPaddingSpacingTokens,
-                        withBorderAndHeaderBackground && verticalPaddingSpacingTokens,
-                        overlayPending && pending && styles.pendingOverlaid,
-                        childrenContainerClassName,
-                    )}
-                >
-                    <DefaultMessage
-                        className={styles.message}
-                        pending={pending}
-                        filtered={filtered}
-                        errored={errored}
-                        empty={empty}
-                        compact={compactMessage}
-                        overlayPending={overlayPending}
-                        emptyMessage={emptyMessage}
-                        filteredEmptyMessage={filteredEmptyMessage}
-                        pendingMessage={pendingMessage}
-                        errorMessage={errorMessage}
-                    />
-                    {!empty && !errored && (!pending || overlayPending) && children}
-                </div>
-            )}
-            {showFooter && withFooterBorder && <div className={styles.border} />}
-            {showFooter && (
-                <Footer
-                    actions={footerActions}
-                    icons={footerIcons}
-                    childrenContainerClassName={footerContentClassName}
-                    className={_cs(
-                        styles.footer,
-                        withInternalPadding && horizontalPaddingSpacingTokens,
-                        withBorderAndHeaderBackground && verticalPaddingSpacingTokens,
-                        footerClassName,
-                    )}
-                    actionsContainerClassName={footerActionsContainerClassName}
-                    spacing={spacing}
-                    withoutWrap={withoutWrapInFooter}
-                >
-                    {footerContent}
-                </Footer>
-            )}
-        </section>
+            {isNotDefined(filters) && mainContent}
+        </BlockView>
     );
 }
 

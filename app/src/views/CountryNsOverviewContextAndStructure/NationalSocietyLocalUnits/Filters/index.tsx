@@ -17,7 +17,6 @@ import { type GoApiResponse } from '#utils/restRequest';
 import { type ValidationOption } from '../common';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 export interface FilterValue {
     search?: string | undefined;
@@ -86,16 +85,13 @@ function Filters(props: Props) {
                 onChange={onChange}
                 icons={<SearchLineIcon />}
             />
-            <div className={styles.actions}>
-                <Button
-                    name={undefined}
-                    variant="secondary"
-                    onClick={resetFilter}
-                    disabled={!filtered}
-                >
-                    {strings.localUnitsFilterClear}
-                </Button>
-            </div>
+            <Button
+                name={undefined}
+                onClick={resetFilter}
+                disabled={!filtered}
+            >
+                {strings.localUnitsFilterClear}
+            </Button>
         </>
     );
 }

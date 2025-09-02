@@ -8,9 +8,8 @@ import { type LngLatBoundsLike } from 'mapbox-gl';
 
 import HistoricalDataChart from '#components/domain/HistoricalDataChart';
 import RiskSeasonalMap from '#components/domain/RiskSeasonalMap';
+import TabPage from '#components/TabPage';
 import { type RegionOutletContext } from '#utils/outletContext';
-
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -23,7 +22,7 @@ export function Component() {
     );
 
     return (
-        <div className={styles.regionSeasonalRiskWatch}>
+        <TabPage>
             <RiskSeasonalMap
                 variant="region"
                 regionId={Number(regionId)}
@@ -33,7 +32,7 @@ export function Component() {
                 variant="region"
                 regionId={Number(regionId)}
             />
-        </div>
+        </TabPage>
     );
 }
 

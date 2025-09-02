@@ -1,6 +1,8 @@
 import { DeleteBinTwoLineIcon } from '@ifrc-go/icons';
 import {
     Button,
+    InlineLayout,
+    ListView,
     NumberInput,
     TextInput,
 } from '@ifrc-go/ui';
@@ -12,12 +14,9 @@ import {
     useFormObject,
 } from '@togglecorp/toggle-form';
 
-import NonFieldError from '#components/NonFieldError';
-
 import { type PartialDref } from '../../../schema';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type PlannedInterventionFormFields = NonNullable<PartialDref['planned_interventions']>[number];
 type IndicatorFormFields = NonNullable<PlannedInterventionFormFields['indicators']>[number];
@@ -28,12 +27,12 @@ const defaultIndicatorValue: IndicatorFormFields = {
 
 interface Props {
     value: IndicatorFormFields;
-    readOnly: boolean;
     error: ArrayError<IndicatorFormFields> | undefined;
     onChange: (value: SetValueArg<IndicatorFormFields>, index: number) => void;
     onRemove: (index: number) => void;
     index: number;
     disabled?: boolean;
+    readOnly?: boolean;
 }
 
 function IndicatorInput(props: Props) {
@@ -56,39 +55,44 @@ function IndicatorInput(props: Props) {
         : undefined;
 
     return (
-        <div className={styles.indicator}>
-            <NonFieldError error={error} />
-            <TextInput
-                className={styles.titleInput}
-                label={strings.drefFormIndicatorTitleLabel}
-                name="title"
-                value={value.title}
-                onChange={onFieldChange}
-                error={error?.title}
-                readOnly={readOnly}
-                disabled={disabled}
-            />
-            <NumberInput
-                className={styles.numberInput}
-                label={strings.drefFormIndicatorTargetLabel}
-                name="target"
-                value={value.target}
-                onChange={onFieldChange}
-                error={error?.target}
-                readOnly={readOnly}
-                disabled={disabled}
-            />
-            <Button
-                name={index}
-                className={styles.removeButton}
-                onClick={onRemove}
-                variant="tertiary"
-                title={strings.drefIndicatorRemoveButtonLabel}
-                disabled={disabled || readOnly}
+        <InlineLayout
+            after={(
+                <Button
+                    name={index}
+                    onClick={onRemove}
+                    styleVariant="action"
+                    title={strings.drefIndicatorRemoveButtonLabel}
+                    disabled={disabled || readOnly}
+                >
+                    <DeleteBinTwoLineIcon />
+                </Button>
+            )}
+            spacing="sm"
+        >
+            <ListView
+                layout="grid"
+                spacing="sm"
             >
-                <DeleteBinTwoLineIcon />
-            </Button>
-        </div>
+                <TextInput
+                    label={strings.drefFormIndicatorTitleLabel}
+                    name="title"
+                    value={value.title}
+                    onChange={onFieldChange}
+                    error={error?.title}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                />
+                <NumberInput
+                    label={strings.drefFormIndicatorTargetLabel}
+                    name="target"
+                    value={value.target}
+                    onChange={onFieldChange}
+                    error={error?.target}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                />
+            </ListView>
+        </InlineLayout>
     );
 }
 

@@ -1,9 +1,19 @@
 .overlay {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--go-ui-color-background-overlay-dark);
+    width: 100vw;
+    height: 100vh;
     overflow: auto;
     animation: fade-in var(--go-ui-duration-transition-medium) ease-in forwards;
 
-    .modal-container {
+    .focus-container {
         display: block;
+        width: 100%;
         width: calc(100% - var(--go-ui-spacing-md) * 2);
         max-height: calc(100% - var(--go-ui-spacing-md) * 2);
         overflow: auto;
@@ -19,10 +29,12 @@
 
         &.size-lg {
             max-width: var(--go-ui-width-modal-lg);
+            min-height: 50vh;
         }
 
         &.size-xl {
             max-width: var(--go-ui-width-modal-lg);
+            min-height: 80vh;
         }
 
         &.size-full {

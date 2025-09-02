@@ -10,13 +10,7 @@
         "peopleExposedOptionLabel": "People Exposed",
         "peopleAtRiskOptionLabel": "People at Risk of Displacement",
         "riskScoreOptionLabel": "Risk Score",
-        "riskCategoryVeryLow": "Very Low",
-        "riskCategoryLow": "Low",
-        "riskCategoryMedium": "Medium",
-        "riskCategoryHigh": "High",
-        "riskCategoryVeryHigh": "Very High",
         "riskSeasonalMapHeading": "Risk Map",
-        "riskSeasonalCountriesByRiskHeading": "Countries by Risk",
-        "riskDataNotAvailable": "Data not available for selected filters"
+        "riskSeasonalCountriesByRiskHeading": "Countries by Risk"
     }
 }

@@ -5,6 +5,7 @@ import {
 } from 'react';
 import {
     Button,
+    InlineLayout,
     InputSection,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -32,12 +33,11 @@ import {
 import { type PartialDref } from '../../schema';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type Value = PartialDref;
 interface Props {
     value: Value;
-    readOnly: boolean;
+    readOnly?: boolean;
     setFieldValue: (...entries: EntriesAsList<PartialDref>) => void;
     disabled?: boolean;
     setDistrictOptions: Dispatch<SetStateAction<DistrictItem[] | null | undefined>>;
@@ -237,15 +237,25 @@ function CopyFieldReportSection(props: Props) {
 
     return (
         <InputSection
-            className={styles.copyFieldReportSection}
             title={strings.drefFormEventDetailsTitle}
             description={strings.drefFormEventDescription}
         >
-            <div className={styles.content}>
+            <InlineLayout
+                after={(
+                    <Button
+                        disabled={isNotDefined(fieldReport)
+                            || frDetailPending
+                            || disabled
+                            || readOnly}
+                        onClick={handleCopyButtonClick}
+                        name={fieldReport}
+                    >
+                        {strings.drefFormCopyButtonLabel}
+                    </Button>
+                )}
+            >
                 <FieldReportSearchSelectInput
-                    className={styles.input}
                     name={undefined}
-                    readOnly={readOnly}
                     value={fieldReport}
                     onChange={setFieldReport}
                     nationalSociety={value?.national_society}
@@ -254,18 +264,9 @@ function CopyFieldReportSection(props: Props) {
                     placeholder={strings.drefFormSelectFieldReportPlaceholder}
                     nonClearable
                     disabled={disabled}
-                />
-                <Button
-                    className={styles.action}
-                    variant="secondary"
                     readOnly={readOnly}
-                    disabled={isNotDefined(fieldReport) || frDetailPending || disabled}
-                    onClick={handleCopyButtonClick}
-                    name={fieldReport}
-                >
-                    {strings.drefFormCopyButtonLabel}
-                </Button>
-            </div>
+                />
+            </InlineLayout>
         </InputSection>
     );
 }

@@ -17,7 +17,7 @@ export function Component() {
             title={strings.riskPageTitle}
             heading={strings.riskPageHeading}
             description={(
-                <NavigationTabList variant="secondary">
+                <NavigationTabList styleVariant="pill">
                     <NavigationTab
                         to="riskWatchImminent"
                     >

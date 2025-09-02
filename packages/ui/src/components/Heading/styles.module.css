@@ -1,13 +1,17 @@
 .heading {
     --font-size: var(--go-ui-font-size-xl);
-    --line-height: var(--go-ui-line-height-sm);
+    --line-height: var(--go-ui-line-height-xs);
     margin: 0;
     line-height: var(--line-height);
     font-size: var(--font-size);
     font-weight: var(--go-ui-font-weight-semibold);
 
+    &.center-aligned {
+        text-align: center;
+    }
+
     &.level-one {
-        --font-size: var(--go-ui-font-size-4xl);
+        --font-size: 2.5rem;
 
         @media print {
             color: var(--go-ui-color-primary-blue);
@@ -15,7 +19,7 @@
     }
 
     &.level-two {
-        --font-size: var(--go-ui-font-size-2xl);
+        --font-size: 1.875rem;
 
         @media print {
             color: var(--go-ui-color-primary-blue);
@@ -23,7 +27,8 @@
     }
 
     &.level-three {
-        --font-size: var(--go-ui-font-size-xl);
+        --font-size: 1.125rem;
+        text-transform: uppercase;
 
         @media print {
             color: var(--go-ui-color-primary-red);
@@ -31,7 +36,7 @@
     }
 
     &.level-four {
-        --font-size: var(--go-ui-font-size-lg);
+        --font-size: 1rem;
     }
 
     &.level-five {
@@ -39,17 +44,16 @@
     }
 
     &.level-six {
-        --font-size: var(--go-ui-font-size-sm);
-    }
-
-    .ellipsized-text {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        --font-size: var(--go-ui-font-size-md);
+        --line-height: var(--go-ui-line-height-md);
+        color: var(--go-ui-color-primary-blue);
+        font-weight: var(--go-ui-font-weight-medium);
     }
 
     &.ellipsized {
-        width: 100%;
-        overflow: auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }

@@ -15,6 +15,7 @@ import {
 import type { ButtonProps } from '@ifrc-go/ui';
 import {
     Button,
+    ListView,
     Message,
     Modal,
     RadioInput,
@@ -590,7 +591,7 @@ function DrefTableActions(props: Props) {
                         <DropdownMenuItem
                             name={undefined}
                             type="confirm-button"
-                            icons={<CheckLineIcon className={styles.icon} />}
+                            before={<CheckLineIcon className={styles.icon} />}
                             confirmMessage={
                                 resolveToString(
                                     strings.drefAccountFinalizeConfirmMessage,
@@ -610,7 +611,7 @@ function DrefTableActions(props: Props) {
                         <DropdownMenuItem
                             name={undefined}
                             type="confirm-button"
-                            icons={<CheckLineIcon className={styles.icon} />}
+                            before={<CheckLineIcon className={styles.icon} />}
                             confirmMessage={strings.drefAccountConfirmMessage}
                             onConfirm={handlePublishClick}
                             disabled={disabled}
@@ -624,7 +625,7 @@ function DrefTableActions(props: Props) {
                             name={undefined}
                             type="button"
                             onClick={handleDrefAllocationExport}
-                            icons={<DownloadLineIcon className={styles.icon} />}
+                            before={<DownloadLineIcon className={styles.icon} />}
                             disabled={disabled}
                             persist
                         >
@@ -635,7 +636,7 @@ function DrefTableActions(props: Props) {
                         <DropdownMenuItem
                             name={undefined}
                             type="button"
-                            icons={<AddLineIcon className={styles.icon} />}
+                            before={<AddLineIcon className={styles.icon} />}
                             onClick={setShowOperationConfirmModalTrue}
                             disabled={disabled}
                             persist
@@ -648,7 +649,7 @@ function DrefTableActions(props: Props) {
                             name={undefined}
                             type="button"
                             onClick={setShowFinalReportConfirmModalTrue}
-                            icons={<CaseManagementIcon className={styles.icon} />}
+                            before={<CaseManagementIcon className={styles.icon} />}
                             disabled={disabled}
                             persist
                         >
@@ -658,7 +659,7 @@ function DrefTableActions(props: Props) {
                     <DropdownMenuItem
                         name={undefined}
                         type="button"
-                        icons={<ShareLineIcon className={styles.icon} />}
+                        before={<ShareLineIcon className={styles.icon} />}
                         onClick={handleShareClick}
                         disabled={disabled}
                         persist
@@ -669,7 +670,7 @@ function DrefTableActions(props: Props) {
                         <DropdownMenuItem
                             name={undefined}
                             type="button"
-                            icons={<DocumentPdfLineIcon className={styles.icon} />}
+                            before={<DocumentPdfLineIcon className={styles.icon} />}
                             onClick={handleExportClick}
                             disabled={disabled}
                             persist
@@ -680,87 +681,82 @@ function DrefTableActions(props: Props) {
                 </>
             )}
         >
-            {
-                (status === DREF_STATUS_DRAFT || status === DREF_STATUS_FINALIZED) && applicationType === 'DREF' && (
-                    <Link
-                        to="drefApplicationForm"
-                        urlParams={{ drefId: id }}
-                        variant="secondary"
-                        icons={<PencilLineIcon className={styles.icon} />}
-                    >
-                        {strings.dropdownActionEditLabel}
-                    </Link>
-                )
-            }
-            {
-                (status === DREF_STATUS_DRAFT || status === DREF_STATUS_FINALIZED) && applicationType === 'OPS_UPDATE' && (
-                    <Link
-                        to="drefOperationalUpdateForm"
-                        urlParams={{ opsUpdateId: id }}
-                        variant="secondary"
-                        icons={<PencilLineIcon className={styles.icon} />}
-                    >
-                        {strings.dropdownActionEditLabel}
-                    </Link>
-                )
-            }
-            {
-                (status === DREF_STATUS_DRAFT || status === DREF_STATUS_FINALIZED) && applicationType === 'FINAL_REPORT' && (
-                    <Link
-                        to={isDrefImminentV2 ? 'drefFinalReportForm' : 'oldDrefFinalReportForm'}
-                        urlParams={{ finalReportId: id }}
-                        variant="secondary"
-                        icons={<PencilLineIcon className={styles.icon} />}
-                    >
-                        {strings.dropdownActionEditLabel}
-                    </Link>
-                )
-            }
-            {
-                showExportModal && (
-                    <DrefExportModal
-                        onCancel={setShowExportModalFalse}
-                        id={id}
-                        applicationType={applicationType}
-                        drefType={drefType}
-                        isDrefImminentV2={isDrefImminentV2}
-                    />
-                )
-            }
-            {
-                showShareModal && (
-                    <DrefShareModal
-                        onCancel={setShowShareModalFalse}
-                        onSuccess={setShowShareModalFalse}
-                        drefId={drefIdFromProps}
-                    />
-                )
-            }
-            {
-                showOperationConfirmModal && (
-                    <Modal
-                        heading={strings.dropdownActionImminentNewOpsUpdateConfirmationHeading}
-                        onClose={setShowOperationConfirmModalFalse}
-                        childrenContainerClassName={styles.addOpsUpdateModal}
-                        footerActions={(
-                            <Button
-                                name={undefined}
-                                onClick={handleAddOpsUpdate}
-                                disabled={(startingLanguage !== 'en' && !selectOpsLanguage)}
-                            >
-                                {strings.dropdownActionAddOpsUpdateLabel}
-                            </Button>
-                        )}
-                    >
-                        <p>{strings.dropdownActionNewOpsUpdateConfirmationMessage}</p>
+            {(status === DREF_STATUS_DRAFT || status === DREF_STATUS_FINALIZED) && applicationType === 'DREF' && (
+                <Link
+                    to="drefApplicationForm"
+                    urlParams={{ drefId: id }}
+                    colorVariant="primary"
+                    styleVariant="outline"
+                    before={<PencilLineIcon className={styles.icon} />}
+                    spacing="sm"
+                >
+                    {strings.dropdownActionEditLabel}
+                </Link>
+            )}
+            {(status === DREF_STATUS_DRAFT || status === DREF_STATUS_FINALIZED) && applicationType === 'OPS_UPDATE' && (
+                <Link
+                    to="drefOperationalUpdateForm"
+                    urlParams={{ opsUpdateId: id }}
+                    colorVariant="primary"
+                    styleVariant="outline"
+                    before={<PencilLineIcon className={styles.icon} />}
+                    spacing="sm"
+                >
+                    {strings.dropdownActionEditLabel}
+                </Link>
+            )}
+            {(status === DREF_STATUS_DRAFT || status === DREF_STATUS_FINALIZED) && applicationType === 'FINAL_REPORT' && (
+                <Link
+                    to={isDrefImminentV2 ? 'drefFinalReportForm' : 'oldDrefFinalReportForm'}
+                    urlParams={{ finalReportId: id }}
+                    colorVariant="primary"
+                    styleVariant="outline"
+                    before={<PencilLineIcon className={styles.icon} />}
+                    spacing="sm"
+                >
+                    {strings.dropdownActionEditLabel}
+                </Link>
+            )}
+            {showExportModal && (
+                <DrefExportModal
+                    onCancel={setShowExportModalFalse}
+                    id={id}
+                    applicationType={applicationType}
+                    drefType={drefType}
+                    isDrefImminentV2={isDrefImminentV2}
+                />
+            )}
+            {showShareModal && (
+                <DrefShareModal
+                    onCancel={setShowShareModalFalse}
+                    onSuccess={setShowShareModalFalse}
+                    drefId={drefIdFromProps}
+                />
+            )}
+            {showOperationConfirmModal && (
+                <Modal
+                    heading={strings.dropdownActionImminentNewOpsUpdateConfirmationHeading}
+                    onClose={setShowOperationConfirmModalFalse}
+                    footerActions={(
+                        <Button
+                            name={undefined}
+                            onClick={handleAddOpsUpdate}
+                            disabled={(startingLanguage !== 'en' && !selectOpsLanguage)}
+                        >
+                            {strings.dropdownActionAddOpsUpdateLabel}
+                        </Button>
+                    )}
+                >
+                    <ListView layout="block">
+                        <div>{strings.dropdownActionNewOpsUpdateConfirmationMessage}</div>
                         {shouldConfirmImminentAddOpsUpdate
                             && strings.dropdownActionImminentNewOpsUpdateConfirmationMessage}
                         {startingLanguage !== 'en' && (
                             <>
-                                <p>
+                                <div>
                                     {strings
                                         .dropdownActionNewOpsUpdateLanguageSelectLanguageMessage}
-                                </p>
+                                </div>
                                 <RadioInput
                                     name={undefined}
                                     value={selectOpsLanguage}
@@ -771,32 +767,33 @@ function DrefTableActions(props: Props) {
                                 />
                             </>
                         )}
-                    </Modal>
-                )
-            }
-            {
-                showFinalReportConfirmModal && (
-                    <Modal
-                        heading={strings.dropdownActionNewFinalReportConfirmationHeading}
-                        onClose={setShowFinalReportConfirmModalFalse}
-                        childrenContainerClassName={styles.addOpsUpdateModal}
-                        footerActions={(
-                            <Button
-                                name={undefined}
-                                onClick={handleAddFinalReport}
-                                disabled={(startingLanguage !== 'en' && !selectFinalLanguage)}
-                            >
-                                {strings.dropdownActionAddFinalReportLabel}
-                            </Button>
-                        )}
-                    >
-                        <p>{strings.dropdownActionNewFinalReportConfirmationMessage}</p>
+                    </ListView>
+                </Modal>
+            )}
+            {showFinalReportConfirmModal && (
+                <Modal
+                    heading={strings.dropdownActionNewFinalReportConfirmationHeading}
+                    onClose={setShowFinalReportConfirmModalFalse}
+                    footerActions={(
+                        <Button
+                            name={undefined}
+                            onClick={handleAddFinalReport}
+                            disabled={(startingLanguage !== 'en' && !selectFinalLanguage)}
+                        >
+                            {strings.dropdownActionAddFinalReportLabel}
+                        </Button>
+                    )}
+                >
+                    <ListView layout="block">
+                        <div>
+                            {strings.dropdownActionNewFinalReportConfirmationMessage}
+                        </div>
                         {startingLanguage !== 'en' && (
                             <>
-                                <p>
+                                <div>
                                     {strings
                                         .dropdownActionNewFinalReportLanguageSelectLanguageMessage}
-                                </p>
+                                </div>
                                 <RadioInput
                                     name={undefined}
                                     value={selectFinalLanguage}
@@ -807,19 +804,17 @@ function DrefTableActions(props: Props) {
                                 />
                             </>
                         )}
-                    </Modal>
-                )
-            }
-            {
-                drefApprovalPending && (
-                    <Modal>
-                        <Message
-                            pending
-                            title={strings.drefApprovalInProgressTitle}
-                        />
-                    </Modal>
-                )
-            }
+                    </ListView>
+                </Modal>
+            )}
+            {drefApprovalPending && (
+                <Modal>
+                    <Message
+                        pending
+                        title={strings.drefApprovalInProgressTitle}
+                    />
+                </Modal>
+            )}
         </TableActions>
     );
 }

@@ -15,6 +15,7 @@ import {
     ConfirmButton,
     Container,
     DropdownMenu,
+    ListView,
     Message,
     Portal,
 } from '@ifrc-go/ui';
@@ -39,6 +40,7 @@ import FormFailedToLoadMessage from '#components/domain/FormFailedToLoadMessage'
 import PerAssessmentSummary from '#components/domain/PerAssessmentSummary';
 import DropdownMenuItem from '#components/DropdownMenuItem';
 import NonFieldError from '#components/NonFieldError';
+import TabPage from '#components/TabPage';
 import useAlert from '#hooks/useAlert';
 import useRouting from '#hooks/useRouting';
 import { PER_PHASE_PRIORITIZATION } from '#utils/domain/per';
@@ -420,16 +422,12 @@ export function Component() {
     }
 
     return (
-        <div
-            className={styles.perPrioritizationForm}
-            ref={formContentRef}
-        >
+        <TabPage>
             {actionDivRef.current && (
                 <Portal container={actionDivRef?.current}>
                     {value.is_draft === false ? (
                         <ConfirmButton
                             name={undefined}
-                            variant="secondary"
                             onConfirm={handleFormSubmit}
                             confirmHeading={strings.postSubmitEditConfirmHeading}
                             confirmMessage={strings.postSubmitEditConfirmMessage}
@@ -440,7 +438,6 @@ export function Component() {
                     ) : (
                         <Button
                             name={undefined}
-                            variant="secondary"
                             onClick={handleFormSubmit}
                             disabled={savePerPrioritizationPending || readOnlyMode}
                         >
@@ -449,10 +446,6 @@ export function Component() {
                     )}
                 </Portal>
             )}
-            <NonFieldError
-                error={error}
-                withFallbackError
-            />
             <PerAssessmentSummary
                 perOptionsResponse={perOptionsResponse}
                 areaResponses={perAssessmentResponse?.area_responses}
@@ -460,16 +453,17 @@ export function Component() {
                 areaIdToTitleMap={areaIdToTitleMap}
             />
             <Container
+                elementRef={formContentRef}
                 heading={strings.prioritizationHeading}
+                withCenteredHeading
                 headingLevel={2}
-                withHeaderBorder
-                actions={(
+                headerActions={(
                     <DropdownMenu
                         label={resolveToString(
                             strings.sortButtonLabel,
                             { sort: sortKeyToLabel[sortBy] },
                         )}
-                        variant="tertiary"
+                        labelStyleVariant="action"
                         popupClassName={styles.sortByDropdownContent}
                     >
                         {sortOptions.map(
@@ -479,7 +473,7 @@ export function Component() {
                                     key={sortOption.key}
                                     name={sortOption.key}
                                     onClick={setSortBy}
-                                    icons={(
+                                    before={(
                                         <CheckLineIcon
                                             className={_cs(
                                                 styles.checkmark,
@@ -497,7 +491,6 @@ export function Component() {
                 footerActions={value?.is_draft !== false ? (
                     <ConfirmButton
                         name={undefined}
-                        variant="secondary"
                         onConfirm={handleFormFinalSubmit}
                         disabled={disabled || readOnlyMode}
                         confirmHeading={strings.submitConfirmHeading}
@@ -506,40 +499,44 @@ export function Component() {
                         {strings.perSelectAndAddToWorkPlan}
                     </ConfirmButton>
                 ) : undefined}
-                childrenContainerClassName={styles.componentList}
+                spacing="lg"
             >
-                <NonFieldError
-                    error={error}
-                    withFallbackError
-                />
-                <NonFieldError error={componentInputError} />
-                {sortedFormComponents.map((component) => {
-                    const rating = assessmentComponentResponseMap
-                        ?.[component.id]?.rating_details;
-                    const ratingDisplay = isDefined(rating)
-                        ? `${rating.value} - ${rating.title}`
-                        : undefined;
+                <ListView layout="block">
+                    <NonFieldError
+                        error={error}
+                        withFallbackError
+                    />
+                    <NonFieldError error={componentInputError} />
+                    {sortedFormComponents.map((component) => {
+                        const rating = assessmentComponentResponseMap
+                            ?.[component.id]?.rating_details;
+                        const ratingDisplay = isDefined(rating)
+                            ? `${rating.value} - ${rating.title}`
+                            : undefined;
 
-                    return (
-                        <ComponentInput
-                            key={component.id}
-                            index={componentResponseMapping[component.id]!.index}
-                            value={componentResponseMapping[component.id]!.value}
-                            onChange={setComponentValue}
-                            component={component}
-                            error={componentInputError?.[component.id]}
-                            onSelectionChange={handleSelectionChange}
-                            questionResponses={
-                                assessmentQuestionResponsesByComponent[component.id]
-                            }
-                            ratingDisplay={ratingDisplay}
-                            readOnly={readOnlyMode}
-                            disabled={disabled}
-                        />
-                    );
-                })}
+                        const index = componentResponseMapping[component.id]?.index;
+
+                        return (
+                            <ComponentInput
+                                key={component.id}
+                                index={index}
+                                value={componentResponseMapping[component.id]?.value}
+                                onChange={setComponentValue}
+                                component={component}
+                                error={componentInputError?.[component.id]}
+                                onSelectionChange={handleSelectionChange}
+                                questionResponses={
+                                    assessmentQuestionResponsesByComponent[component.id]
+                                }
+                                ratingDisplay={ratingDisplay}
+                                readOnly={readOnlyMode}
+                                disabled={disabled}
+                            />
+                        );
+                    })}
+                </ListView>
             </Container>
-        </div>
+        </TabPage>
     );
 }
 

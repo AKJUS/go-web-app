@@ -1,7 +1,7 @@
 .climate-chart {
     .precipitation-chart-container,
     .temperature-chart-container {
-        height: 16rem;
+        height: 18rem;
 
         .rect {
             fill: currentColor;

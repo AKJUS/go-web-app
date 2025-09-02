@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import {
     Container,
+    ListView,
     Pager,
     RawList,
 } from '@ifrc-go/ui';
@@ -63,9 +64,6 @@ function ActiveSurgeSupport() {
             withHeaderBorder
             pending={aggregatedSurgePending}
             errored={isDefined(aggregatedSurgeResponseError)}
-            contentViewType="grid"
-            numPreferredGridContentColumns={3}
-            spacing="comfortable"
             footerActions={(
                 <Pager
                     activePage={page}
@@ -75,12 +73,18 @@ function ActiveSurgeSupport() {
                 />
             )}
         >
-            <RawList
-                data={aggregatedSurgeResponse?.results}
-                keySelector={aggregatedSurgeKeySelector}
-                renderer={SurgeCard}
-                rendererParams={rendererParams}
-            />
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={3}
+                minGridColumnSize="20rem"
+            >
+                <RawList
+                    data={aggregatedSurgeResponse?.results}
+                    keySelector={aggregatedSurgeKeySelector}
+                    renderer={SurgeCard}
+                    rendererParams={rendererParams}
+                />
+            </ListView>
         </Container>
     );
 }

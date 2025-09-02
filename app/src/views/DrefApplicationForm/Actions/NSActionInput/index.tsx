@@ -1,6 +1,7 @@
 import { DeleteBinTwoLineIcon } from '@ifrc-go/icons';
 import {
     Button,
+    InlineLayout,
     InputSection,
     TextArea,
 } from '@ifrc-go/ui';
@@ -18,7 +19,6 @@ import NonFieldError from '#components/NonFieldError';
 import { type PartialDref } from '../../schema';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type NsActionFormFields = NonNullable<PartialDref['national_society_actions']>[number];
 
@@ -27,6 +27,7 @@ const defaultNsActionValue: NsActionFormFields = {
 };
 
 interface Props {
+    readOnly?: boolean;
     value: NsActionFormFields;
     error: ArrayError<NsActionFormFields> | undefined;
     onChange: (value: SetValueArg<NsActionFormFields>, index: number) => void;
@@ -38,6 +39,7 @@ interface Props {
 
 function NsActionInput(props: Props) {
     const {
+        readOnly,
         error: errorFromProps,
         onChange,
         value,
@@ -61,31 +63,34 @@ function NsActionInput(props: Props) {
 
     return (
         <InputSection
-            className={styles.nsActionInput}
             title={nsActionLabel}
-            contentSectionClassName={styles.content}
             withAsteriskOnTitle
+            numPreferredColumns={1}
         >
             <NonFieldError error={error} />
-            <TextArea
-                className={styles.descriptionInput}
-                name="description"
-                value={value.description}
-                onChange={onFieldChange}
-                error={error?.description}
-                disabled={disabled}
-                // withAsterisk
-            />
-            <Button
-                className={styles.removeButton}
-                name={index}
-                onClick={onRemove}
-                variant="tertiary"
-                title={strings.drefApplicationNSActionRemoveNeed}
-                disabled={disabled}
+            <InlineLayout
+                after={(
+                    <Button
+                        name={index}
+                        onClick={onRemove}
+                        styleVariant="action"
+                        title={strings.drefApplicationNSActionRemoveNeed}
+                        disabled={disabled || readOnly}
+                    >
+                        <DeleteBinTwoLineIcon />
+                    </Button>
+                )}
             >
-                <DeleteBinTwoLineIcon />
-            </Button>
+                <TextArea
+                    name="description"
+                    value={value.description}
+                    onChange={onFieldChange}
+                    error={error?.description}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    // withAsterisk
+                />
+            </InlineLayout>
         </InputSection>
     );
 }

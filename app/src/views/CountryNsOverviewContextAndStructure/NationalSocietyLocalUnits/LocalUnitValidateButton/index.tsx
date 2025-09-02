@@ -31,7 +31,7 @@ function LocalUnitValidateButton(props: Props) {
                 : styles.localUnitValidateButton)}
             name={undefined}
             onClick={onClick}
-            spacing="compact"
+            spacing="sm"
             disabled={
                 !hasValidatePermission
                 || isValidated

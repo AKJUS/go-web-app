@@ -5,6 +5,7 @@ import {
     Container,
     Heading,
     InfoPopup,
+    ListView,
     Message,
     Modal,
     NumberOutput,
@@ -248,29 +249,31 @@ function NationalSocietyIndicators(props: Props) {
 
     return (
         <Container
-            className={styles.nationalSocietyIndicators}
+            empty={false}
+            pending={false}
+            filtered={false}
+            errored={false}
             heading={strings.nationalSocietyIndicatorsTitle}
-            actions={isDefined(countryResponse?.fdrs) && (
+            headerActions={isDefined(countryResponse?.fdrs) && (
                 <Link
                     href={`https://data.ifrc.org/fdrs/national-society/${countryResponse.fdrs}`}
                     external
                     withLinkIcon
-                    variant="primary"
+                    colorVariant="primary"
+                    styleVariant="filled"
                 >
                     {strings.goToFDRS}
                 </Link>
             )}
             headingLevel={4}
             withHeaderBorder
-            contentViewType="grid"
-            numPreferredGridContentColumns={3}
             footerActions={isDefined(countryResponse?.fdrs)
                 && isDefined(countryResponse.society_name) && (
                 <TextOutput
                     label={strings.indicatorSourceLabel}
                     value={(
                         <Link
-                            variant="tertiary"
+                            styleVariant="action"
                             href={`https://data.ifrc.org/fdrs/national-society/${countryResponse.fdrs}`}
                             external
                             withUnderline
@@ -284,98 +287,109 @@ function NationalSocietyIndicators(props: Props) {
                 />
             )}
         >
-            <TextOutput
-                label={strings.nationalSocietyFoundedDateLabel}
-                value={founded_date}
-                valueType="date"
-                strongValue
-            />
-            <TextOutput
-                label={strings.nationalSocietyTrainedInFirstAidLabel}
-                value={fdrs_trained_in_first_aid}
-                valueType="number"
-                description={(isDefined(fdrs_trained_in_first_aid)
-                    && <YearPopup year={fdrs_trained_in_first_aid_data_year} />)}
-                strongValue
-            />
-            <TextOutput
-                label={strings.nationalSocietyIncomeLabel}
-                value={fdrs_income}
-                valueType="number"
-                description={isDefined(fdrs_income) && <YearPopup year={fdrs_income_data_year} />}
-                strongValue
-            />
-            <TextOutput
-                label={strings.nationalSocietyVolunteersLabel}
-                value={fdrs_volunteer_total}
-                valueType="number"
-                strongValue
-                descriptionClassName={styles.infoContainer}
-                description={isDefined(fdrs_volunteer_total) && (
-                    <>
-                        <YearPopup year={fdrs_income_data_year} />
-                        {isDefined(totalVolunteerDisaggregation) && (
-                            <Button
-                                name={undefined}
-                                onClick={setShowVolunteerDisaggregationTrue}
-                                variant="tertiary"
-                                // FIXME: use strings
-                                title="Show disaggregation"
-                            >
-                                <HumanResourcesIcon className={styles.disaggregationIcon} />
-                            </Button>
-                        )}
-                    </>
-                )}
-            />
-            <TextOutput
-                label={strings.nationalSocietyYouthLabel}
-                value={youthValue}
-                valueType="number"
-                description={isDefined(youthValue) && <YearPopup year={fdrs_volunteer_data_year} />}
-                strongValue
-            />
-            <TextOutput
-                label={strings.nationalSocietyExpendituresLabel}
-                value={fdrs_expenditures}
-                description={(isDefined(fdrs_expenditures)
-                    && <YearPopup year={fdrs_expenditures_data_year} />)}
-                valueType="number"
-                strongValue
-            />
-            <TextOutput
-                label={strings.nationalSocietyBranchesLabel}
-                value={fdrs_branches}
-                description={(isDefined(fdrs_branches)
-                    && <YearPopup year={fdrs_branches_data_year} />)}
-                valueType="number"
-                strongValue
-            />
-            <TextOutput
-                label={strings.nationalSocietyStaffLabel}
-                value={fdrs_staff_total}
-                valueType="number"
-                strongValue
-                descriptionClassName={styles.infoContainer}
-                description={isDefined(fdrs_staff_total) && (
-                    <>
-                        <YearPopup year={fdrs_staff_data_year} />
-                        {isDefined(totalStaffDisaggregation) && (
-                            <Button
-                                name={undefined}
-                                onClick={setShowStaffDisaggregationTrue}
-                                variant="tertiary"
-                                // FIXME: use strings
-                                title="Show disaggregation"
-                            >
-                                <HumanResourcesIcon className={styles.disaggregationIcon} />
-                            </Button>
-                        )}
-                    </>
-                )}
-            />
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={3}
+                withSpacingOpticalCorrection
+                spacing="sm"
+            >
+                <TextOutput
+                    label={strings.nationalSocietyFoundedDateLabel}
+                    value={founded_date}
+                    valueType="date"
+                    strongValue
+                />
+                <TextOutput
+                    label={strings.nationalSocietyTrainedInFirstAidLabel}
+                    value={fdrs_trained_in_first_aid}
+                    valueType="number"
+                    description={(isDefined(fdrs_trained_in_first_aid)
+                        && <YearPopup year={fdrs_trained_in_first_aid_data_year} />)}
+                    strongValue
+                />
+                <TextOutput
+                    label={strings.nationalSocietyIncomeLabel}
+                    value={fdrs_income}
+                    valueType="number"
+                    description={isDefined(fdrs_income)
+                        && <YearPopup year={fdrs_income_data_year} />}
+                    strongValue
+                />
+                <TextOutput
+                    label={strings.nationalSocietyVolunteersLabel}
+                    value={fdrs_volunteer_total}
+                    valueType="number"
+                    strongValue
+                    description={isDefined(fdrs_volunteer_total) && (
+                        <ListView spacing="xs">
+                            <YearPopup year={fdrs_income_data_year} />
+                            {isDefined(totalVolunteerDisaggregation) && (
+                                <Button
+                                    name={undefined}
+                                    onClick={setShowVolunteerDisaggregationTrue}
+                                    styleVariant="action"
+                                    // FIXME: use strings
+                                    title="Show disaggregation"
+                                >
+                                    <HumanResourcesIcon className={styles.disaggregationIcon} />
+                                </Button>
+                            )}
+                        </ListView>
+                    )}
+                />
+                <TextOutput
+                    label={strings.nationalSocietyYouthLabel}
+                    value={youthValue}
+                    valueType="number"
+                    description={isDefined(youthValue)
+                        && <YearPopup year={fdrs_volunteer_data_year} />}
+                    strongValue
+                />
+                <TextOutput
+                    label={strings.nationalSocietyExpendituresLabel}
+                    value={fdrs_expenditures}
+                    description={(isDefined(fdrs_expenditures)
+                        && <YearPopup year={fdrs_expenditures_data_year} />)}
+                    valueType="number"
+                    strongValue
+                />
+                <TextOutput
+                    label={strings.nationalSocietyBranchesLabel}
+                    value={fdrs_branches}
+                    description={(isDefined(fdrs_branches)
+                        && <YearPopup year={fdrs_branches_data_year} />)}
+                    valueType="number"
+                    strongValue
+                />
+                <TextOutput
+                    label={strings.nationalSocietyStaffLabel}
+                    value={fdrs_staff_total}
+                    valueType="number"
+                    strongValue
+                    description={isDefined(fdrs_staff_total) && (
+                        <ListView spacing="xs">
+                            <YearPopup year={fdrs_staff_data_year} />
+                            {isDefined(totalStaffDisaggregation) && (
+                                <Button
+                                    name={undefined}
+                                    onClick={setShowStaffDisaggregationTrue}
+                                    styleVariant="action"
+                                    // FIXME: use strings
+                                    title="Show disaggregation"
+                                >
+                                    <HumanResourcesIcon className={styles.disaggregationIcon} />
+                                </Button>
+                            )}
+                        </ListView>
+                    )}
+                />
+            </ListView>
             {showVolunteerDisaggregation && (
                 <Modal
+                    empty={false}
+                    pending={false}
+                    filtered={false}
+                    errored={false}
                     heading={strings.volunteerModalHeading}
                     onClose={setShowVolunteerDisaggregationFalse}
                     withHeaderBorder
@@ -386,7 +400,7 @@ function NationalSocietyIndicators(props: Props) {
                         />
                     )}
                     {isDefined(totalVolunteerDisaggregation) && (
-                        <div className={styles.volunteerList}>
+                        <ListView layout="block">
                             <div className={styles.volunteer}>
                                 <div />
                                 <TextOutput
@@ -437,7 +451,6 @@ function NationalSocietyIndicators(props: Props) {
                                             className={styles.maleDisaggregation}
                                             value={volunteer.male}
                                             totalValue={maxVolunteerInDisaggregation}
-                                            color="var(--go-ui-color-primary-blue)"
                                         >
                                             <Tooltip
                                                 title={strings.volunteerTooltipMaleLabel}
@@ -470,7 +483,7 @@ function NationalSocietyIndicators(props: Props) {
                                             className={styles.femaleDisaggregation}
                                             value={volunteer.female}
                                             totalValue={maxVolunteerInDisaggregation}
-                                            color="var(--go-ui-color-primary-red)"
+                                            colorVariant="primary"
                                         >
                                             <Tooltip
                                                 title={strings.volunteerTooltipFemaleLabel}
@@ -507,12 +520,16 @@ function NationalSocietyIndicators(props: Props) {
                                     </div>
                                 ),
                             )}
-                        </div>
+                        </ListView>
                     )}
                 </Modal>
             )}
             {showStaffDisaggregation && (
                 <Modal
+                    empty={false}
+                    pending={false}
+                    filtered={false}
+                    errored={false}
                     heading={strings.staffModalHeading}
                     onClose={setShowStaffDisaggregationFalse}
                     withHeaderBorder
@@ -523,7 +540,7 @@ function NationalSocietyIndicators(props: Props) {
                         />
                     )}
                     {isDefined(totalStaffDisaggregation) && (
-                        <div className={styles.staffList}>
+                        <ListView layout="block">
                             <div className={styles.staff}>
                                 <div />
                                 <TextOutput
@@ -642,7 +659,7 @@ function NationalSocietyIndicators(props: Props) {
                                     </div>
                                 ),
                             )}
-                        </div>
+                        </ListView>
                     )}
                 </Modal>
             )}

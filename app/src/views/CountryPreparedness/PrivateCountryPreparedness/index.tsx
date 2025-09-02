@@ -14,13 +14,15 @@ import {
 import {
     Button,
     Container,
-    Grid,
-    Heading,
+    Description,
     KeyFigure,
+    Label,
     LegendItem,
+    ListView,
     Message,
     PieChart,
     ProgressBar,
+    RawList,
     StackedProgressBar,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -46,9 +48,9 @@ import {
 import { removeNull } from '@togglecorp/toggle-form';
 
 import GoSingleFileInput from '#components/domain/GoSingleFileInput';
+import Link from '#components/Link';
 import PerExportModal from '#components/PerExportModal';
-import WikiLink from '#components/WikiLink';
-import useRouting from '#hooks/useRouting';
+import TabPage from '#components/TabPage';
 import {
     getFormattedComponentName,
     getPerAreaColor,
@@ -378,11 +380,6 @@ function PrivateCountryPreparedness() {
         [prioritizationResponse, assessmentStats],
     );
 
-    const { goBack } = useRouting();
-    const handleBackButtonClick = useCallback(() => {
-        goBack();
-    }, [goBack]);
-
     const hasPer = isDefined(perId);
     const hasAssessmentStats = hasPer && isDefined(assessmentStats);
     const hasPrioritizationStats = hasPer && isDefined(prioritizationStats);
@@ -431,267 +428,299 @@ function PrivateCountryPreparedness() {
     );
 
     return (
-        <Container
-            className={styles.privateCountryPreparedness}
-            childrenContainerClassName={styles.preparednessContent}
-            heading={strings.nsPreparednessAndResponseCapacityHeading}
-            actionsContainerClassName={styles.actionsContainer}
-            headingLevel={2}
-            withHeaderBorder
-            actions={(
-                <div className={styles.perAction}>
-                    <TextOutput
-                        label={strings.lastUpdatedLabel}
-                        value={processStatusResponse?.updated_at}
-                        valueType="date"
-                        strongValue
-                    />
-                    <WikiLink
-                        href="user_guide/Preparedness#how-to-use-it"
-                    />
+        <TabPage
+            wikiLinkPathName="user_guide/Preparedness#how-to-use-it"
+            pending={pending}
+        >
+            <Link
+                to="countryNsOverviewCapacity"
+                urlParams={{ countryId }}
+                styleVariant="action"
+                before={<ArrowLeftLineIcon />}
+            >
+                {strings.goBackButtonTitle}
+            </Link>
+            <Container
+                heading={strings.nsPreparednessAndResponseCapacityHeading}
+                headerActions={(
                     <Button
                         name={undefined}
                         onClick={setShowExportModalTrue}
-                        icons={<DownloadFillIcon />}
-                        variant="secondary"
+                        before={<DownloadFillIcon />}
                     >
                         {strings.perExport}
                     </Button>
-                </div>
-            )}
-            icons={(
-                <Button
-                    name={undefined}
-                    onClick={handleBackButtonClick}
-                    variant="tertiary"
-                    title={strings.goBackButtonTitle}
-                >
-                    <ArrowLeftLineIcon className={styles.backIcon} />
-                </Button>
-            )}
-            pending={pending}
-            contentViewType="grid"
-        >
-            <div className={styles.perOverviewDetails}>
-                <TextOutput
-                    label={strings.startDateLabel}
-                    value={perOverview?.date_of_assessment}
-                    valueType="date"
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.perPhaseLabel}
-                    value={processStatusResponse?.phase_display}
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.focalPointNameLabel}
-                    value={perOverview?.ns_focal_point_name}
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.perCycleLabel}
-                    value={perOverview?.assessment_number}
-                    valueType="number"
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.typeOfAssessmentLabel}
-                    value={perOverview?.type_of_assessment?.name}
-                    strongValue
-                />
-                <TextOutput
-                    label={strings.focalPointEmailTitle}
-                    value={perOverview?.ns_focal_point_email}
-                    strongValue
-                />
-            </div>
-            {hasRatingCounts && (
+                )}
+                spacing="lg"
+            >
                 <Container
-                    heading={strings.perAssessmentHeading}
-                    withHeaderBorder
-                    childrenContainerClassName={styles.assessmentResultsContent}
+                    headerDescription={(
+                        <TextOutput
+                            label={strings.lastUpdatedLabel}
+                            value={processStatusResponse?.updated_at}
+                            valueType="date"
+                            textSize="sm"
+                        />
+                    )}
+                    withPadding
+                    withBackground
+                    withShadow
+                    spacing="lg"
                 >
-                    <PieChart
-                        data={assessmentStats.ratingCounts}
-                        valueSelector={numericCountSelector}
-                        // FIXME: check why title can be undefined
-                        labelSelector={(item) => item.title ?? '??'}
-                        keySelector={numericIdSelector}
-                        colorSelector={perRatingColorSelector}
-                    />
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={3}
+                    >
+                        <TextOutput
+                            label={strings.startDateLabel}
+                            value={perOverview?.date_of_assessment}
+                            valueType="date"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.perPhaseLabel}
+                            value={processStatusResponse?.phase_display}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.focalPointNameLabel}
+                            value={perOverview?.ns_focal_point_name}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.perCycleLabel}
+                            value={perOverview?.assessment_number}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.typeOfAssessmentLabel}
+                            value={perOverview?.type_of_assessment?.name}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.focalPointEmailTitle}
+                            value={perOverview?.ns_focal_point_email}
+                            strongValue
+                        />
+                    </ListView>
                 </Container>
-            )}
-            {hasAnswerCounts && (
-                <Container
-                    heading={strings.totalBenchmarkSummaryHeading}
-                    childrenContainerClassName={styles.benchmarkSummaryContent}
-                    withHeaderBorder
+            </Container>
+            {hasAssessmentStats && (
+                <ListView
+                    layout="grid"
+                    spacing="xl"
                 >
-                    <StackedProgressBar
-                        data={assessmentStats.answerCounts}
-                        valueSelector={numericCountSelector}
-                        labelSelector={stringLabelSelector}
-                        colorSelector={perBenchmarkColorSelector}
-                    />
-                    <KeyFigure
-                        className={styles.keyFigure}
-                        value={assessmentStats?.averageRating}
-                        label={strings.averageComponentRatingLabel}
-                    />
-                </Container>
-            )}
-            {showComponentsByArea && (
-                <Container
-                    heading={strings.componentsByAreaHeading}
-                    withHeaderBorder
-                >
-                    <RatingByAreaChart
-                        ratingOptions={perOptionsResponse.componentratings}
-                        formAreaOptions={perFormAreaResponse.results}
-                        data={assessmentStats.ratingByArea}
-                    />
-                </Container>
-            )}
-            {!pending && hasPrevAssessments && (
-                <Container
-                    heading={strings.NSResponseHeading}
-                    withHeaderBorder
-                >
-                    <PreviousAssessmentCharts
-                        ratingOptions={perOptionsResponse?.componentratings}
-                        data={prevAssessmentRatings}
-                    />
-                </Container>
-            )}
-            {hasRatedComponents && (
-                <Container
-                    heading={strings.highlightedTopRatedComponentHeading}
-                    withHeaderBorder
-                    childrenContainerClassName={styles.topRatedComponentContent}
-                >
-                    {assessmentStats.topFiveRatedComponents.map(
-                        (component) => (
-                            <Container
-                                key={component.details.id}
-                                className={styles.topRatedComponent}
-                                heading={component.rating?.title}
-                                headingLevel={5}
-                                withHeaderBorder
-                                withInternalPadding
-                                icons={<CheckboxFillIcon className={styles.icon} />}
-                                withoutWrapInHeading
+                    {hasRatingCounts && (
+                        <Container
+                            heading={strings.perAssessmentHeading}
+                            withHeaderBorder
+                        >
+                            <PieChart
+                                data={assessmentStats.ratingCounts}
+                                valueSelector={numericCountSelector}
+                                // FIXME: check why title can be undefined
+                                labelSelector={(item) => item.title ?? '??'}
+                                keySelector={numericIdSelector}
+                                colorSelector={perRatingColorSelector}
+                            />
+                        </Container>
+                    )}
+                    {hasAnswerCounts && (
+                        <Container
+                            heading={strings.totalBenchmarkSummaryHeading}
+                            withHeaderBorder
+                        >
+                            <StackedProgressBar
+                                data={assessmentStats.answerCounts}
+                                valueSelector={numericCountSelector}
+                                labelSelector={stringLabelSelector}
+                                colorSelector={perBenchmarkColorSelector}
+                            />
+                            <KeyFigure
+                                value={assessmentStats?.averageRating}
+                                label={strings.averageComponentRatingLabel}
+                                valueType="number"
+                            />
+                        </Container>
+                    )}
+                    {showComponentsByArea && (
+                        <Container
+                            heading={strings.componentsByAreaHeading}
+                            withHeaderBorder
+                        >
+                            <RatingByAreaChart
+                                ratingOptions={perOptionsResponse.componentratings}
+                                formAreaOptions={perFormAreaResponse.results}
+                                data={assessmentStats.ratingByArea}
+                            />
+                        </Container>
+                    )}
+                    {hasPrevAssessments && (
+                        <Container
+                            heading={strings.NSResponseHeading}
+                            withHeaderBorder
+                        >
+                            <PreviousAssessmentCharts
+                                ratingOptions={perOptionsResponse?.componentratings}
+                                data={prevAssessmentRatings}
+                            />
+                        </Container>
+                    )}
+                    {hasRatedComponents && (
+                        <Container
+                            heading={strings.highlightedTopRatedComponentHeading}
+                            withHeaderBorder
+                        >
+                            <ListView
+                                layout="grid"
+                                numPreferredGridColumns={3}
                             >
-                                {component.details.title}
-                            </Container>
-                        ),
+                                {assessmentStats.topFiveRatedComponents.map(
+                                    (component) => (
+                                        <Container
+                                            key={component.details.id}
+                                            heading={component.rating?.title}
+                                            headingLevel={5}
+                                            withHeaderBorder
+                                            headerIcons={(
+                                                <CheckboxFillIcon
+                                                    className={styles.topRatedComponentIcon}
+                                                />
+                                            )}
+                                            withoutWrapInHeader
+                                            withPadding
+                                            withDarkBackground
+                                        >
+                                            {component.details.title}
+                                        </Container>
+                                    ),
+                                )}
+                            </ListView>
+                        </Container>
                     )}
-                </Container>
-            )}
-            {hasPriorityComponents && (
-                <Container
-                    className={styles.priorityComponents}
-                    heading={strings.priorityComponentToBeStrengthenedHeading}
-                    childrenContainerClassName={styles.priorityComponentsContent}
-                    withHeaderBorder
-                >
-                    {prioritizationStats.componentsToBeStrengthened.map(
-                        (priorityComponent) => {
-                            const progressBarColor = getPerAreaColor(priorityComponent.areaNumber);
+                    {hasPriorityComponents && (
+                        <Container
+                            heading={strings.priorityComponentToBeStrengthenedHeading}
+                            withHeaderBorder
+                        >
+                            <ListView layout="grid">
+                                {prioritizationStats.componentsToBeStrengthened.map(
+                                    (priorityComponent) => {
+                                        const progressBarColor = getPerAreaColor(
+                                            priorityComponent.areaNumber,
+                                        );
 
-                            return (
-                                <div
-                                    className={styles.priorityComponent}
-                                    key={priorityComponent.id}
-                                >
-                                    <Heading level={5} className={styles.heading}>
-                                        {getFormattedComponentName({
-                                            component_num: priorityComponent.num,
-                                            component_letter: priorityComponent.letter,
-                                            title: priorityComponent.label,
-                                        })}
-                                    </Heading>
-                                    <ProgressBar
-                                        className={styles.progressBar}
-                                        value={priorityComponent.rating?.value ?? 0}
-                                        totalValue={5}
-                                        color={progressBarColor}
-                                    />
-                                </div>
-                            );
-                        },
+                                        return (
+                                            <Fragment key={priorityComponent.id}>
+                                                <Label strong>
+                                                    {getFormattedComponentName({
+                                                        component_num: priorityComponent.num,
+                                                        component_letter: priorityComponent.letter,
+                                                        title: priorityComponent.label,
+                                                    })}
+                                                </Label>
+                                                <ProgressBar
+                                                    value={priorityComponent.rating?.value ?? 0}
+                                                    totalValue={5}
+                                                    colorVariant="custom"
+                                                    color={progressBarColor}
+                                                />
+                                            </Fragment>
+                                        );
+                                    },
+                                )}
+                            </ListView>
+                        </Container>
                     )}
-                </Container>
+                </ListView>
             )}
             {hasRatedComponents && (
                 <Container
-                    className={styles.ratingResults}
                     heading={strings.componentRatingResultsHeading}
                     withHeaderBorder
-                    childrenContainerClassName={styles.ratingResultsContent}
-                    footerContentClassName={styles.legend}
-                    footerContent={(
-                        <>
-                            <Heading
-                                level={5}
-                            >
-                                {strings.perAreas}
-                            </Heading>
-                            <div className={styles.separator} />
-                            {perFormAreaResponse?.results?.map((perFormArea) => {
-                                if (isNotDefined(perFormArea.area_num)) {
-                                    return null;
-                                }
-                                const color = getPerAreaColor(perFormArea?.area_num);
-                                return (
-                                    <LegendItem
-                                        key={perFormArea.id}
-                                        label={resolveToString(
-                                            strings.perArea,
-                                            {
-                                                areaNumber: perFormArea.area_num,
-                                                title: perFormArea.title,
-                                            },
-                                        )}
-                                        color={color}
-                                    />
-                                );
-                            })}
-                        </>
+                    footer={(
+                        <ListView
+                            withDarkBackground
+                            withPadding
+                        >
+                            <TextOutput
+                                label={strings.perAreas}
+                                value={(
+                                    <ListView
+                                        withWrap
+                                        spacing="sm"
+                                        withSpacingOpticalCorrection
+                                    >
+                                        {perFormAreaResponse?.results?.map((perFormArea) => {
+                                            if (isNotDefined(perFormArea.area_num)) {
+                                                return null;
+                                            }
+                                            const color = getPerAreaColor(perFormArea?.area_num);
+                                            return (
+                                                <LegendItem
+                                                    key={perFormArea.id}
+                                                    label={resolveToString(
+                                                        strings.perArea,
+                                                        {
+                                                            areaNumber: perFormArea.area_num,
+                                                            title: perFormArea.title,
+                                                        },
+                                                    )}
+                                                    color={color}
+                                                />
+                                            );
+                                        })}
+                                    </ListView>
+                                )}
+                            />
+                        </ListView>
                     )}
                 >
-                    {assessmentStats.topRatedComponents.map((component) => {
-                        const progressBarColor = getPerAreaColor(component.area.area_num);
+                    <ListView
+                        layout="block"
+                        spacing="xs"
+                    >
+                        {assessmentStats.topRatedComponents.map((component) => {
+                            const progressBarColor = getPerAreaColor(component.area.area_num);
 
-                        return (
-                            <Fragment
-                                key={`${component.details.id}-${component.details.component_num}-${component.details.component_letter}`}
-                            >
-                                <Heading level={5}>
-                                    {getFormattedComponentName(component.details)}
-                                </Heading>
-                                <ProgressBar
-                                    value={component.rating?.value ?? 0}
-                                    totalValue={5}
-                                    color={progressBarColor}
-                                    title={(
-                                        isDefined(component.rating)
-                                            ? `${component.rating.value} - ${component.rating.title}`
-                                            : strings.componentNotReviewed
-                                    )}
-                                />
-                                <div>
-                                    {component.notes}
-                                </div>
-                                <div className={styles.separator} />
-                            </Fragment>
-                        );
-                    })}
+                            return (
+                                <Container
+                                    withPadding
+                                    withBackground
+                                    withShadow
+                                    key={`${component.details.id}-${component.details.component_num}-${component.details.component_letter}`}
+                                >
+                                    <ListView
+                                        layout="grid"
+                                        numPreferredGridColumns={4}
+                                    >
+                                        <Label strong>
+                                            {getFormattedComponentName(component.details)}
+                                        </Label>
+                                        <ProgressBar
+                                            value={component.rating?.value ?? 0}
+                                            totalValue={5}
+                                            colorVariant="custom"
+                                            color={progressBarColor}
+                                        />
+                                        <Label strong>
+                                            {isDefined(component.rating)
+                                                ? `${component.rating.value} - ${component.rating.title}`
+                                                : strings.componentNotReviewed}
+                                        </Label>
+                                        <Description>
+                                            {component.notes}
+                                        </Description>
+                                    </ListView>
+                                </Container>
+                            );
+                        })}
+                    </ListView>
                 </Container>
             )}
             {!pending && !hasAssessmentStats && (
                 <Message
-                    className={styles.emptyMessage}
                     icon={<AnalyzingIcon />}
                     title={strings.componentChartNotAvailable}
                     description={strings.componentChartNotAvailableDescription}
@@ -707,11 +736,9 @@ function PrivateCountryPreparedness() {
             {countryId && (
                 <Container
                     heading={strings.relevantDocumentHeader}
-                    className={styles.relevantDocuments}
                     withHeaderBorder
-                    contentViewType="vertical"
                     pending={perDocumentsPending}
-                    actions={(
+                    headerActions={(
                         <GoSingleFileInput
                             name="country_ns_upload"
                             accept=".pdf, .docx, .pptx"
@@ -732,25 +759,26 @@ function PrivateCountryPreparedness() {
                             {strings.upload}
                         </GoSingleFileInput>
                     )}
-                    footerContent={(
+                    footer={(
                         (perDocuments?.length ?? 0 > 9) ? strings.uploadLimitDisclaimer
                             : undefined
                     )}
+                    errored={isDefined(perDocumentsError)}
                 >
-                    <Grid
-                        className={styles.perDocuments}
-                        data={perDocuments}
-                        pending={false}
-                        errored={isDefined(perDocumentsError)}
-                        filtered={false}
-                        keySelector={numericIdSelector}
-                        renderer={DocumentCard}
-                        rendererParams={rendererParams}
-                        numPreferredColumns={3}
-                    />
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={3}
+                    >
+                        <RawList
+                            data={perDocuments}
+                            keySelector={numericIdSelector}
+                            renderer={DocumentCard}
+                            rendererParams={rendererParams}
+                        />
+                    </ListView>
                 </Container>
             )}
-        </Container>
+        </TabPage>
     );
 }
 

@@ -2,21 +2,17 @@ import { useContext } from 'react';
 import { FocusLineIcon } from '@ifrc-go/icons';
 import {
     Button,
+    ButtonLayout,
     Container,
     KeyFigure,
-    NumberOutput,
+    ListView,
+    ProgressBar,
     TextOutput,
     Tooltip,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import {
-    resolveToComponent,
-    sumSafe,
-} from '@ifrc-go/ui/utils';
-import {
-    _cs,
-    isNotDefined,
-} from '@togglecorp/fujs';
+import { sumSafe } from '@ifrc-go/ui/utils';
+import { isNotDefined } from '@togglecorp/fujs';
 
 import SeverityIndicator from '#components/domain/SeverityIndicator';
 import Link from '#components/Link';
@@ -102,12 +98,9 @@ function OperationCard(props: Props) {
     const amountRequested = sumSafe(appeals.map((appeal) => appeal.amount_requested));
     const amountFunded = sumSafe(appeals.map((appeal) => appeal.amount_funded));
 
-    const coverage = getPercent(amountFunded, amountRequested);
+    const appealTypes = appeals.map((appeal) => appeal.atype_display);
 
-    const fundingCoverageDescription = resolveToComponent(
-        strings.operationCardFundingCoverage,
-        { coverage: <NumberOutput value={coverage} /> },
-    );
+    const coverage = getPercent(amountFunded, amountRequested);
 
     let countriesInfoDisplay = strings.operationCardNoCountryInvolved;
     if (countries.length === 1) {
@@ -118,24 +111,27 @@ function OperationCard(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.operationCard, className)}
-            // heading={name}
-            headingClassName={styles.heading}
-            headingContainerClassName={styles.headingContainer}
+            className={className}
+            withPadding
+            withBackground
+            withShadow
+            pending={false}
+            empty={false}
+            filtered={false}
+            errored={false}
             heading={(
                 <Link
                     to="emergenciesLayout"
                     urlParams={{ emergencyId: id }}
-                    ellipsize
+                    withEllipsizedContent
+                    withoutPadding
                 >
                     {name}
                 </Link>
             )}
-            headingLevel={4}
-            withInternalPadding
+            headingLevel={6}
             withHeaderBorder
-            withoutWrapInHeading
-            icons={ifrc_severity_level ? (
+            headerIcons={ifrc_severity_level ? (
                 <>
                     <Tooltip
                         description={(
@@ -174,56 +170,97 @@ function OperationCard(props: Props) {
                     />
                 </>
             ) : undefined}
-            actions={isAuthenticated && (
+            headerActions={isAuthenticated && (
                 <Button
                     name={id}
-                    variant="secondary"
                     disabled={subscriptionPending}
-                    onClick={isSubscribed ? triggerRemoveSubscription : triggerAddSubscription}
+                    onClick={isSubscribed
+                        ? triggerRemoveSubscription
+                        : triggerAddSubscription}
+                    spacing="sm"
                 >
-                    {isSubscribed ? strings.operationCardUnfollow : strings.operationCardFollow}
+                    {isSubscribed
+                        ? strings.operationCardUnfollow
+                        : strings.operationCardFollow}
                 </Button>
             )}
             headerDescription={(
-                <TextOutput
-                    className={styles.lastUpdated}
-                    label={strings.operationCardLastUpdated}
-                    value={updated_at}
-                    valueType="date"
+                <ListView
+                    spacing="sm"
+                    withSpaceBetweenContents
+                >
+                    <ButtonLayout
+                        // FIXME: we should use Tag component here
+                        textSize="sm"
+                        spacing="2xs"
+                        withEllipsizedContent
+                        readOnly
+                    >
+                        {appealTypes.join(', ')}
+                    </ButtonLayout>
+                    <TextOutput
+                        className={styles.lastUpdated}
+                        label={strings.operationCardLastUpdated}
+                        value={updated_at}
+                        valueType="date"
+                        withUppercaseLetters
+                        withLightText
+                        textSize="sm"
+                    />
+                </ListView>
+            )}
+            footer={(
+                <ProgressBar
+                    value={coverage}
+                    totalValue={100}
+                    title={(
+                        <TextOutput
+                            label={strings.operationCardFundingCoverage}
+                            value={coverage}
+                            valueType="number"
+                            suffix="%"
+                            textSize="sm"
+                            withUppercaseLetters
+                        />
+                    )}
                 />
             )}
-            childrenContainerClassName={styles.figures}
+            withFooterBorder
         >
-            <KeyFigure
-                className={styles.figure}
-                value={targetedPopulation}
-                label={(
-                    <Link
-                        to="emergenciesLayout"
-                        urlParams={{ emergencyId: id }}
-                    >
-                        {strings.operationCardTargetedPopulation}
-                    </Link>
-                )}
-                compactValue
-            />
-            <div className={styles.separator} />
-            {/* FIXME This keyFigure should route to emergencies/id/report */}
-            <KeyFigure
-                className={styles.figure}
-                value={amountRequested}
-                label={(
-                    <Link
-                        to="emergencyReportsAndDocuments"
-                        urlParams={{ emergencyId: id }}
-                    >
-                        {strings.operationCardFunding}
-                    </Link>
-                )}
-                compactValue
-                progress={coverage}
-                progressDescription={fundingCoverageDescription}
-            />
+            <ListView
+                layout="grid"
+                minGridColumnSize="6rem"
+            >
+                <KeyFigure
+                    label={(
+                        <Link
+                            to="emergenciesLayout"
+                            urlParams={{ emergencyId: id }}
+                            colorVariant="text"
+                        >
+                            {strings.operationCardTargetedPopulation}
+                        </Link>
+                    )}
+                    value={targetedPopulation}
+                    valueType="number"
+                    valueOptions={{ compact: true }}
+                />
+                <KeyFigure
+                    className={styles.figure}
+                    value={amountRequested}
+                    label={(
+                        <Link
+                            to="emergencyReportsAndDocuments"
+                            urlParams={{ emergencyId: id }}
+                            colorVariant="text"
+                        >
+                            {strings.operationCardFunding}
+                        </Link>
+                    )}
+                    valueType="number"
+                    valueOptions={{ compact: true }}
+                />
+            </ListView>
         </Container>
     );
 }

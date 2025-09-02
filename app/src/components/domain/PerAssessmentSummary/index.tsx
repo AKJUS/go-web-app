@@ -1,6 +1,7 @@
 import {
     ExpandableContainer,
-    NumberOutput,
+    Label,
+    ListView,
     ProgressBar,
     StackedProgressBar,
     TextOutput,
@@ -46,8 +47,6 @@ interface Props {
     totalQuestionCount: number | undefined;
     areaIdToTitleMap: Record<number, string | undefined>;
 }
-
-const progressBarColor = 'var(--go-ui-color-dark-blue-40)';
 
 function numberOfComponentsSelector({ components } : { components: unknown[]}) {
     return components.length;
@@ -208,13 +207,19 @@ function PerAssessmentSummary(props: Props) {
             className={_cs(styles.perAssessmentSummary, className)}
             heading={strings.perAssessmentSummaryHeading}
             headerDescription={description}
-            childrenContainerClassName={styles.content}
             withHeaderBorder
-            spacing="comfortable"
+            withPadding
+            withBackground
+            spacing="lg"
         >
-            <div className={styles.totalProgress}>
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={3}
+                spacing="lg"
+                minGridColumnSize="20rem"
+            >
                 <ProgressBar
-                    title={resolveToString(
+                    title={isDefined(totalQuestionCount) && resolveToString(
                         strings.benchmarksAssessedTitle,
                         {
                             allAnsweredResponses: (
@@ -224,10 +229,9 @@ function PerAssessmentSummary(props: Props) {
                         },
                     )}
                     value={allAnsweredResponses?.length ?? 0}
-                    color={progressBarColor}
                     totalValue={totalQuestionCount}
                     description={(
-                        <div className={styles.answerCounts}>
+                        <ListView>
                             {groupedResponseList.map(
                                 (groupedResponse) => (
                                     <TextOutput
@@ -238,44 +242,51 @@ function PerAssessmentSummary(props: Props) {
                                     />
                                 ),
                             )}
-                        </div>
+                        </ListView>
                     )}
                 />
-            </div>
-            <StackedProgressBar
-                className={styles.componentRating}
-                data={statusGroupedComponentList ?? []}
-                valueSelector={numberOfComponentsSelector}
-                colorSelector={perRatingColorSelector}
-                labelSelector={perRatingLabelSelector}
-            />
-            <div className={styles.avgComponentRating}>
-                {averageRatingByAreaList.map(
-                    (rating) => (
-                        <div
-                            className={styles.areaRating}
-                            key={rating.areaId}
-                        >
-                            <NumberOutput
-                                className={styles.ratingValue}
-                                value={rating.rating}
-                            />
-                            <div className={styles.barContainer}>
-                                <div
-                                    className={styles.filledBar}
-                                    style={{
-                                        height: `${getPercentage(rating.rating, averageRatingByAreaList.length)}%`,
-                                        backgroundColor: getPerAreaColor(Number(rating.areaId)),
-                                    }}
+                <StackedProgressBar
+                    className={styles.componentRating}
+                    data={statusGroupedComponentList ?? []}
+                    valueSelector={numberOfComponentsSelector}
+                    colorSelector={perRatingColorSelector}
+                    labelSelector={perRatingLabelSelector}
+                />
+                <ListView>
+                    {averageRatingByAreaList.map(
+                        (rating) => (
+                            <ListView
+                                key={rating.areaId}
+                                layout="block"
+                                spacing="none"
+                                className={styles.rating}
+                            >
+                                <TextOutput
+                                    value={rating.rating}
+                                    valueType="number"
+                                    strongValue
+                                    textSize="sm"
                                 />
-                            </div>
-                            <div>
-                                {rating.areaDisplay}
-                            </div>
-                        </div>
-                    ),
-                )}
-            </div>
+                                <div className={styles.barContainer}>
+                                    <div
+                                        className={styles.filledBar}
+                                        style={{
+                                            height: `${getPercentage(rating.rating, averageRatingByAreaList.length)}%`,
+                                            backgroundColor: getPerAreaColor(Number(rating.areaId)),
+                                        }}
+                                    />
+                                </div>
+                                <Label
+                                    strong
+                                    textSize="sm"
+                                >
+                                    {rating.areaDisplay}
+                                </Label>
+                            </ListView>
+                        ),
+                    )}
+                </ListView>
+            </ListView>
         </ExpandableContainer>
     );
 }

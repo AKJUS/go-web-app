@@ -4,6 +4,7 @@ import {
 } from 'react';
 
 import Button, { Props as ButtonProps } from '#components/Button';
+import ListView from '#components/ListView';
 import Modal from '#components/Modal';
 import useTranslation from '#hooks/useTranslation';
 
@@ -62,22 +63,21 @@ function ConfirmButton<NAME>(props: Props<NAME>) {
                     closeOnEscape={false}
                     size="sm"
                     footerActions={(
-                        <>
+                        <ListView>
                             <Button
                                 name={false}
                                 onClick={setShowConfirmation}
-                                variant="secondary"
                             >
                                 {strings.buttonCancel}
                             </Button>
                             <Button
                                 name={name}
-                                variant="primary"
+                                styleVariant="filled"
                                 onClick={handleConfirmClick}
                             >
                                 {strings.buttonOk}
                             </Button>
-                        </>
+                        </ListView>
                     )}
                 >
                     {confirmMessage}

@@ -232,7 +232,7 @@ function ConditionalModal(props: Props) {
             heading={strings.hereConditionTitle}
             onClose={onClose}
             size="full"
-            withOverflowInContent
+            withContentOverflow
         >
             <Table
                 filtered={false}

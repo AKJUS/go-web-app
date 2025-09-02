@@ -1,85 +1,94 @@
-import React from 'react';
+import React, { useId } from 'react';
 import {
     CheckboxBlankCircleLineIcon,
     RadioButtonLineIcon,
 } from '@ifrc-go/icons';
-import { _cs } from '@togglecorp/fujs';
 
-import useBasicLayout from '#hooks/useBasicLayout';
+import ButtonLayout from '#components/ButtonLayout';
+import Description from '#components/Description';
+import Label from '#components/Label';
+import ListView from '#components/ListView';
+import { SpacingType } from '#utils/style';
 
 import styles from './styles.module.css';
 
-export interface Props<N, IN> {
+export interface Props<NAME> {
+    name: NAME;
+    onClick: (name: NAME) => void;
+
     className?: string;
-    inputName?: IN;
-    label?: React.ReactNode;
     description?: React.ReactNode;
-    name: N;
-    onClick: (name: N) => void;
+
     value: boolean;
+
     disabled?: boolean;
     readOnly?: boolean;
-    actions?: React.ReactNode;
+
+    inputName?: string;
+    spacing?: SpacingType;
+
+    children?: React.ReactNode;
+    after?: React.ReactNode;
 }
 
-function Radio<N, IN>(props: Props<N, IN>) {
+function Radio<NAME>(props: Props<NAME>) {
     const {
         name,
-        label,
         description,
         className,
         value,
-        inputName,
         onClick,
         disabled,
         readOnly,
-        actions,
+        inputName,
+        spacing,
+        children,
+        after,
     } = props;
 
     const handleClick = React.useCallback(() => {
-        if (onClick) {
+        if (onClick && !disabled && !readOnly) {
             onClick(name);
         }
-    }, [name, onClick]);
+    }, [disabled, name, onClick, readOnly]);
 
-    const {
-        content,
-        containerClassName,
-    } = useBasicLayout({
-        icons: value ? (
-            <RadioButtonLineIcon className={styles.icon} />
-        ) : (
-            <CheckboxBlankCircleLineIcon className={styles.icon} />
-        ),
-        actions,
-        childrenContainerClassName: styles.content,
-        children: (
-            <>
-                {label}
-                {description && (
-                    <div className={styles.description}>
-                        {description}
-                    </div>
-                )}
-            </>
-        ),
-        spacing: 'compact',
-        withoutWrap: true,
-    });
+    const inputId = useId();
 
     return (
-        // eslint-disable-next-line jsx-a11y/label-has-associated-control
         <label
-            className={_cs(
-                styles.radio,
-                value && styles.active,
-                disabled && styles.disabled,
-                readOnly && styles.readOnly,
-                containerClassName,
-                className,
-            )}
+            className={styles.radio}
+            htmlFor={inputId}
         >
+            <ButtonLayout
+                before={value ? (
+                    <RadioButtonLineIcon className={styles.activeIcon} />
+                ) : (
+                    <CheckboxBlankCircleLineIcon />
+                )}
+                className={className}
+                spacingOffset={-2}
+                spacing={spacing}
+                after={after}
+                withoutPadding
+                colorVariant="text"
+                styleVariant="action"
+            >
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                    spacingOffset={-2}
+                    spacing={spacing}
+                >
+                    <Label>
+                        {children}
+                    </Label>
+                    <Description textSize="sm">
+                        {description}
+                    </Description>
+                </ListView>
+            </ButtonLayout>
             <input
+                id={inputId}
                 className={styles.input}
                 type="radio"
                 name={typeof inputName === 'string' ? inputName : undefined}
@@ -88,7 +97,6 @@ function Radio<N, IN>(props: Props<N, IN>) {
                 disabled={disabled}
                 readOnly
             />
-            {content}
         </label>
     );
 }

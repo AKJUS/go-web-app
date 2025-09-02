@@ -211,7 +211,7 @@ export default function RapidResponsePersonnelTable(props: Props) {
             className={styles.rapidResponsePersonnelTable}
             heading={strings.rapidResponseTitle}
             withHeaderBorder
-            actions={(
+            headerActions={(
                 <Link
                     to="allDeployedPersonnel"
                     withLinkIcon

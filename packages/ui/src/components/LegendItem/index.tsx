@@ -6,9 +6,11 @@ export interface Props {
     className?: string;
     colorClassName?: string;
     label?: React.ReactNode;
+    icon?: React.ReactNode;
     iconSrc?: string;
     color?: string;
     iconClassName?: string;
+    withColorInvertedIcon?: boolean;
 }
 
 function LegendItem(props: Props) {
@@ -19,22 +21,28 @@ function LegendItem(props: Props) {
         color,
         label,
         iconSrc,
+        icon,
+        withColorInvertedIcon,
     } = props;
 
     return (
         <div className={_cs(styles.legendElement, className)}>
-            {iconSrc ? (
+            {(iconSrc || icon) ? (
                 <div
-                    style={{
-                        backgroundColor: color,
-                    }}
-                    className={styles.iconContainer}
+                    style={{ backgroundColor: color }}
+                    className={_cs(
+                        styles.iconContainer,
+                        withColorInvertedIcon && styles.withColorInvertedIcon,
+                    )}
                 >
-                    <img
-                        className={_cs(styles.icon, iconClassName)}
-                        src={iconSrc}
-                        alt=""
-                    />
+                    {icon}
+                    {iconSrc && (
+                        <img
+                            className={_cs(styles.icon, iconClassName)}
+                            src={iconSrc}
+                            alt=""
+                        />
+                    )}
                 </div>
             ) : (
                 <div

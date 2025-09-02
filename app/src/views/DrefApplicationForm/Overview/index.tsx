@@ -12,8 +12,10 @@ import {
     BooleanInput,
     Button,
     Container,
+    InlineLayout,
     InputSection,
-    List,
+    ListView,
+    RawList,
     SelectInput,
     TextInput,
 } from '@ifrc-go/ui';
@@ -52,6 +54,7 @@ import ImageWithCaptionInput from '#components/domain/ImageWithCaptionInput';
 import NationalSocietySelectInput from '#components/domain/NationalSocietySelectInput';
 import { type User } from '#components/domain/UserSearchMultiSelectInput';
 import Link from '#components/Link';
+import TabPage from '#components/TabPage';
 import useCountry from '#hooks/domain/useCountry';
 import useDisasterType from '#hooks/domain/useDisasterType';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
@@ -80,7 +83,6 @@ import { type PartialDref } from '../schema';
 import CopyFieldReportSection from './CopyFieldReportSection';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const disasterCategoryLink = 'https://ifrcorg.sharepoint.com/:u:/r/sites/DisastersClimateandCrises/SitePages/Emergency-Response-Framework.aspx?csf=1&web=1&e=WWGByn';
 
@@ -261,38 +263,39 @@ function Overview(props: Props) {
     ]);
 
     return (
-        <div className={styles.operationOverview}>
-            <Container
-                heading={strings.drefFormSharingHeading}
-                childrenContainerClassName={styles.content}
-            >
+        <TabPage>
+            <Container heading={strings.drefFormSharingHeading}>
                 <InputSection
                     title={strings.drefShareApplicationLabel}
                     description={strings.drefShareApplicationDescription}
                     numPreferredColumns={1}
                 >
-                    <List
-                        className={styles.userList}
-                        messageClassName={styles.message}
-                        data={drefUsers}
-                        renderer={UserItem}
-                        keySelector={userKeySelector}
-                        rendererParams={userRendererParams}
+                    <Container
+                        headerActions={(
+                            <Button
+                                name={undefined}
+                                onClick={setShowShareModalTrue}
+                                before={<ShareLineIcon />}
+                                disabled={isNotDefined(drefId) || readOnly}
+                            >
+                                {strings.formShareButtonLabel}
+                            </Button>
+                        )}
                         emptyMessage={strings.userListEmptyMessage}
-                        errored={false}
-                        filtered={false}
-                        pending={false}
-                        compact
-                    />
-                    <Button
-                        name={undefined}
-                        disabled={readOnly}
-                        onClick={setShowShareModalTrue}
-                        variant="secondary"
-                        icons={<ShareLineIcon />}
+                        empty={!drefUsers || drefUsers.length === 0}
                     >
-                        {strings.formShareButtonLabel}
-                    </Button>
+                        <ListView
+                            spacing="sm"
+                            withWrap
+                        >
+                            <RawList
+                                data={drefUsers}
+                                renderer={UserItem}
+                                keySelector={userKeySelector}
+                                rendererParams={userRendererParams}
+                            />
+                        </ListView>
+                    </Container>
                     {showShareModal && isDefined(drefId) && (
                         <DrefShareModal
                             onCancel={setShowShareModalFalse}
@@ -302,279 +305,276 @@ function Overview(props: Props) {
                     )}
                 </InputSection>
             </Container>
-            <Container
-                heading={strings.drefFormEssentialInformation}
-                childrenContainerClassName={styles.content}
-            >
-                <InputSection
-                    title={strings.drefFormNationalSociety}
-                    description={strings.drefFormNationalSocietyDescription}
-                    numPreferredColumns={2}
-                    withAsteriskOnTitle
+            <Container heading={strings.drefFormEssentialInformation}>
+                <ListView
+                    layout="block"
+                    spacing="sm"
                 >
-                    <NationalSocietySelectInput
-                        error={error?.national_society}
-                        readOnly={readOnly}
-                        name="national_society"
-                        onChange={handleNSChange}
-                        value={value?.national_society}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                {value?.type_of_dref !== TYPE_LOAN && (
-                    <CopyFieldReportSection
-                        value={value}
-                        readOnly={readOnly}
-                        setFieldValue={setFieldValue}
-                        disabled={disabled}
-                        setDistrictOptions={setDistrictOptions}
-                        fieldReportOptions={fieldReportOptions}
-                        setFieldReportOptions={setFieldReportOptions}
-                    />
-                )}
-                <InputSection
-                    title={strings.drefFormDrefTypeTitle}
-                    numPreferredColumns={2}
-                    withAsteriskOnTitle
-                >
-                    <SelectInput
-                        readOnly={readOnly}
-                        name="type_of_dref"
-                        label={strings.drefFormTypeOfDref}
-                        options={typeOfDrefOptions}
-                        keySelector={typeOfDrefKeySelector}
-                        labelSelector={stringValueSelector}
-                        onChange={handleTypeofDrefChange}
-                        value={value?.type_of_dref}
-                        error={error?.type_of_dref}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <Container>
+                    <InputSection
+                        title={strings.drefFormNationalSociety}
+                        description={strings.drefFormNationalSocietyDescription}
+                        numPreferredColumns={2}
+                        withAsteriskOnTitle
+                    >
+                        <NationalSocietySelectInput
+                            error={error?.national_society}
+                            name="national_society"
+                            onChange={handleNSChange}
+                            value={value?.national_society}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                    </InputSection>
+                    {value?.type_of_dref !== TYPE_LOAN && (
+                        <CopyFieldReportSection
+                            value={value}
+                            setFieldValue={setFieldValue}
+                            disabled={disabled}
+                            setDistrictOptions={setDistrictOptions}
+                            fieldReportOptions={fieldReportOptions}
+                            setFieldReportOptions={setFieldReportOptions}
+                            readOnly={readOnly}
+                        />
+                    )}
+                    <InputSection
+                        title={strings.drefFormDrefTypeTitle}
+                        numPreferredColumns={2}
+                        withAsteriskOnTitle
+                    >
+                        <SelectInput
+                            name="type_of_dref"
+                            label={strings.drefFormTypeOfDref}
+                            options={typeOfDrefOptions}
+                            keySelector={typeOfDrefKeySelector}
+                            labelSelector={stringValueSelector}
+                            onChange={handleTypeofDrefChange}
+                            value={value?.type_of_dref}
+                            error={error?.type_of_dref}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                    </InputSection>
+                    <Container>
+                        <InputSection
+                            title={
+                                value?.type_of_dref === TYPE_IMMINENT
+                                    ? strings.drefFormImminentDisasterDetails
+                                    : strings.drefFormDisasterDetails
+                            }
+                            numPreferredColumns={2}
+                        >
+                            <DisasterTypeSelectInput
+                                label={
+                                    value?.type_of_dref === TYPE_IMMINENT
+                                        ? strings.drefFormImminentDisasterTypeLabel
+                                        : strings.drefFormDisasterTypeLabel
+                                }
+                                name="disaster_type"
+                                value={value?.disaster_type}
+                                onChange={setFieldValue}
+                                error={error?.disaster_type}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <SelectInput
+                                name="type_of_onset"
+                                label={strings.drefFormTypeOfOnsetLabel}
+                                options={drefOnsetTypeOptions}
+                                keySelector={onsetTypeKeySelector}
+                                labelSelector={stringValueSelector}
+                                value={value?.type_of_onset}
+                                onChange={setFieldValue}
+                                error={error?.type_of_onset}
+                                disabled={disabled}
+                                withAsterisk
+                                readOnly={value?.type_of_dref === TYPE_IMMINENT
+                                    || readOnly}
+                            />
+                            {(
+                                value?.disaster_type === DISASTER_FIRE
+                                || value?.disaster_type === DISASTER_FLASH_FLOOD
+                                || value?.disaster_type === DISASTER_FLOOD) ? (
+                                    <BooleanInput
+                                        name="is_man_made_event"
+                                        label={strings.drefFormManMadeEvent}
+                                        value={value?.is_man_made_event}
+                                        onChange={setFieldValue}
+                                        error={error?.is_man_made_event}
+                                        disabled={disabled}
+                                        readOnly={readOnly}
+                                    />
+                                ) : (
+                                    <div />
+                                )}
+                            {value?.type_of_dref !== TYPE_IMMINENT && (
+                                <SelectInput
+                                    name="disaster_category"
+                                    label={(
+                                        <>
+                                            {strings.drefFormDisasterCategoryLabel}
+                                            <Link
+                                                title={strings.drefFormClickEmergencyResponseLabel}
+                                                href={disasterCategoryLink}
+                                                external
+                                                styleVariant="action"
+                                            >
+                                                <WikiHelpSectionLineIcon />
+                                            </Link>
+                                        </>
+                                    )}
+                                    options={drefDisasterCategoryOptions}
+                                    keySelector={disasterCategoryKeySelector}
+                                    labelSelector={stringValueSelector}
+                                    value={value?.disaster_category}
+                                    onChange={setFieldValue}
+                                    error={error?.disaster_category}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            )}
+                        </InputSection>
+                        {(value?.disaster_category === DISASTER_CATEGORY_ORANGE
+                            || value?.disaster_category === DISASTER_CATEGORY_RED
+                        ) && value?.type_of_dref !== TYPE_IMMINENT && (
+                            <InputSection title={strings.drefFormUploadCrisisDocument}>
+                                <GoSingleFileInput
+                                    name="disaster_category_analysis"
+                                    accept=".pdf, .docx, .pptx"
+                                    fileIdToUrlMap={fileIdToUrlMap}
+                                    onChange={setFieldValue}
+                                    url="/api/v2/dref-files/"
+                                    value={value.disaster_category_analysis}
+                                    error={error?.disaster_category_analysis}
+                                    setFileIdToUrlMap={setFileIdToUrlMap}
+                                    clearable
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                    useCurrentLanguageForMutation
+                                >
+                                    {strings.drefFormOverviewUploadDocumentButtonLabel}
+                                </GoSingleFileInput>
+                            </InputSection>
+                        )}
+                    </Container>
                     <InputSection
                         title={
-                            value?.type_of_dref === TYPE_IMMINENT
-                                ? strings.drefFormImminentDisasterDetails
-                                : strings.drefFormDisasterDetails
+                            value?.type_of_dref !== TYPE_IMMINENT
+                                ? strings.drefFormAffectedCountryAndProvince
+                                : strings.drefFormRiskCountryLabelImminent
                         }
                         numPreferredColumns={2}
                     >
-                        <DisasterTypeSelectInput
-                            label={
-                                value?.type_of_dref === TYPE_IMMINENT
-                                    ? strings.drefFormImminentDisasterTypeLabel
-                                    : strings.drefFormDisasterTypeLabel
-                            }
-                            name="disaster_type"
+                        <CountrySelectInput
+                            name="country"
+                            label={strings.drefFormAddCountry}
+                            value={value?.country}
+                            onChange={handleCountryChange}
+                            error={error?.country}
+                            disabled={disabled}
                             readOnly={readOnly}
-                            value={value?.disaster_type}
-                            onChange={setFieldValue}
-                            error={error?.disaster_type}
-                            disabled={disabled}
                         />
-                        <SelectInput
-                            name="type_of_onset"
-                            label={strings.drefFormTypeOfOnsetLabel}
-                            options={drefOnsetTypeOptions}
-                            keySelector={onsetTypeKeySelector}
-                            labelSelector={stringValueSelector}
-                            value={value?.type_of_onset}
+                        <DistrictSearchMultiSelectInput
+                            name="district"
+                            countryId={value.country}
+                            label={strings.drefFormAddRegion}
+                            options={districtOptions}
                             onChange={setFieldValue}
-                            error={error?.type_of_onset}
+                            value={value?.district}
                             disabled={disabled}
-                            withAsterisk
-                            readOnly={
-                                value?.type_of_dref === TYPE_IMMINENT
-                                || readOnly
-                            }
+                            readOnly={readOnly}
+                            onOptionsChange={setDistrictOptions}
+                            error={getErrorString(error?.district)}
                         />
-                        {(
-                            value?.disaster_type === DISASTER_FIRE
-                            || value?.disaster_type === DISASTER_FLASH_FLOOD
-                            || value?.disaster_type === DISASTER_FLOOD) ? (
-                                <BooleanInput
-                                    name="is_man_made_event"
-                                    readOnly={readOnly}
-                                    label={strings.drefFormManMadeEvent}
-                                    value={value?.is_man_made_event}
-                                    onChange={setFieldValue}
-                                    error={error?.is_man_made_event}
-                                    disabled={disabled}
-                                />
-                            ) : (
-                                <div />
-                            )}
-                        {value?.type_of_dref !== TYPE_IMMINENT && (
-                            <SelectInput
-                                name="disaster_category"
-                                readOnly={readOnly}
-                                label={(
-                                    <>
-                                        {strings.drefFormDisasterCategoryLabel}
-                                        <Link
-                                            title={strings.drefFormClickEmergencyResponseLabel}
-                                            href={disasterCategoryLink}
-                                            external
-                                            variant="tertiary"
-                                        >
-                                            <WikiHelpSectionLineIcon />
-                                        </Link>
-                                    </>
-                                )}
-                                options={drefDisasterCategoryOptions}
-                                keySelector={disasterCategoryKeySelector}
-                                labelSelector={stringValueSelector}
-                                value={value?.disaster_category}
-                                onChange={setFieldValue}
-                                error={error?.disaster_category}
-                                disabled={disabled}
-                            />
-                        )}
                     </InputSection>
-                    {(value?.disaster_category === DISASTER_CATEGORY_ORANGE
-                        || value?.disaster_category === DISASTER_CATEGORY_RED
-                    ) && value?.type_of_dref !== TYPE_IMMINENT && (
-                        <InputSection title={strings.drefFormUploadCrisisDocument}>
-                            <GoSingleFileInput
-                                name="disaster_category_analysis"
-                                accept=".pdf, .docx, .pptx"
-                                fileIdToUrlMap={fileIdToUrlMap}
-                                onChange={setFieldValue}
-                                readOnly={readOnly}
-                                url="/api/v2/dref-files/"
-                                value={value.disaster_category_analysis}
-                                error={error?.disaster_category_analysis}
-                                setFileIdToUrlMap={setFileIdToUrlMap}
-                                clearable
-                                disabled={disabled}
-                                useCurrentLanguageForMutation
-                            >
-                                {strings.drefFormOverviewUploadDocumentButtonLabel}
-                            </GoSingleFileInput>
-                        </InputSection>
-                    )}
-                </Container>
-                <InputSection
-                    title={
-                        value?.type_of_dref !== TYPE_IMMINENT
-                            ? strings.drefFormAffectedCountryAndProvince
-                            : strings.drefFormRiskCountryLabelImminent
-                    }
-                    numPreferredColumns={2}
-                >
-                    <CountrySelectInput
-                        name="country"
-                        readOnly={readOnly}
-                        label={strings.drefFormAddCountry}
-                        value={value?.country}
-                        onChange={handleCountryChange}
-                        error={error?.country}
-                        disabled={disabled}
-                    />
-                    <DistrictSearchMultiSelectInput
-                        name="district"
-                        readOnly={readOnly}
-                        countryId={value.country}
-                        label={strings.drefFormAddRegion}
-                        options={districtOptions}
-                        onChange={setFieldValue}
-                        value={value?.district}
-                        disabled={disabled}
-                        onOptionsChange={setDistrictOptions}
-                        error={getErrorString(error?.district)}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.drefFormTitle}
-                    withAsteriskOnTitle
-                >
-                    <div className={styles.titleContainer}>
-                        <TextInput
-                            name="title"
-                            readOnly={readOnly}
-                            className={styles.titleInput}
-                            value={value?.title}
-                            onChange={setFieldValue}
-                            error={error?.title}
-                            disabled={disabled}
-                        />
-                        <Button
-                            className={styles.generateTitleButton}
-                            name={undefined}
-                            variant="secondary"
-                            onClick={handleGenerateTitleButtonClick}
-                            disabled={(
-                                disabled
-                                || isNotDefined(value?.country)
-                                || isNotDefined(value?.disaster_type)
-                                || isNotDefined(disasterTypes)
-                                || readOnly
+                    <InputSection
+                        title={strings.drefFormTitle}
+                        withAsteriskOnTitle
+                        numPreferredColumns={1}
+                    >
+                        <InlineLayout
+                            after={(
+                                <Button
+                                    name={undefined}
+                                    onClick={handleGenerateTitleButtonClick}
+                                    disabled={disabled
+                                        || readOnly
+                                        || isNotDefined(value?.country)
+                                        || isNotDefined(value?.disaster_type)
+                                        || isNotDefined(disasterTypes)}
+                                >
+                                    {strings.drefFormGenerateTitle}
+                                </Button>
                             )}
                         >
-                            {strings.drefFormGenerateTitle}
-                        </Button>
-                    </div>
-                </InputSection>
-                {value?.type_of_dref !== TYPE_LOAN && value?.type_of_dref !== TYPE_IMMINENT && (
-                    <InputSection
-                        title={strings.drefFormEmergencyAppealPlanned}
-                    >
-                        <BooleanInput
-                            name="emergency_appeal_planned"
-                            readOnly={readOnly}
-                            value={value?.emergency_appeal_planned}
-                            onChange={setFieldValue}
-                            error={error?.emergency_appeal_planned}
-                            disabled={disabled}
-                        />
+                            <TextInput
+                                name="title"
+                                value={value?.title}
+                                onChange={setFieldValue}
+                                error={error?.title}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InlineLayout>
                     </InputSection>
-                )}
-                {value?.type_of_dref !== TYPE_LOAN && value?.type_of_dref !== TYPE_IMMINENT && (
-                    <InputSection
-                        title={strings.drefFormUploadMap}
-                        description={strings.drefFormUploadMapDescription}
-                        contentSectionClassName={styles.imageInputContent}
-                        numPreferredColumns={2}
-                    >
-                        <ImageWithCaptionInput
-                            name="event_map_file"
-                            url="/api/v2/dref-files/"
-                            value={value?.event_map_file}
-                            readOnly={readOnly}
-                            onChange={setFieldValue}
-                            error={getErrorObject(error?.event_map_file)}
-                            fileIdToUrlMap={fileIdToUrlMap}
-                            setFileIdToUrlMap={setFileIdToUrlMap}
-                            label={strings.drefFormUploadAnImageLabel}
-                            disabled={disabled}
-                            useCurrentLanguageForMutation
-                        />
-                    </InputSection>
-                )}
-                {value?.type_of_dref !== TYPE_LOAN && (
-                    <InputSection
-                        title={strings.drefFormUploadCoverImage}
-                        description={strings.drefFormUploadCoverImageDescription}
-                        contentSectionClassName={styles.imageInputContent}
-                        numPreferredColumns={2}
-                    >
-                        <ImageWithCaptionInput
-                            name="cover_image_file"
-                            url="/api/v2/dref-files/"
-                            value={value?.cover_image_file}
-                            readOnly={readOnly}
-                            onChange={setFieldValue}
-                            error={getErrorObject(error?.cover_image_file)}
-                            fileIdToUrlMap={fileIdToUrlMap}
-                            setFileIdToUrlMap={setFileIdToUrlMap}
-                            label={strings.drefFormUploadAnImageLabel}
-                            disabled={disabled}
-                            useCurrentLanguageForMutation
-                        />
-                    </InputSection>
-                )}
+                    {value?.type_of_dref !== TYPE_LOAN && value?.type_of_dref !== TYPE_IMMINENT && (
+                        <InputSection
+                            title={strings.drefFormEmergencyAppealPlanned}
+                        >
+                            <BooleanInput
+                                name="emergency_appeal_planned"
+                                value={value?.emergency_appeal_planned}
+                                onChange={setFieldValue}
+                                error={error?.emergency_appeal_planned}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                    )}
+                    {value?.type_of_dref !== TYPE_LOAN && value?.type_of_dref !== TYPE_IMMINENT && (
+                        <InputSection
+                            title={strings.drefFormUploadMap}
+                            description={strings.drefFormUploadMapDescription}
+                            numPreferredColumns={2}
+                        >
+                            <ImageWithCaptionInput
+                                name="event_map_file"
+                                url="/api/v2/dref-files/"
+                                value={value?.event_map_file}
+                                onChange={setFieldValue}
+                                error={getErrorObject(error?.event_map_file)}
+                                fileIdToUrlMap={fileIdToUrlMap}
+                                setFileIdToUrlMap={setFileIdToUrlMap}
+                                label={strings.drefFormUploadAnImageLabel}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                                useCurrentLanguageForMutation
+                            />
+                        </InputSection>
+                    )}
+                    {value?.type_of_dref !== TYPE_LOAN && (
+                        <InputSection
+                            title={strings.drefFormUploadCoverImage}
+                            description={strings.drefFormUploadCoverImageDescription}
+                            numPreferredColumns={2}
+                        >
+                            <ImageWithCaptionInput
+                                name="cover_image_file"
+                                url="/api/v2/dref-files/"
+                                value={value?.cover_image_file}
+                                onChange={setFieldValue}
+                                error={getErrorObject(error?.cover_image_file)}
+                                fileIdToUrlMap={fileIdToUrlMap}
+                                setFileIdToUrlMap={setFileIdToUrlMap}
+                                label={strings.drefFormUploadAnImageLabel}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                                useCurrentLanguageForMutation
+                            />
+                        </InputSection>
+                    )}
+                </ListView>
             </Container>
-        </div>
+        </TabPage>
     );
 }
 

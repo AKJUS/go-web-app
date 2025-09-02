@@ -6,6 +6,7 @@ import {
     Container,
     DateInput,
     InputSection,
+    ListView,
     NumberInput,
     TextArea,
     TextInput,
@@ -23,8 +24,10 @@ import {
 import GoSingleFileInput from '#components/domain/GoSingleFileInput';
 import MultiImageWithCaptionInput from '#components/domain/MultiImageWithCaptionInput';
 import SourceInformationInput from '#components/domain/SourceInformationInput';
-import Link, { useLink } from '#components/Link';
+import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
+import TabPage from '#components/TabPage';
+import useLink from '#hooks/domain/useLink';
 
 import {
     ONSET_SUDDEN,
@@ -35,19 +38,18 @@ import {
 import { type PartialDref } from '../schema';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type Value = PartialDref;
 type SourceInformationFormFields = NonNullable<PartialDref['source_information']>[number];
 
 interface Props {
     value: Value;
-    readOnly: boolean;
     setFieldValue: (...entries: EntriesAsList<Value>) => void;
     error: Error<Value> | undefined;
     fileIdToUrlMap: Record<number, string>;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     disabled?: boolean;
+    readOnly?: boolean;
 }
 
 function EventDetail(props: Props) {
@@ -59,12 +61,12 @@ function EventDetail(props: Props) {
 
     const {
         error: formError,
-        readOnly,
         setFieldValue,
         value,
         fileIdToUrlMap,
         setFileIdToUrlMap,
         disabled,
+        readOnly,
     } = props;
 
     const error = getErrorObject(formError);
@@ -134,11 +136,10 @@ function EventDetail(props: Props) {
     );
 
     return (
-        <div className={styles.eventDetail}>
+        <TabPage>
             {value.type_of_dref === TYPE_RESPONSE && (
                 <Container
                     heading={strings.drefFormPreviousOperations}
-                    className={styles.previousOperations}
                     headerDescription={(
                         resolveToComponent(
                             strings.drefOperationalLearningPlatformLabel,
@@ -157,460 +158,457 @@ function EventDetail(props: Props) {
                         )
                     )}
                 >
-                    <InputSection
-                        title={strings.drefFormAffectSameArea}
-                    >
-                        <BooleanInput
-                            name="did_it_affect_same_area"
-                            readOnly={readOnly}
-                            value={value.did_it_affect_same_area}
-                            onChange={handleDidItAffectSafeAreaChange}
-                            error={error?.did_it_affect_same_area}
-                            disabled={disabled}
-                        />
-                    </InputSection>
-                    {value.did_it_affect_same_area && (
-                        <InputSection
-                            title={strings.drefFormAffectedThePopulationTitle}
-                        >
+                    <ListView layout="block">
+                        <InputSection title={strings.drefFormAffectSameArea}>
                             <BooleanInput
-                                name="did_it_affect_same_population"
-                                readOnly={readOnly}
-                                value={value.did_it_affect_same_population}
-                                onChange={handleDidItAffectSamePopulationChange}
-                                error={error?.did_it_affect_same_population}
+                                name="did_it_affect_same_area"
+                                value={value.did_it_affect_same_area}
+                                onChange={handleDidItAffectSafeAreaChange}
+                                error={error?.did_it_affect_same_area}
                                 disabled={disabled}
+                                readOnly={readOnly}
                             />
                         </InputSection>
-                    )}
-                    {value.did_it_affect_same_population && (
-                        <InputSection
-                            title={strings.drefFormNsRespond}
-                        >
-                            <BooleanInput
-                                name="did_ns_respond"
-                                readOnly={readOnly}
-                                value={value.did_ns_respond}
-                                onChange={handleDidNsRespondChange}
-                                error={error?.did_ns_respond}
-                                disabled={disabled}
-                            />
-                        </InputSection>
-                    )}
-                    {value.did_ns_respond && (
-                        <InputSection
-                            title={strings.drefFormNsRequestFund}
-                        >
-                            <BooleanInput
-                                name="did_ns_request_fund"
-                                readOnly={readOnly}
-                                value={value.did_ns_request_fund}
-                                onChange={handleDidNsRequestFundChange}
-                                error={error?.did_ns_request_fund}
-                                disabled={disabled}
-                            />
-                        </InputSection>
-                    )}
-                    {value.did_ns_request_fund && (
-                        <InputSection
-                            title={strings.drefFormNsFundingDetail}
-                        >
-                            <TextInput
-                                placeholder={strings.drefFormNsFundingDetailDescription}
-                                name="ns_request_text"
-                                readOnly={readOnly}
-                                value={value.ns_request_text}
-                                onChange={setFieldValue}
-                                error={error?.ns_request_text}
-                                disabled={disabled}
-                            />
-                        </InputSection>
-                    )}
-                    {
-                        value.did_ns_request_fund
-                        && value.did_ns_respond
-                        && value.did_it_affect_same_population
-                        && value.did_it_affect_same_area && (
+                        {value.did_it_affect_same_area && (
                             <InputSection
-                                title={strings.drefFormRecurrentText}
+                                title={strings.drefFormAffectedThePopulationTitle}
                             >
-                                <TextArea
-                                    name="dref_recurrent_text"
-                                    readOnly={readOnly}
-                                    value={value.dref_recurrent_text}
-                                    onChange={setFieldValue}
-                                    error={error?.dref_recurrent_text}
+                                <BooleanInput
+                                    name="did_it_affect_same_population"
+                                    value={value.did_it_affect_same_population}
+                                    onChange={handleDidItAffectSamePopulationChange}
+                                    error={error?.did_it_affect_same_population}
                                     disabled={disabled}
+                                    readOnly={readOnly}
                                 />
                             </InputSection>
-                        )
-                    }
-                    <InputSection
-                        title={strings.drefFormLessonsLearnedTitle}
-                        description={strings.drefFormLessonsLearnedDescription}
-                    >
-                        <TextArea
-                            name="lessons_learned"
-                            readOnly={readOnly}
-                            onChange={setFieldValue}
-                            value={value.lessons_learned}
-                            error={error?.lessons_learned}
-                            disabled={disabled}
-                        />
-                    </InputSection>
-                    <InputSection
-                        title={strings.drefFormChildSafeguardingRiskAnalysisTitle}
-                    >
-                        <BooleanInput
-                            name="complete_child_safeguarding_risk"
-                            readOnly={readOnly}
-                            value={value.complete_child_safeguarding_risk}
-                            onChange={setFieldValue}
-                            error={error?.complete_child_safeguarding_risk}
-                            disabled={disabled}
-                        />
-                        <TextArea
-                            label={strings.drefFormChildSafeguardingRiskLevelLabel}
-                            name="child_safeguarding_risk_level"
-                            readOnly={readOnly}
-                            onChange={setFieldValue}
-                            value={value.child_safeguarding_risk_level}
-                            error={error?.child_safeguarding_risk_level}
-                            disabled={disabled}
-                        />
-                    </InputSection>
+                        )}
+                        {value.did_it_affect_same_population && (
+                            <InputSection
+                                title={strings.drefFormNsRespond}
+                            >
+                                <BooleanInput
+                                    name="did_ns_respond"
+                                    value={value.did_ns_respond}
+                                    onChange={handleDidNsRespondChange}
+                                    error={error?.did_ns_respond}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            </InputSection>
+                        )}
+                        {value.did_ns_respond && (
+                            <InputSection
+                                title={strings.drefFormNsRequestFund}
+                            >
+                                <BooleanInput
+                                    name="did_ns_request_fund"
+                                    value={value.did_ns_request_fund}
+                                    onChange={handleDidNsRequestFundChange}
+                                    error={error?.did_ns_request_fund}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            </InputSection>
+                        )}
+                        {value.did_ns_request_fund && (
+                            <InputSection
+                                title={strings.drefFormNsFundingDetail}
+                            >
+                                <TextInput
+                                    placeholder={strings.drefFormNsFundingDetailDescription}
+                                    name="ns_request_text"
+                                    value={value.ns_request_text}
+                                    onChange={setFieldValue}
+                                    error={error?.ns_request_text}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            </InputSection>
+                        )}
+                        {
+                            value.did_ns_request_fund
+                            && value.did_ns_respond
+                            && value.did_it_affect_same_population
+                            && value.did_it_affect_same_area && (
+                                <InputSection
+                                    title={strings.drefFormRecurrentText}
+                                >
+                                    <TextArea
+                                        name="dref_recurrent_text"
+                                        value={value.dref_recurrent_text}
+                                        onChange={setFieldValue}
+                                        error={error?.dref_recurrent_text}
+                                        disabled={disabled}
+                                        readOnly={readOnly}
+                                    />
+                                </InputSection>
+                            )
+                        }
+                        <InputSection
+                            title={strings.drefFormLessonsLearnedTitle}
+                            description={strings.drefFormLessonsLearnedDescription}
+                        >
+                            <TextArea
+                                name="lessons_learned"
+                                onChange={setFieldValue}
+                                value={value.lessons_learned}
+                                error={error?.lessons_learned}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.drefFormChildSafeguardingRiskAnalysisTitle}
+                        >
+                            <BooleanInput
+                                name="complete_child_safeguarding_risk"
+                                value={value.complete_child_safeguarding_risk}
+                                onChange={setFieldValue}
+                                error={error?.complete_child_safeguarding_risk}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextArea
+                                label={strings.drefFormChildSafeguardingRiskLevelLabel}
+                                name="child_safeguarding_risk_level"
+                                onChange={setFieldValue}
+                                value={value.child_safeguarding_risk_level}
+                                error={error?.child_safeguarding_risk_level}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                    </ListView>
                 </Container>
             )}
-            <Container
-                heading={strings.drefFormDescriptionEvent}
-            >
-                {value.type_of_dref !== TYPE_IMMINENT && (
+            <Container heading={strings.drefFormDescriptionEvent}>
+                <ListView layout="block">
+                    {value.type_of_dref !== TYPE_IMMINENT && (
+                        <InputSection
+                            title={(
+                                value.type_of_onset === ONSET_SUDDEN
+                                    ? strings.drefFormEventDate
+                                    : strings.drefFormSlowEventDate
+                            )}
+                        >
+                            <DateInput
+                                name="event_date"
+                                value={value.event_date}
+                                onChange={setFieldValue}
+                                error={error?.event_date}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                    )}
                     <InputSection
-                        title={(
-                            value.type_of_onset === ONSET_SUDDEN
-                                ? strings.drefFormEventDate
-                                : strings.drefFormSlowEventDate
-                        )}
+                        title={strings.numericDetailsSectionTitle}
+                        numPreferredColumns={2}
                     >
-                        <DateInput
-                            name="event_date"
-                            readOnly={readOnly}
-                            value={value.event_date}
-                            onChange={setFieldValue}
-                            error={error?.event_date}
-                            disabled={disabled}
-                        />
-                    </InputSection>
-                )}
-                <InputSection
-                    title={strings.numericDetailsSectionTitle}
-                    numPreferredColumns={2}
-                >
-                    <NumberInput
-                        name="num_affected"
-                        readOnly={readOnly}
-                        label={value?.type_of_dref === TYPE_IMMINENT ? (
-                            <>
-                                {strings.drefFormRiskPeopleLabel}
-                                <Link
-                                    title={strings.drefFormClickEmergencyResponseFramework}
-                                    href={totalPopulationRiskImminentLink}
-                                    external
-                                >
-                                    <WikiHelpSectionLineIcon />
-                                </Link>
-                            </>
-                        ) : (
-                            <>
-                                {strings.drefFormPeopleAffected}
-                                <Link
-                                    title={strings.drefFormClickEmergencyResponseFramework}
-                                    href={totalPeopleAffectedSlowSuddenLink}
-                                    external
-                                >
-                                    <WikiHelpSectionLineIcon />
-                                </Link>
-                            </>
-                        )}
-                        value={value?.num_affected}
-                        onChange={setFieldValue}
-                        error={error?.num_affected}
-                        hint={(
-                            value?.type_of_dref === TYPE_IMMINENT
-                                ? strings.drefFormPeopleAffectedDescriptionImminent
-                                : strings.drefFormPeopleAffectedDescriptionSlowSudden
-                        )}
-                        disabled={disabled}
-                    />
-                    {value?.type_of_dref !== TYPE_LOAN && value?.type_of_dref !== TYPE_IMMINENT && (
                         <NumberInput
-                            label={(
+                            name="num_affected"
+                            label={value?.type_of_dref === TYPE_IMMINENT ? (
                                 <>
-                                    {strings.drefFormPeopleInNeed}
+                                    {strings.drefFormRiskPeopleLabel}
                                     <Link
                                         title={strings.drefFormClickEmergencyResponseFramework}
-                                        href={peopleInNeedLink}
+                                        href={totalPopulationRiskImminentLink}
+                                        external
+                                    >
+                                        <WikiHelpSectionLineIcon />
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                    {strings.drefFormPeopleAffected}
+                                    <Link
+                                        title={strings.drefFormClickEmergencyResponseFramework}
+                                        href={totalPeopleAffectedSlowSuddenLink}
                                         external
                                     >
                                         <WikiHelpSectionLineIcon />
                                     </Link>
                                 </>
                             )}
-                            name="people_in_need"
-                            readOnly={readOnly}
-                            value={value?.people_in_need}
+                            value={value?.num_affected}
                             onChange={setFieldValue}
-                            error={error?.people_in_need}
-                            hint={strings.drefFormPeopleInNeedDescriptionSlowSudden}
+                            error={error?.num_affected}
+                            hint={(
+                                value?.type_of_dref === TYPE_IMMINENT
+                                    ? strings.drefFormPeopleAffectedDescriptionImminent
+                                    : strings.drefFormPeopleAffectedDescriptionSlowSudden
+                            )}
                             disabled={disabled}
+                            readOnly={readOnly}
                         />
-                    )}
-                    <NumberInput
-                        name="estimated_number_of_affected_male"
-                        readOnly={readOnly}
-                        label={strings.drefFormAffectedMaleLabel}
-                        value={value?.estimated_number_of_affected_male}
-                        onChange={setFieldValue}
-                        error={error?.estimated_number_of_affected_male}
-                        disabled={disabled}
-                    />
-                    <NumberInput
-                        name="estimated_number_of_affected_female"
-                        readOnly={readOnly}
-                        label={strings.drefFormAffectedFemaleLabel}
-                        value={value?.estimated_number_of_affected_female}
-                        onChange={setFieldValue}
-                        error={error?.estimated_number_of_affected_female}
-                        disabled={disabled}
-                    />
-                    <NumberInput
-                        name="estimated_number_of_affected_girls_under_18"
-                        readOnly={readOnly}
-                        label={strings.drefFormAffectedMinorGirlsLabel}
-                        value={value?.estimated_number_of_affected_girls_under_18}
-                        onChange={setFieldValue}
-                        error={error?.estimated_number_of_affected_girls_under_18}
-                        disabled={disabled}
-                    />
-                    <NumberInput
-                        name="estimated_number_of_affected_boys_under_18"
-                        readOnly={readOnly}
-                        label={strings.drefFormAffectedMinorBoysLabel}
-                        value={value?.estimated_number_of_affected_boys_under_18}
-                        onChange={setFieldValue}
-                        error={error?.estimated_number_of_affected_boys_under_18}
-                        disabled={disabled}
-                    />
-                    {/* NOTE: Empty div to preserve the layout */}
-                    <div />
-                </InputSection>
-                {value.type_of_dref === TYPE_LOAN && (
-                    <Container>
-                        <InputSection
-                            title={strings.drefFormRequestAmountForTypeLoan}
-                            description={strings.drefFormRequestAmountDescriptionForTypeLoan}
-                        >
+                        {value?.type_of_dref !== TYPE_LOAN
+                            && value?.type_of_dref !== TYPE_IMMINENT && (
                             <NumberInput
-                                name="amount_requested"
-                                readOnly={readOnly}
-                                value={value?.amount_requested}
+                                label={(
+                                    <>
+                                        {strings.drefFormPeopleInNeed}
+                                        <Link
+                                            title={strings.drefFormClickEmergencyResponseFramework}
+                                            href={peopleInNeedLink}
+                                            external
+                                        >
+                                            <WikiHelpSectionLineIcon />
+                                        </Link>
+                                    </>
+                                )}
+                                name="people_in_need"
+                                value={value?.people_in_need}
                                 onChange={setFieldValue}
-                                error={error?.amount_requested}
+                                error={error?.people_in_need}
+                                hint={strings.drefFormPeopleInNeedDescriptionSlowSudden}
                                 disabled={disabled}
+                                readOnly={readOnly}
                             />
-                        </InputSection>
-                    </Container>
-                )}
-                {value.type_of_dref !== TYPE_LOAN && value.type_of_dref !== TYPE_IMMINENT && (
-                    <InputSection
-                        title={strings.drefFormWhatWhereWhen}
-                        description={(
-                            <>
-                                <p>
-                                    {strings.drefFormWhatWhereWhenDescriptionHeading}
-                                </p>
-                                <ol>
-                                    <li>
-                                        {strings.drefFormWhatWhereWhenDescriptionPoint1}
-                                    </li>
-                                    <li>
-                                        {strings.drefFormWhatWhereWhenDescriptionPoint2}
-                                    </li>
-                                    <li>
-                                        {strings.drefFormWhatWhereWhenDescriptionPoint3}
-                                    </li>
-                                </ol>
-                            </>
                         )}
-                    >
-                        <TextArea
-                            name="event_description"
-                            readOnly={readOnly}
+                        <NumberInput
+                            name="estimated_number_of_affected_male"
+                            label={strings.drefFormAffectedMaleLabel}
+                            value={value?.estimated_number_of_affected_male}
                             onChange={setFieldValue}
-                            value={value.event_description}
-                            error={error?.event_description}
+                            error={error?.estimated_number_of_affected_male}
                             disabled={disabled}
-                        />
-                    </InputSection>
-                )}
-                {value.type_of_dref === TYPE_RESPONSE && (
-                    <InputSection
-                        title={strings.drefFormScopeAndScaleEvent}
-                        description={strings.drefFormScopeAndScaleDescription}
-                    >
-                        <TextArea
-                            name="event_scope"
                             readOnly={readOnly}
-                            onChange={setFieldValue}
-                            value={value.event_scope}
-                            error={error?.event_scope}
-                            disabled={disabled}
                         />
+                        <NumberInput
+                            name="estimated_number_of_affected_female"
+                            label={strings.drefFormAffectedFemaleLabel}
+                            value={value?.estimated_number_of_affected_female}
+                            onChange={setFieldValue}
+                            error={error?.estimated_number_of_affected_female}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                        <NumberInput
+                            name="estimated_number_of_affected_girls_under_18"
+                            label={strings.drefFormAffectedMinorGirlsLabel}
+                            value={value?.estimated_number_of_affected_girls_under_18}
+                            onChange={setFieldValue}
+                            error={error?.estimated_number_of_affected_girls_under_18}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                        <NumberInput
+                            name="estimated_number_of_affected_boys_under_18"
+                            label={strings.drefFormAffectedMinorBoysLabel}
+                            value={value?.estimated_number_of_affected_boys_under_18}
+                            onChange={setFieldValue}
+                            error={error?.estimated_number_of_affected_boys_under_18}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                        {/* NOTE: Empty div to preserve the layout */}
+                        <div />
                     </InputSection>
-                )}
-                {value.type_of_dref !== TYPE_LOAN && value.type_of_dref !== TYPE_IMMINENT && (
-                    <>
-                        <InputSection
-                            title={strings.drefFormSourceInformationTitle}
-                            description={strings.drefFormSourceInformationDescription}
-                        >
-                            <NonFieldError error={getErrorObject(error?.source_information)} />
-                            {value.source_information?.map((source, index) => (
-                                <SourceInformationInput
-                                    key={source.client_id}
-                                    index={index}
-                                    value={source}
-                                    onChange={onSourceInformationChange}
-                                    onRemove={onSourceInformationRemove}
-                                    error={getErrorObject(error?.source_information)}
-                                    readOnly={readOnly}
-                                    disabled={disabled}
-                                />
-                            ))}
-                            <div className={styles.actions}>
-                                <Button
-                                    name={undefined}
-                                    onClick={handleSourceInformationAdd}
-                                    variant="secondary"
-                                    disabled={disabled || readOnly}
-                                >
-                                    {strings.drefFormSourceInformationAddButton}
-                                </Button>
-                            </div>
-                        </InputSection>
-                        <InputSection
-                            title={strings.drefFormUploadPhotos}
-                            description={strings.drefFormUploadPhotosLimitation}
-                            contentSectionClassName={styles.imageInputContent}
-                        >
-                            <MultiImageWithCaptionInput
-                                label={strings.drefFormSelectImages}
-                                url="/api/v2/dref-files/multiple/"
-                                name="images_file"
-                                value={value.images_file}
-                                onChange={setFieldValue}
-                                fileIdToUrlMap={fileIdToUrlMap}
-                                setFileIdToUrlMap={setFileIdToUrlMap}
-                                error={getErrorObject(error?.images_file)}
-                                disabled={disabled || readOnly}
-                                useCurrentLanguageForMutation
-                            />
-                        </InputSection>
-                    </>
-                )}
-                {value.type_of_dref === TYPE_IMMINENT && (
-                    <>
-                        <InputSection
-                            title={strings.drefHazardExpectedLabel}
-                        >
-                            <DateInput
-                                name="hazard_date"
-                                readOnly={readOnly}
-                                onChange={setFieldValue}
-                                value={value.hazard_date}
-                                error={error?.hazard_date}
-                                disabled={disabled}
-                            />
-                        </InputSection>
-                        <InputSection
-                            title={strings.drefHazardExpectedTitle}
-                            description={strings.drefHazardExpectedDescription}
-                        >
-                            <TextArea
-                                name="hazard_date_and_location"
-                                readOnly={readOnly}
-                                onChange={setFieldValue}
-                                value={value.hazard_date_and_location}
-                                error={error?.hazard_date_and_location}
-                                disabled={disabled}
-                            />
-                        </InputSection>
-                        <InputSection
-                            title={strings.drefHazardTitle}
-                            description={strings.drefHazardDescription}
-                        >
-                            <TextArea
-                                name="hazard_vulnerabilities_and_risks"
-                                readOnly={readOnly}
-                                onChange={setFieldValue}
-                                value={value.hazard_vulnerabilities_and_risks}
-                                error={error?.hazard_vulnerabilities_and_risks}
-                                disabled={disabled}
-                            />
-                        </InputSection>
-                        <InputSection
-                            title={strings.drefFormSourceInformationTitle}
-                            description={strings.drefFormSourceInformationDescription}
-                        >
-                            <NonFieldError error={getErrorObject(error?.source_information)} />
-                            {value.source_information?.map((source, index) => (
-                                <SourceInformationInput
-                                    key={source.client_id}
-                                    index={index}
-                                    value={source}
-                                    onChange={onSourceInformationChange}
-                                    onRemove={onSourceInformationRemove}
-                                    error={getErrorObject(error?.source_information)}
-                                    readOnly={readOnly}
-                                    disabled={disabled}
-                                />
-                            ))}
-                            <div className={styles.actions}>
-                                <Button
-                                    name={undefined}
-                                    readOnly={readOnly}
-                                    onClick={handleSourceInformationAdd}
-                                    variant="secondary"
-                                    disabled={disabled || readOnly}
-                                >
-                                    {strings.drefFormSourceInformationAddButton}
-                                </Button>
-                            </div>
-                        </InputSection>
-                        <InputSection
-                            title={strings.drefFormUploadSupportingDocument}
-                        >
-                            <GoSingleFileInput
-                                name="scenario_analysis_supporting_document"
-                                accept=".pdf, .docx, .pptx"
-                                fileIdToUrlMap={fileIdToUrlMap}
-                                onChange={setFieldValue}
-                                url="/api/v2/dref-files/"
-                                readOnly={readOnly}
-                                value={value.scenario_analysis_supporting_document}
-                                error={error?.scenario_analysis_supporting_document}
-                                setFileIdToUrlMap={setFileIdToUrlMap}
-                                clearable
-                                disabled={disabled}
-                                useCurrentLanguageForMutation
+                    {value.type_of_dref === TYPE_LOAN && (
+                        <Container>
+                            <InputSection
+                                title={strings.drefFormRequestAmountForTypeLoan}
+                                description={strings.drefFormRequestAmountDescriptionForTypeLoan}
                             >
-                                {strings.drefFormUploadSupportingDocumentButton}
-                            </GoSingleFileInput>
+                                <NumberInput
+                                    name="amount_requested"
+                                    value={value?.amount_requested}
+                                    onChange={setFieldValue}
+                                    error={error?.amount_requested}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            </InputSection>
+                        </Container>
+                    )}
+                    {value.type_of_dref !== TYPE_LOAN && value.type_of_dref !== TYPE_IMMINENT && (
+                        <InputSection
+                            title={strings.drefFormWhatWhereWhen}
+                            description={(
+                                <ListView
+                                    layout="block"
+                                    withSpacingOpticalCorrection
+                                >
+                                    <p>
+                                        {strings.drefFormWhatWhereWhenDescriptionHeading}
+                                    </p>
+                                    <ol>
+                                        <li>
+                                            {strings.drefFormWhatWhereWhenDescriptionPoint1}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormWhatWhereWhenDescriptionPoint2}
+                                        </li>
+                                        <li>
+                                            {strings.drefFormWhatWhereWhenDescriptionPoint3}
+                                        </li>
+                                    </ol>
+                                </ListView>
+                            )}
+                        >
+                            <TextArea
+                                name="event_description"
+                                onChange={setFieldValue}
+                                value={value.event_description}
+                                error={error?.event_description}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
                         </InputSection>
-                    </>
-                )}
+                    )}
+                    {value.type_of_dref === TYPE_RESPONSE && (
+                        <InputSection
+                            title={strings.drefFormScopeAndScaleEvent}
+                            description={strings.drefFormScopeAndScaleDescription}
+                        >
+                            <TextArea
+                                name="event_scope"
+                                onChange={setFieldValue}
+                                value={value.event_scope}
+                                error={error?.event_scope}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                    )}
+                    {value.type_of_dref !== TYPE_LOAN && value.type_of_dref !== TYPE_IMMINENT && (
+                        <>
+                            <InputSection
+                                title={strings.drefFormSourceInformationTitle}
+                                description={strings.drefFormSourceInformationDescription}
+                            >
+                                <NonFieldError error={getErrorObject(error?.source_information)} />
+                                {value.source_information?.map((source, index) => (
+                                    <SourceInformationInput
+                                        key={source.client_id}
+                                        index={index}
+                                        value={source}
+                                        onChange={onSourceInformationChange}
+                                        onRemove={onSourceInformationRemove}
+                                        error={getErrorObject(error?.source_information)}
+                                        disabled={disabled}
+                                        readOnly={readOnly}
+                                    />
+                                ))}
+                                <Button
+                                    name={undefined}
+                                    onClick={handleSourceInformationAdd}
+                                    disabled={disabled || readOnly}
+                                >
+                                    {strings.drefFormSourceInformationAddButton}
+                                </Button>
+                            </InputSection>
+                            <InputSection
+                                title={strings.drefFormUploadPhotos}
+                                description={strings.drefFormUploadPhotosLimitation}
+                            >
+                                <MultiImageWithCaptionInput
+                                    label={strings.drefFormSelectImages}
+                                    url="/api/v2/dref-files/multiple/"
+                                    name="images_file"
+                                    value={value.images_file}
+                                    onChange={setFieldValue}
+                                    fileIdToUrlMap={fileIdToUrlMap}
+                                    setFileIdToUrlMap={setFileIdToUrlMap}
+                                    error={getErrorObject(error?.images_file)}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                    useCurrentLanguageForMutation
+                                />
+                            </InputSection>
+                        </>
+                    )}
+                    {value.type_of_dref === TYPE_IMMINENT && (
+                        <>
+                            <InputSection
+                                title={strings.drefHazardExpectedLabel}
+                            >
+                                <DateInput
+                                    name="hazard_date"
+                                    onChange={setFieldValue}
+                                    value={value.hazard_date}
+                                    error={error?.hazard_date}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            </InputSection>
+                            <InputSection
+                                title={strings.drefHazardExpectedTitle}
+                                description={strings.drefHazardExpectedDescription}
+                            >
+                                <TextArea
+                                    name="hazard_date_and_location"
+                                    onChange={setFieldValue}
+                                    value={value.hazard_date_and_location}
+                                    error={error?.hazard_date_and_location}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            </InputSection>
+                            <InputSection
+                                title={strings.drefHazardTitle}
+                                description={strings.drefHazardDescription}
+                            >
+                                <TextArea
+                                    name="hazard_vulnerabilities_and_risks"
+                                    onChange={setFieldValue}
+                                    value={value.hazard_vulnerabilities_and_risks}
+                                    error={error?.hazard_vulnerabilities_and_risks}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                />
+                            </InputSection>
+                            <InputSection
+                                title={strings.drefFormSourceInformationTitle}
+                                description={strings.drefFormSourceInformationDescription}
+                            >
+                                <NonFieldError error={getErrorObject(error?.source_information)} />
+                                {value.source_information?.map((source, index) => (
+                                    <SourceInformationInput
+                                        key={source.client_id}
+                                        index={index}
+                                        value={source}
+                                        onChange={onSourceInformationChange}
+                                        onRemove={onSourceInformationRemove}
+                                        error={getErrorObject(error?.source_information)}
+                                        disabled={disabled}
+                                        readOnly={readOnly}
+                                    />
+                                ))}
+                                <Button
+                                    name={undefined}
+                                    onClick={handleSourceInformationAdd}
+                                    disabled={disabled || readOnly}
+                                >
+                                    {strings.drefFormSourceInformationAddButton}
+                                </Button>
+                            </InputSection>
+                            <InputSection
+                                title={strings.drefFormUploadSupportingDocument}
+                            >
+                                <GoSingleFileInput
+                                    name="scenario_analysis_supporting_document"
+                                    accept=".pdf, .docx, .pptx"
+                                    fileIdToUrlMap={fileIdToUrlMap}
+                                    onChange={setFieldValue}
+                                    url="/api/v2/dref-files/"
+                                    value={value.scenario_analysis_supporting_document}
+                                    error={error?.scenario_analysis_supporting_document}
+                                    setFileIdToUrlMap={setFileIdToUrlMap}
+                                    clearable
+                                    disabled={disabled}
+                                    readOnly={readOnly}
+                                    useCurrentLanguageForMutation
+                                >
+                                    {strings.drefFormUploadSupportingDocumentButton}
+                                </GoSingleFileInput>
+                            </InputSection>
+                        </>
+                    )}
+                </ListView>
             </Container>
-        </div>
+        </TabPage>
     );
 }
 

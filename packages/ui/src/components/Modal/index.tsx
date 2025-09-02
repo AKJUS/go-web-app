@@ -6,9 +6,9 @@ import { FocusOn } from 'react-focus-on';
 import { CloseFillIcon } from '@ifrc-go/icons';
 import { _cs } from '@togglecorp/fujs';
 
-import BodyOverlay from '#components/BodyOverlay';
 import Button from '#components/Button';
 import Container, { type Props as ContainerProps } from '#components/Container';
+import Portal from '#components/Portal';
 import useTranslation from '#hooks/useTranslation';
 
 import i18n from './i18n.json';
@@ -26,7 +26,7 @@ const sizeToStyleMap: Record<ModalSize, string> = {
     pageWidth: styles.pageWidth,
 };
 
-export interface Props extends Omit<ContainerProps, 'withInternalPadding' | 'withoutWrapInHeading'> {
+export interface Props extends Omit<ContainerProps, 'withInternalPadding' | 'withoutWrapInHeading' | 'size'> {
     closeOnClickOutside?: boolean;
     closeOnEscape?: boolean;
     onClose?: () => void;
@@ -46,8 +46,7 @@ function Modal(props: Props) {
         withoutCloseButton = false,
 
         className,
-        actions,
-        childrenContainerClassName,
+        headerActions,
         modalContainerClassName,
 
         ...containerProps
@@ -82,37 +81,39 @@ function Modal(props: Props) {
     }, [onClose, closeOnEscape]);
 
     return (
-        <BodyOverlay className={_cs(styles.overlay, overlayClassName)}>
-            <FocusOn
-                className={_cs(styles.modalContainer, modalContainerClassName, sizeStyle)}
-                onClickOutside={handleClickOutside}
-                onEscapeKey={handleEscape}
-                gapMode="padding"
-                // gapMode={null}
-            >
-                <Container
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...containerProps}
-                    withInternalPadding
-                    withoutWrapInHeading
-                    className={_cs(styles.modal, className)}
-                    childrenContainerClassName={_cs(styles.content, childrenContainerClassName)}
-                    actions={(!withoutCloseButton || actions) ? (
-                        <>
-                            {actions}
-                            <Button
-                                name={undefined}
-                                onClick={onClose}
-                                variant="tertiary"
-                                title={strings.closeButtonLabel}
-                            >
-                                <CloseFillIcon className={styles.closeIcon} />
-                            </Button>
-                        </>
-                    ) : undefined}
-                />
-            </FocusOn>
-        </BodyOverlay>
+        <Portal>
+            <div className={_cs(styles.overlay, overlayClassName)}>
+                <FocusOn
+                    className={_cs(styles.focusContainer, modalContainerClassName, sizeStyle)}
+                    onClickOutside={handleClickOutside}
+                    onEscapeKey={handleEscape}
+                    gapMode="padding"
+                    // gapMode={null}
+                >
+                    <Container
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        {...containerProps}
+                        withPadding
+                        withoutWrapInHeader
+                        className={_cs(styles.modal, className)}
+                        headerActions={(!withoutCloseButton || headerActions) ? (
+                            <>
+                                {headerActions}
+                                <Button
+                                    name={undefined}
+                                    onClick={onClose}
+                                    styleVariant="action"
+                                    colorVariant="text"
+                                    title={strings.closeButtonLabel}
+                                >
+                                    <CloseFillIcon className={styles.closeIcon} />
+                                </Button>
+                            </>
+                        ) : undefined}
+                    />
+                </FocusOn>
+            </div>
+        </Portal>
     );
 }
 

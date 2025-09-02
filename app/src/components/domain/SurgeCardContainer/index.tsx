@@ -1,6 +1,7 @@
-import { Container } from '@ifrc-go/ui';
-
-import styles from './styles.module.css';
+import {
+    Container,
+    ListView,
+} from '@ifrc-go/ui';
 
 interface Props {
     heading: React.ReactNode;
@@ -15,12 +16,17 @@ function SurgeCardContainer(props: Props) {
 
     return (
         <Container
-            className={styles.surgeCardContainer}
-            childrenContainerClassName={styles.content}
             heading={heading}
             withHeaderBorder
+            withoutSpacingOpticalCorrection
         >
-            {children}
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={3}
+                minGridColumnSize="16rem"
+            >
+                {children}
+            </ListView>
         </Container>
     );
 }

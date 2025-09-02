@@ -119,7 +119,8 @@ function PerExportModal(props: Props) {
                     description={strings.perClickDownloadLink}
                     actions={(
                         <Link
-                            variant="secondary"
+                            colorVariant="primary"
+                            styleVariant="outline"
                             href={exportStatusResponse?.pdf_file}
                             external
                         >

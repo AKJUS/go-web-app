@@ -17,4 +17,5 @@
     display: flex;
     flex-direction: column;
     padding: var(--go-ui-spacing-sm) 0;
+    gap: var(--go-ui-spacing-2xs);
 }

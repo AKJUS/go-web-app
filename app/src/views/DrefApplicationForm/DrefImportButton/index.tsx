@@ -28,7 +28,6 @@ function DrefImportButton(props: Props) {
     return (
         <>
             <Button
-                variant="secondary"
                 name={undefined}
                 onClick={setShowImportModalTrue}
             >

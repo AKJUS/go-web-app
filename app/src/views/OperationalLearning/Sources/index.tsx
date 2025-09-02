@@ -1,8 +1,8 @@
-import ReactDOMServer from 'react-dom/server';
 import { CopyLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     Container,
+    ListView,
     Pager,
     RawList,
 } from '@ifrc-go/ui';
@@ -11,7 +11,10 @@ import {
     useTranslation,
 } from '@ifrc-go/ui/hooks';
 import { numericIdSelector } from '@ifrc-go/ui/utils';
-import { isDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import useFilterState from '#hooks/useFilterState';
 import {
@@ -23,13 +26,6 @@ import AllExtractsModal from './AllExtractsModal';
 import Emergency from './Emergency';
 
 import i18n from './i18n.json';
-
-// FIXME: move this to utils
-// NOTE: this may be slower on the long run
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isChildNull(children: any) {
-    return !ReactDOMServer.renderToStaticMarkup(children);
-}
 
 type AppealDocumentResponse = GoApiResponse<'/api/v2/appeal_document/'>;
 type AppealDocument = NonNullable<AppealDocumentResponse['results']>[number];
@@ -101,30 +97,35 @@ function Sources(props: Props) {
     return (
         <Container
             className={className}
-            footerContent={isChildNull(pager) ? undefined : pager}
-            contentViewType="vertical"
-            footerIcons={(
+            footerActions={pager}
+            footer={(
                 <Button
                     name="viewAll"
-                    variant="secondary"
-                    icons={<CopyLineIcon />}
+                    before={<CopyLineIcon />}
                     onClick={setShowExtractsModalTrue}
                 >
                     {strings.viewAllExtracts}
                 </Button>
             )}
+            empty={isNotDefined(appealDocumentResponse?.results)
+                || appealDocumentResponse.results.length === 0}
             emptyMessage={strings.noSources}
             errored={isDefined(appealDocumentError)}
             pending={appealDocumentPending}
-            filtered={false}
-            compactMessage
+            overlayPending
         >
-            <RawList
-                data={appealDocumentResponse?.results}
-                renderer={Emergency}
-                keySelector={numericIdSelector}
-                rendererParams={appealRendererParams}
-            />
+            <ListView
+                layout="block"
+                withSpacingOpticalCorrection
+                spacing="sm"
+            >
+                <RawList
+                    data={appealDocumentResponse?.results}
+                    renderer={Emergency}
+                    keySelector={numericIdSelector}
+                    rendererParams={appealRendererParams}
+                />
+            </ListView>
             {showExtractsModal && (
                 <AllExtractsModal
                     summaryType={summaryType}

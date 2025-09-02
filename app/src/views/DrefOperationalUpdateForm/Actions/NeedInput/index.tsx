@@ -1,6 +1,7 @@
 import { DeleteBinTwoLineIcon } from '@ifrc-go/icons';
 import {
     Button,
+    InlineLayout,
     InputSection,
     TextArea,
 } from '@ifrc-go/ui';
@@ -28,7 +29,7 @@ const defaultNeedValue: NeedFormFields = {
 
 interface Props {
     value: PartialForm<NeedFormFields>;
-    readOnly: boolean;
+    readOnly?: boolean;
     error: ArrayError<NeedFormFields> | undefined;
     onChange: (value: SetValueArg<NeedFormFields>, index: number) => void;
     onRemove: (index: number) => void;
@@ -63,32 +64,34 @@ function NeedInput(props: Props) {
 
     return (
         <InputSection
-            className={styles.needInput}
             title={needLabel}
-            contentSectionClassName={styles.content}
             withAsteriskOnTitle
         >
             <NonFieldError error={error} />
-            <TextArea
-                className={styles.descriptionInput}
-                name="description"
-                value={value.description}
-                onChange={onFieldChange}
-                error={error?.description}
-                readOnly={readOnly}
-                disabled={disabled}
-                // withAsterisk
-            />
-            <Button
-                className={styles.removeButton}
-                name={index}
-                onClick={onRemove}
-                variant="tertiary"
-                title={strings.drefOperationalUpdateFormRemoveNeed}
-                disabled={disabled || readOnly}
+            <InlineLayout
+                after={(
+                    <Button
+                        name={index}
+                        onClick={onRemove}
+                        styleVariant="action"
+                        title={strings.drefOperationalUpdateFormRemoveNeed}
+                        disabled={disabled || readOnly}
+                    >
+                        <DeleteBinTwoLineIcon />
+                    </Button>
+                )}
             >
-                <DeleteBinTwoLineIcon />
-            </Button>
+                <TextArea
+                    className={styles.descriptionInput}
+                    name="description"
+                    value={value.description}
+                    onChange={onFieldChange}
+                    error={error?.description}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    // withAsterisk
+                />
+            </InlineLayout>
         </InputSection>
     );
 }

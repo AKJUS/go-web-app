@@ -6,6 +6,7 @@ import { PencilFillIcon } from '@ifrc-go/icons';
 import {
     Button,
     Container,
+    ListView,
     Pager,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -21,6 +22,7 @@ import {
 } from '@togglecorp/fujs';
 
 import Link from '#components/Link';
+import TabPage from '#components/TabPage';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import useUserMe from '#hooks/domain/useUserMe';
 import useFilterState from '#hooks/useFilterState';
@@ -32,7 +34,6 @@ import GenerateMontandonTokenModal from './GenerateMontandonTokenModal';
 import TokenDetails from './TokenDetails';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const TOKEN_PAGE_SIZE = 12;
 
@@ -90,93 +91,94 @@ export function Component() {
     });
 
     return (
-        <div className={styles.accountInformation}>
+        <TabPage>
             <Container
                 heading={strings.accountInformationHeading}
                 withHeaderBorder
-                actions={(
+                headerActions={(
                     <>
                         <Button
                             name
-                            className={styles.changePasswordButton}
                             onClick={setShowChangePasswordModal}
-                            variant="secondary"
+                            colorVariant="primary"
                         >
                             {strings.changePasswordButtonLabel}
                         </Button>
                         <Button
                             name
-                            icons={(<PencilFillIcon />)}
+                            after={(<PencilFillIcon />)}
                             onClick={setShowEditProfileModal}
-                            variant="secondary"
+                            colorVariant="primary"
                             disabled={isNotDefined(meResponse)}
                         >
                             {strings.editProfileButtonLabel}
                         </Button>
                     </>
                 )}
-                contentViewType="grid"
-                numPreferredGridContentColumns={3}
             >
-                <TextOutput
-                    label={strings.usernameLabel}
-                    value={meResponse?.username}
-                    strongLabel
-                />
-                <TextOutput
-                    label={strings.fullNameLabel}
-                    strongLabel
-                    value={
-                        // FIXME: use helper from utils
-                        [meResponse?.first_name, meResponse?.last_name]
-                            .filter(isTruthyString).join(' ')
-                    }
-                />
-                <TextOutput
-                    label={strings.emailLabel}
-                    value={meResponse?.email}
-                    strongLabel
-                />
-                <TextOutput
-                    label={strings.phoneNumberLabel}
-                    value={meResponse?.profile?.phone_number}
-                    strongLabel
-                />
-                <TextOutput
-                    strongLabel
-                    label={strings.cityLabel}
-                    value={meResponse?.profile?.city}
-                />
-                <TextOutput
-                    label={strings.organizationLabel}
-                    value={meResponse?.profile?.org}
-                    strongLabel
-                />
-                <TextOutput
-                    label={strings.organizationTypeLabel}
-                    value={
-                        isDefined(meResponse?.profile.org_type)
-                            ? orgTypeMap?.[meResponse?.profile?.org_type]?.value
-                            : undefined
-                    }
-                    strongLabel
-                />
-                <TextOutput
-                    label={strings.departmentLabel}
-                    value={meResponse?.profile?.department}
-                    strongLabel
-                />
-                <TextOutput
-                    label={strings.positionLabel}
-                    value={meResponse?.profile?.position}
-                    strongLabel
-                />
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                >
+                    <TextOutput
+                        label={strings.usernameLabel}
+                        value={meResponse?.username}
+                        strongLabel
+                    />
+                    <TextOutput
+                        label={strings.fullNameLabel}
+                        strongLabel
+                        value={
+                            // FIXME: use helper from utils
+                            [meResponse?.first_name, meResponse?.last_name]
+                                .filter(isTruthyString).join(' ')
+                        }
+                    />
+                    <TextOutput
+                        label={strings.emailLabel}
+                        value={meResponse?.email}
+                        strongLabel
+                    />
+                    <TextOutput
+                        label={strings.phoneNumberLabel}
+                        value={meResponse?.profile?.phone_number}
+                        strongLabel
+                    />
+                    <TextOutput
+                        strongLabel
+                        label={strings.cityLabel}
+                        value={meResponse?.profile?.city}
+                    />
+                    <TextOutput
+                        label={strings.organizationLabel}
+                        value={meResponse?.profile?.org}
+                        strongLabel
+                    />
+                    <TextOutput
+                        label={strings.organizationTypeLabel}
+                        value={
+                            isDefined(meResponse?.profile.org_type)
+                                ? orgTypeMap?.[meResponse?.profile?.org_type]?.value
+                                : undefined
+                        }
+                        strongLabel
+                    />
+                    <TextOutput
+                        label={strings.departmentLabel}
+                        value={meResponse?.profile?.department}
+                        strongLabel
+                    />
+                    <TextOutput
+                        label={strings.positionLabel}
+                        value={meResponse?.profile?.position}
+                        strongLabel
+                    />
+                </ListView>
             </Container>
             <Container
                 heading={strings.externalConnectionsTitle}
                 headerDescription={strings.externalConnectionsDescription}
                 withHeaderBorder
-                contentViewType="vertical"
             >
                 <Container
                     heading={strings.externalConnectionMontandonTitle}
@@ -195,17 +197,16 @@ export function Component() {
                         </>
                     )}
                     headingLevel={4}
-                    actions={(
+                    headerActions={(
                         <Button
                             name={undefined}
                             onClick={setShowGenerateMontandonTokenModalTrue}
+                            colorVariant="primary"
                         >
                             {strings.generateNewTokenLabel}
                         </Button>
                     )}
                     pending={montandonTokenPending}
-                    contentViewType="grid"
-                    numPreferredGridContentColumns={3}
                     footerActions={isDefined(montandonTokenResponse)
                         && isDefined(montandonTokenResponse.count)
                         && (
@@ -217,19 +218,26 @@ export function Component() {
                             />
                         )}
                     overlayPending
+                    withPadding
+                    withDarkBackground
                 >
-                    {/* FIXME: use list */}
-                    {montandonTokenResponse?.results?.map(
-                        (tokenResponse, i) => (
-                            <TokenDetails
-                                // NOTE: id should be provided from the server
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={i}
-                                className={styles.tokenDetails}
-                                data={tokenResponse}
-                            />
-                        ),
-                    )}
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={3}
+                        spacing="sm"
+                    >
+                        {/* FIXME: use list */}
+                        {montandonTokenResponse?.results?.map(
+                            (tokenResponse, i) => (
+                                <TokenDetails
+                                    // NOTE: id should be provided from the server
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={i}
+                                    data={tokenResponse}
+                                />
+                            ),
+                        )}
+                    </ListView>
                 </Container>
             </Container>
             {showEditProfileModal && (
@@ -249,7 +257,7 @@ export function Component() {
                     onCreate={refetchMontandonTokenList}
                 />
             )}
-        </div>
+        </TabPage>
     );
 }
 

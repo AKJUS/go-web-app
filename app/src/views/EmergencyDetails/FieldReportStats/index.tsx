@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import {
     DateOutput,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -15,7 +16,6 @@ import {
 import { type GoApiResponse } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type EventItem = GoApiResponse<'/api/v2/event/{id}'>;
 type FieldReport = EventItem['field_reports'][number];
@@ -88,7 +88,10 @@ function FieldReportStats(props: Props) {
             ?? report.gov_affected_pop_centres ?? report.other_affected_pop_centres;
 
         return (
-            <div className={styles.keyFigureList}>
+            <ListView
+                layout="block"
+                withSpacingOpticalCorrection
+            >
                 <TextOutput
                     label={strings.potentiallyAffected}
                     valueType="number"
@@ -119,13 +122,16 @@ function FieldReportStats(props: Props) {
                     value={report.num_assisted}
                 />
                 {reportLink}
-            </div>
+            </ListView>
         );
     }
 
     if (reportType === 'COVID') {
         return (
-            <div className={styles.keyFigureList}>
+            <ListView
+                layout="block"
+                withSpacingOpticalCorrection
+            >
                 <TextOutput
                     label={strings.cases}
                     valueType="number"
@@ -161,13 +167,16 @@ function FieldReportStats(props: Props) {
                     strongValue
                     value={report.num_volunteers}
                 />
-            </div>
+            </ListView>
         );
     }
 
     if (reportType === 'EPI') {
         return (
-            <div className={styles.keyFigureList}>
+            <ListView
+                layout="block"
+                withSpacingOpticalCorrection
+            >
                 <TextOutput
                     label={strings.cases}
                     valueType="number"
@@ -227,12 +236,15 @@ function FieldReportStats(props: Props) {
                     strongValue
                     value={report.num_expats_delegates}
                 />
-            </div>
+            </ListView>
         );
     }
 
     return (
-        <div className={styles.keyFigureList}>
+        <ListView
+            layout="block"
+            withSpacingOpticalCorrection
+        >
             <TextOutput
                 label={strings.affected}
                 valueType="number"
@@ -287,7 +299,7 @@ function FieldReportStats(props: Props) {
                 strongValue
                 value={report.num_expats_delegates}
             />
-        </div>
+        </ListView>
     );
 }
 

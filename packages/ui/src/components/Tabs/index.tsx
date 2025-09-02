@@ -4,27 +4,30 @@ import {
     useState,
 } from 'react';
 
-import {
-    TabContext,
-    TabKey,
-    TabVariant,
-} from './TabContext';
+import TabContext, {
+    type TabColorVariant,
+    TabContextProps,
+    type TabKey,
+    type TabStyleVariant,
+} from '#contexts/tab';
 
-export interface Props<T> {
+export interface Props<VALUE> {
     children: React.ReactNode;
-    variant?: TabVariant;
+    colorVariant?: TabColorVariant;
+    styleVariant?: TabStyleVariant;
     disabled?: boolean;
-    value: T;
-    onChange: (key: T) => void;
+    value: VALUE | undefined;
+    onChange: (key: VALUE) => void;
 }
 
-function Tabs<T extends TabKey>(props: Props<T>) {
+function Tabs<const VALUE extends TabKey>(props: Props<VALUE>) {
     const {
-        children,
-        variant = 'primary',
+        styleVariant = 'tab',
+        colorVariant = styleVariant === 'tab' ? 'text' : 'primary',
         disabled,
         value,
         onChange,
+        children,
     } = props;
 
     const [tabs, setTabs] = useState<TabKey[]>([]);
@@ -54,10 +57,11 @@ function Tabs<T extends TabKey>(props: Props<T>) {
         });
     }, [setTabs]);
 
-    const contextValue = useMemo(() => ({
+    const contextValue = useMemo<TabContextProps>(() => ({
         tabs,
-        variant,
-        disabled,
+        colorVariant,
+        styleVariant,
+        disabled: !!disabled,
         activeTab: value,
         setActiveTab: onChange as (key: TabKey) => void,
         registerTab,
@@ -68,7 +72,8 @@ function Tabs<T extends TabKey>(props: Props<T>) {
         tabs,
         value,
         onChange,
-        variant,
+        colorVariant,
+        styleVariant,
         disabled,
         registerTab,
         unregisterTab,

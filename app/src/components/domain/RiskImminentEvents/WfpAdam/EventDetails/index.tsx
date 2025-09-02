@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import {
     Container,
+    ListView,
     TextOutput,
     Tooltip,
 } from '@ifrc-go/ui';
@@ -158,225 +159,228 @@ function EventDetails(props: Props) {
     return (
         <Container
             className={styles.eventDetails}
-            contentViewType="vertical"
-            childrenContainerClassName={styles.content}
-            spacing="cozy"
             pending={pending}
         >
-            {stormPoints && stormPoints.length > 0 && isDefined(maxWindSpeed) && (
-                /* TODO: use proper svg charts */
-                <div className={styles.windSpeedChart}>
-                    <div className={styles.barListContainer}>
-                        {stormPoints.map(
-                            (point) => (
-                                <div
-                                    key={point.id}
-                                    className={styles.barContainer}
-                                >
-                                    <Tooltip
-                                        description={resolveToString(
-                                            strings.wfpEventDetailsKm,
-                                            {
-                                                point: point.windSpeed ?? '--',
-                                                pointDate: point.date.toLocaleString() ?? '--',
-                                            },
-                                        )}
-                                    />
+            <ListView layout="block">
+                {stormPoints && stormPoints.length > 0 && isDefined(maxWindSpeed) && (
+                    /* TODO: use proper svg charts */
+                    <div className={styles.windSpeedChart}>
+                        <div className={styles.barListContainer}>
+                            {stormPoints.map(
+                                (point) => (
                                     <div
-                                        style={{ height: `${getPercentage(point.windSpeed, maxWindSpeed)}%` }}
-                                        className={styles.bar}
-                                    />
-                                </div>
-                            ),
-                        )}
+                                        key={point.id}
+                                        className={styles.barContainer}
+                                    >
+                                        <Tooltip
+                                            description={resolveToString(
+                                                strings.wfpEventDetailsKm,
+                                                {
+                                                    point: point.windSpeed ?? '--',
+                                                    pointDate: point.date.toLocaleString() ?? '--',
+                                                },
+                                            )}
+                                        />
+                                        <div
+                                            style={{ height: `${getPercentage(point.windSpeed, maxWindSpeed)}%` }}
+                                            className={styles.bar}
+                                        />
+                                    </div>
+                                ),
+                            )}
+                        </div>
+                        <div className={styles.chartLabel}>
+                            {strings.wfpChartLabel}
+                        </div>
                     </div>
-                    <div className={styles.chartLabel}>
-                        {strings.wfpChartLabel}
-                    </div>
-                </div>
-            )}
-            {isDefined(eventDetails)
-                && (isDefined(eventDetails.url) || isDefined(eventDetails.dashboard_url)) && (
-                <Container
-                    heading={strings.wfpUsefulLinks}
-                    headingLevel={5}
-                    childrenContainerClassName={styles.usefulLinksContent}
-                    spacing="compact"
-                >
-                    {isDefined(dashboardUrl) && (
-                        <Link
-                            href={dashboardUrl}
-                            external
-                            withLinkIcon
+                )}
+                {isDefined(eventDetails)
+                    && (isDefined(eventDetails.url) || isDefined(eventDetails.dashboard_url)) && (
+                    <Container
+                        heading={strings.wfpUsefulLinks}
+                        headingLevel={5}
+                    >
+                        <ListView
+                            withWrap
+                            withSpacingOpticalCorrection
+                            spacing="sm"
                         >
-                            {strings.wfpDashboard}
-                        </Link>
+                            {isDefined(dashboardUrl) && (
+                                <Link
+                                    href={dashboardUrl}
+                                    external
+                                    withLinkIcon
+                                >
+                                    {strings.wfpDashboard}
+                                </Link>
+                            )}
+                            {isDefined(eventDetails?.url) && (
+                                <>
+                                    {isDefined(eventDetails.url.shakemap) && (
+                                        <Link
+                                            href={eventDetails?.url.shakemap}
+                                            external
+                                            withLinkIcon
+                                        >
+                                            {strings.wfpShakemap}
+                                        </Link>
+                                    )}
+                                    {isDefined(eventDetails.url.population) && (
+                                        <Link
+                                            href={eventDetails.url.population}
+                                            external
+                                            withLinkIcon
+                                        >
+                                            {strings.wfpPopulationTable}
+                                        </Link>
+                                    )}
+                                    {isDefined(eventDetails.url.wind) && (
+                                        <Link
+                                            href={eventDetails.url.wind}
+                                            external
+                                            withLinkIcon
+                                        >
+                                            {strings.wfpWind}
+                                        </Link>
+                                    )}
+                                    {isDefined(eventDetails.url.rainfall) && (
+                                        <Link
+                                            href={eventDetails.url.rainfall}
+                                            external
+                                            withLinkIcon
+                                        >
+                                            {strings.wfpRainfall}
+                                        </Link>
+                                    )}
+                                    {isDefined(eventDetails.url.shapefile) && (
+                                        <Link
+                                            href={eventDetails.url.shapefile}
+                                            external
+                                            withLinkIcon
+                                        >
+                                            {strings.wfpShapefile}
+                                        </Link>
+                                    )}
+                                </>
+                            )}
+                        </ListView>
+                    </Container>
+                )}
+                <div>
+                    {isDefined(eventDetails?.wind_speed) && (
+                        <TextOutput
+                            label={strings.wfpWindSpeed}
+                            value={eventDetails?.wind_speed}
+                        />
                     )}
-                    {isDefined(eventDetails?.url) && (
-                        <>
-                            {isDefined(eventDetails.url.shakemap) && (
-                                <Link
-                                    href={eventDetails?.url.shakemap}
-                                    external
-                                    withLinkIcon
-                                >
-                                    {strings.wfpShakemap}
-                                </Link>
-                            )}
-                            {isDefined(eventDetails.url.population) && (
-                                <Link
-                                    href={eventDetails.url.population}
-                                    external
-                                    withLinkIcon
-                                >
-                                    {strings.wfpPopulationTable}
-                                </Link>
-                            )}
-                            {isDefined(eventDetails.url.wind) && (
-                                <Link
-                                    href={eventDetails.url.wind}
-                                    external
-                                    withLinkIcon
-                                >
-                                    {strings.wfpWind}
-                                </Link>
-                            )}
-                            {isDefined(eventDetails.url.rainfall) && (
-                                <Link
-                                    href={eventDetails.url.rainfall}
-                                    external
-                                    withLinkIcon
-                                >
-                                    {strings.wfpRainfall}
-                                </Link>
-                            )}
-                            {isDefined(eventDetails.url.shapefile) && (
-                                <Link
-                                    href={eventDetails.url.shapefile}
-                                    external
-                                    withLinkIcon
-                                >
-                                    {strings.wfpShapefile}
-                                </Link>
-                            )}
-                        </>
+                    {isDefined(populationImpact) && (
+                        <TextOutput
+                            label={strings.wfpPeopleExposed}
+                            value={populationImpact}
+                            valueType="number"
+                            maximumFractionDigits={0}
+                        />
                     )}
-                </Container>
-            )}
-            <div>
-                {isDefined(eventDetails?.wind_speed) && (
-                    <TextOutput
-                        label={strings.wfpWindSpeed}
-                        value={eventDetails?.wind_speed}
-                    />
-                )}
-                {isDefined(populationImpact) && (
-                    <TextOutput
-                        label={strings.wfpPeopleExposed}
-                        value={populationImpact}
-                        valueType="number"
-                        maximumFractionDigits={0}
-                    />
-                )}
-            </div>
-            <div>
-                {isDefined(eventDetails?.source) && (
-                    <TextOutput
-                        label={strings.wfpSource}
-                        value={eventDetails?.source}
-                    />
-                )}
-                {isDefined(eventDetails?.sitrep) && (
-                    <TextOutput
-                        label={strings.wfpSitrep}
-                        value={eventDetails?.sitrep}
-                    />
-                )}
-                {isDefined(eventDetails?.mag) && (
-                    <TextOutput
-                        label={strings.wfpMagnitude}
-                        value={eventDetails?.mag}
-                        valueType="number"
-                    />
-                )}
-                {isDefined(eventDetails?.depth) && (
-                    <TextOutput
-                        label={strings.wfpDepth}
-                        value={eventDetails?.depth}
-                        valueType="number"
-                    />
-                )}
-                {isDefined(eventDetails?.alert_level) && (
-                    <TextOutput
-                        label={strings.wfpAlertType}
-                        value={eventDetails?.alert_level}
-                    />
-                )}
-                {isDefined(eventDetails?.effective_date) && (
-                    <TextOutput
-                        label={strings.wfpEffective}
-                        value={eventDetails?.effective_date}
-                        valueType="date"
-                    />
-                )}
-                {isDefined(eventDetails?.from_date) && (
-                    <TextOutput
-                        label={strings.wfpFromDate}
-                        value={eventDetails?.from_date}
-                        valueType="date"
-                    />
-                )}
-                {isDefined(eventDetails?.to_date) && (
-                    <TextOutput
-                        label={strings.wfpToDate}
-                        value={eventDetails?.to_date}
-                        valueType="date"
-                    />
-                )}
-            </div>
-            <div>
-                {isDefined(populationExposure?.exposure_60_kmh) && (
-                    <TextOutput
-                        label={strings.wfpExposed60}
-                        value={populationExposure?.exposure_60_kmh}
-                        valueType="number"
-                        maximumFractionDigits={0}
-                    />
-                )}
-                {isDefined(populationExposure?.exposure_90_kmh) && (
-                    <TextOutput
-                        label={strings.wfpExposed90}
-                        value={populationExposure?.exposure_90_kmh}
-                        valueType="number"
-                        maximumFractionDigits={0}
-                    />
-                )}
-                {isDefined(populationExposure?.exposure_120_kmh) && (
-                    <TextOutput
-                        label={strings.wfpExposed120}
-                        value={populationExposure?.exposure_120_kmh}
-                        valueType="number"
-                        maximumFractionDigits={0}
-                    />
-                )}
-                {isDefined(eventDetails?.flood_area) && (
-                    <TextOutput
-                        label={strings.wfpFloodArea}
-                        value={eventDetails?.flood_area}
-                        valueType="number"
-                        suffix="hectares"
-                    />
-                )}
-                {isDefined(eventDetails?.fl_croplnd) && (
-                    <TextOutput
-                        label={strings.wfpFloodCropland}
-                        value={eventDetails?.fl_croplnd}
-                        valueType="number"
-                        suffix="hectares"
-                    />
-                )}
-            </div>
-            {children}
+                </div>
+                <div>
+                    {isDefined(eventDetails?.source) && (
+                        <TextOutput
+                            label={strings.wfpSource}
+                            value={eventDetails?.source}
+                        />
+                    )}
+                    {isDefined(eventDetails?.sitrep) && (
+                        <TextOutput
+                            label={strings.wfpSitrep}
+                            value={eventDetails?.sitrep}
+                        />
+                    )}
+                    {isDefined(eventDetails?.mag) && (
+                        <TextOutput
+                            label={strings.wfpMagnitude}
+                            value={eventDetails?.mag}
+                            valueType="number"
+                        />
+                    )}
+                    {isDefined(eventDetails?.depth) && (
+                        <TextOutput
+                            label={strings.wfpDepth}
+                            value={eventDetails?.depth}
+                            valueType="number"
+                        />
+                    )}
+                    {isDefined(eventDetails?.alert_level) && (
+                        <TextOutput
+                            label={strings.wfpAlertType}
+                            value={eventDetails?.alert_level}
+                        />
+                    )}
+                    {isDefined(eventDetails?.effective_date) && (
+                        <TextOutput
+                            label={strings.wfpEffective}
+                            value={eventDetails?.effective_date}
+                            valueType="date"
+                        />
+                    )}
+                    {isDefined(eventDetails?.from_date) && (
+                        <TextOutput
+                            label={strings.wfpFromDate}
+                            value={eventDetails?.from_date}
+                            valueType="date"
+                        />
+                    )}
+                    {isDefined(eventDetails?.to_date) && (
+                        <TextOutput
+                            label={strings.wfpToDate}
+                            value={eventDetails?.to_date}
+                            valueType="date"
+                        />
+                    )}
+                </div>
+                <div>
+                    {isDefined(populationExposure?.exposure_60_kmh) && (
+                        <TextOutput
+                            label={strings.wfpExposed60}
+                            value={populationExposure?.exposure_60_kmh}
+                            valueType="number"
+                            maximumFractionDigits={0}
+                        />
+                    )}
+                    {isDefined(populationExposure?.exposure_90_kmh) && (
+                        <TextOutput
+                            label={strings.wfpExposed90}
+                            value={populationExposure?.exposure_90_kmh}
+                            valueType="number"
+                            maximumFractionDigits={0}
+                        />
+                    )}
+                    {isDefined(populationExposure?.exposure_120_kmh) && (
+                        <TextOutput
+                            label={strings.wfpExposed120}
+                            value={populationExposure?.exposure_120_kmh}
+                            valueType="number"
+                            maximumFractionDigits={0}
+                        />
+                    )}
+                    {isDefined(eventDetails?.flood_area) && (
+                        <TextOutput
+                            label={strings.wfpFloodArea}
+                            value={eventDetails?.flood_area}
+                            valueType="number"
+                            suffix="hectares"
+                        />
+                    )}
+                    {isDefined(eventDetails?.fl_croplnd) && (
+                        <TextOutput
+                            label={strings.wfpFloodCropland}
+                            value={eventDetails?.fl_croplnd}
+                            valueType="number"
+                            suffix="hectares"
+                        />
+                    )}
+                </div>
+                {children}
+            </ListView>
         </Container>
     );
 }

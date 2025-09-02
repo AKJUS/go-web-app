@@ -1,4 +1,7 @@
-import { useCallback } from 'react';
+import {
+    useCallback,
+    useMemo,
+} from 'react';
 import { useOutletContext } from 'react-router-dom';
 import {
     ChartAxes,
@@ -45,31 +48,33 @@ function NationalSocietyIncomeOverTime(props: Props) {
     const strings = useTranslation(i18n);
     const { countryResponse } = useOutletContext<CountryOutletContext>();
 
-    const annualIncome = databankResponse?.fdrs_annual_income?.map(
-        (income) => {
-            const {
-                date,
-                value,
-                ...other
-            } = income;
+    const annualIncome = useMemo(() => (
+        databankResponse?.fdrs_annual_income?.map(
+            (income) => {
+                const {
+                    date,
+                    value,
+                    ...other
+                } = income;
 
-            if (isNotDefined(date) || isNotDefined(value)) {
-                return undefined;
-            }
+                if (isNotDefined(date) || isNotDefined(value)) {
+                    return undefined;
+                }
 
-            const dateObj = new Date(date);
+                const dateObj = new Date(date);
 
-            if (Number.isNaN(dateObj.getTime())) {
-                return undefined;
-            }
+                if (Number.isNaN(dateObj.getTime())) {
+                    return undefined;
+                }
 
-            return {
-                ...other,
-                date: dateObj,
-                value,
-            };
-        },
-    ).filter(isDefined);
+                return {
+                    ...other,
+                    date: dateObj,
+                    value,
+                };
+            },
+        ).filter(isDefined)
+    ), [databankResponse?.fdrs_annual_income]);
 
     const incomeByYear = listToMap(
         annualIncome,
@@ -125,6 +130,10 @@ function NationalSocietyIncomeOverTime(props: Props) {
 
     return (
         <Container
+            pending={false}
+            filtered={false}
+            errored={false}
+            empty={isNotDefined(annualIncome) || annualIncome.length === 0}
             className={styles.nationalSocietyIncomeOverTime}
             heading={strings.nsIncomeOverTimeHeading}
             withHeaderBorder
@@ -134,10 +143,11 @@ function NationalSocietyIncomeOverTime(props: Props) {
                     label={strings.sourceLabel}
                     value={(
                         <Link
-                            variant="tertiary"
+                            styleVariant="action"
                             href={`https://data.ifrc.org/fdrs/national-society/${countryResponse.fdrs}`}
                             external
                             withUnderline
+                            withLinkIcon
                         >
                             {resolveToString(
                                 strings.sourceFDRSLabel,

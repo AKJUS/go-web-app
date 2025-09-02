@@ -1,21 +1,14 @@
 import {
-    ArrowDownSmallFillIcon,
-    ArrowUpSmallFillIcon,
-} from '@ifrc-go/icons';
-import {
-    Button,
-    Container,
+    Description,
+    ExpandableContainer,
+    ListView,
 } from '@ifrc-go/ui';
-import {
-    useBooleanState,
-    useTranslation,
-} from '@ifrc-go/ui/hooks';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
 
 import Sources from '../Sources';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 export interface Props {
     id: number;
@@ -36,51 +29,37 @@ function Summary(props: Props) {
 
     const strings = useTranslation(i18n);
 
-    const [
-        isExpanded,
-        {
-            toggle: toggleExpansion,
-        },
-    ] = useBooleanState(false);
-
     return (
-        <Container
-            className={styles.summary}
-            headingContainerClassName={styles.heading}
+        <ExpandableContainer
             heading={summaryTitle}
-            headingDescription={(extractsCount > 1) ? (
-                resolveToString(
-                    strings.summaryExtractsCount,
-                    { count: extractsCount },
-                )
-            ) : (
-                resolveToString(
-                    strings.summaryExtractCount,
-                    { count: extractsCount },
-                )
-            )}
-            withInternalPadding
-            childrenContainerClassName={styles.content}
-            footerClassName={styles.footer}
-            footerActions={(
-                <Button
-                    name={id}
-                    variant="tertiary"
-                    onClick={toggleExpansion}
-                    actions={(isExpanded
-                        ? <ArrowUpSmallFillIcon />
-                        : <ArrowDownSmallFillIcon />
+            headerDescription={(
+                <ListView layout="block">
+                    {extractsCount > 1 ? (
+                        resolveToString(
+                            strings.summaryExtractsCount,
+                            { count: extractsCount },
+                        )
+                    ) : (
+                        resolveToString(
+                            strings.summaryExtractCount,
+                            { count: extractsCount },
+                        )
                     )}
-                >
-                    {isExpanded ? strings.closeSources : strings.seeSources}
-                </Button>
+                    <Description>
+                        {summaryContent}
+                    </Description>
+                </ListView>
             )}
+            withPadding
+            withDarkBackground
+            withToggleButtonOnFooter
+            toggleButtonLabel={[strings.seeSources, strings.closeSources]}
         >
-            {summaryContent}
-            {isExpanded && (
-                <Sources summaryId={id} summaryType={summaryType} />
-            )}
-        </Container>
+            <Sources
+                summaryId={id}
+                summaryType={summaryType}
+            />
+        </ExpandableContainer>
     );
 }
 

@@ -4,7 +4,6 @@
         "statusSectionTitle": "Status",
         "statusEarlyWarningDescription": "First report for this hazard.",
         "statusEventDescription": "First report for this disaster.",
-        "covidSectionTitle": "COVID-19 Related Event",
         "countryInputLabel": "Country",
         "districtInputLabel": "Region / Province",
         "emergencySelectLabel": "Please check for, and link to an existing emergency if available",

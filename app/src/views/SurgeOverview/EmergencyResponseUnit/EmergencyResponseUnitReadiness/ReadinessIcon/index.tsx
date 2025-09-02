@@ -3,6 +3,7 @@ import {
     CheckboxCircleLineIcon,
     CloseCircleLineIcon,
 } from '@ifrc-go/icons';
+import { Label } from '@ifrc-go/ui';
 import { isDefined } from '@togglecorp/fujs';
 
 import {
@@ -39,8 +40,12 @@ function ReadinessIcon(props: Props) {
 
     return (
         <div className={styles.readinessIcon}>
-            {icon}
-            {isDefined(label) && label}
+            <div className={styles.icon}>
+                {icon}
+            </div>
+            <Label>
+                {isDefined(label) && label}
+            </Label>
         </div>
     );
 }

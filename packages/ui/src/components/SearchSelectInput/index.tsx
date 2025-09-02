@@ -16,7 +16,7 @@ import {
     unique,
 } from '@togglecorp/fujs';
 
-import SelectInputContainer, { SelectInputContainerProps } from '#components/SelectInputContainer';
+import SelectInputContainer, { Props as SelectInputContainerProps } from '#components/SelectInputContainer';
 import { rankedSearchOnList } from '#utils/common';
 
 import Option from './Option';
@@ -56,36 +56,36 @@ export type Props<
 
         selectedOnTop: boolean;
     }, OMISSION>
-    & SelectInputContainerProps<OPTION_KEY, NAME, OPTION, RENDER_PROPS,
-        'name'
-        | 'nonClearable'
-        | 'onClearButtonClick'
-        | 'onOptionClick'
-        | 'options'
-        | 'optionKeySelector'
-        | 'optionRenderer'
-        | 'optionRendererParams'
-        | 'optionsFiltered'
-        | 'persistentOptionPopup'
-        | 'valueDisplay'
-        | 'optionContainerClassName'
-        | 'searchText'
-        | 'options'
-        | 'onOptionsChange'
-        | 'onSearchTextChange'
-        | 'dropdownShown'
-        | 'onDropdownShownChange'
-        | 'focused'
-        | 'onFocusedChange'
-        | 'focusedKey'
-        | 'onFocusedKeyChange'
-        | 'hasValue'
-        | 'hideOptionFilter'
-        | 'onSelectAllButtonClick'
-        | 'onEnterWithoutOption'
-        | OMISSION
-    >
-    & ({
+& Omit<
+SelectInputContainerProps<OPTION_KEY, NAME, OPTION, RENDER_PROPS>,
+    'name'
+    | 'nonClearable'
+    | 'onClearButtonClick'
+    | 'onOptionClick'
+    | 'options'
+    | 'optionKeySelector'
+    | 'optionRenderer'
+    | 'optionRendererParams'
+    | 'optionsFiltered'
+    | 'persistentOptionPopup'
+    | 'valueDisplay'
+    | 'optionContainerClassName'
+    | 'searchText'
+    | 'options'
+    | 'onOptionsChange'
+    | 'onSearchTextChange'
+    | 'dropdownShown'
+    | 'onDropdownShownChange'
+    | 'focused'
+    | 'onFocusedChange'
+    | 'focusedKey'
+    | 'onFocusedKeyChange'
+    | 'hasValue'
+    | 'hideOptionFilter'
+    | 'onSelectAllButtonClick'
+    | 'onEnterWithoutOption'
+    | OMISSION
+> & ({
         nonClearable: true,
         onChange: (newValue: OPTION_KEY, name: NAME, value: OPTION) => void,
     } | {

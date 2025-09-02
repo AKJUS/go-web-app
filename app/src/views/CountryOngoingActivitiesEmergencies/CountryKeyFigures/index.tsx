@@ -7,17 +7,15 @@ import {
 } from '@ifrc-go/icons';
 import {
     InfoPopup,
-    KeyFigure,
+    KeyFigureView,
+    ListView,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { getPercentage } from '@ifrc-go/ui/utils';
-import { _cs } from '@togglecorp/fujs';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 interface Props {
-    className?: string;
     data: {
         active_drefs: number | null;
         active_appeals: number | null;
@@ -30,18 +28,18 @@ interface Props {
 }
 
 function CountryKeyFigures(props: Props) {
-    const {
-        data,
-        className,
-    } = props;
+    const { data } = props;
     const strings = useTranslation(i18n);
 
     return (
-        <div className={_cs(styles.countryKeyFigures, className)}>
-            <KeyFigure
+        <ListView
+            layout="grid"
+            numPreferredGridColumns={5}
+        >
+            <KeyFigureView
                 icon={<DrefIcon />}
-                className={styles.keyFigure}
                 value={data.active_drefs}
+                valueType="number"
                 info={(
                     <InfoPopup
                         title={strings.countryOngoingActivitiesKeyFiguresDrefTitle}
@@ -49,11 +47,12 @@ function CountryKeyFigures(props: Props) {
                     />
                 )}
                 label={strings.activeDrefOperationsLabel}
+                withShadow
             />
-            <KeyFigure
+            <KeyFigureView
                 icon={<AppealsIcon />}
-                className={styles.keyFigure}
                 value={data.active_appeals}
+                valueType="number"
                 info={(
                     <InfoPopup
                         title={strings.countryOngoingActivitiesKeyFiguresAppealsTitle}
@@ -63,33 +62,39 @@ function CountryKeyFigures(props: Props) {
                     />
                 )}
                 label={strings.countryOngoingActivitiesKeyFiguresActiveAppeals}
+                withShadow
             />
-            <KeyFigure
+            <KeyFigureView
                 icon={<TargetedPopulationIcon />}
-                className={styles.keyFigure}
                 value={data.target_population}
-                compactValue
+                valueType="number"
+                valueOptions={{ compact: true }}
                 label={strings.countryOngoingActivitiesKeyFiguresTargetPop}
+                withShadow
             />
-            <KeyFigure
+            <KeyFigureView
                 icon={<FundingIcon />}
-                className={styles.keyFigure}
                 value={data.amount_requested_dref_included}
-                compactValue
+                valueType="number"
+                valueOptions={{ compact: true }}
                 label={strings.countryOngoingActivitiesKeyFiguresBudget}
+                withShadow
             />
-            <KeyFigure
+            <KeyFigureView
                 icon={<FundingCoverageIcon />}
-                className={styles.keyFigure}
                 value={getPercentage(
                     data.amount_funded_dref_included,
                     data.amount_requested_dref_included,
                 )}
-                suffix="%"
-                compactValue
+                valueType="number"
+                valueOptions={{
+                    suffix: '%',
+                    compact: true,
+                }}
                 label={strings.countryOngoingActivitiesKeyFiguresAppealsFunding}
+                withShadow
             />
-        </div>
+        </ListView>
     );
 }
 

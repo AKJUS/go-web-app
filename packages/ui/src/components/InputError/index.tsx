@@ -9,6 +9,7 @@ import {
     isNotDefined,
 } from '@togglecorp/fujs';
 
+import InlineLayout from '#components/InlineLayout';
 import Popup from '#components/Popup';
 
 import styles from './styles.module.css';
@@ -17,6 +18,7 @@ export interface Props {
     className?: string;
     children?: React.ReactNode;
     disabled?: boolean;
+    floating?: boolean;
 }
 
 function InputError(props: Props) {
@@ -24,6 +26,7 @@ function InputError(props: Props) {
         children,
         className,
         disabled,
+        floating,
     } = props;
 
     const [hasParentRef, setHasParentRef] = useState(false);
@@ -53,6 +56,22 @@ function InputError(props: Props) {
         [],
     );
 
+    const content = (
+        <InlineLayout
+            className={styles.errorContent}
+            before={(
+                <AlertLineIcon className={styles.icon} />
+            )}
+            spacing="xs"
+        >
+            {children}
+        </InlineLayout>
+    );
+
+    if (!floating) {
+        return content;
+    }
+
     return (
         <>
             {!hasParentRef && (
@@ -67,8 +86,7 @@ function InputError(props: Props) {
                     pointerClassName={styles.pointer}
                     parentRef={parentRef}
                 >
-                    <AlertLineIcon className={styles.icon} />
-                    {children}
+                    {content}
                 </Popup>
             )}
         </>

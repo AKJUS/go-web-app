@@ -1,104 +1,107 @@
-import {
-    _cs,
-    isDefined,
-} from '@togglecorp/fujs';
+import { useMemo } from 'react';
+import { _cs } from '@togglecorp/fujs';
 
-import NumberOutput from '#components/NumberOutput';
-import ProgressBar from '#components/ProgressBar';
+import BooleanOutput, { Props as BooleanOutputProps } from '#components/BooleanOutput';
+import DateOutput, { Props as DateOutputProps } from '#components/DateOutput';
+import NumberOutput, { Props as NumberOutputProps } from '#components/NumberOutput';
 
 import styles from './styles.module.css';
 
-export interface Props {
+interface CommonProps {
     className?: string;
-    children?: React.ReactNode;
-    contentClassName?: string;
-    value: number | undefined | null;
-    compactValue?: boolean;
     label?: React.ReactNode;
-    labelClassName?: string;
-    description?: React.ReactNode;
-    descriptionClassName?: string;
-    progressTitle?: React.ReactNode;
-    progress?: number;
-    progressDescription?: React.ReactNode;
-    icon?: React.ReactNode;
-    info?: React.ReactNode;
-    suffix?: React.ReactNode;
+    size?: 'sm' | 'md' | 'lg';
 }
+
+interface BooleanProps {
+    valueType: 'boolean',
+    value: BooleanOutputProps['value'];
+    valueOptions?: Omit<BooleanOutputProps, 'value'>
+}
+
+interface NumberProps {
+    valueType: 'number',
+    value: NumberOutputProps['value'];
+    valueOptions?: Omit<NumberOutputProps, 'value'>;
+}
+
+interface DateProps {
+    valueType: 'date',
+    value: DateOutputProps['value'],
+    valueOptions?: Omit<DateOutputProps, 'value'>;
+}
+
+interface TextProps {
+    valueType: 'text',
+    value: string | null | undefined;
+    valueOptions?: never;
+}
+
+export type Props = CommonProps & (
+    BooleanProps | NumberProps | DateProps | TextProps
+);
 
 function KeyFigure(props: Props) {
     const {
         className,
-        children,
-        contentClassName,
-        value,
-        compactValue,
         label,
-        labelClassName,
-        description,
-        descriptionClassName,
-        progress,
-        progressTitle,
-        progressDescription,
-        icon,
-        info,
-        suffix,
+        size = 'md',
+
+        valueType,
+        value,
+        valueOptions,
     } = props;
+
+    const valueComponent = useMemo(() => {
+        if (valueType === 'boolean') {
+            return (
+                <BooleanOutput
+                    value={value}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...valueOptions}
+                />
+            );
+        }
+
+        if (valueType === 'number') {
+            return (
+                <NumberOutput
+                    value={value}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...valueOptions}
+                />
+            );
+        }
+
+        if (valueType === 'date') {
+            return (
+                <DateOutput
+                    value={value}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...valueOptions}
+                />
+            );
+        }
+
+        return value;
+    }, [valueType, value, valueOptions]);
 
     return (
         <div
             className={_cs(
                 styles.keyFigure,
-                !!icon && styles.withIcon,
+                size === 'sm' && styles.smallSize,
+                size === 'md' && styles.mediumSize,
+                size === 'lg' && styles.largeSize,
                 className,
             )}
         >
-            {icon && (
-                <div className={styles.iconSection}>
-                    <div className={styles.icon}>
-                        {icon}
-                    </div>
-                    {info && (
-                        <div className={styles.infoSection}>
-                            {info}
-                        </div>
-                    )}
-                </div>
-            )}
-            {!icon && info && (
-                <div className={styles.infoSectionWithoutIcon}>
-                    {info}
-                </div>
-            )}
-            <NumberOutput
-                className={styles.value}
-                value={value}
-                compact={compactValue}
-                suffix={suffix}
-            />
-            {label && (
-                <div className={labelClassName}>
-                    {label}
-                </div>
-            )}
-            {description && (
-                <div className={_cs(descriptionClassName, styles.description)}>
-                    {description}
-                </div>
-            )}
-            {isDefined(progress) && (
-                <ProgressBar
-                    title={progressTitle}
-                    value={progress}
-                    totalValue={100}
-                    description={progressDescription}
-                />
-            )}
-            {children && (
-                <div className={contentClassName}>
-                    {children}
-                </div>
-            )}
+            <div className={styles.value}>
+                {valueComponent}
+            </div>
+            <div className={styles.label}>
+                {label}
+            </div>
         </div>
     );
 }

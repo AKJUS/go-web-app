@@ -34,7 +34,8 @@ function ExpandButton<K>(props : ExpandButtonProps<K>) {
             )}
             name={row}
             onClick={onClick}
-            variant="tertiary"
+            colorVariant="text"
+            styleVariant="action"
             disabled={disabled}
         >
             {expanded ? (

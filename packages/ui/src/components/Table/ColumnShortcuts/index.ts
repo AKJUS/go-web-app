@@ -112,6 +112,7 @@ export function createProgressColumn<D, K>(
             value: accessor(datum),
             totalValue: 100,
             showPercentageInTitle: true,
+            colorVariant: 'primary',
         }),
         valueSelector: accessor,
         valueComparator: (foo: D, bar: D) => compareNumber(accessor(foo), accessor(bar)),
@@ -310,7 +311,7 @@ export function createExpandColumn<D, K>(
     const item: Column<D, K, ExpandButtonProps<D>, HeaderCellProps> = {
         id,
         title,
-        columnClassName: options?.columnClassName,
+        columnClassName: _cs(options?.columnClassName, styles.expandColumn),
         headerCellRenderer: HeaderCell,
         headerCellRendererClassName: options?.headerCellRendererClassName,
         headerContainerClassName: options?.headerContainerClassName,

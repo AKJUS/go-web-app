@@ -1,7 +1,10 @@
 import { useMemo } from 'react';
+import {
+    LegendItem,
+    ListView,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    _cs,
     isDefined,
     isNotDefined,
     listToMap,
@@ -13,7 +16,7 @@ import {
 import type { FillLayer } from 'mapbox-gl';
 
 import BaseMap from '#components/domain/BaseMap';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
+import GoMapContainer from '#components/GoMapContainer';
 import useCountryRaw from '#hooks/domain/useCountryRaw';
 import {
     COLOR_LIGHT_GREY,
@@ -25,7 +28,6 @@ import { getCountryListBoundingBox } from '#utils/map';
 import { type GoApiResponse } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type EventItem = GoApiResponse<'/api/v2/event/{id}'>;
 
@@ -144,7 +146,7 @@ function EmergencyMap(props: Props) {
     );
 
     return (
-        <div className={_cs(styles.emergencyMap, className)}>
+        <div className={className}>
             <BaseMap
                 baseLayers={(
                     <>
@@ -163,25 +165,21 @@ function EmergencyMap(props: Props) {
                     </>
                 )}
             >
-                <MapContainerWithDisclaimer
-                    className={styles.mapContainer}
+                <GoMapContainer
+                    title="Emergency Map"
                     footer={(
-                        <div className={styles.footer}>
+                        <ListView
+                            spacing="sm"
+                            withSpacingOpticalCorrection
+                        >
                             {legendOptions.map((legendItem) => (
-                                <div
+                                <LegendItem
                                     key={legendItem.key}
-                                    className={styles.legendItem}
-                                >
-                                    <div
-                                        className={styles.color}
-                                        style={{ backgroundColor: legendItem.color }}
-                                    />
-                                    <div className={styles.label}>
-                                        {legendItem.label}
-                                    </div>
-                                </div>
+                                    color={legendItem.color}
+                                    label={legendItem.label}
+                                />
                             ))}
-                        </div>
+                        </ListView>
                     )}
                 />
                 {isDefined(bounds) && (

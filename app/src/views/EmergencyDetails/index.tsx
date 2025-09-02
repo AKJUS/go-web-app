@@ -2,9 +2,11 @@ import { useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import {
     Container,
+    Description,
     HtmlOutput,
     InfoPopup,
-    KeyFigure,
+    KeyFigureView,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -20,6 +22,7 @@ import {
 
 import SeverityIndicator from '#components/domain/SeverityIndicator';
 import Link from '#components/Link';
+import TabPage from '#components/TabPage';
 import useDisasterType from '#hooks/domain/useDisasterType';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import { type EmergencyOutletContext } from '#utils/outletContext';
@@ -29,7 +32,6 @@ import EmergencyMap from './EmergencyMap';
 import FieldReportStats from './FieldReportStats';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type EventItem = GoApiResponse<'/api/v2/event/{id}'>;
 type FieldReport = EventItem['field_reports'][number];
@@ -143,123 +145,134 @@ export function Component() {
     );
 
     return (
-        <div
-            className={styles.emergencyDetails}
-        >
+        <TabPage>
             {hasKeyFigures && (
                 <Container
-                    className={styles.keyFiguresContainer}
                     heading={strings.emergencyKeyFiguresTitle}
-                    childrenContainerClassName={styles.keyFigureList}
                     withHeaderBorder
                 >
-                    {emergencyResponse?.key_figures.map(
-                        (keyFigure) => (
-                            <KeyFigure
-                                key={keyFigure.id}
-                                className={styles.keyFigure}
-                                // FIXME: fix typing in server (medium priority)
-                                // FIXME: Rounding this because it was previously rounded
-                                value={Math.round(
-                                    Number.parseInt(
-                                        // Removing commas from the value
-                                        keyFigure.number.replace(/[^\d.-]/g, ''),
-                                        10,
-                                    ),
-                                )}
-                                label={keyFigure.deck}
-                                description={resolveToString(
-                                    strings.sourceLabel,
-                                    {
-                                        source: keyFigure.source,
-                                    },
-                                )}
-                            />
-                        ),
-                    )}
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={4}
+                    >
+                        {emergencyResponse?.key_figures.map(
+                            (keyFigure) => (
+                                <KeyFigureView
+                                    key={keyFigure.id}
+                                    // FIXME: fix typing in server (medium priority)
+                                    // FIXME: Rounding this because it was previously rounded
+                                    value={Math.round(
+                                        Number.parseInt(
+                                            // Removing commas from the value
+                                            keyFigure.number.replace(/[^\d.-]/g, ''),
+                                            10,
+                                        ),
+                                    )}
+                                    valueType="number"
+                                    label={(
+                                        <ListView
+                                            layout="block"
+                                            spacing="sm"
+                                        >
+                                            <div>
+                                                {keyFigure.deck}
+                                            </div>
+                                            <div>
+                                                {resolveToString(
+                                                    strings.sourceLabel,
+                                                    { source: keyFigure.source },
+                                                )}
+                                            </div>
+                                        </ListView>
+                                    )}
+                                    withShadow
+                                />
+                            ),
+                        )}
+                    </ListView>
                 </Container>
             )}
             {isDefined(emergencyResponse) && (
                 <Container
                     heading={strings.emergencyOverviewTitle}
                     withHeaderBorder
-                    childrenContainerClassName={styles.overviewContent}
                 >
-                    <TextOutput
-                        className={styles.overviewItem}
-                        label={strings.disasterCategorization}
-                        value={(
-                            <>
-                                {emergencyResponse.ifrc_severity_level_display}
-                                <SeverityIndicator
-                                    level={emergencyResponse.ifrc_severity_level}
-                                />
-                                {emergencyResponse.ifrc_severity_level_update_date && (
-                                    <InfoPopup
-                                        description={(
-                                            <TextOutput
-                                                label={strings.severityLevelUpdateDateLabel}
-                                                value={
-                                                    emergencyResponse
-                                                        .ifrc_severity_level_update_date
-                                                }
-                                                valueType="date"
-                                            />
-                                        )}
+                    <ListView
+                        layout="grid"
+                        withSpacingOpticalCorrection
+                        numPreferredGridColumns={3}
+                    >
+                        <TextOutput
+                            label={strings.disasterCategorization}
+                            value={(
+                                <ListView
+                                    withWrap
+                                    withSpacingOpticalCorrection
+                                    spacing="sm"
+                                >
+                                    {emergencyResponse.ifrc_severity_level_display}
+                                    <SeverityIndicator
+                                        level={emergencyResponse.ifrc_severity_level}
                                     />
-                                )}
-                            </>
-                        )}
-                        valueClassName={styles.disasterCategoryValue}
-                        strongValue
-                    />
-                    <TextOutput
-                        className={styles.overviewItem}
-                        label={strings.disasterType}
-                        value={disasterType?.name}
-                        strongValue
-                    />
-                    <TextOutput
-                        className={styles.overviewItem}
-                        label={strings.startDate}
-                        valueType="date"
-                        value={emergencyResponse?.disaster_start_date}
-                        strongValue
-                    />
-                    <TextOutput
-                        className={styles.overviewItem}
-                        label={strings.visibility}
-                        value={isDefined(emergencyResponse.visibility)
-                            ? visibilityMap?.[emergencyResponse.visibility]
-                            : '--'}
-                        strongValue
-                    />
-                    <TextOutput
-                        className={styles.overviewItem}
-                        label={strings.MDRCode}
-                        value={mdrCode}
-                        strongValue
-                    />
-                    <TextOutput
-                        className={styles.overviewItem}
-                        label={strings.GLIDENumber}
-                        value={emergencyResponse?.glide}
-                        strongValue
-                    />
-                    <TextOutput
-                        className={styles.overviewItem}
-                        label={strings.assistanceRequestedByNS}
-                        valueType="boolean"
-                        value={assistanceIsRequestedByNS}
-                        strongValue
-                    />
-                    <TextOutput
-                        className={styles.overviewItem}
-                        label={strings.assistanceRequestedByGovernment}
-                        valueType="boolean"
-                        value={assistanceIsRequestedByCountry}
-                        strongValue
-                    />
+                                    {emergencyResponse.ifrc_severity_level_update_date && (
+                                        <InfoPopup
+                                            description={(
+                                                <TextOutput
+                                                    label={strings.severityLevelUpdateDateLabel}
+                                                    value={
+                                                        emergencyResponse
+                                                            .ifrc_severity_level_update_date
+                                                    }
+                                                    valueType="date"
+                                                />
+                                            )}
+                                        />
+                                    )}
+                                </ListView>
+                            )}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.disasterType}
+                            value={disasterType?.name}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.startDate}
+                            valueType="date"
+                            value={emergencyResponse?.disaster_start_date}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.visibility}
+                            value={isDefined(emergencyResponse.visibility)
+                                ? visibilityMap?.[emergencyResponse.visibility]
+                                : '--'}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.MDRCode}
+                            value={mdrCode}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.GLIDENumber}
+                            value={emergencyResponse?.glide}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.assistanceRequestedByNS}
+                            valueType="boolean"
+                            value={assistanceIsRequestedByNS}
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.assistanceRequestedByGovernment}
+                            valueType="boolean"
+                            value={assistanceIsRequestedByCountry}
+                            strongValue
+                        />
+                    </ListView>
                 </Container>
             )}
             {isDefined(emergencyResponse)
@@ -282,47 +295,52 @@ export function Component() {
                     <Container
                         heading={strings.linksTitle}
                         withHeaderBorder
-                        childrenContainerClassName={styles.linksContent}
                     >
-                        {emergencyResponse.links.map((link) => (
-                            <div
-                                key={link.id}
-                                className={styles.linkContainer}
-                            >
-                                <Link
-                                    href={link.url}
-                                    external
-                                    withLinkIcon
-                                    className={styles.link}
+                        <ListView
+                            layout="grid"
+                            withSpacingOpticalCorrection
+                        >
+                            {emergencyResponse.links.map((link) => (
+                                <ListView
+                                    key={link.id}
+                                    layout="block"
+                                    withSpacingOpticalCorrection
+                                    spacing="sm"
                                 >
-                                    {link.title}
-                                </Link>
-                                <div>
-                                    {link.description}
-                                </div>
-                            </div>
-                        ))}
+                                    <Link
+                                        href={link.url}
+                                        external
+                                        withLinkIcon
+                                    >
+                                        {link.title}
+                                    </Link>
+                                    <Description
+                                        textSize="sm"
+                                        withLightText
+                                    >
+                                        {link.description}
+                                    </Description>
+                                </ListView>
+                            ))}
+                        </ListView>
                     </Container>
                 )}
-            <div className={styles.mapKeyFigureContainer}>
+            <ListView
+                layout="grid"
+                withSidebar
+            >
                 {emergencyResponse && !emergencyResponse.hide_field_report_map && (
                     <Container
-                        className={styles.mapContainer}
                         heading={strings.emergencyMapTitle}
                         withHeaderBorder
                     >
-                        {emergencyResponse && (
-                            <EmergencyMap
-                                event={emergencyResponse}
-                            />
-                        )}
+                        <EmergencyMap event={emergencyResponse} />
                     </Container>
                 )}
                 {hasFieldReports
                     && isDefined(latestFieldReport)
                     && !emergencyResponse.hide_attached_field_reports && (
                     <Container
-                        className={styles.fieldReportStatsContainer}
                         heading={strings.emergencyKeyFiguresTitle}
                         withHeaderBorder
                     >
@@ -332,73 +350,88 @@ export function Component() {
                         />
                     </Container>
                 )}
-            </div>
+            </ListView>
             {isDefined(groupedContacts) && Object.keys(groupedContacts).length > 0
                 && (
                     <Container
                         heading={strings.contactsTitle}
-                        childrenContainerClassName={styles.contactsContent}
                         withHeaderBorder
                     >
-                        {/* FIXME: lets not use Object.entries here */}
-                        {Object.entries(groupedContacts).map(([contactGroup, contacts]) => (
-                            <Container
-                                key={contactGroup}
-                                heading={contactGroup}
-                                childrenContainerClassName={styles.contactList}
-                                headingLevel={4}
-                            >
-                                {contacts.map((contact) => (
-                                    <div
-                                        key={contact.id}
-                                        className={styles.contact}
+                        <ListView layout="block">
+                            {/* FIXME: lets not use Object.entries here */}
+                            {Object.entries(groupedContacts).map(([contactGroup, contacts]) => (
+                                <Container
+                                    key={contactGroup}
+                                    heading={contactGroup}
+                                    headingLevel={5}
+                                >
+                                    <ListView
+                                        layout="grid"
+                                        numPreferredGridColumns={4}
+                                        spacing="sm"
                                     >
-                                        <div className={styles.details}>
-                                            <div className={styles.name}>
-                                                {contact.name}
-                                            </div>
-                                            <div className={styles.title}>
-                                                {contact.title}
-                                            </div>
-                                        </div>
-                                        <div className={styles.contactMechanisms}>
-                                            <div className={styles.type}>
-                                                {contact.ctype}
-                                            </div>
-                                            {isTruthyString(contact.email) && (
-                                                <TextOutput
-                                                    value={(
-                                                        <Link
-                                                            href={`mailto:${contact.email}`}
-                                                            external
-                                                            withLinkIcon
+                                        {contacts.map((contact) => (
+                                            <Container
+                                                key={contact.id}
+                                                headingLevel={6}
+                                                heading={contact.name}
+                                                withPadding
+                                                withShadow
+                                                withBackground
+                                            >
+                                                <ListView
+                                                    layout="block"
+                                                    withSpacingOpticalCorrection
+                                                >
+                                                    <Description
+                                                        textSize="sm"
+                                                        withLightText
+                                                    >
+                                                        {contact.title}
+                                                    </Description>
+                                                    <ListView
+                                                        layout="block"
+                                                        spacing="none"
+                                                    >
+                                                        <Description
+                                                            textSize="sm"
+                                                            withLightText
                                                         >
-                                                            {contact.email}
-                                                        </Link>
-                                                    )}
-                                                />
-                                            )}
-                                            {isTruthyString(contact.phone) && (
-                                                <TextOutput
-                                                    value={(
-                                                        <Link
-                                                            href={`tel:${contact.phone}`}
-                                                            withLinkIcon
-                                                            external
-                                                        >
-                                                            {contact.phone}
-                                                        </Link>
-                                                    )}
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </Container>
-                        ))}
+                                                            {contact.ctype}
+                                                        </Description>
+                                                        {isTruthyString(contact.email) && (
+                                                            <Link
+                                                                href={`mailto:${contact.email}`}
+                                                                external
+                                                                withLinkIcon
+                                                                textSize="sm"
+                                                                withEllipsizedContent
+                                                            >
+                                                                {contact.email}
+                                                            </Link>
+                                                        )}
+                                                        {isTruthyString(contact.phone) && (
+                                                            <Link
+                                                                href={`tel:${contact.phone}`}
+                                                                withLinkIcon
+                                                                external
+                                                                textSize="sm"
+                                                                withEllipsizedContent
+                                                            >
+                                                                {contact.phone}
+                                                            </Link>
+                                                        )}
+                                                    </ListView>
+                                                </ListView>
+                                            </Container>
+                                        ))}
+                                    </ListView>
+                                </Container>
+                            ))}
+                        </ListView>
                     </Container>
                 )}
-        </div>
+        </TabPage>
     );
 }
 

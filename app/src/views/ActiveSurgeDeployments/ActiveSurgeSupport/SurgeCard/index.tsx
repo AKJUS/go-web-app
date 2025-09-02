@@ -4,8 +4,8 @@ import {
 } from 'react';
 import {
     Container,
-    DateOutput,
     KeyFigure,
+    ListView,
     ReducedListDisplay,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -14,11 +14,9 @@ import {
     getDuration,
     maxSafe,
     minSafe,
-    resolveToComponent,
     stringNameSelector,
 } from '@ifrc-go/ui/utils';
 import {
-    _cs,
     isDefined,
     unique,
 } from '@togglecorp/fujs';
@@ -108,107 +106,127 @@ function SurgeCard(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.surgeCard, className)}
+            className={className}
             headingLevel={4}
-            withInternalPadding
             withHeaderBorder
-            withoutWrapInHeading
-            ellipsizeHeading
+            withoutWrapInHeader
             heading={(
                 <Link
                     to="emergenciesLayout"
                     urlParams={{ emergencyId }}
-                    ellipsize
+                    withEllipsizedContent
                 >
                     {emergencyName}
                 </Link>
             )}
-            headerDescription={resolveToComponent(
-                strings.operationTimeline,
-                {
-                    startDate: (
-                        <DateOutput
-                            value={operationStartDate}
-                        />
-                    ),
-                    duration,
-                },
+            headerDescription={(
+                <TextOutput
+                    label={strings.operationStartDateLabel}
+                    value={operationStartDate}
+                    valueType="date"
+                    description={`(${duration})`}
+                    textSize="sm"
+                />
             )}
-            icons={severityLevel ? (
+            headerIcons={isDefined(severityLevel) && (
                 <SeverityIndicator
                     className={styles.severityIndicator}
                     level={severityLevel}
                 />
-            ) : undefined}
-            childrenContainerClassName={styles.content}
+            )}
+            withPadding
+            withBackground
+            withShadow
         >
-            {deployedERUCount > 0 && (
-                <>
-                    <KeyFigure
-                        className={styles.figure}
-                        value={deployedERUCount}
-                        label={strings.surgeEmergencyResponseUnit}
-                        compactValue
-                    />
-                    <div className={styles.verticalSeparator} />
-                    <ReducedListDisplay
-                        list={deployedERUTypes}
-                        keySelector={stringNameSelector}
-                        renderer={DisplayName}
-                        rendererParams={rendererParams}
-                        maxItems={3}
-                    />
-                    <TextOutput
-                        className={styles.deployingOrganizations}
-                        value={(
+            <ListView
+                layout="block"
+                withSpacingOpticalCorrection
+            >
+                {deployedERUCount > 0 && (
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                    >
+                        <ListView
+                            layout="grid"
+                            minGridColumnSize="6rem"
+                            withSpacingOpticalCorrection
+                        >
+                            <KeyFigure
+                                className={styles.figure}
+                                value={deployedERUCount}
+                                label={strings.surgeEmergencyResponseUnit}
+                                valueType="number"
+                                valueOptions={{ compact: true }}
+                            />
                             <ReducedListDisplay
-                                list={eruDeployingOrganizations}
+                                list={deployedERUTypes}
                                 keySelector={stringNameSelector}
                                 renderer={DisplayName}
                                 rendererParams={rendererParams}
                                 maxItems={3}
                             />
-                        )}
-                        label={strings.surgeDeployingOrganizations}
-                        strongValue
-                    />
-                </>
-            )}
-            {deployedERUCount > 0 && deployedPersonnelCount > 0 && (
-                <div className={styles.separator} />
-            )}
-            {deployedPersonnelCount > 0 && (
-                <>
-                    <KeyFigure
-                        className={styles.figure}
-                        value={deployedPersonnelCount}
-                        label={strings.surgeRapidResponsePersonnel}
-                        compactValue
-                    />
-                    <div className={styles.verticalSeparator} />
-                    <ReducedListDisplay
-                        list={deployedPersonnelTypes}
-                        keySelector={stringNameSelector}
-                        renderer={DisplayName}
-                        rendererParams={rendererParams}
-                        maxItems={3}
-                    />
-                    <TextOutput
-                        className={styles.deployingOrganizations}
-                        value={(
+                        </ListView>
+                        <TextOutput
+                            className={styles.deployingOrganizations}
+                            value={(
+                                <ReducedListDisplay
+                                    list={eruDeployingOrganizations}
+                                    keySelector={stringNameSelector}
+                                    renderer={DisplayName}
+                                    rendererParams={rendererParams}
+                                    maxItems={3}
+                                />
+                            )}
+                            label={strings.surgeDeployingOrganizations}
+                            strongValue
+                        />
+                    </ListView>
+                )}
+                {deployedPersonnelCount > 0 && deployedERUCount > 0 && (
+                    <hr className={styles.separator} />
+                )}
+                {deployedPersonnelCount > 0 && (
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                    >
+                        <ListView
+                            layout="grid"
+                            minGridColumnSize="6rem"
+                            withSpacingOpticalCorrection
+                        >
+                            <KeyFigure
+                                value={deployedPersonnelCount}
+                                label={strings.surgeRapidResponsePersonnel}
+                                valueType="number"
+                                valueOptions={{ compact: true }}
+                            />
                             <ReducedListDisplay
-                                list={personnelDeployingOrganizations}
+                                list={deployedPersonnelTypes}
                                 keySelector={stringNameSelector}
                                 renderer={DisplayName}
                                 rendererParams={rendererParams}
                                 maxItems={3}
                             />
-                        )}
-                        label={strings.surgeDeployingOrganizations}
-                        strongValue
-                    />
-                </>
-            )}
+                        </ListView>
+                        <TextOutput
+                            className={styles.deployingOrganizations}
+                            value={(
+                                <ReducedListDisplay
+                                    list={personnelDeployingOrganizations}
+                                    keySelector={stringNameSelector}
+                                    renderer={DisplayName}
+                                    rendererParams={rendererParams}
+                                    maxItems={3}
+                                />
+                            )}
+                            label={strings.surgeDeployingOrganizations}
+                            strongValue
+                        />
+                    </ListView>
+                )}
+            </ListView>
         </Container>
     );
 }

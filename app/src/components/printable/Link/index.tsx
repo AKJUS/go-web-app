@@ -7,7 +7,7 @@ import GoLink, {
 
 import styles from './styles.module.css';
 
-type Props = CommonLinkProps<'withUnderline'> & Omit<ExternalLinkProps, 'external'>;
+type Props = Omit<CommonLinkProps, 'withUnderline'> & Omit<ExternalLinkProps, 'external'>;
 
 function Link(props: Props) {
     const {

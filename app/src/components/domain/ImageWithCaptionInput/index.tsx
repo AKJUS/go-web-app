@@ -1,8 +1,11 @@
 import { useCallback } from 'react';
-import { TextInput } from '@ifrc-go/ui';
+import {
+    Image,
+    ListView,
+    TextInput,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    _cs,
     isDefined,
     randomString,
 } from '@togglecorp/fujs';
@@ -17,7 +20,6 @@ import GoSingleFileInput, { type SupportedPaths } from '#components/domain/GoSin
 import NonFieldError from '#components/NonFieldError';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type Value = {
     id?: number | undefined;
@@ -30,15 +32,15 @@ interface Props<N> {
     name: N;
     url: SupportedPaths;
     value: Value | null | undefined;
-    readOnly: boolean;
     onChange: (value: SetValueArg<Value> | undefined, name: N) => void;
     error: ObjectError<Value> | undefined;
     fileIdToUrlMap: Record<number, string>;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     label: React.ReactNode;
-    icons?: React.ReactNode;
-    actions?: React.ReactNode;
+    before?: React.ReactNode;
+    after?: React.ReactNode;
     disabled?: boolean;
+    readOnly?: boolean;
     useCurrentLanguageForMutation?: boolean;
 }
 
@@ -55,8 +57,8 @@ function ImageWithCaptionInput<const N extends string | number>(props: Props<N>)
         onChange,
         error: formError,
         label,
-        icons,
-        actions,
+        before,
+        after,
         disabled,
         useCurrentLanguageForMutation,
     } = props;
@@ -88,7 +90,11 @@ function ImageWithCaptionInput<const N extends string | number>(props: Props<N>)
     ]);
 
     return (
-        <div className={_cs(styles.imageWithCaptionInput, className)}>
+        <ListView
+            className={className}
+            layout="block"
+            spacing="xs"
+        >
             <NonFieldError
                 error={error}
             />
@@ -101,15 +107,15 @@ function ImageWithCaptionInput<const N extends string | number>(props: Props<N>)
                 url={url}
                 fileIdToUrlMap={fileIdToUrlMap}
                 setFileIdToUrlMap={setFileIdToUrlMap}
-                icons={icons}
-                actions={actions}
+                before={before}
+                after={after}
                 disabled={disabled}
                 // FIXME: Make Go single file input with preview
                 description={isDefined(fileUrl) ? (
-                    <img
-                        className={styles.preview}
+                    <Image
                         alt={strings.imageWithCaptionPreview}
                         src={fileUrl}
+                        size="sm"
                     />
                 ) : undefined}
                 clearable
@@ -119,7 +125,6 @@ function ImageWithCaptionInput<const N extends string | number>(props: Props<N>)
             </GoSingleFileInput>
             {value?.id && isDefined(fileUrl) && (
                 <TextInput
-                    className={styles.captionInput}
                     name="caption"
                     value={value?.caption}
                     readOnly={readOnly}
@@ -129,7 +134,7 @@ function ImageWithCaptionInput<const N extends string | number>(props: Props<N>)
                     disabled={disabled}
                 />
             )}
-        </div>
+        </ListView>
     );
 }
 

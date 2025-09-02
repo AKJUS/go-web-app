@@ -8,6 +8,7 @@ import {
     Container,
     DateInput,
     InputSection,
+    ListView,
     RadioInput,
     TextInput,
     TextOutput,
@@ -42,7 +43,6 @@ import { type PartialFormValue } from '../common';
 import TitlePreview from './TitlePreview';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 function isNotEpidemic(o: DisasterTypeItem) {
     return o.id !== DISASTER_TYPE_EPIDEMIC;
@@ -148,6 +148,7 @@ function ContextFields(props: Props) {
         [onValueChange],
     );
 
+    /*
     const handleIsCovidReportChange = useCallback(
         (val: boolean, name: 'is_covid_report') => {
             onValueChange(val, name);
@@ -155,6 +156,7 @@ function ContextFields(props: Props) {
         },
         [onValueChange],
     );
+    */
 
     const handleStatusChange = useCallback(
         (val: FieldReportStatusEnum, name: 'status') => {
@@ -172,188 +174,186 @@ function ContextFields(props: Props) {
     const summaryVisible = !value.is_covid_report;
 
     return (
-        <Container
-            heading={strings.fieldReportFormContextTitle}
-            className={styles.contextFields}
-            childrenContainerClassName={styles.content}
-        >
-            <InputSection
-                title={strings.statusSectionTitle}
-                withAsteriskOnTitle
-            >
-                <RadioInput
-                    name="status"
-                    options={statusOptions}
-                    // FIXME: do not use inline functions
-                    keySelector={(d) => d.key}
-                    labelSelector={(d) => d.value}
-                    descriptionSelector={statusDescriptionSelector}
-                    value={value.status}
-                    error={error?.status}
-                    onChange={handleStatusChange}
-                    disabled={disabled}
-                />
-            </InputSection>
-            <InputSection
-                className={styles.hidden}
-                title={strings.covidSectionTitle}
-                withAsteriskOnTitle
-            >
-                <BooleanInput
-                    name="is_covid_report"
-                    value={value.is_covid_report}
-                    onChange={handleIsCovidReportChange}
-                    error={error?.is_covid_report}
-                    disabled={value.status === FIELD_REPORT_STATUS_EARLY_WARNING || disabled}
-                />
-            </InputSection>
-
-            <InputSection
-                title={strings.fieldReportFormSearchTitle}
-                description={strings.fieldReportFormSearchDescription}
-            >
-                <EventSearchSelectInput
-                    label={strings.emergencySelectLabel}
-                    placeholder={strings.emergencySelectPlaceholder}
-                    name="event"
-                    value={value.event}
-                    onChange={onValueChange}
-                    error={error?.event}
-                    options={eventOptions}
-                    onOptionsChange={setEventOptions}
-                    disabled={disabled}
-                />
-            </InputSection>
-            <InputSection
-                title={countrySectionTitle}
-                description={countrySectionDescription}
-                numPreferredColumns={2}
-                withAsteriskOnTitle
-            >
-                <CountrySelectInput
-                    error={error?.country}
-                    label={strings.countryInputLabel}
-                    name="country"
-                    onChange={handleCountryChange}
-                    value={value.country}
-                    disabled={disabled}
-                    withAsterisk
-                />
-                <DistrictSearchMultiSelectInput
-                    error={getErrorString(error?.districts)}
-                    label={strings.districtInputLabel}
-                    name="districts"
-                    disabled={isNotDefined(value.country) || disabled}
-                    countryId={value?.country}
-                    onChange={onValueChange}
-                    options={districtOptions}
-                    onOptionsChange={setDistrictOptions}
-                    value={value.districts}
-                />
-            </InputSection>
-            <InputSection
-                title={strings.disasterTypeLabel}
-                description={strings.disasterTypeDescription}
-                numPreferredColumns={2}
-                withAsteriskOnTitle
-            >
-                <DisasterTypeSelectInput
-                    name="dtype"
-                    optionsFilter={(
-                        value.status === FIELD_REPORT_STATUS_EARLY_WARNING
-                            ? isNotEpidemic
-                            : undefined
+        <Container heading={strings.fieldReportFormContextTitle}>
+            <ListView layout="block">
+                <InputSection
+                    title={strings.statusSectionTitle}
+                    withAsteriskOnTitle
+                >
+                    <RadioInput
+                        name="status"
+                        options={statusOptions}
+                        // FIXME: do not use inline functions
+                        keySelector={(d) => d.key}
+                        labelSelector={(d) => d.value}
+                        descriptionSelector={statusDescriptionSelector}
+                        value={value.status}
+                        error={error?.status}
+                        onChange={handleStatusChange}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                {/*
+                <InputSection
+                    title={strings.covidSectionTitle}
+                    withAsteriskOnTitle
+                >
+                    <BooleanInput
+                        name="is_covid_report"
+                        value={value.is_covid_report}
+                        onChange={handleIsCovidReportChange}
+                        error={error?.is_covid_report}
+                        disabled={value.status === FIELD_REPORT_STATUS_EARLY_WARNING || disabled}
+                    />
+                </InputSection>
+                */}
+                <InputSection
+                    title={strings.fieldReportFormSearchTitle}
+                    description={strings.fieldReportFormSearchDescription}
+                >
+                    <EventSearchSelectInput
+                        label={strings.emergencySelectLabel}
+                        placeholder={strings.emergencySelectPlaceholder}
+                        name="event"
+                        value={value.event}
+                        onChange={onValueChange}
+                        error={error?.event}
+                        options={eventOptions}
+                        onOptionsChange={setEventOptions}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                <InputSection
+                    title={countrySectionTitle}
+                    description={countrySectionDescription}
+                    numPreferredColumns={2}
+                    withAsteriskOnTitle
+                >
+                    <CountrySelectInput
+                        error={error?.country}
+                        label={strings.countryInputLabel}
+                        name="country"
+                        onChange={handleCountryChange}
+                        value={value.country}
+                        disabled={disabled}
+                        withAsterisk
+                    />
+                    <DistrictSearchMultiSelectInput
+                        error={getErrorString(error?.districts)}
+                        label={strings.districtInputLabel}
+                        name="districts"
+                        disabled={isNotDefined(value.country) || disabled}
+                        countryId={value?.country}
+                        onChange={onValueChange}
+                        options={districtOptions}
+                        onOptionsChange={setDistrictOptions}
+                        value={value.districts}
+                    />
+                </InputSection>
+                <InputSection
+                    title={strings.disasterTypeLabel}
+                    description={strings.disasterTypeDescription}
+                    numPreferredColumns={2}
+                    withAsteriskOnTitle
+                >
+                    <DisasterTypeSelectInput
+                        name="dtype"
+                        optionsFilter={(
+                            value.status === FIELD_REPORT_STATUS_EARLY_WARNING
+                                ? isNotEpidemic
+                                : undefined
+                        )}
+                        value={value.dtype}
+                        onChange={onValueChange}
+                        error={error?.dtype}
+                        disabled={value.is_covid_report || disabled}
+                    />
+                </InputSection>
+                <InputSection
+                    title={startDateSectionTitle}
+                    description={startDateSectionDescription}
+                    numPreferredColumns={2}
+                    withAsteriskOnTitle
+                >
+                    <DateInput
+                        name="start_date"
+                        value={value.start_date}
+                        onChange={onValueChange}
+                        error={error?.start_date || disabled}
+                        disabled={disabled}
+                    />
+                </InputSection>
+                <InputSection
+                    title={strings.summaryLabel}
+                    description={strings.summaryDescription}
+                    withAsteriskOnTitle
+                    numPreferredColumns={1}
+                >
+                    {summaryVisible && (
+                        <>
+                            <TextInput
+                                label={strings.titleSecondaryLabel}
+                                placeholder={strings.titleInputPlaceholder}
+                                name="title"
+                                value={value.title}
+                                maxLength={256}
+                                onChange={onValueChange}
+                                error={error?.title}
+                                disabled={disabled}
+                                withAsterisk
+                            />
+                            {isDefined(value.country)
+                                && isDefined(value.dtype)
+                                && isDefined(value.title)
+                                && isTruthyString(value.title.trim())
+                                ? (
+                                    <TitlePreview
+                                        country={value.country}
+                                        disasterType={value.dtype}
+                                        event={value.event}
+                                        isCovidReport={value.is_covid_report}
+                                        startDate={value.start_date}
+                                        title={value.title}
+                                        id={value.id}
+                                    />
+                                ) : (
+                                    <TextOutput
+                                        value={value.summary}
+                                        label={isDefined(fieldReportId)
+                                            ? strings.originalTitle : strings.generatedTitlePreview}
+                                        strongLabel
+                                    />
+                                )}
+                        </>
                     )}
-                    value={value.dtype}
-                    onChange={onValueChange}
-                    error={error?.dtype}
-                    disabled={value.is_covid_report || disabled}
-                />
-            </InputSection>
-            <InputSection
-                title={startDateSectionTitle}
-                description={startDateSectionDescription}
-                numPreferredColumns={2}
-                withAsteriskOnTitle
-            >
-                <DateInput
-                    name="start_date"
-                    value={value.start_date}
-                    onChange={onValueChange}
-                    error={error?.start_date || disabled}
-                    disabled={disabled}
-                />
-            </InputSection>
-            <InputSection
-                title={strings.summaryLabel}
-                description={strings.summaryDescription}
-                withAsteriskOnTitle
-                numPreferredColumns={1}
-            >
-                {summaryVisible && (
-                    <>
-                        <TextInput
-                            label={strings.titleSecondaryLabel}
-                            placeholder={strings.titleInputPlaceholder}
-                            name="title"
-                            value={value.title}
-                            maxLength={256}
-                            onChange={onValueChange}
-                            error={error?.title}
-                            disabled={disabled}
-                            withAsterisk
-                        />
-                        {isDefined(value.country)
-                            && isDefined(value.dtype)
-                            && isDefined(value.title)
-                            && isTruthyString(value.title.trim())
-                            ? (
-                                <TitlePreview
-                                    country={value.country}
-                                    disasterType={value.dtype}
-                                    event={value.event}
-                                    isCovidReport={value.is_covid_report}
-                                    startDate={value.start_date}
-                                    title={value.title}
-                                    id={value.id}
-                                />
-                            ) : (
-                                <TextOutput
-                                    value={value.summary}
-                                    label={isDefined(fieldReportId)
-                                        ? strings.originalTitle : strings.generatedTitlePreview}
-                                    strongLabel
-                                />
-                            )}
-                    </>
-                )}
-            </InputSection>
-            <InputSection
-                title={strings.assistanceLabel}
-                description={strings.assistanceDescription}
-            >
-                <BooleanInput
-                    name="request_assistance"
-                    value={value.request_assistance}
-                    onChange={onValueChange}
-                    error={error?.request_assistance}
-                    disabled={disabled}
-                    clearable
-                />
-            </InputSection>
-            <InputSection
-                title={strings.nsAssistanceLabel}
-                description={strings.nsAssistanceDescription}
-            >
-                <BooleanInput
-                    name="ns_request_assistance"
-                    value={value.ns_request_assistance}
-                    onChange={onValueChange}
-                    error={error?.ns_request_assistance}
-                    disabled={disabled}
-                    clearable
-                />
-            </InputSection>
+                </InputSection>
+                <InputSection
+                    title={strings.assistanceLabel}
+                    description={strings.assistanceDescription}
+                >
+                    <BooleanInput
+                        name="request_assistance"
+                        value={value.request_assistance}
+                        onChange={onValueChange}
+                        error={error?.request_assistance}
+                        disabled={disabled}
+                        clearable
+                    />
+                </InputSection>
+                <InputSection
+                    title={strings.nsAssistanceLabel}
+                    description={strings.nsAssistanceDescription}
+                >
+                    <BooleanInput
+                        name="ns_request_assistance"
+                        value={value.ns_request_assistance}
+                        onChange={onValueChange}
+                        error={error?.ns_request_assistance}
+                        disabled={disabled}
+                        clearable
+                    />
+                </InputSection>
+            </ListView>
         </Container>
     );
 }

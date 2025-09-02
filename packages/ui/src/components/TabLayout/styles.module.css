@@ -1,0 +1,169 @@
+.tab-layout {
+    --variant-color: inherit;
+    --text-color: var(--variant-color);
+    --outline-color: var(--go-ui-color-separator);
+    --background-color: var(--go-ui-color-background);
+
+    position: relative;
+    border: var(--go-ui-width-separator-thin) solid var(--outline-color);
+    border-radius: var(--go-ui-border-radius-full);
+    background-color: var(--background-color);
+    width: fit-content;
+    line-height: var(--go-ui-line-height-sm);
+    color: var(--text-color);
+    user-select: none;
+    font-weight: var(--go-ui-font-weight-medium);
+
+    &.color-variant-text {
+        --variant-color: var(--go-ui-color-text);
+    }
+
+    &.color-variant-primary {
+        --variant-color: var(--go-ui-color-primary-red);
+    }
+
+    &.color-variant-secondary {
+        --variant-color: var(--go-ui-color-primary-blue);
+    }
+
+    &.style-variant-tab {
+        border: unset;
+        border-radius: initial;
+        border-color: transparent;
+        text-transform: uppercase;
+        font-weight: var(--go-ui-font-weight-medium);
+        --outline-color: var(--go-ui-color-separator);
+        --background-color: transparent;
+
+        &.active {
+            color: var(--go-ui-color-primary-red);
+            border-inline-start: var(--go-ui-width-separator-sm) solid var(--go-ui-color-separator);
+            border-inline-end: var(--go-ui-width-separator-sm) solid var(--go-ui-color-separator);
+            border-block-start: var(--go-ui-width-separator-sm) solid var(--go-ui-color-separator);
+        }
+
+        &:not(.active) {
+            --background-color: var(--go-ui-color-background);
+        }
+    }
+
+    &.style-variant-nav {
+        --outline-color: transparent;
+        --background-color: transparent;
+        --text-color: var(--go-ui-color-text);
+
+        &.active {
+            --text-color: var(--variant-color);
+        }
+    }
+
+    &.style-variant-pill {
+        --outline-color: transparent;
+        --text-color: var(--go-ui-color-text);
+        --background-color: transparent;
+
+        &.active {
+            --text-color: var(--go-ui-color-text-on-dark);
+            --background-color: var(--variant-color);
+        }
+    }
+
+    &.style-variant-vertical {
+        --outline-color: transparent;
+        --text-color: var(--go-ui-color-text);
+        --background-color: transparent;
+        border-radius: initial;
+        width: auto;
+        border-inline-start: var(--go-ui-width-separator-sm) solid var(--go-ui-color-separator);
+        text-align: start;
+
+        &.active {
+            --text-color: var(--variant-color);
+            --background-color: color-mix(in srgb, var(--variant-color) 10%, transparent);
+            border-inline-start-width: var(--go-ui-width-separator-lg);
+            border-inline-start-color: var(--variant-color);
+        }
+    }
+
+    &.style-variant-vertical-compact {
+        --outline-color: transparent;
+        --text-color: var(--go-ui-color-text);
+        --background-color: transparent;
+        border-radius: initial;
+        width: auto;
+        text-align: start;
+
+        &.active {
+            --text-color: var(--variant-color);
+            font-weight: var(--go-ui-font-weight-bold);
+        }
+    }
+
+    &.style-variant-step {
+        --outline-color: transparent;
+        --text-color: var(--go-ui-color-text);
+        text-transform: uppercase;
+
+        &.active {
+            --text-color: var(--variant-color);
+        }
+    }
+
+    &.disabled {
+        opacity: var(--go-ui-opacity-disabled-element);
+    }
+
+    &:not(.disabled) {
+        cursor: pointer;
+    }
+}
+
+.tab-wrapper {
+    display: grid;
+    position: relative;
+    border-bottom: var(--go-ui-width-separator-thin) solid var(--go-ui-color-separator);
+    grid-template-columns: min-content 1fr min-content;
+
+    .active-border {
+        position: absolute;
+        bottom: 0;
+        left: 15%;
+        border-bottom: var(--go-ui-width-separator-md) solid var(--go-ui-color-primary-red);
+        width: 70%;
+    }
+
+    &.active {
+        border-bottom: initial;
+
+        .bottom-border {
+            border-bottom: var(--go-ui-width-separator-thin) solid var(--go-ui-color-separator);
+        }
+    }
+}
+
+.step-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .dot {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: var(--go-ui-color-primary-blue);
+        width: 1rem;
+        height: 1rem;
+        line-height: 0;
+
+        .icon {
+            color: var(--go-ui-color-text-on-dark);
+        }
+    }
+
+    &.active {
+        .dot {
+            background-color: var(--go-ui-color-primary-red);
+        }
+    }
+}

@@ -15,7 +15,7 @@ import {
     Container,
     DateInput,
     InputSection,
-    Message,
+    ListView,
     NumberInput,
     Portal,
     SelectInput,
@@ -39,7 +39,6 @@ import {
     useForm,
 } from '@togglecorp/toggle-form';
 
-import FormFailedToLoadMessage from '#components/domain/FormFailedToLoadMessage';
 import GoMultiFileInput from '#components/domain/GoMultiFileInput';
 import NationalSocietySelectInput from '#components/domain/NationalSocietySelectInput';
 import NonFieldError from '#components/NonFieldError';
@@ -351,32 +350,18 @@ export function Component() {
     const savePerPending = createPerPending || updatePerPending;
     const disabled = savePerPending;
 
-    if (dataPending) {
-        return (
-            <Message
-                pending
-            />
-        );
-    }
-
-    if (isDefined(perOverviewResponseError)) {
-        return (
-            <FormFailedToLoadMessage
-                description={perOverviewResponseError.value.messageForNotification}
-            />
-        );
-    }
-
     return (
         <Container
-            headerElementRef={formContentRef}
+            pending={dataPending}
+            errored={isDefined(perOverviewResponseError)}
+            errorMessage={perOverviewResponseError?.value?.messageForNotification}
+            elementRef={formContentRef}
             className={styles.overviewForm}
             heading={partialReadOnly
                 ? strings.overviewEditHeading
                 : strings.overviewSetupHeading}
+            withCenteredHeading
             headingLevel={2}
-            childrenContainerClassName={styles.content}
-            withHeaderBorder
             footerActions={(
                 <ConfirmButton
                     name={undefined}
@@ -388,15 +373,12 @@ export function Component() {
                     {strings.submitButtonLabel}
                 </ConfirmButton>
             )}
-            spacing="comfortable"
+            spacing="xl"
         >
             {actionDivRef.current && (
-                <Portal
-                    container={actionDivRef.current}
-                >
+                <Portal container={actionDivRef.current}>
                     <Button
                         name={undefined}
-                        variant="secondary"
                         onClick={handleSave}
                         disabled={savePerPending || readOnly}
                     >
@@ -404,18 +386,16 @@ export function Component() {
                     </Button>
                 </Portal>
             )}
-            <NonFieldError
-                error={formError}
-                withFallbackError
-            />
-            <Container
-                className={styles.container}
-                childrenContainerClassName={styles.sectionContent}
-                withInternalPadding
+            <ListView
+                layout="block"
+                spacing="lg"
             >
+                <NonFieldError
+                    error={formError}
+                    withFallbackError
+                />
                 <InputSection
                     title={strings.nationalSocietyInputLabel}
-                    withoutPadding
                     numPreferredColumns={2}
                     withAsteriskOnTitle
                 >
@@ -433,415 +413,389 @@ export function Component() {
                         autoFocus
                     />
                 </InputSection>
-            </Container>
-            <Container
-                heading={strings.orientationSectionHeading}
-                className={styles.container}
-                childrenContainerClassName={styles.sectionContent}
-                withInternalPadding
-                withHeaderBorder
-            >
-                <InputSection
-                    title={strings.dateOfOrientationInputLabel}
-                    description={strings.dateOfOrientationInputDescription}
-                    numPreferredColumns={2}
-                    withoutPadding
-                    withAsteriskOnTitle={isNotDefined(value?.date_of_assessment)}
+                <Container
+                    heading={strings.orientationSectionHeading}
+                    spacing="lg"
                 >
-                    <DateInput
-                        name="date_of_orientation"
-                        onChange={setFieldValue}
-                        value={value?.date_of_orientation}
-                        error={error?.date_of_orientation}
-                        readOnly={partialReadOnly || readOnly}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.uploadADocInputLabel}
-                    withoutPadding
+                    <ListView layout="block">
+                        <InputSection
+                            title={strings.dateOfOrientationInputLabel}
+                            description={strings.dateOfOrientationInputDescription}
+                            numPreferredColumns={2}
+                            withAsteriskOnTitle={isNotDefined(value?.date_of_assessment)}
+                        >
+                            <DateInput
+                                name="date_of_orientation"
+                                onChange={setFieldValue}
+                                value={value?.date_of_orientation}
+                                error={error?.date_of_orientation}
+                                readOnly={partialReadOnly || readOnly}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                        <InputSection title={strings.uploadADocInputLabel}>
+                            <GoMultiFileInput
+                                name="orientation_documents"
+                                accept=".docx, .pdf"
+                                url="/api/v2/per-file/multiple/"
+                                value={value?.orientation_documents}
+                                onChange={setFieldValue}
+                                fileIdToUrlMap={fileIdToUrlMap}
+                                setFileIdToUrlMap={setFileIdToUrlMap}
+                                error={getErrorString(error?.orientation_documents)}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            >
+                                {strings.uploadButtonLabel}
+                            </GoMultiFileInput>
+                        </InputSection>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.assessmentSectionHeading}
+                    spacing="lg"
                 >
-                    <GoMultiFileInput
-                        name="orientation_documents"
-                        accept=".docx, .pdf"
-                        url="/api/v2/per-file/multiple/"
-                        value={value?.orientation_documents}
-                        onChange={setFieldValue}
-                        fileIdToUrlMap={fileIdToUrlMap}
-                        setFileIdToUrlMap={setFileIdToUrlMap}
-                        error={getErrorString(error?.orientation_documents)}
-                        disabled={disabled}
-                        readOnly={readOnly}
+                    <ListView layout="block">
+                        <InputSection
+                            numPreferredColumns={2}
+                            title={strings.dateOfAssessmentInputLabel}
+                            description={strings.dateOfAssessmentInputDescription}
+                            withAsteriskOnTitle={isNotDefined(value?.date_of_orientation)}
+                        >
+                            <DateInput
+                                name="date_of_assessment"
+                                onChange={setFieldValue}
+                                value={value?.date_of_assessment}
+                                error={error?.date_of_assessment}
+                                readOnly={partialReadOnly || readOnly}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                        <InputSection
+                            numPreferredColumns={2}
+                            title={strings.typeOfAssessmentInputLabel}
+                            withAsteriskOnTitle={isDefined(value.date_of_assessment)}
+                        >
+                            <SelectInput
+                                name="type_of_assessment"
+                                options={perOptionsResponse?.overviewassessmenttypes}
+                                keySelector={numericIdSelector}
+                                labelSelector={stringNameSelector}
+                                onChange={setFieldValue}
+                                value={value?.type_of_assessment}
+                                error={error?.type_of_assessment}
+                                readOnly={partialReadOnly || readOnly}
+                                disabled={disabled || perOptionsPending}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.dateOfPreviousPerAssessmentInputLabel}
+                            numPreferredColumns={2}
+                        >
+                            <DateInput
+                                name="date_of_previous_assessment"
+                                onChange={setFieldValue}
+                                value={value?.date_of_previous_assessment}
+                                error={error?.date_of_previous_assessment}
+                                disabled={disabled}
+                                readOnly
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.typeOfPreviousPerAssessmentInputLabel}
+                            numPreferredColumns={2}
+                        >
+                            <SelectInput
+                                name="type_of_previous_assessment"
+                                options={perOptionsResponse?.overviewassessmenttypes}
+                                keySelector={numericIdSelector}
+                                labelSelector={stringNameSelector}
+                                onChange={setFieldValue}
+                                value={value?.type_of_previous_assessment}
+                                error={error?.type_of_previous_assessment}
+                                disabled={disabled || perOptionsPending}
+                                readOnly
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.branchesInvolvedInputLabel}
+                            description={strings.branchesInvolvedInputDescription}
+                        >
+                            <TextInput
+                                name="branches_involved"
+                                value={value?.branches_involved}
+                                onChange={setFieldValue}
+                                error={error?.branches_involved}
+                                readOnly={partialReadOnly || readOnly}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.whatMethodHasThisAssessmentUsedInputLabel}
+                            numPreferredColumns={2}
+                        >
+                            <SelectInput
+                                name="assessment_method"
+                                options={per_overviewassessmentmethods}
+                                value={value?.assessment_method}
+                                keySelector={perAssessmentMethodsKeySelector}
+                                labelSelector={stringValueSelector}
+                                onChange={setFieldValue}
+                                error={error?.assessment_method}
+                                readOnly={partialReadOnly || readOnly}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.epiConsiderationsInputLabel}
+                            description={strings.epiConsiderationsInputDescription}
+                        >
+                            <BooleanInput
+                                name="assess_preparedness_of_country"
+                                value={value?.assess_preparedness_of_country}
+                                onChange={setFieldValue}
+                                error={error?.assess_preparedness_of_country}
+                                readOnly={partialReadOnly || readOnly}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.urbanConsiderationsInputLabel}
+                            description={strings.urbanConsiderationsInputDescription}
+                        >
+                            <BooleanInput
+                                name="assess_urban_aspect_of_country"
+                                value={value.assess_urban_aspect_of_country}
+                                onChange={setFieldValue}
+                                error={error?.assess_urban_aspect_of_country}
+                                readOnly={partialReadOnly || readOnly}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.climateAndEnvironmentalConsiderationsInputLabel}
+                            // eslint-disable-next-line max-len
+                            description={strings.climateAndEnvironmentalConsiderationsInputDescription}
+                        >
+                            <BooleanInput
+                                name="assess_climate_environment_of_country"
+                                value={value?.assess_climate_environment_of_country}
+                                onChange={setFieldValue}
+                                error={error?.assess_climate_environment_of_country}
+                                readOnly={partialReadOnly || readOnly}
+                                disabled={disabled}
+                            />
+                        </InputSection>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.processCycleHeading}
+                    spacing="lg"
+                >
+                    <InputSection
+                        title={strings.perProcessCycleNumberInputLabel}
+                        description={strings.assessmentNumberInputDescription}
+                        numPreferredColumns={2}
                     >
-                        {strings.uploadButtonLabel}
-                    </GoMultiFileInput>
-                </InputSection>
-            </Container>
-            <Container
-                heading={strings.assessmentSectionHeading}
-                className={styles.container}
-                childrenContainerClassName={styles.sectionContent}
-                withHeaderBorder
-                withInternalPadding
-            >
-                <InputSection
-                    numPreferredColumns={2}
-                    title={strings.dateOfAssessmentInputLabel}
-                    description={strings.dateOfAssessmentInputDescription}
-                    withoutPadding
-                    withAsteriskOnTitle={isNotDefined(value?.date_of_orientation)}
+                        <NumberInput
+                            readOnly
+                            name="assessment_number"
+                            value={value?.assessment_number}
+                            onChange={setFieldValue}
+                            error={error?.assessment_number}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                </Container>
+                <Container
+                    heading={strings.workPlanHeading}
+                    spacing="lg"
                 >
-                    <DateInput
-                        name="date_of_assessment"
-                        onChange={setFieldValue}
-                        value={value?.date_of_assessment}
-                        error={error?.date_of_assessment}
-                        readOnly={partialReadOnly || readOnly}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    numPreferredColumns={2}
-                    title={strings.typeOfAssessmentInputLabel}
-                    withoutPadding
-                    withAsteriskOnTitle={isDefined(value.date_of_assessment)}
+                    <ListView layout="block">
+                        <InputSection
+                            title={strings.workPlanDevelopmentDateInputLabel}
+                            numPreferredColumns={2}
+                        >
+                            <DateInput
+                                name="workplan_development_date"
+                                value={value?.workplan_development_date}
+                                error={error?.workplan_development_date}
+                                onChange={setFieldValue}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.workPlanRevisionDateInputLabel}
+                            numPreferredColumns={2}
+                        >
+                            <DateInput
+                                name="workplan_revision_date"
+                                onChange={setFieldValue}
+                                value={value?.workplan_revision_date}
+                                error={error?.workplan_revision_date}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.contactInformationInputLabel}
+                    spacing="lg"
                 >
-                    <SelectInput
-                        name="type_of_assessment"
-                        options={perOptionsResponse?.overviewassessmenttypes}
-                        keySelector={numericIdSelector}
-                        labelSelector={stringNameSelector}
-                        onChange={setFieldValue}
-                        value={value?.type_of_assessment}
-                        error={error?.type_of_assessment}
-                        readOnly={partialReadOnly || readOnly}
-                        disabled={disabled || perOptionsPending}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.dateOfPreviousPerAssessmentInputLabel}
-                    numPreferredColumns={2}
-                    withoutPadding
-                >
-                    <DateInput
-                        name="date_of_previous_assessment"
-                        onChange={setFieldValue}
-                        value={value?.date_of_previous_assessment}
-                        error={error?.date_of_previous_assessment}
-                        disabled={disabled}
-                        readOnly
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.typeOfPreviousPerAssessmentInputLabel}
-                    numPreferredColumns={2}
-                    withoutPadding
-                >
-                    <SelectInput
-                        name="type_of_previous_assessment"
-                        options={perOptionsResponse?.overviewassessmenttypes}
-                        keySelector={numericIdSelector}
-                        labelSelector={stringNameSelector}
-                        onChange={setFieldValue}
-                        value={value?.type_of_previous_assessment}
-                        error={error?.type_of_previous_assessment}
-                        disabled={disabled || perOptionsPending}
-                        readOnly
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.branchesInvolvedInputLabel}
-                    description={strings.branchesInvolvedInputDescription}
-                    withoutPadding
-                >
-                    <TextInput
-                        name="branches_involved"
-                        value={value?.branches_involved}
-                        onChange={setFieldValue}
-                        error={error?.branches_involved}
-                        readOnly={partialReadOnly || readOnly}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.whatMethodHasThisAssessmentUsedInputLabel}
-                    numPreferredColumns={2}
-                    withoutPadding
-                >
-                    <SelectInput
-                        name="assessment_method"
-                        options={per_overviewassessmentmethods}
-                        value={value?.assessment_method}
-                        keySelector={perAssessmentMethodsKeySelector}
-                        labelSelector={stringValueSelector}
-                        onChange={setFieldValue}
-                        error={error?.assessment_method}
-                        readOnly={partialReadOnly || readOnly}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.epiConsiderationsInputLabel}
-                    description={strings.epiConsiderationsInputDescription}
-                    withoutPadding
-                >
-                    <BooleanInput
-                        name="assess_preparedness_of_country"
-                        value={value?.assess_preparedness_of_country}
-                        onChange={setFieldValue}
-                        error={error?.assess_preparedness_of_country}
-                        readOnly={partialReadOnly || readOnly}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.urbanConsiderationsInputLabel}
-                    description={strings.urbanConsiderationsInputDescription}
-                    withoutPadding
-                >
-                    <BooleanInput
-                        name="assess_urban_aspect_of_country"
-                        value={value.assess_urban_aspect_of_country}
-                        onChange={setFieldValue}
-                        error={error?.assess_urban_aspect_of_country}
-                        readOnly={partialReadOnly || readOnly}
-                        disabled={disabled}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.climateAndEnvironmentalConsiderationsInputLabel}
-                    description={strings.climateAndEnvironmentalConsiderationsInputDescription}
-                    withoutPadding
-                >
-                    <BooleanInput
-                        name="assess_climate_environment_of_country"
-                        value={value?.assess_climate_environment_of_country}
-                        onChange={setFieldValue}
-                        error={error?.assess_climate_environment_of_country}
-                        readOnly={partialReadOnly || readOnly}
-                        disabled={disabled}
-                    />
-                </InputSection>
-            </Container>
-            <Container
-                heading={strings.processCycleHeading}
-                className={styles.container}
-                childrenContainerClassName={styles.sectionContent}
-                withHeaderBorder
-                withInternalPadding
-            >
-                <InputSection
-                    title={strings.perProcessCycleNumberInputLabel}
-                    description={strings.assessmentNumberInputDescription}
-                    numPreferredColumns={2}
-                    withoutPadding
-                >
-                    <NumberInput
-                        readOnly
-                        name="assessment_number"
-                        value={value?.assessment_number}
-                        onChange={setFieldValue}
-                        error={error?.assessment_number}
-                        disabled={disabled}
-                    />
-                </InputSection>
-            </Container>
-            <Container
-                heading={strings.workPlanHeading}
-                className={styles.container}
-                childrenContainerClassName={styles.sectionContent}
-                withHeaderBorder
-                withInternalPadding
-            >
-                <InputSection
-                    title={strings.workPlanDevelopmentDateInputLabel}
-                    numPreferredColumns={2}
-                    withoutPadding
-                >
-                    <DateInput
-                        name="workplan_development_date"
-                        value={value?.workplan_development_date}
-                        error={error?.workplan_development_date}
-                        onChange={setFieldValue}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.workPlanRevisionDateInputLabel}
-                    numPreferredColumns={2}
-                    withoutPadding
-                >
-                    <DateInput
-                        name="workplan_revision_date"
-                        onChange={setFieldValue}
-                        value={value?.workplan_revision_date}
-                        error={error?.workplan_revision_date}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                </InputSection>
-            </Container>
-            <Container
-                heading={strings.contactInformationInputLabel}
-                className={styles.container}
-                childrenContainerClassName={styles.sectionContent}
-                withHeaderBorder
-                withInternalPadding
-            >
-                <InputSection
-                    title={strings.nsFocalPointInputLabel}
-                    description={strings.nsFocalPointInputDescription}
-                    numPreferredColumns={4}
-                    withoutPadding
-                >
-                    <TextInput
-                        label={strings.focalPointNameInputLabel}
-                        name="ns_focal_point_name"
-                        value={value?.ns_focal_point_name}
-                        onChange={setFieldValue}
-                        error={error?.ns_focal_point_name}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.focalPointEmailInputLabel}
-                        name="ns_focal_point_email"
-                        value={value?.ns_focal_point_email}
-                        onChange={setFieldValue}
-                        error={error?.ns_focal_point_email}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.focalPointPhoneNumberInputLabel}
-                        name="ns_focal_point_phone"
-                        value={value?.ns_focal_point_phone}
-                        onChange={setFieldValue}
-                        error={error?.ns_focal_point_phone}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.nsSecondFocalPointInputLabel}
-                    description={strings.nsSecondFocalPointInputDescription}
-                    numPreferredColumns={4}
-                    withoutPadding
-                >
-                    <TextInput
-                        label={strings.focalPointNameInputLabel}
-                        name="ns_second_focal_point_name"
-                        value={value?.ns_second_focal_point_name}
-                        onChange={setFieldValue}
-                        error={error?.ns_second_focal_point_name}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.focalPointEmailInputLabel}
-                        name="ns_second_focal_point_email"
-                        value={value?.ns_second_focal_point_email}
-                        onChange={setFieldValue}
-                        error={error?.ns_second_focal_point_email}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.focalPointPhoneNumberInputLabel}
-                        name="ns_second_focal_point_phone"
-                        value={value?.ns_second_focal_point_phone}
-                        onChange={setFieldValue}
-                        error={error?.ns_second_focal_point_phone}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.partnerFocalPointInputLabel}
-                    numPreferredColumns={4}
-                    withoutPadding
-                >
-                    <TextInput
-                        label={strings.focalPointNameInputLabel}
-                        name="partner_focal_point_name"
-                        value={value?.partner_focal_point_name}
-                        onChange={setFieldValue}
-                        error={error?.partner_focal_point_name}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.focalPointEmailInputLabel}
-                        name="partner_focal_point_email"
-                        value={value?.partner_focal_point_email}
-                        onChange={setFieldValue}
-                        error={error?.partner_focal_point_email}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.focalPointPhoneNumberInputLabel}
-                        name="partner_focal_point_phone"
-                        value={value?.partner_focal_point_phone}
-                        onChange={setFieldValue}
-                        error={error?.partner_focal_point_phone}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.focalPointOrganizationInputLabel}
-                        name="partner_focal_point_organization"
-                        value={value?.partner_focal_point_organization}
-                        onChange={setFieldValue}
-                        error={error?.partner_focal_point_organization}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.perFacilitatorInputLabel}
-                    numPreferredColumns={4}
-                    withoutPadding
-                >
-                    <TextInput
-                        label={strings.focalPointNameInputLabel}
-                        name="facilitator_name"
-                        value={value?.facilitator_name}
-                        onChange={setFieldValue}
-                        error={error?.facilitator_name}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.focalPointEmailInputLabel}
-                        name="facilitator_email"
-                        value={value?.facilitator_email}
-                        onChange={setFieldValue}
-                        error={error?.facilitator_email}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.focalPointPhoneNumberInputLabel}
-                        name="facilitator_phone"
-                        value={value?.facilitator_phone}
-                        onChange={setFieldValue}
-                        error={error?.facilitator_phone}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                    <TextInput
-                        label={strings.otherContactMethodInputLabel}
-                        name="facilitator_contact"
-                        value={value?.facilitator_contact}
-                        onChange={setFieldValue}
-                        error={error?.facilitator_contact}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                    />
-                </InputSection>
-            </Container>
+                    <ListView layout="block">
+                        <InputSection
+                            title={strings.nsFocalPointInputLabel}
+                            description={strings.nsFocalPointInputDescription}
+                            numPreferredColumns={4}
+                        >
+                            <TextInput
+                                label={strings.focalPointNameInputLabel}
+                                name="ns_focal_point_name"
+                                value={value?.ns_focal_point_name}
+                                onChange={setFieldValue}
+                                error={error?.ns_focal_point_name}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.focalPointEmailInputLabel}
+                                name="ns_focal_point_email"
+                                value={value?.ns_focal_point_email}
+                                onChange={setFieldValue}
+                                error={error?.ns_focal_point_email}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.focalPointPhoneNumberInputLabel}
+                                name="ns_focal_point_phone"
+                                value={value?.ns_focal_point_phone}
+                                onChange={setFieldValue}
+                                error={error?.ns_focal_point_phone}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.nsSecondFocalPointInputLabel}
+                            description={strings.nsSecondFocalPointInputDescription}
+                            numPreferredColumns={4}
+                        >
+                            <TextInput
+                                label={strings.focalPointNameInputLabel}
+                                name="ns_second_focal_point_name"
+                                value={value?.ns_second_focal_point_name}
+                                onChange={setFieldValue}
+                                error={error?.ns_second_focal_point_name}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.focalPointEmailInputLabel}
+                                name="ns_second_focal_point_email"
+                                value={value?.ns_second_focal_point_email}
+                                onChange={setFieldValue}
+                                error={error?.ns_second_focal_point_email}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.focalPointPhoneNumberInputLabel}
+                                name="ns_second_focal_point_phone"
+                                value={value?.ns_second_focal_point_phone}
+                                onChange={setFieldValue}
+                                error={error?.ns_second_focal_point_phone}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.partnerFocalPointInputLabel}
+                            numPreferredColumns={4}
+                        >
+                            <TextInput
+                                label={strings.focalPointNameInputLabel}
+                                name="partner_focal_point_name"
+                                value={value?.partner_focal_point_name}
+                                onChange={setFieldValue}
+                                error={error?.partner_focal_point_name}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.focalPointEmailInputLabel}
+                                name="partner_focal_point_email"
+                                value={value?.partner_focal_point_email}
+                                onChange={setFieldValue}
+                                error={error?.partner_focal_point_email}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.focalPointPhoneNumberInputLabel}
+                                name="partner_focal_point_phone"
+                                value={value?.partner_focal_point_phone}
+                                onChange={setFieldValue}
+                                error={error?.partner_focal_point_phone}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.focalPointOrganizationInputLabel}
+                                name="partner_focal_point_organization"
+                                value={value?.partner_focal_point_organization}
+                                onChange={setFieldValue}
+                                error={error?.partner_focal_point_organization}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.perFacilitatorInputLabel}
+                            numPreferredColumns={4}
+                        >
+                            <TextInput
+                                label={strings.focalPointNameInputLabel}
+                                name="facilitator_name"
+                                value={value?.facilitator_name}
+                                onChange={setFieldValue}
+                                error={error?.facilitator_name}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.focalPointEmailInputLabel}
+                                name="facilitator_email"
+                                value={value?.facilitator_email}
+                                onChange={setFieldValue}
+                                error={error?.facilitator_email}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.focalPointPhoneNumberInputLabel}
+                                name="facilitator_phone"
+                                value={value?.facilitator_phone}
+                                onChange={setFieldValue}
+                                error={error?.facilitator_phone}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                            <TextInput
+                                label={strings.otherContactMethodInputLabel}
+                                name="facilitator_contact"
+                                value={value?.facilitator_contact}
+                                onChange={setFieldValue}
+                                error={error?.facilitator_contact}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </InputSection>
+                    </ListView>
+                </Container>
+            </ListView>
         </Container>
     );
 }

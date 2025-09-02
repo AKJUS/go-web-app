@@ -1,11 +1,4 @@
 .expandable-container {
-    border: var(--go-ui-width-separator-thin) solid var(--go-ui-color-separator);
-    background-color: var(--go-ui-color-foreground);
-
-    .header {
-        background-color: var(--go-ui-color-foreground);
-    }
-
     .icon {
         display: flex;
         font-size: var(--go-ui-height-icon-multiplier);

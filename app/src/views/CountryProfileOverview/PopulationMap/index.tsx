@@ -27,8 +27,8 @@ import {
 } from 'mapbox-gl';
 
 import BaseMap from '#components/domain/BaseMap';
+import GoMapContainer from '#components/GoMapContainer';
 import Link from '#components/Link';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
 import useCountry from '#hooks/domain/useCountry';
 import {
@@ -291,34 +291,37 @@ function PopulationMap(props: Props) {
             heading={strings.populationMapTitle}
             className={styles.populationMap}
             withHeaderBorder
-            footerContent={(
-                <div className={styles.populationLegend}>
-                    <div className={styles.legendLabel}>{strings.populationLegendLabel}</div>
-                    <div className={styles.legendContent}>
-                        <div
-                            className={styles.populationGradient}
-                            style={{ background: `linear-gradient(90deg, ${COLOR_LIGHT_BLUE}, ${COLOR_PRIMARY_BLUE})` }}
-                        />
-                        <div className={styles.labelList}>
-                            <NumberOutput
-                                value={0}
+            footer={(
+                <TextOutput
+                    label={strings.populationLegendLabel}
+                    value={(
+                        <div className={styles.legendContent}>
+                            <div
+                                className={styles.populationGradient}
+                                style={{ background: `linear-gradient(90deg, ${COLOR_LIGHT_BLUE}, ${COLOR_PRIMARY_BLUE})` }}
                             />
-                            <NumberOutput
-                                value={maxPopulation}
-                            />
+                            <div className={styles.labelList}>
+                                <NumberOutput value={0} />
+                                <NumberOutput
+                                    value={maxPopulation}
+                                    compact
+                                    maximumFractionDigits={0}
+                                />
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    )}
+                />
             )}
             footerActions={(
                 <TextOutput
                     label={strings.populationMapSource}
                     value={(
                         <Link
-                            variant="tertiary"
+                            styleVariant="action"
                             href="https://data.worldbank.org/"
                             external
                             withUnderline
+                            withLinkIcon
                         >
                             {strings.populationMapWorldBank}
                         </Link>
@@ -373,8 +376,8 @@ function PopulationMap(props: Props) {
                     </>
                 )}
             >
-                <MapContainerWithDisclaimer
-                    className={styles.mapContainer}
+                <GoMapContainer
+                    title="Population Map"
                 />
                 <MapBounds
                     duration={DURATION_MAP_ZOOM}

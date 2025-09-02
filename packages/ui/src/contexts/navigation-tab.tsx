@@ -1,14 +1,19 @@
 import { createContext } from 'react';
 
-export type NavigationTabVariant = 'primary' | 'secondary' | 'tertiary' | 'step' | 'vertical';
+import {
+    TabColorVariant,
+    TabStyleVariant,
+} from '#contexts/tab';
 
 export interface NavigationTabContextProps {
-    variant?: NavigationTabVariant;
+    colorVariant?: TabColorVariant;
+    styleVariant?: TabStyleVariant;
     className?: string;
 }
 
 const NavigationTabContext = createContext<NavigationTabContextProps>({
-    variant: 'primary',
+    colorVariant: 'primary',
+    styleVariant: 'tab',
 });
 
 export default NavigationTabContext;

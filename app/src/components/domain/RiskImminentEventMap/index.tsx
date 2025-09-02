@@ -5,7 +5,8 @@ import {
 } from 'react';
 import {
     Container,
-    List,
+    ListView,
+    RawList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -30,7 +31,7 @@ import type {
 } from 'mapbox-gl';
 
 import GlobalMap from '#components/domain/GlobalMap';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
+import GoMapContainer from '#components/GoMapContainer';
 import { type components } from '#generated/riskTypes';
 import useDebouncedValue from '#hooks/useDebouncedValue';
 import {
@@ -350,9 +351,9 @@ function RiskImminentEventMap<
             <GlobalMap
                 mapOptions={{ bounds }}
             >
-                <MapContainerWithDisclaimer
-                    title={strings.riskImminentEventsMap}
+                <GoMapContainer
                     className={styles.mapContainer}
+                    title={strings.riskImminentEventsMap}
                 />
                 {hazardKeys.map((key) => {
                     const url = hazardKeyToIconMap[key];
@@ -471,24 +472,30 @@ function RiskImminentEventMap<
                 )}
             </GlobalMap>
             <Container
-                heading={sidePanelHeading}
                 className={styles.sidePanel}
-                withHeaderBorder
-                withInternalPadding
-                childrenContainerClassName={styles.content}
-                spacing="cozy"
+                heading={sidePanelHeading}
+                pending={pending}
+                empty={isNotDefined(events) || events.length === 0}
+                emptyMessage={strings.emptyImminentEventMessage}
+                withPadding
+                withBackground
+                withShadow
+                withContentOverflow
+                withContentWell
+                spacing="sm"
+                withoutSpacingOpticalCorrection
             >
-                <List
-                    className={styles.eventList}
-                    filtered={false}
-                    pending={pending}
-                    errored={false}
-                    data={events}
-                    keySelector={keySelector}
-                    renderer={listItemRenderer}
-                    rendererParams={eventListRendererParams}
-                    emptyMessage={strings.emptyImminentEventMessage}
-                />
+                <ListView
+                    layout="block"
+                    spacing="sm"
+                >
+                    <RawList
+                        data={events}
+                        keySelector={keySelector}
+                        renderer={listItemRenderer}
+                        rendererParams={eventListRendererParams}
+                    />
+                </ListView>
             </Container>
         </div>
     );

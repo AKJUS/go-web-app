@@ -166,7 +166,7 @@ export default function DeployedErusTable(props: Props) {
         <Container
             heading={containerHeading}
             withHeaderBorder
-            actions={(
+            headerActions={(
                 <Link
                     to="allDeployedEmergencyResponseUnits"
                     withLinkIcon

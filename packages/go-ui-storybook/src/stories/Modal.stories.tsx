@@ -59,7 +59,8 @@ function Template(args:Args) {
         <>
             <Button
                 name={undefined}
-                variant="secondary"
+                colorVariant="primary"
+                styleVariant="outline"
                 onClick={handleClick}
             >
                 Open Modal
@@ -96,14 +97,16 @@ export const Default: Story = {
             <>
                 <Button
                     name={undefined}
-                    variant="secondary"
+                    colorVariant="primary"
+                    styleVariant="outline"
                     onClick={undefined}
                 >
                     Cancel
                 </Button>
                 <Button
                     name={undefined}
-                    variant="primary"
+                    colorVariant="primary"
+                    styleVariant="filled"
                     onClick={undefined}
                 >
                     Submit

@@ -213,9 +213,10 @@ function DrefExportModal(props: Props) {
                     description={strings.drefClickDownloadLink}
                     actions={(
                         <Link
-                            variant="secondary"
+                            colorVariant="primary"
+                            styleVariant="outline"
                             href={exportStatusResponse?.pdf_file}
-                            icons={<DownloadLineIcon className={styles.icon} />}
+                            before={<DownloadLineIcon className={styles.icon} />}
                             external
                         >
                             {strings.drefDownloadPDF}

@@ -1,0 +1,4 @@
+.gradient-bar {
+    width: min(30cqi, 10rem);
+    height: 0.5rem;
+}

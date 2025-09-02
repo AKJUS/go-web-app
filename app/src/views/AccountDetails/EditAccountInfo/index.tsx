@@ -4,6 +4,7 @@ import {
 } from 'react';
 import {
     Button,
+    ListView,
     Modal,
     SelectInput,
     TextInput,
@@ -38,7 +39,6 @@ import {
 import { transformObjectError } from '#utils/restRequest/error';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type UserMeResponse = GoApiResponse<'/api/v2/user/me/'>;
 type AccountRequestBody = GoApiBody<'/api/v2/user/{id}/', 'PATCH'>;
@@ -205,16 +205,15 @@ function EditAccountInfo(props: Props) {
 
     return (
         <Modal
-            className={styles.editAccountInfo}
             heading={strings.editUserProfileHeading}
             headingLevel={3}
             onClose={handleModalCloseButton}
             withoutCloseButton
             footerActions={(
-                <>
+                <ListView spacing="sm">
                     <Button
                         name={undefined}
-                        variant="secondary"
+                        colorVariant="primary"
                         onClick={handleModalCloseButton}
                     >
                         {strings.editProfileCancelButtonLabel}
@@ -223,106 +222,109 @@ function EditAccountInfo(props: Props) {
                         name={undefined}
                         onClick={handleFormSubmit}
                         disabled={updateAccountPending}
+                        colorVariant="primary"
+                        styleVariant="filled"
                     >
                         {strings.editProfileConfirmButtonLabel}
                     </Button>
-                </>
+                </ListView>
             )}
-            childrenContainerClassName={styles.content}
+            withFooterBorder
+            withHeaderBorder
         >
-            <NonFieldError
-                className={styles.nonFieldError}
-                error={formError}
-                withFallbackError
-            />
-            <NonFieldError
-                className={styles.nonFieldError}
-                error={profileError}
-            />
-            <TextInput
-                name="first_name"
-                label={strings.firstNameInputLabel}
-                value={formValue.first_name}
-                onChange={setFieldValue}
-                error={fieldError?.first_name}
-                disabled={updateAccountPending}
-                withAsterisk
-                autoFocus
-            />
-            <TextInput
-                name="last_name"
-                label={strings.lastNameInputLabel}
-                value={formValue.last_name}
-                onChange={setFieldValue}
-                error={fieldError?.last_name}
-                disabled={updateAccountPending}
-                withAsterisk
-            />
-            <TextInput
-                name="city"
-                label={strings.cityInputLabel}
-                value={formValue?.profile?.city}
-                onChange={setProfileFieldValue}
-                error={profileError?.city}
-                disabled={updateAccountPending}
-            />
-            <SelectInput
-                label={strings.organizationTypeInputLabel}
-                name="org_type"
-                value={formValue?.profile?.org_type}
-                onChange={handleOrganizationNameChange}
-                keySelector={organizationTypeKeySelector}
-                labelSelector={stringValueSelector}
-                options={organizationTypeOptions}
-                error={profileError?.org_type}
-                disabled={updateAccountPending}
-            />
-            {isNationalSociety ? (
-                <SelectInput
-                    label={strings.organizationNameInputLabel}
-                    name="org"
-                    value={formValue?.profile?.org}
-                    onChange={setProfileFieldValue}
-                    keySelector={nsLabelSelector}
-                    labelSelector={nsLabelSelector}
-                    options={nationalSocietyOptions}
-                    disabled={updateAccountPending}
-                    error={profileError?.org}
+            <ListView layout="block">
+                <NonFieldError
+                    error={formError}
+                    withFallbackError
                 />
-            ) : (
+                <NonFieldError
+                    error={profileError}
+                />
                 <TextInput
-                    name="org"
-                    label={strings.organizationNameInputLabel}
-                    value={formValue?.profile?.org}
-                    onChange={setProfileFieldValue}
+                    name="first_name"
+                    label={strings.firstNameInputLabel}
+                    value={formValue.first_name}
+                    onChange={setFieldValue}
+                    error={fieldError?.first_name}
                     disabled={updateAccountPending}
-                    error={profileError?.org}
+                    withAsterisk
+                    autoFocus
                 />
-            )}
-            <TextInput
-                name="department"
-                label={strings.departmentInputLabel}
-                value={formValue?.profile?.department}
-                onChange={setProfileFieldValue}
-                error={profileError?.department}
-                disabled={updateAccountPending}
-            />
-            <TextInput
-                name="phone_number"
-                label={strings.phoneNumberInputLabel}
-                value={formValue?.profile?.phone_number}
-                onChange={setProfileFieldValue}
-                error={profileError?.phone_number}
-                disabled={updateAccountPending}
-            />
-            <TextInput
-                name="position"
-                label={strings.positionInputLabel}
-                value={formValue?.profile?.position}
-                onChange={setProfileFieldValue}
-                error={profileError?.position}
-                disabled={updateAccountPending}
-            />
+                <TextInput
+                    name="last_name"
+                    label={strings.lastNameInputLabel}
+                    value={formValue.last_name}
+                    onChange={setFieldValue}
+                    error={fieldError?.last_name}
+                    disabled={updateAccountPending}
+                    withAsterisk
+                />
+                <TextInput
+                    name="city"
+                    label={strings.cityInputLabel}
+                    value={formValue?.profile?.city}
+                    onChange={setProfileFieldValue}
+                    error={profileError?.city}
+                    disabled={updateAccountPending}
+                />
+                <SelectInput
+                    label={strings.organizationTypeInputLabel}
+                    name="org_type"
+                    value={formValue?.profile?.org_type}
+                    onChange={handleOrganizationNameChange}
+                    keySelector={organizationTypeKeySelector}
+                    labelSelector={stringValueSelector}
+                    options={organizationTypeOptions}
+                    error={profileError?.org_type}
+                    disabled={updateAccountPending}
+                />
+                {isNationalSociety ? (
+                    <SelectInput
+                        label={strings.organizationNameInputLabel}
+                        name="org"
+                        value={formValue?.profile?.org}
+                        onChange={setProfileFieldValue}
+                        keySelector={nsLabelSelector}
+                        labelSelector={nsLabelSelector}
+                        options={nationalSocietyOptions}
+                        disabled={updateAccountPending}
+                        error={profileError?.org}
+                    />
+                ) : (
+                    <TextInput
+                        name="org"
+                        label={strings.organizationNameInputLabel}
+                        value={formValue?.profile?.org}
+                        onChange={setProfileFieldValue}
+                        disabled={updateAccountPending}
+                        error={profileError?.org}
+                    />
+                )}
+                <TextInput
+                    name="department"
+                    label={strings.departmentInputLabel}
+                    value={formValue?.profile?.department}
+                    onChange={setProfileFieldValue}
+                    error={profileError?.department}
+                    disabled={updateAccountPending}
+                />
+                <TextInput
+                    name="phone_number"
+                    label={strings.phoneNumberInputLabel}
+                    value={formValue?.profile?.phone_number}
+                    onChange={setProfileFieldValue}
+                    error={profileError?.phone_number}
+                    disabled={updateAccountPending}
+                />
+                <TextInput
+                    name="position"
+                    label={strings.positionInputLabel}
+                    value={formValue?.profile?.position}
+                    onChange={setProfileFieldValue}
+                    error={profileError?.position}
+                    disabled={updateAccountPending}
+                />
+            </ListView>
         </Modal>
     );
 }

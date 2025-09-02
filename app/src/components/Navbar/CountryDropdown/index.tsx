@@ -11,6 +11,7 @@ import { SearchLineIcon } from '@ifrc-go/icons';
 import {
     Container,
     DropdownMenu,
+    ListView,
     Message,
     Tab,
     TabList,
@@ -25,6 +26,7 @@ import {
     isDefined,
     isFalsyString,
     isNotDefined,
+    isTruthyString,
 } from '@togglecorp/fujs';
 
 import DropdownMenuItem from '#components/DropdownMenuItem';
@@ -104,7 +106,8 @@ function CountryDropdown() {
                 isDefined(match) && styles.active,
             )}
             label={strings.menuCountriesLabel}
-            variant="tertiary"
+            labelColorVariant="text"
+            labelStyleVariant="action"
             popupClassName={styles.dropdown}
             persistent
             preferredPopupWidth={56}
@@ -119,18 +122,14 @@ function CountryDropdown() {
                 <Tabs
                     value={activeRegion}
                     onChange={setActiveRegion}
-                    variant="vertical-compact"
+                    styleVariant="vertical-compact"
                 >
-                    <TabList
-                        className={styles.regionList}
-                        contentClassName={styles.regionListContent}
-                    >
+                    <TabList className={styles.regionList}>
                         {regionOptions?.map(
                             (region) => (
                                 <Tab
                                     key={region.key}
                                     name={region.key}
-                                    className={styles.region}
                                 >
                                     {region.value}
                                 </Tab>
@@ -146,6 +145,10 @@ function CountryDropdown() {
                                 className={styles.regionDetail}
                             >
                                 <Container
+                                    pending={false}
+                                    empty={false}
+                                    errored={false}
+                                    filtered={isTruthyString(countrySearch)}
                                     className={styles.regionDetailContent}
                                     withHeaderBorder
                                     heading={(
@@ -154,15 +157,16 @@ function CountryDropdown() {
                                             to="regionsLayout"
                                             urlParams={{ regionId: region.key }}
                                             withLinkIcon
-                                            variant="primary"
+                                            colorVariant="primary"
+                                            withoutPadding
+                                            withoutFullWidth
                                         >
                                             {/* FIXME: use translation */}
                                             {`${region.value} Region`}
                                         </DropdownMenuItem>
                                     )}
                                     headingLevel={4}
-                                    childrenContainerClassName={styles.countryList}
-                                    actions={(
+                                    headerActions={(
                                         <TextInput
                                             name={undefined}
                                             placeholder={strings.countryDropdownSearchPlaceholder}
@@ -172,22 +176,30 @@ function CountryDropdown() {
                                         />
                                     )}
                                 >
-                                    {/* TODO: use List */}
-                                    {countriesInSelectedRegion?.map(
-                                        ({ id, name }) => (
-                                            <DropdownMenuItem
-                                                key={id}
-                                                type="link"
-                                                to="countriesLayout"
-                                                urlParams={{ countryId: id }}
-                                                variant="tertiary"
-                                                withLinkIcon
-                                                className={styles.countryLink}
-                                            >
-                                                {name}
-                                            </DropdownMenuItem>
-                                        ),
-                                    )}
+                                    <ListView
+                                        layout="grid"
+                                        spacing="sm"
+                                        numPreferredGridColumns={3}
+                                    >
+                                        {/* TODO: use RawList */}
+                                        {countriesInSelectedRegion?.map(
+                                            ({ id, name }) => (
+                                                <DropdownMenuItem
+                                                    type="link"
+                                                    key={id}
+                                                    to="countriesLayout"
+                                                    urlParams={{ countryId: id }}
+                                                    styleVariant="action"
+                                                    withLinkIcon
+                                                    spacing="sm"
+                                                    withoutFullWidth
+                                                    withoutPadding
+                                                >
+                                                    {name}
+                                                </DropdownMenuItem>
+                                            ),
+                                        )}
+                                    </ListView>
                                 </Container>
                             </TabPanel>
                         ),

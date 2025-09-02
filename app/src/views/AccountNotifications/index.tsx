@@ -1,14 +1,19 @@
 import { useCallback } from 'react';
 import {
     Container,
-    List,
+    ListView,
     Pager,
+    RawList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { numericIdSelector } from '@ifrc-go/ui/utils';
-import { isDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import OperationListItem, { type Props as OperationListItemProps } from '#components/domain/OperationListItem';
+import TabPage from '#components/TabPage';
 import useFilterState from '#hooks/useFilterState';
 import {
     type GoApiResponse,
@@ -56,12 +61,9 @@ export function Component() {
         (
             _: number,
             operation: NonNullable<OperationsResponse['results']>[number],
-            i: number,
-            data: unknown[],
         ): OperationListItemProps => ({
             eventItem: operation,
             updateSubscribedEvents: updateSubscribedEventsResponse,
-            isLastItem: i === (data.length - 1),
         }),
         [updateSubscribedEventsResponse],
     );
@@ -69,7 +71,7 @@ export function Component() {
     const eventList = subscribedEventsResponse?.results;
 
     return (
-        <div className={styles.accountNotifications}>
+        <TabPage>
             <Container
                 className={styles.operationsFollowing}
                 heading={strings.operationFollowingHeading}
@@ -82,20 +84,24 @@ export function Component() {
                         onActivePageChange={setPage}
                     />
                 )}
+                pending={subscribedEventsResponsePending}
+                errored={isDefined(subscribedEventsResponseError)}
+                empty={isNotDefined(eventList) || eventList?.length === 0}
             >
-                <List
-                    className={styles.operationsList}
-                    data={eventList}
-                    pending={subscribedEventsResponsePending}
-                    errored={isDefined(subscribedEventsResponseError)}
-                    filtered={false}
-                    keySelector={numericIdSelector}
-                    renderer={OperationListItem}
-                    rendererParams={rendererParams}
-                />
+                <ListView
+                    layout="block"
+                    spacing="xl"
+                >
+                    <RawList
+                        data={eventList}
+                        keySelector={numericIdSelector}
+                        renderer={OperationListItem}
+                        rendererParams={rendererParams}
+                    />
+                </ListView>
             </Container>
             <SubscriptionPreferences />
-        </div>
+        </TabPage>
     );
 }
 

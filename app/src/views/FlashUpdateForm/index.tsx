@@ -360,7 +360,7 @@ export function Component() {
             value={activeTab}
             // NOTE: Not using handleTabChange
             onChange={setActiveTab}
-            variant="step"
+            styleVariant="step"
         >
             <Page
                 elementRef={formContentRef}
@@ -455,7 +455,6 @@ export function Component() {
                                     name={prevTab ?? activeTab}
                                     onClick={handleTabChange}
                                     disabled={isNotDefined(prevTab)}
-                                    variant="secondary"
                                 >
                                     {strings.flashUpdateBackButtonLabel}
                                 </Button>
@@ -463,7 +462,6 @@ export function Component() {
                                     name={nextTab ?? activeTab}
                                     onClick={handleTabChange}
                                     disabled={isNotDefined(nextTab)}
-                                    variant="secondary"
                                 >
                                     {strings.flashUpdateContinueButtonLabel}
                                 </Button>
@@ -477,7 +475,6 @@ export function Component() {
                                     handleFormError,
                                 )}
                                 disabled={activeTab !== 'focal' || submitPending}
-                                variant="secondary"
                             >
                                 {strings.flashUpdateSubmitButtonLabel}
                             </Button>

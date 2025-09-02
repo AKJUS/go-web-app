@@ -1,82 +1,114 @@
-import { _cs } from '@togglecorp/fujs';
-
 import Container from '#components/Container';
+import Description from '#components/Description';
 import InfoPopup from '#components/InfoPopup';
-
-import styles from './styles.module.css';
+import ListView from '#components/ListView';
 
 type NumColumn = 1 | 2 | 3 | 4;
 export interface Props {
-    className?: string;
+    // className?: string;
     title?: React.ReactNode;
     children?: React.ReactNode;
     description?: React.ReactNode;
-    contentSectionClassName?: string;
+    // contentSectionClassName?: string;
     tooltip?: string;
-    withCompactTitleSection?: boolean;
     withoutTitleSection?: boolean;
+    withFullWidthContent?: boolean;
     withoutPadding?: boolean;
+    withoutBackground?: boolean;
     withAsteriskOnTitle?: boolean;
     numPreferredColumns?: NumColumn;
+    withShadow?: boolean;
 }
 
 function InputSection(props: Props) {
     const {
-        className,
+        // className,
         title,
         children,
         description,
         tooltip,
-        contentSectionClassName,
+        // contentSectionClassName,
         withoutTitleSection = false,
-        withCompactTitleSection,
         withoutPadding = false,
+        withoutBackground = false,
         withAsteriskOnTitle,
         numPreferredColumns = 1,
+        withFullWidthContent,
+        withShadow,
     } = props;
 
-    return (
-        <div
-            className={_cs(
-                styles.inputSection,
-                withoutTitleSection && styles.withoutTitleSection,
-                !withoutPadding && styles.withPadding,
-                withCompactTitleSection && styles.withCompactTitleSection,
-                className,
-            )}
-        >
+    const content = (
+        <>
             {!withoutTitleSection && (
                 <Container
-                    heading={title}
-                    headingDescription={withAsteriskOnTitle && (
-                        <span aria-hidden className={styles.asterisk}>
-                            *
-                        </span>
+                    heading={(
+                        <>
+                            {title}
+                            {withAsteriskOnTitle && (
+                                <span aria-hidden>*</span>
+                            )}
+                        </>
                     )}
-                    headerClassName={styles.header}
-                    headingClassName={styles.heading}
-                    headingContainerClassName={styles.headingContainer}
-                    actions={tooltip && <InfoPopup description={tooltip} />}
-                    childrenContainerClassName={styles.description}
-                    headingLevel={withCompactTitleSection ? 5 : 4}
-                    spacing="cozy"
+                    // headingDescription={withAsteriskOnTitle && (
+                    //     <span aria-hidden className={styles.asterisk}>
+                    //         *
+                    //     </span>
+                    // )}
+                    headerActions={tooltip && <InfoPopup description={tooltip} />}
+                    headingLevel={6}
                 >
-                    {description}
+                    <Description withLightText>
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                        >
+                            {description}
+                        </ListView>
+                    </Description>
                 </Container>
             )}
-            <div
-                className={_cs(
-                    styles.contentSection,
-                    numPreferredColumns === 1 && styles.oneColumn,
-                    numPreferredColumns === 2 && styles.twoColumn,
-                    numPreferredColumns === 3 && styles.threeColumn,
-                    numPreferredColumns === 4 && styles.fourColumn,
-                    contentSectionClassName,
-                )}
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={numPreferredColumns}
             >
                 {children}
-            </div>
-        </div>
+            </ListView>
+        </>
+    );
+
+    return (
+        <Container
+            withPadding={!withoutPadding}
+            withBackground={!withoutBackground}
+            withShadow={withShadow}
+            spacing="lg"
+            // className={_cs(
+            //     styles.inputSection,
+            //     withoutTitleSection && styles.withoutTitleSection,
+            //     !withoutPadding && styles.withPadding,
+            //     withCompactTitleSection && styles.withCompactTitleSection,
+            //     className,
+            // )}
+        >
+            {withFullWidthContent && (
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                >
+                    {content}
+                </ListView>
+            )}
+            {!withFullWidthContent && !withoutTitleSection && (
+                <ListView
+                    layout="grid"
+                    withSidebar
+                    sidebarPosition="start"
+                >
+                    {content}
+                </ListView>
+            )}
+            {!withFullWidthContent && withoutTitleSection && content}
+        </Container>
     );
 }
 

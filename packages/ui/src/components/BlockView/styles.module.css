@@ -1,0 +1,22 @@
+.block-layout {
+    display: flex;
+    flex-direction: column;
+
+    .children {
+        flex-grow: 1;
+    }
+
+    .separator {
+        margin: 0;
+        border: 0;
+        border-top: var(--go-ui-width-separator-thin) solid var(--go-ui-color-separator);
+    }
+
+    .after-content,
+    .before-content {
+        &:empty {
+            display: none;
+        }
+    }
+}
+

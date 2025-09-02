@@ -1,6 +1,10 @@
 import { useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { LegendItem } from '@ifrc-go/ui';
+import {
+    LegendItem,
+    ListView,
+    TextOutput,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     _cs,
@@ -16,7 +20,7 @@ import {
 import type { FillLayer } from 'mapbox-gl';
 
 import BaseMap from '#components/domain/BaseMap';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
+import GoMapContainer from '#components/GoMapContainer';
 import useCountryRaw from '#hooks/domain/useCountryRaw';
 import {
     COLOR_LIGHT_GREY,
@@ -142,62 +146,61 @@ function ActivitiesMap(props: Props) {
     );
 
     return (
-        <div className={_cs(styles.map, className)}>
-            <div className={styles.mapWithLegend}>
-                <BaseMap
-                    baseLayers={(
-                        <>
-                            <MapLayer
-                                layerKey="admin-1-highlight"
-                                layerOptions={adminOneHighlightLayerOptions}
-                            />
-                            <MapLayer
-                                layerKey="admin-1-label-selected"
-                                layerOptions={adminOneLabelSelectedLayerOptions}
-                            />
-                        </>
-                    )}
-                >
-                    <MapContainerWithDisclaimer
-                        className={styles.mapContainer}
-                        footer={(
-                            <div className={styles.legend}>
-                                <div className={styles.label}>
-                                    {strings.numberOfProjects}
-                                </div>
-                                <LegendItem
-                                    color={COLOR_SEVERITY_LOW}
-                                    label={strings.severityLow}
-                                />
-                                <LegendItem
-                                    color={COLOR_SEVERITY_MEDIUM}
-                                    label={strings.severityMedium}
-                                />
-                                <LegendItem
-                                    color={COLOR_SEVERITY_HIGH}
-                                    label={strings.severityHigh}
-                                />
-                                <LegendItem
-                                    color={COLOR_SEVERITY_SEVERE}
-                                    label={strings.severitySevere}
-                                />
-                            </div>
-                        )}
-                    />
-                    {isDefined(bounds) && (
-                        <MapBounds
-                            duration={DURATION_MAP_ZOOM}
-                            bounds={bounds}
-                            padding={DEFAULT_MAP_PADDING}
+        <div className={_cs(styles.activityMap, className)}>
+            <BaseMap
+                baseLayers={(
+                    <>
+                        <MapLayer
+                            layerKey="admin-1-highlight"
+                            layerOptions={adminOneHighlightLayerOptions}
+                        />
+                        <MapLayer
+                            layerKey="admin-1-label-selected"
+                            layerOptions={adminOneLabelSelectedLayerOptions}
+                        />
+                    </>
+                )}
+            >
+                <GoMapContainer
+                    title="Response Activity Map"
+                    footer={(
+                        <TextOutput
+                            label={strings.numberOfProjects}
+                            value={(
+                                <ListView
+                                    spacing="sm"
+                                    withSpacingOpticalCorrection
+                                >
+                                    <LegendItem
+                                        color={COLOR_SEVERITY_LOW}
+                                        label={strings.severityLow}
+                                    />
+                                    <LegendItem
+                                        color={COLOR_SEVERITY_MEDIUM}
+                                        label={strings.severityMedium}
+                                    />
+                                    <LegendItem
+                                        color={COLOR_SEVERITY_HIGH}
+                                        label={strings.severityHigh}
+                                    />
+                                    <LegendItem
+                                        color={COLOR_SEVERITY_SEVERE}
+                                        label={strings.severitySevere}
+                                    />
+                                </ListView>
+                            )}
                         />
                     )}
-                </BaseMap>
-            </div>
-            {sidebarContent && (
-                <div className={styles.sidebar}>
-                    {sidebarContent}
-                </div>
-            )}
+                />
+                {isDefined(bounds) && (
+                    <MapBounds
+                        duration={DURATION_MAP_ZOOM}
+                        bounds={bounds}
+                        padding={DEFAULT_MAP_PADDING}
+                    />
+                )}
+            </BaseMap>
+            {sidebarContent}
         </div>
     );
 }

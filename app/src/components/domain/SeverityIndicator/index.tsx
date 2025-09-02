@@ -1,12 +1,10 @@
 import {
-    _cs,
-    isNotDefined,
-} from '@togglecorp/fujs';
+    ColorPreview,
+    type ColorPreviewProps,
+} from '@ifrc-go/ui';
+import { isNotDefined } from '@togglecorp/fujs';
 
-import styles from './styles.module.css';
-
-interface Props {
-    className?: string;
+interface Props extends Omit<ColorPreviewProps, 'value'> {
     level: number | undefined | null;
     title?: string;
 }
@@ -15,26 +13,32 @@ function SeverityIndicator(props: Props) {
     const {
         level,
         title,
-        className,
+        ...otherProps
     } = props;
 
-    const classNameMap: Record<number, string | undefined> = {
-        0: styles.yellow,
-        1: styles.orange,
-        2: styles.red,
+    const colorMap: Record<number, string | undefined> = {
+        0: 'var(--go-ui-color-yellow)',
+        1: 'var(--go-ui-color-orange)',
+        2: 'var(--go-ui-color-red)',
     };
 
     if (isNotDefined(level)) {
         return null;
     }
 
+    const value = colorMap[level];
+
+    if (isNotDefined(value)) {
+        return null;
+    }
+
     return (
-        <div
+        <ColorPreview
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...otherProps}
             title={title}
-            className={_cs(styles.severityIndicator, className)}
-        >
-            <div className={_cs(styles.icon, classNameMap[level])} />
-        </div>
+            value={value}
+        />
     );
 }
 

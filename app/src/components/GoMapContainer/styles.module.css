@@ -1,0 +1,75 @@
+.go-map-container {
+    .go-icon {
+        height: var(--go-ui-height-compact-status-icon);
+    }
+
+    .relative-wrapper {
+        position: relative;
+        isolation: isolate;
+
+        .map {
+            height: var(--go-ui-height-map-md);
+        }
+
+        .download-button {
+            position: absolute;
+            top: 5rem;
+            /* NOTE: Exactly as mapbox */
+            right: 10px;
+            border: var(--go-ui-width-separator-md) solid var(--go-ui-color-separator);
+            border-radius: var(--go-ui-border-radius-md);
+            background-color: var(--go-ui-color-foreground);
+            padding: 0 var(--go-ui-spacing-2xs);
+            font-size: var(--go-ui-height-icon-multiplier);
+        }
+
+        .map-disclaimer {
+            position: absolute;
+            bottom: var(--go-ui-spacing-xs);
+            left: calc(var(--mapbox-icon-width) + var(--go-ui-spacing-sm));
+            background-color: var(--go-ui-color-white);
+            padding: 0 var(--go-ui-spacing-2xs);
+            font-size: var(--go-ui-font-size-sm);
+        }
+
+        .presentation-mode-button {
+            position: absolute;
+            top: var(--go-ui-spacing-sm);
+            left: var(--go-ui-spacing-sm);
+        }
+
+        .content {
+            position: absolute;
+            bottom: calc(1.5rem + 2 * var(--go-ui-spacing-xs));
+            left: var(--go-ui-spacing-sm);
+        }
+    }
+
+    &.print-mode {
+        position: relative;
+        border: var(--go-ui-width-separator-thin) solid var(--go-ui-color-separator);
+
+        .relative-wrapper {
+            border-top: var(--go-ui-width-separator-lg) solid var(--go-ui-color-primary-red);
+
+            .map {
+                height: calc(var(--go-ui-width-separator-lg) + var(--go-ui-height-map-md));
+            }
+        }
+
+        .floating-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: translateY(-100%);
+            background-color: var(--go-ui-color-foreground);
+        }
+    }
+
+    &.presentation-mode {
+        background-color: var(--go-ui-color-background);
+        width: 100vw;
+        height: 100vh;
+        overflow: auto;
+    }
+}

@@ -10,10 +10,6 @@
     .option-list {
         flex-basis: 10rem;
         flex-shrink: 0;
-
-        .option {
-            padding: 0;
-        }
     }
 
     .option-border {
@@ -108,24 +104,8 @@
         }
     }
 
-    .bottom {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--go-ui-spacing-sm) var(--go-ui-spacing-lg);
-        padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
-
-        .menu-items {
-            display: flex;
-            align-items: center;
-            flex-grow: 1;
-            flex-wrap: wrap;
-            font-weight: var(--go-ui-font-weight-medium);
-        }
-
-        .search-container {
-            flex-basis: 30rem;
-            flex-grow: 0.5;
-        }
+    .search-container {
+        flex-basis: 30rem;
     }
 
     @media print {

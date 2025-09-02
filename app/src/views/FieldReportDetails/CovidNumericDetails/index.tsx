@@ -25,26 +25,32 @@ function CovidNumericDetails(props: Props) {
             <KeyFigure
                 label={strings.covidCumulativeCasesLabel}
                 value={value?.epi_cases}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.covidCumulativeDeadLabel}
                 value={value?.epi_num_dead}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.covidNumberOfCasesLabel}
                 value={value?.epi_cases_since_last_fr}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.covidNumberOfNewDeathsLabel}
                 value={value?.epi_deaths_since_last_fr}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.covidAssistedRcLabel}
                 value={value?.num_assisted}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.covidAssistedGovernmentLabel}
                 value={value?.gov_num_assisted}
+                valueType="number"
             />
             {/* FIXME: This is not there in old details */}
             <TextOutput
@@ -55,10 +61,12 @@ function CovidNumericDetails(props: Props) {
             <KeyFigure
                 label={strings.covidLocalStaff}
                 value={value?.num_localstaff}
+                valueType="number"
             />
             <KeyFigure
                 label={strings.covidVolunteersLabel}
                 value={value?.num_volunteers}
+                valueType="number"
             />
         </>
     );

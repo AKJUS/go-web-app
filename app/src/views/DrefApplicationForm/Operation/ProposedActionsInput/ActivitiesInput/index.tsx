@@ -2,6 +2,7 @@ import { DeleteBinLineIcon } from '@ifrc-go/icons';
 import {
     Container,
     IconButton,
+    ListView,
     SelectInput,
     TextArea,
 } from '@ifrc-go/ui';
@@ -67,7 +68,6 @@ function ActivitiesInput(props: Props) {
 
     return (
         <Container
-            numPreferredGridContentColumns={2}
             footerActions={(
                 <IconButton
                     name={index}
@@ -75,35 +75,37 @@ function ActivitiesInput(props: Props) {
                     title={strings.drefFormProposedActionRemoveSector}
                     ariaLabel={strings.drefFormProposedActionRemoveSector}
                     round={false}
-                    variant="tertiary"
+                    styleVariant="action"
                     disabled={disabled || readOnly}
                 >
                     <DeleteBinLineIcon />
                 </IconButton>
             )}
         >
-            <SelectInput
-                required
-                name="sector"
-                label={strings.drefFormProposedActionSector}
-                options={activityOptions}
-                keySelector={sectorKeySelector}
-                labelSelector={sectorLabelSelector}
-                error={error?.sector}
-                onChange={onFieldChange}
-                value={value.sector}
-                readOnly
-            />
-            <TextArea
-                label={strings.drefFormProposedActionsListOfActivities}
-                name="activity"
-                value={value.activity}
-                onChange={onFieldChange}
-                error={error?.activity}
-                disabled={disabled}
-                readOnly={readOnly}
-                autoBullets
-            />
+            <ListView layout="grid">
+                <SelectInput
+                    required
+                    name="sector"
+                    label={strings.drefFormProposedActionSector}
+                    options={activityOptions}
+                    keySelector={sectorKeySelector}
+                    labelSelector={sectorLabelSelector}
+                    error={error?.sector}
+                    onChange={onFieldChange}
+                    value={value.sector}
+                    readOnly
+                />
+                <TextArea
+                    label={strings.drefFormProposedActionsListOfActivities}
+                    name="activity"
+                    value={value.activity}
+                    onChange={onFieldChange}
+                    error={error?.activity}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    autoBullets
+                />
+            </ListView>
         </Container>
     );
 }

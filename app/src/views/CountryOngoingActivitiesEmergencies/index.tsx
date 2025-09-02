@@ -10,13 +10,9 @@ import {
     useOutletContext,
 } from 'react-router-dom';
 import {
-    ArtboardLineIcon,
-    PencilFillIcon,
-} from '@ifrc-go/icons';
-import {
-    Button,
     Container,
     LegendItem,
+    ListView,
     Pager,
     RadioInput,
     Table,
@@ -35,7 +31,6 @@ import {
     sumSafe,
 } from '@ifrc-go/ui/utils';
 import {
-    _cs,
     isDefined,
     isNotDefined,
     listToGroupList,
@@ -67,15 +62,12 @@ import {
 } from '#components/domain/ActiveOperationMap/utils';
 import GlobalMap, { type AdminZeroFeatureProperties } from '#components/domain/GlobalMap';
 import HighlightedOperations from '#components/domain/HighlightedOperations';
+import GoMapContainer from '#components/GoMapContainer';
 import Link from '#components/Link';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
-import WikiLink from '#components/WikiLink';
-import { adminUrl } from '#config';
+import TabPage from '#components/TabPage';
 import RouteContext from '#contexts/route';
-import useAuth from '#hooks/domain/useAuth';
 import useCountryRaw from '#hooks/domain/useCountryRaw';
-import usePermissions from '#hooks/domain/usePermissions';
 import useFilterState from '#hooks/useFilterState';
 import useInputState from '#hooks/useInputState';
 import {
@@ -84,7 +76,6 @@ import {
 } from '#utils/constants';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
 import { type CountryOutletContext } from '#utils/outletContext';
-import { resolveUrl } from '#utils/resolveUrl';
 import type {
     GoApiResponse,
     GoApiUrlQuery,
@@ -95,7 +86,6 @@ import CountryKeyFigures from './CountryKeyFigures';
 import Filters from './Filters';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type AppealQueryParams = GoApiUrlQuery<'/api/v2/appeal/'>;
 type AppealResponse = GoApiResponse<'/api/v2/appeal/'>;
@@ -110,11 +100,6 @@ const sourceOptions: mapboxgl.GeoJSONSourceRaw = {
 };
 
 const now = new Date().toISOString();
-type BaseProps = {
-    className?: string;
-    presentationMode?: boolean;
-    onPresentationModeButtonClick?: () => void;
-}
 
 interface ClickedPoint {
     properties: AdminZeroFeatureProperties;
@@ -123,17 +108,11 @@ interface ClickedPoint {
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
-export function Component(props: BaseProps) {
-    const {
-        className,
-        onPresentationModeButtonClick,
-        presentationMode = false,
-    } = props;
+export function Component() {
     const { countryOngoingActivitiesEmergencies } = useContext(RouteContext);
+    const [presentationMode, setPresentationMode] = useState(false);
 
     const strings = useTranslation(i18n);
-    const { isAuthenticated } = useAuth();
-    const { isGuestUser } = usePermissions();
 
     const {
         countryId,
@@ -228,27 +207,18 @@ export function Component(props: BaseProps) {
                 'start_date',
                 strings.appealsTableStartDate,
                 (item) => item.start_date,
-                {
-                    sortable: true,
-                    columnClassName: styles.startDate,
-                },
+                { sortable: true },
             ),
             createStringColumn<AppealListItem, string>(
                 'atype',
                 strings.appealsTableType,
                 (item) => item.atype_display,
-                {
-                    sortable: true,
-                    columnClassName: styles.appealType,
-                },
+                { sortable: true },
             ),
             createStringColumn<AppealListItem, string>(
                 'code',
                 strings.appealsTableCode,
                 (item) => item.code,
-                {
-                    columnClassName: styles.code,
-                },
             ),
             createLinkColumn<AppealListItem, string>(
                 'operation',
@@ -445,9 +415,61 @@ export function Component(props: BaseProps) {
         strings.explanationBubbleMultiple,
     ]);
 
-    const popupDetails = clickedPointProperties
-        ? countryGroupedAppeal[clickedPointProperties.properties.iso3]
-        : undefined;
+    const popupDetails = useMemo(() => {
+        if (isNotDefined(clickedPointProperties)) {
+            return undefined;
+        }
+
+        const appealList = countryGroupedAppeal[clickedPointProperties.properties.iso3];
+
+        if (isNotDefined(appealList) || appealList.length === 0) {
+            return undefined;
+        }
+
+        return appealList.map((appeal) => (
+            <Container
+                pending={false}
+                filtered={false}
+                empty={false}
+                errored={false}
+                key={appeal.id}
+                heading={appeal.name}
+                headingLevel={5}
+                spacing="sm"
+            >
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                    spacing="2xs"
+                >
+                    <TextOutput
+                        value={appeal.num_beneficiaries}
+                        description={strings.operationPopoverPeopleAffected}
+                        valueType="number"
+                        textSize="sm"
+                    />
+                    <TextOutput
+                        value={appeal.amount_requested}
+                        description={strings.operationAmountRequested}
+                        valueType="number"
+                        textSize="sm"
+                    />
+                    <TextOutput
+                        value={appeal.amount_funded}
+                        description={strings.operationPopoverAmountFunded}
+                        valueType="number"
+                        textSize="sm"
+                    />
+                </ListView>
+            </Container>
+        ));
+    }, [
+        clickedPointProperties,
+        countryGroupedAppeal,
+        strings.operationAmountRequested,
+        strings.operationPopoverAmountFunded,
+        strings.operationPopoverPeopleAffected,
+    ]);
 
     if (countryResponse?.sovereign_state_id && countryResponse?.independent === false) {
         const redirectCountryId = countryResponse.sovereign_state_id;
@@ -465,33 +487,16 @@ export function Component(props: BaseProps) {
     }
 
     return (
-        <Container
-            className={styles.countryOngoingActivities}
-            actions={!isGuestUser && isAuthenticated && (
-                <>
-                    <Link
-                        external
-                        href={resolveUrl(adminUrl, `api/country/${countryId}/change/`)}
-                        variant="secondary"
-                        icons={<PencilFillIcon />}
-                    >
-                        {strings.editCountryLink}
-                    </Link>
-                    <WikiLink
-                        href="user_guide/Country_Pages#on-going-activities"
-                    />
-                </>
-            )}
-            headerDescription={strings.countryOngoingActivitiesEmergenciesDescription}
-            withCenteredHeaderDescription
-            contentViewType="vertical"
-            spacing="loose"
-            pending={aggregatedAppealPending || appealsPending}
-        >
+        <TabPage>
             <Container
+                headerDescription={strings.countryOngoingActivitiesEmergenciesDescription}
+                withCenteredHeaderDescription
                 pending={aggregatedAppealPending}
                 errored={isDefined(aggregatedAppealError)}
                 errorMessage={aggregatedAppealError?.value?.messageForNotification}
+                filtered={false}
+                empty={isNotDefined(aggregatedAppealResponse)}
+                spacing="lg"
             >
                 {aggregatedAppealResponse && (
                     <CountryKeyFigures
@@ -507,10 +512,12 @@ export function Component(props: BaseProps) {
             )}
             {isDefined(countryId) && (
                 <Container
-                    className={_cs(styles.activeOperationMap, className)}
+                    pending={false}
+                    errored={false}
+                    empty={false}
                     heading={!presentationMode && heading}
                     withHeaderBorder={!presentationMode}
-                    childrenContainerClassName={styles.content}
+                    filtered={filtered}
                     filters={(
                         <Filters
                             value={rawFilter}
@@ -519,7 +526,7 @@ export function Component(props: BaseProps) {
                             filtered={filtered}
                         />
                     )}
-                    actions={!presentationMode && (
+                    headerActions={!presentationMode && (
                         <Link
                             to="allAppeals"
                             urlSearch={allAppealsType.searchParam}
@@ -537,17 +544,17 @@ export function Component(props: BaseProps) {
                             onActivePageChange={setPage}
                         />
                     )}
-                    contentViewType="vertical"
                 >
                     <GlobalMap
                         // FIXME: We should use CountryMap instead
                         onAdminZeroFillClick={handleCountryClick}
                     >
-                        <MapContainerWithDisclaimer
-                            className={styles.mapContainer}
+                        <GoMapContainer
                             title={strings.downloadMapTitle}
+                            withPresentationMode
+                            onPresentationModeChange={setPresentationMode}
                             footer={(
-                                <div className={styles.footer}>
+                                <>
                                     <RadioInput
                                         label={strings.explanationBubbleScalePoints}
                                         name={undefined}
@@ -557,17 +564,20 @@ export function Component(props: BaseProps) {
                                         value={scaleBy}
                                         onChange={setScaleBy}
                                     />
-                                    <div className={styles.legend}>
+                                    <ListView
+                                        withWrap
+                                        withSpacingOpticalCorrection
+                                        spacing="sm"
+                                    >
                                         {legendOptions.map((legendItem) => (
                                             <LegendItem
                                                 key={legendItem.value}
-                                                className={styles.legendItem}
                                                 color={legendItem.color}
                                                 label={legendItem.label}
                                             />
                                         ))}
-                                    </div>
-                                </div>
+                                    </ListView>
+                                </>
                             )}
                         />
                         <MapSource
@@ -591,53 +601,28 @@ export function Component(props: BaseProps) {
                         </MapSource>
                         {clickedPointProperties?.lngLat && (
                             <MapPopup
-                                popupClassName={styles.mapPopup}
                                 onCloseButtonClick={handlePointClose}
                                 coordinates={clickedPointProperties.lngLat}
                                 heading={(
                                     <Link
                                         to="countriesLayout"
                                         urlParams={{
-                                            countryId: clickedPointProperties.properties.country_id,
+                                            countryId: clickedPointProperties
+                                                .properties.country_id,
                                         }}
                                     >
                                         {clickedPointProperties.properties.name}
                                     </Link>
                                 )}
-                                childrenContainerClassName={styles.popupContent}
+                                withPadding
+                                pending={false}
+                                filtered={false}
+                                errored={false}
+                                empty={isNotDefined(popupDetails)}
+                                emptyMessage={strings.operationPopoverEmpty}
+                                withCompactMessage
                             >
-                                {popupDetails?.map(
-                                    (appeal) => (
-                                        <Container
-                                            key={appeal.id}
-                                            className={styles.popupAppeal}
-                                            childrenContainerClassName={styles.popupAppealDetail}
-                                            heading={appeal.name}
-                                            headingLevel={5}
-                                        >
-                                            <TextOutput
-                                                value={appeal.num_beneficiaries}
-                                                description={strings.operationPopoverPeopleAffected}
-                                                valueType="number"
-                                            />
-                                            <TextOutput
-                                                value={appeal.amount_requested}
-                                                description={strings.operationAmountRequested}
-                                                valueType="number"
-                                            />
-                                            <TextOutput
-                                                value={appeal.amount_funded}
-                                                description={strings.operationPopoverAmountFunded}
-                                                valueType="number"
-                                            />
-                                        </Container>
-                                    ),
-                                )}
-                                {(isNotDefined(popupDetails) || popupDetails.length === 0) && (
-                                    <div className={styles.empty}>
-                                        {strings.operationPopoverEmpty}
-                                    </div>
-                                )}
+                                {popupDetails}
                             </MapPopup>
                         )}
                         {isDefined(countryBounds) && (
@@ -648,22 +633,10 @@ export function Component(props: BaseProps) {
                             />
                         )}
                     </GlobalMap>
-                    {onPresentationModeButtonClick && !presentationMode && (
-                        <Button
-                            className={styles.presentationModeButton}
-                            name={undefined}
-                            icons={<ArtboardLineIcon />}
-                            onClick={onPresentationModeButtonClick}
-                            variant="secondary"
-                        >
-                            {strings.presentationModeButton}
-                        </Button>
-                    )}
                     <SortContext.Provider value={sortState}>
                         <Table
                             pending={appealsPending}
                             filtered={isFiltered}
-                            className={styles.table}
                             columns={columns}
                             keySelector={appealKeySelector}
                             data={appealsResponse?.results}
@@ -671,7 +644,8 @@ export function Component(props: BaseProps) {
                         />
                     </SortContext.Provider>
                 </Container>
+
             )}
-        </Container>
+        </TabPage>
     );
 }

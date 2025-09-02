@@ -1,9 +1,7 @@
 import { useCallback } from 'react';
-import { SearchLineIcon } from '@ifrc-go/icons';
 import {
     DateInput,
     MultiSelectInput,
-    TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -177,15 +175,6 @@ function Filters(props: Props) {
                 label={strings.appealEndDate}
                 onChange={onChange}
                 value={value.appealStartDateBefore}
-                disabled={disabled}
-            />
-            <TextInput
-                name="appealSearchText"
-                label={strings.filterOpsLearningSearchLabel}
-                placeholder={strings.filterOpsLearningSearchPlaceholder}
-                value={value.appealSearchText}
-                onChange={onChange}
-                icons={<SearchLineIcon />}
                 disabled={disabled}
             />
         </>

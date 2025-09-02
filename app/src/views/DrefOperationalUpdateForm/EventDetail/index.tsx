@@ -118,7 +118,7 @@ function EventDetail(props: Props) {
                             />
                             {operationTimeframeWarning && (
                                 <div className={styles.warning}>
-                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    <ErrorWarningFillIcon />
                                     {operationTimeframeWarning}
                                 </div>
                             )}
@@ -150,7 +150,7 @@ function EventDetail(props: Props) {
                             />
                             {peopleTargetedWarning && (
                                 <div className={styles.warning}>
-                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    <ErrorWarningFillIcon />
                                     {peopleTargetedWarning}
                                 </div>
                             )}
@@ -171,7 +171,7 @@ function EventDetail(props: Props) {
                             />
                             {geoWarning && (
                                 <div className={styles.warning}>
-                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    <ErrorWarningFillIcon />
                                     {geoWarning}
                                 </div>
                             )}
@@ -191,7 +191,7 @@ function EventDetail(props: Props) {
                             />
                             {budgetWarning && (
                                 <div className={styles.warning}>
-                                    <ErrorWarningFillIcon className={styles.icon} />
+                                    <ErrorWarningFillIcon />
                                     {budgetWarning}
                                 </div>
                             )}
@@ -455,7 +455,6 @@ function EventDetail(props: Props) {
                     <InputSection
                         title={strings.drefFormUploadPhotos}
                         description={strings.drefFormUploadPhotosLimitation}
-                        contentSectionClassName={styles.imageInputContent}
                     >
                         <MultiImageWithCaptionInput
                             label={strings.drefOperationalUpdateFormSelectImages}
@@ -506,10 +505,8 @@ function EventDetail(props: Props) {
                             />
                         ))}
                         <Button
-                            className={styles.actions}
                             name={undefined}
                             onClick={handleSourceInformationAdd}
-                            variant="secondary"
                             disabled={disabled || readOnly}
                         >
                             {strings.drefFormSourceInformationAddButton}

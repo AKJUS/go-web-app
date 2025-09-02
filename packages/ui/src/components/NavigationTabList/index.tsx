@@ -1,53 +1,44 @@
 import { useMemo } from 'react';
-import { _cs } from '@togglecorp/fujs';
 
-import NavigationTabContext, { NavigationTabVariant } from '#contexts/navigation-tab';
+import TabListLayout, { type Props as TabListLayoutProps } from '#components/TabListLayout';
+import NavigationTabContext from '#contexts/navigation-tab';
+import {
+    TabColorVariant,
+    TabStyleVariant,
+} from '#contexts/tab';
 
-import styles from './styles.module.css';
-
-export interface Props extends React.HTMLProps<HTMLDivElement> {
-    children: React.ReactNode;
-    className?: string;
-    variant?: NavigationTabVariant;
+export interface Props extends TabListLayoutProps {
+    colorVariant?: TabColorVariant;
+    styleVariant?: TabStyleVariant;
+    disabled?: boolean;
 }
 
 export default function NavigationTabList(props: Props) {
     const {
-        children,
-        variant = 'primary',
-        className,
-        ...otherProps
+        styleVariant = 'tab',
+        colorVariant = styleVariant === 'tab' ? 'text' : 'primary',
+        disabled,
+        ...tabListLayoutProps
     } = props;
 
     const tabContextValue = useMemo(
         () => ({
-            variant,
+            colorVariant,
+            styleVariant,
+            disabled,
         }),
-        [variant],
+        [styleVariant, colorVariant, disabled],
     );
 
     return (
         <NavigationTabContext.Provider value={tabContextValue}>
-            <div
+            <TabListLayout
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                {...otherProps}
-                className={_cs(
-                    className,
-                    styles.navigationTabList,
-                    variant === 'primary' && styles.primary,
-                    variant === 'secondary' && styles.secondary,
-                    variant === 'tertiary' && styles.tertiary,
-                    variant === 'step' && styles.step,
-                    variant === 'vertical' && styles.vertical,
-                )}
-                role="tablist"
-            >
-                <div className={styles.startDummyContent} />
-                <div className={styles.content}>
-                    {children}
-                </div>
-                <div className={styles.endDummyContent} />
-            </div>
+                {...tabListLayoutProps}
+                styleVariant={styleVariant}
+                colorVariant={colorVariant}
+                disabled={disabled}
+            />
         </NavigationTabContext.Provider>
     );
 }

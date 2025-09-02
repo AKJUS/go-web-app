@@ -1,5 +1,6 @@
 import {
     Container,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -49,73 +50,68 @@ function EventDetails(props: Props) {
     } | null;
 
     return (
-        <Container
-            contentViewType="vertical"
-            spacing="cozy"
-            withBorderAndHeaderBackground
-            pending={pending}
-        >
-            <Container
-                contentViewType="vertical"
-                spacing="compact"
+        <Container pending={pending}>
+            <ListView
+                layout="block"
+                spacing="xs"
             >
                 <TextOutput
                     label={strings.eventDetailsCreatedOn}
                     value={pdc_created_at}
                     valueType="date"
                     strongValue
-                    withBackground
+                    withLightBackground
                 />
                 <TextOutput
                     label={strings.eventDetailsUpdatedOn}
                     value={pdc_updated_at}
                     valueType="date"
                     strongValue
-                    withBackground
+                    withLightBackground
                 />
                 <TextOutput
                     label={strings.eventDetailsPeopleExposed}
                     value={popExposure?.total?.valueFormatted}
                     strongValue
-                    withBackground
+                    withLightBackground
                 />
                 <TextOutput
                     label={strings.eventDetailsHouseholdExposed}
                     value={popExposure?.households?.valueFormatted}
                     strongValue
-                    withBackground
+                    withLightBackground
                 />
                 <TextOutput
                     label={strings.eventDetailsPeopleGroups}
                     value={popExposure?.vulnerable?.valueFormatted}
                     strongValue
-                    withBackground
+                    withLightBackground
                 />
                 <TextOutput
                     label={strings.eventDetailsValueExposed}
                     value={capitalExposure?.total?.valueFormatted}
                     strongValue
-                    withBackground
+                    withLightBackground
                 />
                 <TextOutput
                     label={strings.eventDetailsSchoolExposed}
                     value={capitalExposure?.school?.valueFormatted}
                     strongValue
-                    withBackground
+                    withLightBackground
                 />
                 <TextOutput
                     label={strings.eventHospitalsExposed}
                     value={capitalExposure?.hospital?.valueFormatted}
                     strongValue
-                    withBackground
+                    withLightBackground
                 />
-            </Container>
-            <TextOutput
-                valueType="text"
-                value={description}
-                withBackground
-            />
-            {children}
+                <TextOutput
+                    valueType="text"
+                    value={description}
+                    withLightBackground
+                />
+                {children}
+            </ListView>
         </Container>
     );
 }

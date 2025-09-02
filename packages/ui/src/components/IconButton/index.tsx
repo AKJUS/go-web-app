@@ -1,19 +1,18 @@
 import { _cs } from '@togglecorp/fujs';
 
-import type {
-    ButtonVariant,
-    Props as RawButtonProps,
-} from '#components/Button';
+import type { Props as RawButtonProps } from '#components/Button';
 import RawButton from '#components/RawButton';
 
 import styles from './styles.module.css';
+
+type IconButtonVariant = 'primary' | 'secondary' | 'tertiary';
 
 export interface Props<N> extends RawButtonProps<N> {
     ariaLabel: string;
     disabled?: boolean;
     round?: boolean;
     title: string;
-    variant: ButtonVariant;
+    variant?: IconButtonVariant;
 }
 
 function IconButton<N>(props: Props<N>) {
@@ -21,7 +20,7 @@ function IconButton<N>(props: Props<N>) {
         ariaLabel,
         children,
         className,
-        variant,
+        variant = 'tertiary',
         round = true,
         ...otherProps
     } = props;

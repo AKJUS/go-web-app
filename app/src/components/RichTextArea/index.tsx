@@ -3,6 +3,7 @@ import {
     InputContainer,
     type InputContainerProps,
 } from '@ifrc-go/ui';
+import { extractInputContainerProps } from '@ifrc-go/ui/utils';
 import {
     Editor,
     type IAllProps,
@@ -38,31 +39,28 @@ type InheritedProps<T> = Omit<InputContainerProps, 'input'> & {
 }
 interface Props<T extends string | undefined> extends InheritedProps<T> {
     inputElementRef?: React.RefObject<HTMLInputElement>;
-    inputClassName?: string;
     placeholder?: string;
 }
 
 function RichTextArea<T extends string | undefined>(props: Props<T>) {
     const {
-        className,
-        actions,
-        icons,
-        error,
-        label,
-        labelClassName,
         disabled,
+        className,
         readOnly,
+        required,
+        ...otherProps
+    } = props;
+
+    const [inputContainerProps, inputProps] = extractInputContainerProps(
+        otherProps,
+    );
+
+    const {
         name,
         value,
         onChange,
-        inputSectionClassName,
-        hint,
-        withAsterisk,
-        errorOnTooltip,
-        required,
-        variant,
-        ...otherInputProps
-    } = props;
+        ...editorProps
+    } = inputProps;
 
     const handleChange = React.useCallback((newValue: string | undefined) => {
         if (readOnly || disabled || !onChange) {
@@ -88,24 +86,16 @@ function RichTextArea<T extends string | undefined>(props: Props<T>) {
 
     return (
         <InputContainer
-            actions={actions}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...inputContainerProps}
             className={_cs(styles.richTextArea, className)}
             disabled={disabled}
-            error={error}
-            errorOnTooltip={errorOnTooltip}
-            hint={hint}
-            icons={icons}
-            inputSectionClassName={inputSectionClassName}
-            labelClassName={labelClassName}
-            label={label}
             readOnly={readOnly}
             required={required}
-            variant={variant}
-            withAsterisk={withAsterisk}
             input={(
                 <Editor
                     // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...otherInputProps}
+                    {...editorProps}
                     apiKey={tinyApiKey}
                     init={editorOptions}
                     value={value}

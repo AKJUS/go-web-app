@@ -3,12 +3,12 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { ArtboardLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     Container,
     DateInput,
     LegendItem,
+    ListView,
     RadioInput,
     SelectInput,
     TextOutput,
@@ -20,7 +20,6 @@ import {
     sumSafe,
 } from '@ifrc-go/ui/utils';
 import {
-    _cs,
     isDefined,
     isNotDefined,
     listToGroupList,
@@ -36,8 +35,8 @@ import { type LngLatBoundsLike } from 'mapbox-gl';
 
 import DisasterTypeSelectInput from '#components/domain/DisasterTypeSelectInput';
 import DistrictSearchMultiSelectInput, { type DistrictItem } from '#components/domain/DistrictSearchMultiSelectInput';
+import GoMapContainer from '#components/GoMapContainer';
 import Link from '#components/Link';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
 import useCountryRaw from '#hooks/domain/useCountryRaw';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
@@ -70,7 +69,6 @@ import {
 } from './utils';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type AppealQueryParams = GoApiUrlQuery<'/api/v2/appeal/'>;
 type GlobalEnumsResponse = GoApiResponse<'/api/v2/global-enums/'>;
@@ -91,9 +89,10 @@ interface ClickedPoint {
 
 type BaseProps = {
     className?: string;
-    onPresentationModeButtonClick?: () => void;
-    presentationMode?: boolean;
     bbox: LngLatBoundsLike | undefined;
+    presentationModeAdditionalBeforeContent?: React.ReactNode;
+    presentationModeAdditionalAfterContent?: React.ReactNode;
+    mapTitle: string;
 }
 
 type CountryProps = {
@@ -115,10 +114,13 @@ function ActiveOperationMap(props: Props) {
     const {
         className,
         variant,
-        onPresentationModeButtonClick,
-        presentationMode = false,
+        presentationModeAdditionalBeforeContent,
+        presentationModeAdditionalAfterContent,
         bbox,
+        mapTitle,
     } = props;
+
+    const [presentationMode, setPresentationMode] = useState(false);
 
     const {
         filter,
@@ -178,6 +180,8 @@ function ActiveOperationMap(props: Props) {
     const { api_appeal_type: appealTypeOptionsRaw } = useGlobalEnums();
     const {
         response: appealResponse,
+        pending: appealPending,
+        error: appealError,
     } = useRequest({
         url: '/api/v2/appeal/',
         query,
@@ -362,10 +366,13 @@ function ActiveOperationMap(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.activeOperationMap, className)}
+            pending={appealPending}
+            filtered={filtered}
+            errored={isDefined(appealError)}
+            overlayPending
+            className={className}
             heading={!presentationMode && heading}
             withHeaderBorder={!presentationMode}
-            childrenContainerClassName={styles.content}
             filters={!presentationMode && (
                 <>
                     <DateInput
@@ -409,19 +416,16 @@ function ActiveOperationMap(props: Props) {
                         value={rawFilter.displacement}
                         onChange={setFilterField}
                     />
-                    <div className={styles.clearButton}>
-                        <Button
-                            name={undefined}
-                            onClick={handleClearFiltersButtonClick}
-                            variant="secondary"
-                            disabled={!filtered}
-                        >
-                            {strings.operationMapClearFilters}
-                        </Button>
-                    </div>
+                    <Button
+                        name={undefined}
+                        onClick={handleClearFiltersButtonClick}
+                        disabled={!filtered}
+                    >
+                        {strings.operationMapClearFilters}
+                    </Button>
                 </>
             )}
-            actions={!presentationMode && (
+            headerActions={!presentationMode && (
                 <Link
                     to="allAppeals"
                     urlSearch={allAppealsType.searchParam}
@@ -432,14 +436,19 @@ function ActiveOperationMap(props: Props) {
                 </Link>
             )}
         >
-            <GlobalMap
-                onAdminZeroFillClick={handleCountryClick}
-            >
-                <MapContainerWithDisclaimer
-                    className={styles.mapContainer}
-                    title={strings.downloadMapTitle}
+            <GlobalMap onAdminZeroFillClick={handleCountryClick}>
+                <GoMapContainer
+                    presentationModeAdditionalAfterContent={
+                        presentationModeAdditionalAfterContent
+                    }
+                    presentationModeAdditionalBeforeContent={
+                        presentationModeAdditionalBeforeContent
+                    }
+                    withPresentationMode
+                    onPresentationModeChange={setPresentationMode}
+                    title={mapTitle}
                     footer={(
-                        <div className={styles.footer}>
+                        <>
                             <RadioInput
                                 label={strings.explanationBubbleScalePoints}
                                 name={undefined}
@@ -449,17 +458,20 @@ function ActiveOperationMap(props: Props) {
                                 value={scaleBy}
                                 onChange={setScaleBy}
                             />
-                            <div className={styles.legend}>
+                            <ListView
+                                withWrap
+                                withSpacingOpticalCorrection
+                                spacing="sm"
+                            >
                                 {legendOptions.map((legendItem) => (
                                     <LegendItem
                                         key={legendItem.value}
-                                        className={styles.legendItem}
                                         color={legendItem.color}
                                         label={legendItem.label}
                                     />
                                 ))}
-                            </div>
-                        </div>
+                            </ListView>
+                        </>
                     )}
                 />
                 <MapSource
@@ -495,39 +507,44 @@ function ActiveOperationMap(props: Props) {
                                 {clickedPoint.featureProperties.name}
                             </Link>
                         )}
-                        childrenContainerClassName={styles.popupContent}
+                        withPadding
+                        empty={isNotDefined(popupDetails) || popupDetails.length === 0}
+                        emptyMessage={strings.operationPopoverEmpty}
                     >
                         {popupDetails?.map(
                             (appeal) => (
                                 <Container
                                     key={appeal.id}
-                                    className={styles.popupAppeal}
-                                    childrenContainerClassName={styles.popupAppealDetail}
                                     heading={appeal.name}
                                     headingLevel={5}
+                                    spacing="sm"
                                 >
-                                    <TextOutput
-                                        value={appeal.num_beneficiaries}
-                                        description={strings.operationPopoverPeopleAffected}
-                                        valueType="number"
-                                    />
-                                    <TextOutput
-                                        value={appeal.amount_requested}
-                                        description={strings.operationPopoverAmountRequested}
-                                        valueType="number"
-                                    />
-                                    <TextOutput
-                                        value={appeal.amount_funded}
-                                        description={strings.operationPopoverAmountFunded}
-                                        valueType="number"
-                                    />
+                                    <ListView
+                                        layout="block"
+                                        spacing="sm"
+                                        withSpacingOpticalCorrection
+                                    >
+                                        <TextOutput
+                                            value={appeal.num_beneficiaries}
+                                            description={strings.operationPopoverPeopleAffected}
+                                            valueType="number"
+                                            textSize="sm"
+                                        />
+                                        <TextOutput
+                                            value={appeal.amount_requested}
+                                            description={strings.operationPopoverAmountRequested}
+                                            valueType="number"
+                                            textSize="sm"
+                                        />
+                                        <TextOutput
+                                            value={appeal.amount_funded}
+                                            description={strings.operationPopoverAmountFunded}
+                                            valueType="number"
+                                            textSize="sm"
+                                        />
+                                    </ListView>
                                 </Container>
                             ),
-                        )}
-                        {(isNotDefined(popupDetails) || popupDetails.length === 0) && (
-                            <div className={styles.empty}>
-                                {strings.operationPopoverEmpty}
-                            </div>
                         )}
                     </MapPopup>
                 )}
@@ -539,17 +556,6 @@ function ActiveOperationMap(props: Props) {
                     />
                 )}
             </GlobalMap>
-            {onPresentationModeButtonClick && !presentationMode && (
-                <Button
-                    className={styles.presentationModeButton}
-                    name={undefined}
-                    icons={<ArtboardLineIcon />}
-                    onClick={onPresentationModeButtonClick}
-                    variant="secondary"
-                >
-                    {strings.presentationModeButton}
-                </Button>
-            )}
         </Container>
     );
 }

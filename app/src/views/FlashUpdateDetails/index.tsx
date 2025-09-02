@@ -14,6 +14,8 @@ import {
     DateOutput,
     HtmlOutput,
     Image,
+    Label,
+    ListView,
     Message,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -38,7 +40,6 @@ import FlashUpdateExportModal from './FlashUpdateExportModal';
 import FlashUpdateShareModal from './FlashUpdateShareModal';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -120,7 +121,6 @@ export function Component() {
     return (
         <Page
             title={pageTitle}
-            className={styles.flashUpdateDetails}
             heading={flashUpdateResponse?.title ?? strings.flashUpdateDetailsHeading}
             breadCrumbs={(
                 <Breadcrumbs>
@@ -147,23 +147,21 @@ export function Component() {
                     <Button
                         name={undefined}
                         onClick={setShowExportModalTrue}
-                        variant="secondary"
                     >
                         {strings.flashUpdateExport}
                     </Button>
                     <Button
                         name={undefined}
                         onClick={setShowShareModalTrue}
-                        variant="secondary"
                     >
                         {strings.flashUpdateShare}
                     </Button>
                     <Link
-                        className={styles.editLink}
                         to="flashUpdateFormEdit"
                         urlParams={{ flashUpdateId }}
-                        icons={<PencilFillIcon />}
-                        variant="primary"
+                        before={<PencilFillIcon />}
+                        colorVariant="primary"
+                        styleVariant="filled"
                         disabled={shouldHideDetails}
                     >
                         {strings.flashUpdateEdit}
@@ -184,7 +182,6 @@ export function Component() {
                     </Fragment>
                 ),
             )}
-            mainSectionClassName={styles.content}
             contentOriginalLanguage={flashUpdateResponse?.translation_module_original_language}
         >
             {fetchingFlashUpdate && (
@@ -200,11 +197,9 @@ export function Component() {
                     {flashUpdateResponse.situational_overview && (
                         <Container
                             heading={strings.flashUpdateSituationalOverviewHeading}
-                            className={styles.contentHeader}
                             withHeaderBorder
                         >
                             <HtmlOutput
-                                className={styles.contentHeader}
                                 value={flashUpdateResponse.situational_overview}
                             />
                         </Container>
@@ -212,19 +207,20 @@ export function Component() {
                     {flashUpdateResponse.map_files && flashUpdateResponse.map_files.length > 0 && (
                         <Container
                             heading={strings.flashUpdateMapHeading}
-                            className={styles.maps}
                             withHeaderBorder
-                            contentViewType="grid"
-                            numPreferredGridContentColumns={4}
                         >
-                            {flashUpdateResponse.map_files.map((item) => (
-                                <Image
-                                    key={item.id}
-                                    imgElementClassName={styles.mapImageElement}
-                                    src={item.file}
-                                    caption={item.caption}
-                                />
-                            ))}
+                            <ListView
+                                layout="grid"
+                                numPreferredGridColumns={4}
+                            >
+                                {flashUpdateResponse.map_files.map((item) => (
+                                    <Image
+                                        key={item.id}
+                                        src={item.file}
+                                        size="md"
+                                    />
+                                ))}
+                            </ListView>
                         </Container>
                     )}
                     {flashUpdateResponse.graphics_files
@@ -232,105 +228,113 @@ export function Component() {
                         && (
                             <Container
                                 heading={strings.flashUpdateImagesHeading}
-                                className={styles.graphics}
                                 withHeaderBorder
-                                contentViewType="grid"
-                                numPreferredGridContentColumns={4}
                             >
-                                {flashUpdateResponse?.graphics_files?.map((item) => (
-                                    <Image
-                                        key={item.id}
-                                        src={item.file}
-                                        caption={item.caption}
-                                        imgElementClassName={styles.mapImageElement}
-                                    />
-                                ))}
+                                <ListView
+                                    layout="grid"
+                                    numPreferredGridColumns={4}
+                                >
+                                    {flashUpdateResponse?.graphics_files?.map((item) => (
+                                        <Image
+                                            key={item.id}
+                                            src={item.file}
+                                            caption={item.caption}
+                                            size="md"
+                                        />
+                                    ))}
+                                </ListView>
                             </Container>
                         )}
                     {isDefined(definedActions) && (
                         <Container
                             heading={strings.flashUpdateActionTakenHeading}
                             withHeaderBorder
-                            contentViewType="vertical"
                         >
-                            {definedActions.map((actionTaken) => (
-                                <Container
-                                    childrenContainerClassName={styles.actionContent}
-                                    heading={actionTaken.organization_display}
-                                    headingLevel={4}
-                                    spacing="cozy"
-                                    key={actionTaken.id}
-                                    contentViewType="vertical"
-                                >
-                                    {isTruthyString(actionTaken.summary) && (
-                                        <TextOutput
-                                            label={strings.flashUpdateActionDescription}
-                                            value={actionTaken.summary}
-                                            strongLabel
-                                        />
-                                    )}
-                                    {actionTaken.action_details.length > 0 && (
-                                        <Container
-                                            heading={strings.flashUpdateActions}
-                                            headingLevel={5}
-                                            childrenContainerClassName={styles.actionList}
-                                            spacing="none"
-                                        >
-                                            {actionTaken.action_details.map((actionDetail) => (
-                                                <div
-                                                    key={actionDetail.id}
-                                                    className={styles.action}
+                            <ListView layout="block">
+                                {definedActions.map((actionTaken) => (
+                                    <Container
+                                        heading={actionTaken.organization_display}
+                                        headingLevel={4}
+                                        key={actionTaken.id}
+                                    >
+                                        <ListView layout="block">
+                                            {isTruthyString(actionTaken.summary) && (
+                                                <TextOutput
+                                                    label={strings.flashUpdateActionDescription}
+                                                    value={actionTaken.summary}
+                                                    strongLabel
+                                                />
+                                            )}
+                                            {actionTaken.action_details.length > 0 && (
+                                                <Container
+                                                    heading={strings.flashUpdateActions}
+                                                    headingLevel={5}
+                                                    spacing="none"
                                                 >
-                                                    {actionDetail.name}
-                                                </div>
-                                            ))}
-                                        </Container>
-                                    )}
-                                </Container>
-                            ))}
+                                                    <ListView withWrap>
+                                                        {actionTaken.action_details.map(
+                                                            (actionDetail) => (
+                                                                <Label key={actionDetail.id}>
+                                                                    {actionDetail.name}
+                                                                </Label>
+                                                            ),
+                                                        )}
+                                                    </ListView>
+                                                </Container>
+                                            )}
+                                        </ListView>
+                                    </Container>
+                                ))}
+                            </ListView>
                         </Container>
                     )}
                     {flashUpdateResponse?.references
                         && flashUpdateResponse.references.length > 0
                         && (
                             <Container
-                                className={styles.references}
                                 heading={strings.flashUpdateResourcesHeading}
                                 withHeaderBorder
-                                contentViewType="grid"
-                                numPreferredGridContentColumns={3}
                             >
-                                {flashUpdateResponse.references.map((reference) => (
-                                    <Container
-                                        key={reference.id}
-                                        className={styles.referenceItem}
-                                        heading={reference.source_description}
-                                        headerDescription={<DateOutput value={reference.date} />}
-                                        headingLevel={4}
-                                        withInternalPadding
-                                        contentViewType="vertical"
-                                    >
-                                        {isTruthyString(reference.url) && (
-                                            <Link
-                                                href={reference.url}
-                                                external
-                                                withLinkIcon
-                                            >
-                                                {strings.flashUpdateReference}
-                                            </Link>
-                                        )}
-                                        {reference.document_details?.file && (
-                                            <Link
-                                                href={reference.document_details.file}
-                                                external
-                                                icons={<DownloadLineIcon className={styles.icon} />}
-                                                variant="secondary"
-                                            >
-                                                {strings.flashUpdateDownloadDocument}
-                                            </Link>
-                                        )}
-                                    </Container>
-                                ))}
+                                <ListView
+                                    layout="grid"
+                                    numPreferredGridColumns={3}
+                                >
+                                    {flashUpdateResponse.references.map((reference) => (
+                                        <Container
+                                            key={reference.id}
+                                            heading={reference.source_description}
+                                            headerDescription={(
+                                                <DateOutput value={reference.date} />
+                                            )}
+                                            headingLevel={4}
+                                            withPadding
+                                            withBackground
+                                            withShadow
+                                        >
+                                            {isTruthyString(reference.url) && (
+                                                <Link
+                                                    href={reference.url}
+                                                    external
+                                                    withLinkIcon
+                                                >
+                                                    {strings.flashUpdateReference}
+                                                </Link>
+                                            )}
+                                            {reference.document_details?.file && (
+                                                <Link
+                                                    href={reference.document_details.file}
+                                                    external
+                                                    before={(
+                                                        <DownloadLineIcon />
+                                                    )}
+                                                    styleVariant="outline"
+                                                >
+                                                    {strings.flashUpdateDownloadDocument}
+                                                </Link>
+                                            )}
+                                        </Container>
+                                    ))}
+                                </ListView>
                             </Container>
                         )}
                 </>

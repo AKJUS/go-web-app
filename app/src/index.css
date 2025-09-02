@@ -1,6 +1,21 @@
 * {
     box-sizing: border-box;
 }
+::-webkit-scrollbar {
+    transform: translateX(100%);
+    background-color: var(--go-ui-color-scrollbar-background);
+    width: var(--go-ui-width-scrollbar);
+    height: var(--go-ui-width-scrollbar);
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--go-ui-color-scrollbar-background);
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: var(--go-ui-radius-scrollbar-border);
+    background-color: var(--go-ui-color-scrollbar-foreground);
+}
 
 html {
     @media screen {
@@ -26,6 +41,22 @@ body {
 
 ul, ol, p {
     margin: 0;
+}
+
+ul, ol {
+    padding-inline-start: var(--go-ui-spacing-lg);
+}
+
+li {
+    margin: var(--go-ui-spacing-2xs) 0;
+
+    &:first-child {
+        margin-top: unset;
+    }
+
+    &:last-child {
+        margin-bottom: unset;
+    }
 }
 
 @media print {

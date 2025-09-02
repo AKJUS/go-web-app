@@ -1,4 +1,6 @@
 .file-input {
+    display: contents;
+
     .input {
         visibility: hidden;
         width: 0;

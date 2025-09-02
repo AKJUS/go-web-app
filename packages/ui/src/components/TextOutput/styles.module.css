@@ -1,11 +1,28 @@
 .text-output {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 var(--go-ui-spacing-sm);
+
+    &.with-uppercase-letters {
+        text-transform: uppercase;
+    }
+
+    &.with-light-text {
+        color: var(--go-ui-color-text-light);
+    }
+
+    &.with-block-layout {
+        flex-direction: column;
+        flex-wrap: initial;
+    }
 
     &.with-background {
+        border-radius: var(--go-ui-border-radius-md);
         background-color: var(--go-ui-color-background);
-        padding: var(--go-ui-spacing-sm);
+    }
+
+    &.with-light-background {
+        border-radius: var(--go-ui-border-radius-md);
+        background-color: var(--go-ui-color-foreground);
     }
 
     .label {
@@ -23,5 +40,17 @@
 
     .strong {
         font-weight: var(--go-ui-font-weight-semibold);
+    }
+
+    &.text-size-small {
+        font-size: var(--go-ui-font-size-sm);
+    }
+
+    &.text-size-medium {
+        font-size: var(--go-ui-font-size-md);
+    }
+
+    &.text-size-large {
+        font-size: var(--go-ui-font-size-lg);
     }
 }

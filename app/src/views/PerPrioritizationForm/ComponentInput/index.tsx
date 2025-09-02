@@ -3,9 +3,10 @@ import {
     useState,
 } from 'react';
 import {
-    BlockLoading,
+    ButtonLayout,
     Checkbox,
     ExpandableContainer,
+    ListView,
     TextArea,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -34,7 +35,6 @@ import type { PartialPrioritization } from '../schema';
 import QuestionOutput from './QuestionOutput';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type AssessmentResponse = GoApiResponse<'/api/v2/per-assessment/{id}/'>;
 type AreaResponse = NonNullable<AssessmentResponse['area_responses']>[number];
@@ -44,9 +44,9 @@ type PerFormComponentResponse = GoApiResponse<'/api/v2/per-formcomponent/'>;
 type Value = NonNullable<PartialPrioritization['prioritized_action_responses']>[number];
 
 interface Props {
-    value?: Value;
+    value: Value | undefined;
     onChange: (value: SetValueArg<Value>, index: number | undefined) => void;
-    index: number;
+    index: number | undefined;
     error: Error<Value> | undefined;
     component: NonNullable<PerFormComponentResponse['results']>[number];
     onSelectionChange: (checked: boolean, index: number, componentId: number) => void;
@@ -143,9 +143,11 @@ function ComponentInput(props: Props) {
         }),
     );
 
-    const handleCheck = useCallback((checked: boolean, checkIndex: number) => {
-        onSelectionChange(checked, checkIndex, component.id);
-    }, [component.id, onSelectionChange]);
+    const handleCheck = useCallback((checked: boolean, checkIndex: number | undefined) => {
+        if (!readOnly && isDefined(checkIndex)) {
+            onSelectionChange(checked, checkIndex, component.id);
+        }
+    }, [component.id, readOnly, onSelectionChange]);
 
     const componentNum = component.component_num;
 
@@ -157,14 +159,12 @@ function ComponentInput(props: Props) {
 
     return (
         <ExpandableContainer
-            className={styles.componentInput}
             onExpansionChange={setExpanded}
             heading={isTruthyString(component.component_letter)
                 ? `${component.component_num}(${component.component_letter}). ${component.title}`
                 : `${component.component_num}. ${component.title}`}
-            headingLevel={4}
-            spacing="comfortable"
-            icons={(
+            headingLevel={5}
+            headerIcons={(
                 <Checkbox
                     name={index}
                     value={isDefined(value)}
@@ -172,32 +172,58 @@ function ComponentInput(props: Props) {
                     readOnly={readOnly}
                 />
             )}
-            headerDescriptionContainerClassName={styles.headerDescription}
             headerDescription={(
-                <>
-                    <div className={styles.additionalInformation}>
-                        <div>
+                <ListView layout="block">
+                    <ListView
+                        withWrap
+                        withSpacingOpticalCorrection
+                        spacing="sm"
+                    >
+                        <ButtonLayout
+                            spacing="sm"
+                            readOnly
+                            styleVariant="translucent"
+                            // FIXME: use tag component
+                        >
                             {ratingDisplay ?? strings.notReviewed}
-                        </div>
-                        <div className={styles.separator} />
-                        <div>
+                        </ButtonLayout>
+                        <ButtonLayout
+                            spacing="sm"
+                            readOnly
+                            styleVariant="translucent"
+                            // FIXME: use tag component
+                        >
                             {resolveToComponent(
                                 strings.benchmarksAssessed,
                                 { count: numResponses },
                             )}
-                        </div>
+                        </ButtonLayout>
                         {expanded && answerStats.length > 0 && (
-                            <div className={styles.answersByCount}>
+                            <ListView
+                                withWrap
+                                withSpacingOpticalCorrection
+                                spacing="sm"
+                            >
                                 {answerStats.map((answerStat) => (
-                                    <TextOutput
+                                    <ButtonLayout
                                         key={answerStat.answer}
-                                        label={answerStat.answer}
-                                        value={answerStat.num}
-                                    />
+                                        spacing="sm"
+                                        readOnly
+                                        styleVariant="translucent"
+                                        // FIXME: use tag component
+                                    >
+                                        <TextOutput
+                                            key={answerStat.answer}
+                                            label={answerStat.answer}
+                                            value={answerStat.num}
+                                            valueType="number"
+                                            prefix="x"
+                                        />
+                                    </ButtonLayout>
                                 ))}
-                            </div>
+                            </ListView>
                         )}
-                    </div>
+                    </ListView>
                     <NonFieldError error={error} />
                     <TextArea
                         name="justification_text"
@@ -209,29 +235,36 @@ function ComponentInput(props: Props) {
                         error={error?.justification_text}
                         readOnly={readOnly}
                     />
-                </>
+                </ListView>
             )}
+            pending={formQuestionsPending}
+            withPadding
+            withBackground
+            spacing="lg"
         >
-            {formQuestionsPending && (
-                <BlockLoading />
-            )}
-            <NonFieldError
-                error={error}
-                withFallbackError
-            />
-            {/* FIXME: use List */}
-            {formQuestions && formQuestions.results?.map(
-                (perFormQuestion) => (
-                    <QuestionOutput
-                        key={perFormQuestion.id}
-                        question={perFormQuestion.question}
-                        questionNum={perFormQuestion.question_num}
-                        componentNum={componentNum}
-                        answer={mappedQuestionResponses?.[perFormQuestion.id]?.answerDisplay}
-                        notes={mappedQuestionResponses?.[perFormQuestion.id]?.notes}
-                    />
-                ),
-            )}
+            <ListView
+                layout="block"
+                spacing="xs"
+            >
+                <NonFieldError
+                    error={error}
+                    withFallbackError
+                />
+                {/* FIXME: use List */}
+                {formQuestions && formQuestions.results?.map(
+                    (perFormQuestion, i) => (
+                        <QuestionOutput
+                            key={perFormQuestion.id}
+                            question={perFormQuestion.question}
+                            questionNum={perFormQuestion.question_num}
+                            componentNum={componentNum}
+                            answer={mappedQuestionResponses?.[perFormQuestion.id]?.answerDisplay}
+                            notes={mappedQuestionResponses?.[perFormQuestion.id]?.notes}
+                            withDarkBackground={i % 2 === 0}
+                        />
+                    ),
+                )}
+            </ListView>
         </ExpandableContainer>
     );
 }

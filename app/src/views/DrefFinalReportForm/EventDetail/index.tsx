@@ -21,6 +21,7 @@ import MultiImageWithCaptionInput from '#components/domain/MultiImageWithCaption
 import SourceInformationInput from '#components/domain/SourceInformationInput';
 import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
+import TabPage from '#components/TabPage';
 
 import {
     ONSET_SUDDEN,
@@ -30,7 +31,6 @@ import {
 import { type PartialFinalReport } from '../schema';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type Value = PartialFinalReport;
 type SourceInformationFormFields = NonNullable<PartialFinalReport['source_information']>[number];
@@ -85,10 +85,8 @@ function EventDetail(props: Props) {
     }, [setFieldValue]);
 
     return (
-        <div className={styles.eventDetail}>
-            <Container
-                heading={strings.drefFormDescriptionEvent}
-            >
+        <TabPage>
+            <Container heading={strings.drefFormDescriptionEvent}>
                 {value.type_of_dref !== TYPE_IMMINENT && (
                     <InputSection
                         title={(
@@ -248,7 +246,6 @@ function EventDetail(props: Props) {
                     <InputSection
                         title={strings.drefFormUploadPhotos}
                         description={strings.drefFormUploadPhotosLimitation}
-                        contentSectionClassName={styles.imageInputContent}
                     >
                         <MultiImageWithCaptionInput
                             label={strings.drefFinalReportFormSelectImages}
@@ -305,17 +302,15 @@ function EventDetail(props: Props) {
                         />
                     ))}
                     <Button
-                        className={styles.actions}
                         name={undefined}
                         onClick={handleSourceInformationAdd}
-                        variant="secondary"
                         disabled={disabled || readOnly}
                     >
                         {strings.drefFormSourceInformationAddButton}
                     </Button>
                 </InputSection>
             </Container>
-        </div>
+        </TabPage>
     );
 }
 

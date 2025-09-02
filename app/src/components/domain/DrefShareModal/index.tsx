@@ -4,8 +4,10 @@ import {
 } from 'react';
 import {
     Button,
-    List,
+    Container,
+    ListView,
     Modal,
+    RawList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -24,7 +26,6 @@ import {
 import UserItem from './UserItem';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 interface Props {
     drefId: number;
@@ -102,9 +103,6 @@ function DrefShareModal(props: Props) {
 
     return (
         <Modal
-            overlayClassName={styles.overlay}
-            modalContainerClassName={styles.modalContainer}
-            className={styles.drefShareModal}
             heading={strings.drefShareTitle}
             headerDescription={strings.drefShareDescription}
             onClose={onCancel}
@@ -112,34 +110,46 @@ function DrefShareModal(props: Props) {
                 <Button
                     name={null}
                     onClick={triggerUpdate}
+                    colorVariant="primary"
                 >
                     {strings.drefShareUpdate}
                 </Button>
             )}
             size="md"
-            childrenContainerClassName={styles.content}
+            withHeaderBorder
         >
-            <UserSearchMultiSelectInput
-                name={undefined}
-                value={users}
-                onChange={setUsers}
-                options={userOptions}
-                onOptionsChange={setUserOptions}
-                disabled={updatePending || getPending}
-            />
-            <List
-                className={styles.userList}
-                messageClassName={styles.message}
-                data={selectedUsers}
-                renderer={UserItem}
-                keySelector={userKeySelector}
-                rendererParams={userRendererParams}
-                emptyMessage={strings.userListEmptyMessage}
-                errored={false}
-                pending={updatePending || getPending}
-                filtered={false}
-                compact
-            />
+            <ListView layout="block">
+                <UserSearchMultiSelectInput
+                    // FIXME: use strings
+                    label="Select users"
+                    name={undefined}
+                    value={users}
+                    onChange={setUsers}
+                    options={userOptions}
+                    onOptionsChange={setUserOptions}
+                    disabled={updatePending || getPending}
+                />
+                <Container
+                    emptyMessage={strings.userListEmptyMessage}
+                    pending={updatePending || getPending}
+                    headingLevel={6}
+                    // FIXME: use strings
+                    heading="Already shared to"
+                    withHeaderBorder
+                >
+                    <ListView
+                        withWrap
+                        spacing="sm"
+                    >
+                        <RawList
+                            data={selectedUsers}
+                            renderer={UserItem}
+                            keySelector={userKeySelector}
+                            rendererParams={userRendererParams}
+                        />
+                    </ListView>
+                </Container>
+            </ListView>
         </Modal>
     );
 }

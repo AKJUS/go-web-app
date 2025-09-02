@@ -239,11 +239,11 @@ function Application() {
     );
 
     return (
-        <RouteContext.Provider value={wrappedRoutes}>
-            <UserContext.Provider value={userContextValue}>
-                <AlertContext.Provider value={alertContextValue}>
-                    <RequestContext.Provider value={requestContextValue}>
-                        <LanguageContext.Provider value={languageContextValue}>
+        <LanguageContext.Provider value={languageContextValue}>
+            <RouteContext.Provider value={wrappedRoutes}>
+                <UserContext.Provider value={userContextValue}>
+                    <AlertContext.Provider value={alertContextValue}>
+                        <RequestContext.Provider value={requestContextValue}>
                             <RouterProvider
                                 router={router}
                                 fallbackElement={(
@@ -257,11 +257,11 @@ function Application() {
                                     </div>
                                 )}
                             />
-                        </LanguageContext.Provider>
-                    </RequestContext.Provider>
-                </AlertContext.Provider>
-            </UserContext.Provider>
-        </RouteContext.Provider>
+                        </RequestContext.Provider>
+                    </AlertContext.Provider>
+                </UserContext.Provider>
+            </RouteContext.Provider>
+        </LanguageContext.Provider>
     );
 }
 

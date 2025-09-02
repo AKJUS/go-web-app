@@ -7,7 +7,6 @@
         "addLocalUnitLabel": "Add a Local Unit",
         "importDropdownLabel": "Import Local Units",
         "configureDropdownLabel": "Configure Local Units",
-        "viewPreviousImportsDropdownLabel": "View previous imports",
-        "closePresentationLabel": "Close"
+        "viewPreviousImportsDropdownLabel": "View previous imports"
     }
 }

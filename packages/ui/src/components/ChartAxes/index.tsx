@@ -206,6 +206,7 @@ function ChartAxes(props: Props) {
                                     style={{
                                         width: xTickWidth,
                                         height: xAxisHeight,
+                                        transform: xTickWidth < 30 ? 'rotate(-45deg) translateX(-10%) translateY(20%)' : undefined,
                                     }}
                                     title={typeof tick.label === 'string' ? String(tick.label) : undefined}
                                 >

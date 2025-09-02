@@ -300,7 +300,7 @@ export function Component() {
             heading={heading}
         >
             <Container
-                actions={(
+                headerActions={(
                     <ExportButton
                         onClick={handleExportClick}
                         progress={progress}

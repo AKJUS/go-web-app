@@ -32,7 +32,7 @@ interface Props {
     onChange: (value: SetValueArg<IndicatorFormFields>, index: number) => void;
     onRemove: (index: number) => void;
     index: number;
-    readOnly: boolean;
+    readOnly?: boolean;
     disabled?: boolean;
 }
 
@@ -93,7 +93,7 @@ function IndicatorInput(props: Props) {
                 name={index}
                 className={styles.removeButton}
                 onClick={onRemove}
-                variant="tertiary"
+                styleVariant="action"
                 title={strings.drefIndicatorRemoveButtonLabel}
                 disabled={disabled || readOnly}
             >

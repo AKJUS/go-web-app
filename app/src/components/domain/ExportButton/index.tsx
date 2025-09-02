@@ -57,9 +57,8 @@ function ExportButton(props: Props) {
         <Button
             name={undefined}
             onClick={onClick}
-            icons={<DownloadTwoLineIcon />}
+            before={<DownloadTwoLineIcon />}
             disabled={totalCount < 1 || pendingExport || disabled}
-            variant="secondary"
         >
             {exportButtonLabel}
         </Button>

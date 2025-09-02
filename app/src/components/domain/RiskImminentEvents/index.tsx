@@ -13,11 +13,12 @@ import {
 import {
     Container,
     InfoPopup,
+    LegendItem,
+    ListView,
     Radio,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToComponent } from '@ifrc-go/ui/utils';
-import { _cs } from '@togglecorp/fujs';
 import type { LngLatBoundsLike } from 'mapbox-gl';
 
 import Link from '#components/Link';
@@ -32,7 +33,6 @@ import Pdc from './Pdc';
 import WfpAdam from './WfpAdam';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 export type ImminentEventSource = 'pdc' | 'wfpAdam' | 'gdacs' | 'meteoSwiss';
 type HazardType = components<'read'>['schemas']['CommonHazardTypeEnumKey'];
@@ -64,29 +64,6 @@ function RiskImminentEvents(props: Props) {
 
     const strings = useTranslation(i18n);
 
-    const CurrentView = useMemo(
-        () => {
-            if (activeView === 'pdc') {
-                return Pdc;
-            }
-
-            if (activeView === 'wfpAdam') {
-                return WfpAdam;
-            }
-
-            if (activeView === 'gdacs') {
-                return Gdacs;
-            }
-
-            if (activeView === 'meteoSwiss') {
-                return MeteoSwiss;
-            }
-
-            return null;
-        },
-        [activeView],
-    );
-
     const handleRadioClick = useCallback((key: ImminentEventSource) => {
         setActiveView(key);
     }, []);
@@ -100,27 +77,27 @@ function RiskImminentEvents(props: Props) {
             {
                 key: 'FL',
                 label: strings.imminentEventsFlood,
-                icon: <FloodIcon className={styles.icon} />,
+                icon: <FloodIcon />,
             },
             {
                 key: 'TC',
                 label: strings.imminentEventsStorm,
-                icon: <CycloneIcon className={styles.icon} />,
+                icon: <CycloneIcon />,
             },
             {
                 key: 'EQ',
                 label: strings.imminentEventsEarthquake,
-                icon: <EarthquakeIcon className={styles.icon} />,
+                icon: <EarthquakeIcon />,
             },
             {
                 key: 'DR',
                 label: strings.imminentEventsDrought,
-                icon: <DroughtIcon className={styles.icon} />,
+                icon: <DroughtIcon />,
             },
             {
                 key: 'WF',
                 label: strings.imminentEventsWildfire,
-                icon: <ForestFireIcon className={styles.icon} />,
+                icon: <ForestFireIcon />,
             },
         ],
         [
@@ -134,112 +111,55 @@ function RiskImminentEvents(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.riskImminentEvents, className)}
+            className={className}
             heading={strings.imminentEventsHeading}
             headerDescription={strings.imminentEventsDescription}
             withHeaderBorder
-            actions={(
+            headerActions={(
                 <WikiLink
-                    href="user_guide/risk_module#imminent-events"
+                    pathName="user_guide/risk_module#imminent-events"
                 />
             )}
-            footerContent={(
-                <div className={styles.legend}>
-                    {riskHazards.map((hazard) => (
-                        <div
-                            key={hazard.key}
-                            className={styles.legendItem}
-                        >
-                            <div
-                                className={styles.iconContainer}
-                                style={{
-                                    backgroundColor: hazardTypeToColorMap[hazard.key],
-                                }}
-                            >
-                                {hazard.icon}
-                            </div>
-                            <div className={styles.label}>
-                                {hazard.label}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-            footerActionsContainerClassName={styles.footerActions}
-            footerActions={(
-                <>
-                    <Radio
-                        name="gdacs"
-                        value={activeView === 'gdacs'}
-                        onClick={handleRadioClick}
-                        label={strings.imminentEventsSourceGdacsLabel}
-                        actions={(
-                            <InfoPopup
-                                title={strings.gdacsTitle}
-                                popupClassName={styles.popup}
-                                descriptionClassName={styles.description}
-                                description={resolveToComponent(
-                                    strings.gdacsDescription,
-                                    {
-                                        here: (
-                                            <Link
-                                                href="https://www.gdacs.org/default.aspx"
-                                                variant="tertiary"
-                                                external
-                                            >
-                                                {strings.here}
-                                            </Link>
-                                        ),
-                                    },
-                                )}
+            footer={(
+                <ListView
+                    withWrap
+                    withDarkBackground
+                    withSpaceBetweenContents
+                    withPadding
+                >
+                    <ListView
+                        withWrap
+                        spacing="sm"
+                        withSpacingOpticalCorrection
+                    >
+                        {riskHazards.map((hazard) => (
+                            <LegendItem
+                                icon={hazard.icon}
+                                label={hazard.label}
+                                color={hazardTypeToColorMap[hazard.key]}
+                                withColorInvertedIcon
                             />
-                        )}
-                    />
-                    <Radio
-                        name="pdc"
-                        value={activeView === 'pdc'}
-                        onClick={handleRadioClick}
-                        label={strings.imminentEventsSourcePdcLabel}
-                        actions={(
-                            <InfoPopup
-                                title={strings.pdcTooltipTitle}
-                                popupClassName={styles.popup}
-                                descriptionClassName={styles.description}
-                                description={resolveToComponent(
-                                    strings.pdcTooltipDescription,
-                                    {
-                                        here: (
-                                            <Link
-                                                href="https://www.pdc.org/wp-content/uploads/AIM-3-Fact-Sheet-Screen-1.pdf"
-                                                variant="tertiary"
-                                                external
-                                            >
-                                                {strings.here}
-                                            </Link>
-                                        ),
-                                    },
-                                )}
-                            />
-                        )}
-                    />
-                    {environment !== 'production' && (
+                        ))}
+                    </ListView>
+                    <ListView
+                        withWrap
+                        spacing="sm"
+                        withSpacingOpticalCorrection
+                    >
                         <Radio
-                            name="wfpAdam"
-                            value={activeView === 'wfpAdam'}
+                            name="gdacs"
+                            value={activeView === 'gdacs'}
                             onClick={handleRadioClick}
-                            label={strings.imminentEventsSourceWfpAdamLabel}
-                            actions={(
+                            after={(
                                 <InfoPopup
-                                    title={strings.wfpAdamTitle}
-                                    popupClassName={styles.popup}
-                                    descriptionClassName={styles.description}
+                                    title={strings.gdacsTitle}
                                     description={resolveToComponent(
-                                        strings.wfpAdamDescription,
+                                        strings.gdacsDescription,
                                         {
                                             here: (
                                                 <Link
-                                                    href="https://gis.wfp.org/adam/"
-                                                    variant="tertiary"
+                                                    href="https://www.gdacs.org/default.aspx"
+                                                    styleVariant="action"
                                                     external
                                                 >
                                                     {strings.here}
@@ -249,52 +169,124 @@ function RiskImminentEvents(props: Props) {
                                     )}
                                 />
                             )}
-                        />
-                    )}
-                    {environment !== 'production' && (
+                        >
+                            {strings.imminentEventsSourceGdacsLabel}
+                        </Radio>
                         <Radio
-                            name="meteoSwiss"
-                            value={activeView === 'meteoSwiss'}
+                            name="pdc"
+                            value={activeView === 'pdc'}
                             onClick={handleRadioClick}
-                            label={strings.imminentEventsSourceMeteoSwissLabel}
-                            actions={(
+                            after={(
                                 <InfoPopup
-                                    title={strings.meteoSwissTitle}
-                                    popupClassName={styles.popup}
-                                    descriptionClassName={styles.description}
-                                    description={(
-                                        <div className={styles.descriptionContent}>
-                                            <div>
-                                                {strings.meteoSwissDescriptionOne}
-                                            </div>
-                                            <div>
-                                                {resolveToComponent(
-                                                    strings.meteoSwissDescriptionTwo,
-                                                    {
-                                                        here: (
-                                                            <Link
-                                                                href="https://www.meteoswiss.admin.ch/about-us/research-and-cooperation/projects/2021/weather4un.html"
-                                                                variant="tertiary"
-                                                                external
-                                                            >
-                                                                {strings.here}
-                                                            </Link>
-                                                        ),
-                                                    },
-                                                )}
-                                            </div>
-                                        </div>
+                                    title={strings.pdcTooltipTitle}
+                                    description={resolveToComponent(
+                                        strings.pdcTooltipDescription,
+                                        {
+                                            here: (
+                                                <Link
+                                                    href="https://www.pdc.org/wp-content/uploads/AIM-3-Fact-Sheet-Screen-1.pdf"
+                                                    styleVariant="action"
+                                                    external
+                                                >
+                                                    {strings.here}
+                                                </Link>
+                                            ),
+                                        },
                                     )}
                                 />
                             )}
-                        />
-                    )}
-                </>
+                        >
+                            {strings.imminentEventsSourcePdcLabel}
+                        </Radio>
+                        {environment !== 'production' && (
+                            <Radio
+                                name="wfpAdam"
+                                value={activeView === 'wfpAdam'}
+                                onClick={handleRadioClick}
+                                after={(
+                                    <InfoPopup
+                                        title={strings.wfpAdamTitle}
+                                        description={resolveToComponent(
+                                            strings.wfpAdamDescription,
+                                            {
+                                                here: (
+                                                    <Link
+                                                        href="https://gis.wfp.org/adam/"
+                                                        styleVariant="action"
+                                                        external
+                                                    >
+                                                        {strings.here}
+                                                    </Link>
+                                                ),
+                                            },
+                                        )}
+                                    />
+                                )}
+                            >
+                                {strings.imminentEventsSourceWfpAdamLabel}
+                            </Radio>
+                        )}
+                        {environment !== 'production' && (
+                            <Radio
+                                name="meteoSwiss"
+                                value={activeView === 'meteoSwiss'}
+                                onClick={handleRadioClick}
+                                after={(
+                                    <InfoPopup
+                                        title={strings.meteoSwissTitle}
+                                        description={(
+                                            <ListView layout="block">
+                                                <div>
+                                                    {strings.meteoSwissDescriptionOne}
+                                                </div>
+                                                <div>
+                                                    {resolveToComponent(
+                                                        strings.meteoSwissDescriptionTwo,
+                                                        {
+                                                            here: (
+                                                                <Link
+                                                                    href="https://www.meteoswiss.admin.ch/about-us/research-and-cooperation/projects/2021/weather4un.html"
+                                                                    styleVariant="action"
+                                                                    external
+                                                                >
+                                                                    {strings.here}
+                                                                </Link>
+                                                            ),
+                                                        },
+                                                    )}
+                                                </div>
+                                            </ListView>
+                                        )}
+                                    />
+                                )}
+                            >
+                                {strings.imminentEventsSourceMeteoSwissLabel}
+                            </Radio>
+                        )}
+                    </ListView>
+                </ListView>
             )}
-            headingLevel={2}
         >
-            {CurrentView && (
-                <CurrentView
+            {activeView === 'pdc' && (
+                <Pdc
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...otherProps}
+                />
+            )}
+            {activeView === 'wfpAdam' && (
+                <WfpAdam
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...otherProps}
+                />
+            )}
+            {activeView === 'gdacs' && (
+                <Gdacs
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...otherProps}
+                />
+            )}
+            {activeView === 'meteoSwiss' && (
+                <MeteoSwiss
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...otherProps}
                 />

@@ -1,6 +1,10 @@
+import {
+    Description,
+    InlineLayout,
+    Label,
+    ListView,
+} from '@ifrc-go/ui';
 import { isNotDefined } from '@togglecorp/fujs';
-
-import styles from './styles.module.css';
 
 interface Props {
     question: string | undefined | null;
@@ -9,6 +13,7 @@ interface Props {
     questionNum: number | undefined | null;
     componentNum: number;
     notes?: string | null;
+    withDarkBackground?: boolean;
 }
 
 function QuestionOutput(props: Props) {
@@ -18,6 +23,7 @@ function QuestionOutput(props: Props) {
         question,
         answer,
         notes,
+        withDarkBackground,
     } = props;
 
     if (isNotDefined(questionNum)) {
@@ -25,24 +31,29 @@ function QuestionOutput(props: Props) {
     }
 
     return (
-        <div className={styles.questionOutput}>
-            <div className={styles.questionRow}>
-                <div className={styles.numbering}>
-                    {`${componentNum}.${questionNum}.`}
-                </div>
-                <div className={styles.question}>
-                    {question}
-                </div>
-                <div className={styles.answer}>
-                    {answer}
-                </div>
-            </div>
+        <ListView
+            layout="block"
+            withSpacingOpticalCorrection
+            withPadding
+            withDarkBackground={withDarkBackground}
+            spacing="sm"
+        >
+            <InlineLayout
+                before={`${componentNum}.${questionNum}.`}
+                after={(
+                    <Label strong>
+                        {answer}
+                    </Label>
+                )}
+            >
+                {question}
+            </InlineLayout>
             {notes && (
-                <div className={styles.notes}>
+                <Description withLightText>
                     {notes}
-                </div>
+                </Description>
             )}
-        </div>
+        </ListView>
     );
 }
 

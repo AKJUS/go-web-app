@@ -2,7 +2,7 @@
     "namespace": "countryPreparedness",
     "strings": {
         "nsPreparednessAndResponseCapacityHeading": "NS Preparedness and Response Capacity",
-        "goBackButtonTitle": "Go back",
+        "goBackButtonTitle": "Back to Capacity",
         "startDateLabel": "Start Date",
         "perPhaseLabel": "PER Phase",
         "perCycleLabel": "PER Cycle",

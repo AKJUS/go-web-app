@@ -84,32 +84,35 @@ function Alert<N extends string>(props: Props<N>) {
                 alertTypeToClassNameMap[type],
                 className,
             )}
-            icons={icon[type]}
+            headerIcons={icon[type]}
             heading={title}
             headingLevel={5}
-            withInternalPadding
-            actions={nonDismissable && (
+            headerActions={nonDismissable && (
                 <Button
                     name={undefined}
                     onClick={handleCloseButtonClick}
-                    variant="tertiary-on-dark"
+                    colorVariant="text-on-dark"
+                    styleVariant="action"
                     title={strings.closeButtonTitle}
                 >
                     <CloseLineIcon className={styles.closeIcon} />
                 </Button>
             )}
-            withoutWrapInHeading
+            withoutWrapInHeader
             footerActions={debugMessage && (
                 <div className={styles.actions}>
                     <Button
                         name={undefined}
                         onClick={handleCopyDebugMessageButtonClick}
-                        variant="tertiary-on-dark"
+                        colorVariant="text-on-dark"
+                        styleVariant="action"
                     >
                         {strings.alertCopyErrorDetails}
                     </Button>
                 </div>
             )}
+            withPadding
+            withShadow
         >
             {description}
         </Container>

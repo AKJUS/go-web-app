@@ -4,6 +4,7 @@ import {
 } from 'react';
 import {
     Button,
+    ListView,
     Modal,
     RadioInput,
     TextArea,
@@ -28,7 +29,6 @@ import {
 } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type DeprecateReason = NonNullable<GlobalEnums['local_units_deprecate_reason']>[number];
 
@@ -149,7 +149,6 @@ function LocalUnitDeleteModal(props: Props) {
                 { localUnitName },
             )}
             withHeaderBorder
-            childrenContainerClassName={styles.localUnitDeleteFormContent}
             onClose={onClose}
             footerActions={(
                 <Button
@@ -161,26 +160,31 @@ function LocalUnitDeleteModal(props: Props) {
                 </Button>
             )}
         >
-            <RadioInput
-                required
-                name="deprecated_reason"
-                listContainerClassName={styles.reasonList}
-                value={value.deprecated_reason}
-                label={strings.chooseDeleteReasonMessage}
-                onChange={setFieldValue}
-                options={deprecateReasonOptions}
-                keySelector={deprecateReasonKeySelector}
-                labelSelector={deprecateReasonLabelSelector}
-                error={error?.deprecated_reason}
-            />
-            <TextArea
-                required
-                name="deprecated_reason_overview"
-                label={strings.deleteReasonExplanation}
-                value={value.deprecated_reason_overview}
-                onChange={setFieldValue}
-                error={error?.deprecated_reason_overview}
-            />
+            <ListView
+                layout="block"
+                withSpacingOpticalCorrection
+            >
+                <RadioInput
+                    required
+                    name="deprecated_reason"
+                    radioListLayout="block"
+                    value={value.deprecated_reason}
+                    label={strings.chooseDeleteReasonMessage}
+                    onChange={setFieldValue}
+                    options={deprecateReasonOptions}
+                    keySelector={deprecateReasonKeySelector}
+                    labelSelector={deprecateReasonLabelSelector}
+                    error={error?.deprecated_reason}
+                />
+                <TextArea
+                    required
+                    name="deprecated_reason_overview"
+                    label={strings.deleteReasonExplanation}
+                    value={value.deprecated_reason_overview}
+                    onChange={setFieldValue}
+                    error={error?.deprecated_reason_overview}
+                />
+            </ListView>
         </Modal>
     );
 }

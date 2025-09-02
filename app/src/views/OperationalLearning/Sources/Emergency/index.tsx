@@ -1,9 +1,11 @@
-import { Container } from '@ifrc-go/ui';
+import { DownloadFillIcon } from '@ifrc-go/icons';
+import {
+    Container,
+    ListView,
+} from '@ifrc-go/ui';
 import { isDefined } from '@togglecorp/fujs';
 
 import Link from '#components/Link';
-
-import styles from './styles.module.css';
 
 interface Props {
     emergencyId: number | null | undefined;
@@ -21,27 +23,32 @@ function Emergency(props: Props) {
 
     return (
         <Container
-            className={styles.emergency}
-            childrenContainerClassName={styles.content}
+            withBackground
+            withPadding
         >
-            <Link
-                to="emergencyDetails"
-                urlParams={{
-                    emergencyId,
-                }}
-                withUnderline
+            <ListView
+                layout="grid"
+                withSpacingOpticalCorrection
             >
-                {emergencyName}
-            </Link>
-            {isDefined(appealDocumentURL) && (
                 <Link
-                    href={appealDocumentURL}
-                    withLinkIcon
-                    external
+                    to="emergencyDetails"
+                    urlParams={{
+                        emergencyId,
+                    }}
+                    withUnderline
                 >
-                    {appealDocumentName}
+                    {emergencyName}
                 </Link>
-            )}
+                {isDefined(appealDocumentURL) && (
+                    <Link
+                        href={appealDocumentURL}
+                        external
+                        before={<DownloadFillIcon />}
+                    >
+                        {appealDocumentName}
+                    </Link>
+                )}
+            </ListView>
         </Container>
     );
 }

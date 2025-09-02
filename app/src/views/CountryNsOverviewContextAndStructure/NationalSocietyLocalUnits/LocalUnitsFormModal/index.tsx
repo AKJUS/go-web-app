@@ -2,7 +2,10 @@ import {
     useCallback,
     useRef,
 } from 'react';
-import { Modal } from '@ifrc-go/ui';
+import {
+    ListView,
+    Modal,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { isDefined } from '@togglecorp/fujs';
 
@@ -10,7 +13,6 @@ import { type ManageResponse } from '../common';
 import LocalUnitsForm from './LocalUnitsForm';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 interface Props {
     localUnitId?: number;
@@ -54,7 +56,6 @@ function LocalUnitsFormModal(props: Props) {
 
     return (
         <Modal
-            className={styles.localUnitsFormModal}
             heading={readOnly
                 ? strings.localUnitsModalReadOnlyHeading
                 : strings.localUnitsModalHeading}
@@ -62,16 +63,16 @@ function LocalUnitsFormModal(props: Props) {
             size="pageWidth"
             withHeaderBorder
             headingLevel={2}
-            actions={<div className={styles.actionContainer} ref={actionsContainerRef} />}
-            headingContainerClassName={styles.headingContainer}
-            headingDescription={
-                <div ref={headingDescriptionRef} />
-            }
-            headerDescription={
-                <div ref={headerDescriptionRef} />
-            }
+            headerActions={<ListView elementRef={actionsContainerRef} />}
+            // FIXME: heading description
+            headerDescription={(
+                <>
+                    <div ref={headingDescriptionRef} />
+                    <div ref={headerDescriptionRef} />
+                </>
+            )}
             withFooterBorder={!readOnly}
-            spacing="comfortable"
+            withContentOverflow
         >
             <LocalUnitsForm
                 manageResponse={manageResponse}

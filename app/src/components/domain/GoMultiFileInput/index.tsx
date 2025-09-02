@@ -1,19 +1,25 @@
 import React, {
     useCallback,
+    useMemo,
     useRef,
 } from 'react';
-import { DeleteBinFillIcon } from '@ifrc-go/icons';
+import {
+    DeleteBinFillIcon,
+    DeleteBinLineIcon,
+} from '@ifrc-go/icons';
 import {
     Button,
-    type ButtonVariant,
+    type CommonRawFileInputProps,
+    Description,
+    IconButton,
+    InlineLayout,
     InputError,
+    ListView,
     type NameType,
     RawFileInput,
-    type RawFileInputProps,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    _cs,
     isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
@@ -25,7 +31,6 @@ import { useLazyRequest } from '#utils/restRequest';
 import { transformObjectError } from '#utils/restRequest/error';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 export type SupportedPaths = '/api/v2/per-file/multiple/' | '/api/v2/dref-files/multiple/' | '/api/v2/flash-update-file/multiple/';
 
@@ -47,45 +52,44 @@ function getFileNameFromUrl(urlString: string | undefined) {
     return splits[splits.length - 1];
 }
 
-type Props<T extends NameType> = Omit<RawFileInputProps<T>, 'multiple' | 'value' | 'onChange' | 'children' | 'inputRef'> & {
-    actions?: React.ReactNode;
-    children?: React.ReactNode;
-    className?: string;
+type Props<NAME> = Omit<CommonRawFileInputProps<NAME>, 'value'> & {
+    name: NAME;
     clearable?: boolean;
-    icons?: React.ReactNode;
-    onChange: (value: number[] | undefined, name: T) => void;
+    description?: React.ReactNode;
+    error?: React.ReactNode;
+    errorOnTooltip?: boolean;
     fileIdToUrlMap: Record<number, string>;
+    onChange: (value: number[] | undefined, name: NAME) => void;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     url: SupportedPaths;
     value: number[] | undefined | null;
-    variant?: ButtonVariant;
     withoutPreview?: boolean;
-    error?: React.ReactNode;
-    description?: React.ReactNode;
     useCurrentLanguageForMutation?: boolean;
 }
 
 function GoMultiFileInput<T extends NameType>(props: Props<T>) {
     const {
         accept,
-        actions: actionsFromProps,
+        after: afterFromProps,
+        before,
         children,
         className,
         clearable,
+        colorVariant = 'primary',
+        description,
         disabled: disabledFromProps,
-        icons,
+        error,
+        errorOnTooltip,
+        fileIdToUrlMap,
         inputProps,
         name,
         onChange,
         readOnly,
-        fileIdToUrlMap,
         setFileIdToUrlMap,
+        styleVariant = 'outline',
         url,
         value,
-        variant = 'secondary',
         withoutPreview,
-        error,
-        description,
         useCurrentLanguageForMutation = false,
     } = props;
 
@@ -162,11 +166,54 @@ function GoMultiFileInput<T extends NameType>(props: Props<T>) {
         }
     }, [triggerFileUpload]);
 
+    const handleClearButtonClick = useCallback(() => {
+        onChange(undefined, name);
+    }, [onChange, name]);
+
     const disabled = disabledFromProps || pending || readOnly;
-    const actions = (clearable && value && !readOnly && !disabled ? actionsFromProps : null);
     const valueUrls = isDefined(value) ? (
         value.map((fileId) => ({ id: fileId, url: fileIdToUrlMap?.[fileId] }))
     ) : undefined;
+
+    const after = useMemo(() => {
+        if (readOnly || disabled) {
+            return null;
+        }
+
+        if (!clearable || !value) {
+            return afterFromProps;
+        }
+
+        return (
+            <ListView spacing="xs">
+                {after}
+                {clearable && value && (
+                    <IconButton
+                        name={undefined}
+                        onClick={handleClearButtonClick}
+                        // FIXME: use translations
+                        title="Clear selected files"
+                        // FIXME: use translations
+                        ariaLabel="Clear selected files"
+                        // title={strings.removeFileButtonTitle}
+                        // ariaLabel={strings.removeFileButtonTitle}
+                        spacing="none"
+                        disabled={disabled}
+                    >
+                        <DeleteBinLineIcon />
+                    </IconButton>
+                )}
+            </ListView>
+        );
+    }, [
+        afterFromProps,
+        clearable,
+        disabled,
+        handleClearButtonClick,
+        readOnly,
+        // strings.removeFileButtonTitle,
+        value,
+    ]);
 
     const handleFileRemove = useCallback(
         (id: number) => {
@@ -185,7 +232,11 @@ function GoMultiFileInput<T extends NameType>(props: Props<T>) {
     );
 
     return (
-        <div className={_cs(styles.goFileInput, className)}>
+        <ListView
+            layout="block"
+            spacing="xs"
+            className={className}
+        >
             <RawFileInput
                 name={name}
                 onChange={handleChange}
@@ -194,20 +245,34 @@ function GoMultiFileInput<T extends NameType>(props: Props<T>) {
                 readOnly={readOnly}
                 inputProps={inputProps}
                 inputRef={inputRef}
-                variant={variant}
-                icons={icons}
-                actions={actions}
+                colorVariant={colorVariant}
+                styleVariant={styleVariant}
+                before={before}
+                after={after}
                 multiple
             >
                 {children}
             </RawFileInput>
             {!withoutPreview && isDefined(valueUrls) && valueUrls.length > 0 && (
-                <div className={styles.selectedFiles}>
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                    spacing="xs"
+                >
                     {valueUrls.map(
                         (valueUrl) => (
-                            <div
-                                className={styles.file}
+                            <InlineLayout
                                 key={valueUrl.id}
+                                after={(
+                                    <Button
+                                        name={valueUrl.id}
+                                        styleVariant="action"
+                                        onClick={handleFileRemove}
+                                        title={strings.goMultiDeleteButton}
+                                    >
+                                        <DeleteBinFillIcon />
+                                    </Button>
+                                )}
                             >
                                 <Link
                                     href={valueUrl.url}
@@ -215,29 +280,25 @@ function GoMultiFileInput<T extends NameType>(props: Props<T>) {
                                 >
                                     {getFileNameFromUrl(valueUrl.url)}
                                 </Link>
-                                <Button
-                                    name={valueUrl.id}
-                                    variant="tertiary"
-                                    className={styles.deleteIcon}
-                                    onClick={handleFileRemove}
-                                    title={strings.goMultiDeleteButton}
-                                >
-                                    <DeleteBinFillIcon />
-                                </Button>
-                            </div>
+                            </InlineLayout>
                         ),
                     )}
-                </div>
+                </ListView>
             )}
             {description && (
-                <div>
+                <Description withLightText>
                     {description}
-                </div>
+                </Description>
             )}
-            <InputError>
-                {error}
-            </InputError>
-        </div>
+            {error && (
+                <InputError
+                    disabled={disabled}
+                    floating={errorOnTooltip}
+                >
+                    {error}
+                </InputError>
+            )}
+        </ListView>
     );
 }
 export default GoMultiFileInput;

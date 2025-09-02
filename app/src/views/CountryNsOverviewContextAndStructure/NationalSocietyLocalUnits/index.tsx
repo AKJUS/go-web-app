@@ -1,12 +1,9 @@
 import {
     useCallback,
-    useEffect,
-    useRef,
     useState,
 } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import {
-    CloseLineIcon,
     EpoaIcon,
     MoreTwoFillIcon,
     SettingsIcon,
@@ -16,7 +13,7 @@ import {
     Button,
     Container,
     DropdownMenu,
-    IconButton,
+    InlineLayout,
     Tab,
     TabList,
     TabPanel,
@@ -29,7 +26,6 @@ import {
 import {
     _cs,
     isDefined,
-    isNotDefined,
     listToMap,
 } from '@togglecorp/fujs';
 
@@ -75,16 +71,10 @@ function NationalSocietyLocalUnits(props: Props) {
         isLocalUnitRegionValidator,
         isLocalUnitCountryValidator,
     } = usePermissions();
-    const containerRef = useRef<HTMLDivElement>(null);
 
     // NOTE: key is used to refresh the page when local unit data is updated
     const [localUnitUpdateKey, setLocalUnitUpdateKey] = useState(0);
     const [manageResponse, setManageResponse] = useState<ManageResponse>();
-
-    const [
-        presentationMode,
-        setFullScreenMode,
-    ] = useState(false);
 
     const [showAddEditModal, {
         setTrue: setShowAddEditModalTrue,
@@ -105,10 +95,6 @@ function NationalSocietyLocalUnits(props: Props) {
         setTrue: setShowUploadHistoryModalTrue,
         setFalse: setShowUploadHistoryModalFalse,
     }] = useBooleanState(false);
-
-    const handleFullScreenChange = useCallback(() => {
-        setFullScreenMode(isDefined(document.fullscreenElement));
-    }, [setFullScreenMode]);
 
     const {
         filter,
@@ -147,18 +133,6 @@ function NationalSocietyLocalUnits(props: Props) {
     });
 
     const pending = localUnitsOptionsPending || manageLocalUnitsPending;
-
-    const handleFullScreenToggleClick = useCallback(() => {
-        if (isNotDefined(containerRef.current)) {
-            return;
-        }
-        const { current: viewerContainer } = containerRef;
-        if (!presentationMode && isDefined(viewerContainer?.requestFullscreen)) {
-            viewerContainer?.requestFullscreen();
-        } else if (presentationMode && isDefined(document.exitFullscreen)) {
-            document.exitFullscreen();
-        }
-    }, [presentationMode]);
 
     const handleLocalUnitsUpdate = useCallback(
         () => {
@@ -216,53 +190,32 @@ function NationalSocietyLocalUnits(props: Props) {
 
     const canSeeMoreOptions = isSuperUser || isValidator;
 
-    useEffect(() => {
-        document.addEventListener('fullscreenchange', handleFullScreenChange);
-
-        return (() => {
-            document.removeEventListener('fullscreenchange', handleFullScreenChange);
-        });
-    }, [handleFullScreenChange]);
-
     return (
         <Tabs
             onChange={handleTabChanges}
             value={activeTab}
-            variant="tertiary"
+            styleVariant="nav"
         >
             <Container
+                pending={false}
+                errored={false}
+                empty={false}
+                filtered={false}
                 className={_cs(styles.nationalSocietyLocalUnits, className)}
                 heading={strings.localUnitsTitle}
-                childrenContainerClassName={styles.content}
                 withHeaderBorder
-                filterActions={isAuthenticated && !isGuestUser && (
-                    <TabList>
-                        <Tab name="map">{strings.localUnitsMapView}</Tab>
-                        <Tab name="table">{strings.localUnitsListView}</Tab>
-                    </TabList>
-                )}
-                filters={(
-                    <Filters
-                        value={rawFilter}
-                        setFieldValue={setFilterField}
-                        options={localUnitsOptions}
-                        resetFilter={resetFilter}
-                        filtered={filtered}
-                    />
-                )}
-                actions={isAuthenticated && (environment !== 'production') && (
+                headerActions={isAuthenticated && (environment !== 'production') && (
                     <>
                         <Button
                             name={undefined}
-                            variant="secondary"
                             onClick={handleLocalUnitAddEditModalOpen}
                         >
                             {strings.addLocalUnitLabel}
                         </Button>
                         {canSeeMoreOptions && (
                             <DropdownMenu
-                                variant="tertiary"
                                 withoutDropdownIcon
+                                labelStyleVariant="action"
                                 label={<MoreTwoFillIcon className={styles.icon} />}
                                 // label="More options"
                                 persistent
@@ -272,7 +225,7 @@ function NationalSocietyLocalUnits(props: Props) {
                                         type="button"
                                         name={undefined}
                                         onClick={handleManageLocalUnitsModalOpen}
-                                        icons={<SettingsIcon className={styles.icon} />}
+                                        before={<SettingsIcon className={styles.icon} />}
                                     >
                                         {strings.configureDropdownLabel}
                                     </DropdownMenuItem>
@@ -283,7 +236,7 @@ function NationalSocietyLocalUnits(props: Props) {
                                             type="button"
                                             name={undefined}
                                             onClick={handleBulkUploadModalOpen}
-                                            icons={<UploadTwoFillIcon className={styles.icon} />}
+                                            before={<UploadTwoFillIcon className={styles.icon} />}
                                         >
                                             {strings.importDropdownLabel}
                                         </DropdownMenuItem>
@@ -291,7 +244,7 @@ function NationalSocietyLocalUnits(props: Props) {
                                             type="button"
                                             name={undefined}
                                             onClick={setShowUploadHistoryModalTrue}
-                                            icons={<EpoaIcon className={styles.icon} />}
+                                            before={<EpoaIcon className={styles.icon} />}
                                         >
                                             {strings.viewPreviousImportsDropdownLabel}
                                         </DropdownMenuItem>
@@ -301,32 +254,33 @@ function NationalSocietyLocalUnits(props: Props) {
                         )}
                     </>
                 )}
+                filters={(
+                    <Filters
+                        value={rawFilter}
+                        setFieldValue={setFilterField}
+                        options={localUnitsOptions}
+                        resetFilter={resetFilter}
+                        filtered={filtered}
+                    />
+                )}
             >
-                <TabPanel name="map">
-                    <Container
-                        className={_cs(presentationMode && styles.presentationMode)}
-                        containerRef={containerRef}
-                        actions={presentationMode && (
-                            <IconButton
-                                name={undefined}
-                                onClick={handleFullScreenToggleClick}
-                                title={strings.closePresentationLabel}
-                                variant="secondary"
-                                ariaLabel={strings.closePresentationLabel}
-                            >
-                                <CloseLineIcon />
-                            </IconButton>
+                {isAuthenticated && !isGuestUser && (
+                    <InlineLayout
+                        after={(
+                            <TabList>
+                                <Tab name="map">{strings.localUnitsMapView}</Tab>
+                                <Tab name="table">{strings.localUnitsListView}</Tab>
+                            </TabList>
                         )}
-                    >
-                        <LocalUnitsMap
-                            manageResponse={manageResponse}
-                            key={localUnitUpdateKey}
-                            onPresentationModeButtonClick={handleFullScreenToggleClick}
-                            presentationMode={presentationMode}
-                            filter={filter}
-                            localUnitsOptions={localUnitsOptions}
-                        />
-                    </Container>
+                    />
+                )}
+                <TabPanel name="map">
+                    <LocalUnitsMap
+                        manageResponse={manageResponse}
+                        key={localUnitUpdateKey}
+                        filter={filter}
+                        localUnitsOptions={localUnitsOptions}
+                    />
                 </TabPanel>
                 <TabPanel name="table">
                     <LocalUnitsTable

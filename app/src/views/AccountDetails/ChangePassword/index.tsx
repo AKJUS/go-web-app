@@ -4,6 +4,7 @@ import {
 } from 'react';
 import {
     Button,
+    ListView,
     Modal,
     TextInput,
 } from '@ifrc-go/ui';
@@ -29,7 +30,6 @@ import {
 import { transformObjectError } from '#utils/restRequest/error';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type PasswordChangeRequestBody = GoApiBody<'/change_password', 'POST'>;
 
@@ -157,15 +157,12 @@ function ChangePasswordModal(props: Props) {
     return (
         <Modal
             heading={strings.changePasswordModalHeading}
-            headingLevel={3}
             onClose={handleModalCloseButton}
             withoutCloseButton
-            className={styles.changePassword}
             footerActions={(
-                <>
+                <ListView spacing="sm">
                     <Button
                         name={undefined}
-                        variant="secondary"
                         onClick={handleModalCloseButton}
                     >
                         {strings.changePasswordCancelButtonLabel}
@@ -174,49 +171,54 @@ function ChangePasswordModal(props: Props) {
                         name={undefined}
                         onClick={handleSubmitPassword}
                         disabled={updatePasswordPending}
+                        styleVariant="filled"
                     >
                         {strings.changePasswordConfirmButtonLabel}
                     </Button>
-                </>
+                </ListView>
             )}
-            childrenContainerClassName={styles.content}
+            withHeaderBorder
+            withFooterBorder
         >
-            <NonFieldError
-                className={styles.serverError}
-                error={formError}
-                withFallbackError
-            />
-            <TextInput
-                name="old_password"
-                type="password"
-                label={strings.oldPasswordInputLabel}
-                value={formValue.old_password}
-                onChange={setFieldValue}
-                error={fieldError?.old_password}
-                disabled={updatePasswordPending}
-                withAsterisk
-                autoFocus
-            />
-            <TextInput
-                name="new_password"
-                type="password"
-                label={strings.newPasswordInputLabel}
-                value={formValue.new_password}
-                onChange={setFieldValue}
-                error={fieldError?.new_password}
-                disabled={updatePasswordPending}
-                withAsterisk
-            />
-            <TextInput
-                name="confirmNewPassword"
-                type="password"
-                label={strings.confirmNewPasswordInputLabel}
-                value={formValue.confirmNewPassword}
-                onChange={setFieldValue}
-                error={fieldError?.confirmNewPassword}
-                disabled={updatePasswordPending}
-                withAsterisk
-            />
+            <ListView
+                layout="block"
+            >
+                <NonFieldError
+                    error={formError}
+                    withFallbackError
+                />
+                <TextInput
+                    name="old_password"
+                    type="password"
+                    label={strings.oldPasswordInputLabel}
+                    value={formValue.old_password}
+                    onChange={setFieldValue}
+                    error={fieldError?.old_password}
+                    disabled={updatePasswordPending}
+                    withAsterisk
+                    autoFocus
+                />
+                <TextInput
+                    name="new_password"
+                    type="password"
+                    label={strings.newPasswordInputLabel}
+                    value={formValue.new_password}
+                    onChange={setFieldValue}
+                    error={fieldError?.new_password}
+                    disabled={updatePasswordPending}
+                    withAsterisk
+                />
+                <TextInput
+                    name="confirmNewPassword"
+                    type="password"
+                    label={strings.confirmNewPasswordInputLabel}
+                    value={formValue.confirmNewPassword}
+                    onChange={setFieldValue}
+                    error={fieldError?.confirmNewPassword}
+                    disabled={updatePasswordPending}
+                    withAsterisk
+                />
+            </ListView>
         </Modal>
     );
 }

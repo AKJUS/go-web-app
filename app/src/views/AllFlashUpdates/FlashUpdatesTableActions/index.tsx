@@ -28,7 +28,7 @@ function FlashUpdatesTableActions(props: Props) {
                         type="link"
                         to="flashUpdateFormDetails"
                         urlParams={{ flashUpdateId }}
-                        icons={<ShareBoxLineIcon />}
+                        before={<ShareBoxLineIcon />}
                     >
                         {strings.flashUpdateViewDetails}
                     </DropdownMenuItem>
@@ -36,7 +36,7 @@ function FlashUpdatesTableActions(props: Props) {
                         type="link"
                         to="flashUpdateFormEdit"
                         urlParams={{ flashUpdateId }}
-                        icons={<PencilFillIcon />}
+                        before={<PencilFillIcon />}
                     >
                         {strings.flashUpdateEdit}
                     </DropdownMenuItem>

@@ -11,9 +11,9 @@ import {
 } from '@ifrc-go/icons';
 import {
     BarChart,
-    BlockLoading,
     Container,
-    KeyFigure,
+    KeyFigureView,
+    ListView,
     TimeSeriesChart,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -225,48 +225,53 @@ export function Component() {
             className={styles.emergencies}
             title={strings.emergenciesTitle}
             heading={strings.emergenciesTableTitle}
-            infoContainerClassName={styles.keyFigureList}
             info={(
-                <>
-                    {eventsPending && <BlockLoading />}
-                    {eventsResponse && (
-                        <>
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                icon={<EmergenciesIcon />}
-                                value={eventsResponse?.count}
-                                label={strings.emergenciesStatsTitle}
-                            />
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                icon={<TargetedPopulationIcon />}
-                                value={numAffected}
-                                label={strings.emergenciesStatsAffected}
-                            />
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                icon={<FundingCoverageIcon />}
-                                value={amountRequested}
-                                label={strings.emergenciesStatsRequested}
-                            />
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                icon={<FundingIcon />}
-                                value={funding}
-                                label={strings.emergenciesStatsFunding}
-                            />
-                        </>
-                    )}
-                </>
+                <Container pending={eventsPending}>
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={4}
+                    >
+                        <KeyFigureView
+                            className={styles.keyFigure}
+                            icon={<EmergenciesIcon />}
+                            value={eventsResponse?.count}
+                            valueType="number"
+                            label={strings.emergenciesStatsTitle}
+                        />
+                        <KeyFigureView
+                            className={styles.keyFigure}
+                            icon={<TargetedPopulationIcon />}
+                            value={numAffected}
+                            valueType="number"
+                            label={strings.emergenciesStatsAffected}
+                        />
+                        <KeyFigureView
+                            className={styles.keyFigure}
+                            icon={<FundingCoverageIcon />}
+                            value={amountRequested}
+                            valueType="number"
+                            label={strings.emergenciesStatsRequested}
+                        />
+                        <KeyFigureView
+                            className={styles.keyFigure}
+                            icon={<FundingIcon />}
+                            value={funding}
+                            valueType="number"
+                            label={strings.emergenciesStatsFunding}
+                        />
+                    </ListView>
+                </Container>
             )}
-            mainSectionClassName={styles.mainContent}
         >
-            <div className={styles.charts}>
+            <ListView layout="grid">
                 <Container
                     heading={strings.emergenciesByTypeTitle}
                     className={styles.emergenciesByType}
                     withHeaderBorder
-                    withInternalPadding
+                    withShadow
+                    withPadding
+                    withBackground
+                    pending={eventsPending}
                 >
                     <BarChart
                         data={emergenciesByType}
@@ -279,7 +284,9 @@ export function Component() {
                     heading={strings.emergenciesOverLastYearTitle}
                     className={styles.emergenciesOverLastYear}
                     withHeaderBorder
-                    withInternalPadding
+                    withShadow
+                    withPadding
+                    withBackground
                 >
                     {aggregateEventResponse && (
                         <TimeSeriesChart
@@ -292,13 +299,11 @@ export function Component() {
                         />
                     )}
                 </Container>
-            </div>
-            <div>
-                {eventsResponse && (
-                    <Map eventList={eventsResponse.results} />
-                )}
-                <EmergenciesTable />
-            </div>
+            </ListView>
+            {eventsResponse && (
+                <Map eventList={eventsResponse.results} />
+            )}
+            <EmergenciesTable />
             {isIfrcAdmin && (
                 <FlashUpdateTable />
             )}

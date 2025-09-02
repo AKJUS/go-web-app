@@ -7,8 +7,9 @@ import { PencilFillIcon } from '@ifrc-go/icons';
 import {
     Container,
     DateOutput,
-    List,
+    ListView,
     Message,
+    RawList,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -31,7 +32,6 @@ import {
 import ActivityListItem, { type Props as ActivityListItemProps } from './ActivityListItem';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type ProjectItem = NonNullable<GoApiResponse<'/api/v2/emergency-project/'>['results']>[number];
 type ActivityItem = NonNullable<ProjectItem['activities']>[number];
@@ -112,20 +112,19 @@ export function Component() {
     return (
         <Page
             title={strings.activityPageTitle}
-            className={styles.threeWActivityDetail}
             heading={heading}
             actions={(
                 <Link
-                    variant="secondary"
+                    colorVariant="primary"
+                    styleVariant="outline"
                     to="threeWActivityEdit"
                     urlParams={{ activityId }}
-                    icons={<PencilFillIcon />}
+                    before={<PencilFillIcon />}
                     disabled={shouldHideDetails}
                 >
                     {strings.emergencyEdit}
                 </Link>
             )}
-            descriptionContainerClassName={styles.description}
             description={!shouldHideDetails && (
                 resolveToComponent(
                     strings.emergencyLastModifiedOnTitle,
@@ -139,7 +138,6 @@ export function Component() {
                     },
                 )
             )}
-            mainSectionClassName={styles.content}
         >
             {fetchingActivity && (
                 <Message
@@ -153,87 +151,90 @@ export function Component() {
             )}
             {!shouldHideDetails && (
                 <>
-                    <Container
-                        className={styles.emergencyThreeWDetails}
-                        childrenContainerClassName={styles.operationDetails}
-                    >
-                        <TextOutput
-                            label={strings.emergencyIFRCSupportedOperation}
-                            value={(
-                                <Link
-                                    to="emergencyDetails"
-                                    urlParams={{ emergencyId: eventId }}
-                                    withUnderline
-                                >
-                                    {eventName}
-                                </Link>
-                            )}
-                            strongLabel
-                        />
-                        <TextOutput
-                            label={strings.emergencyCountry}
-                            value={(
-                                <Link
-                                    to="countriesLayout"
-                                    urlParams={{ countryId }}
-                                    withUnderline
-                                >
-                                    {countryName}
-                                </Link>
-                            )}
-                            strongLabel
-                        />
-                        <TextOutput
-                            label={strings.emergencyProvince}
-                            value={districtsName}
-                            strongLabel
-                        />
-                        <TextOutput
-                            label={strings.emergencyStartDate}
-                            value={startDate}
-                            valueType="date"
-                            strongLabel
-                        />
-                        <TextOutput
-                            label={strings.emergencyStatus}
-                            value={statusName}
-                            strongLabel
-                        />
-                        <TextOutput
-                            label={strings.emergencyActivityLead}
-                            value={activityLeadName}
-                            strongLabel
-                        />
-                        {activityLead === 'deployed_eru' && (
+                    <Container>
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                        >
                             <TextOutput
-                                label={strings.emergencyERU}
-                                value={eruNationalSocietyName}
+                                label={strings.emergencyIFRCSupportedOperation}
+                                value={(
+                                    <Link
+                                        to="emergencyDetails"
+                                        urlParams={{ emergencyId: eventId }}
+                                        withUnderline
+                                    >
+                                        {eventName}
+                                    </Link>
+                                )}
                                 strongLabel
                             />
-                        )}
-                        {activityLead === 'national_society' && (
                             <TextOutput
-                                label={strings.emergencyNationalSociety}
-                                value={nationalSocietyName}
+                                label={strings.emergencyCountry}
+                                value={(
+                                    <Link
+                                        to="countriesLayout"
+                                        urlParams={{ countryId }}
+                                        withUnderline
+                                    >
+                                        {countryName}
+                                    </Link>
+                                )}
                                 strongLabel
                             />
-                        )}
+                            <TextOutput
+                                label={strings.emergencyProvince}
+                                value={districtsName}
+                                strongLabel
+                            />
+                            <TextOutput
+                                label={strings.emergencyStartDate}
+                                value={startDate}
+                                valueType="date"
+                                strongLabel
+                            />
+                            <TextOutput
+                                label={strings.emergencyStatus}
+                                value={statusName}
+                                strongLabel
+                            />
+                            <TextOutput
+                                label={strings.emergencyActivityLead}
+                                value={activityLeadName}
+                                strongLabel
+                            />
+                            {activityLead === 'deployed_eru' && (
+                                <TextOutput
+                                    label={strings.emergencyERU}
+                                    value={eruNationalSocietyName}
+                                    strongLabel
+                                />
+                            )}
+                            {activityLead === 'national_society' && (
+                                <TextOutput
+                                    label={strings.emergencyNationalSociety}
+                                    value={nationalSocietyName}
+                                    strongLabel
+                                />
+                            )}
+                        </ListView>
                     </Container>
                     <Container
                         heading={strings.emergencyActivities}
                         withHeaderBorder
-                        childrenContainerClassName={styles.activityContent}
+                        pending={fetchingActivity}
                     >
-                        <List
-                            className={styles.list}
-                            data={activityResponse?.activities}
-                            renderer={ActivityListItem}
-                            rendererParams={simplifiedReportListRendererParams}
-                            keySelector={simplifiedKeySelector}
-                            pending={fetchingActivity}
-                            errored={false}
-                            filtered={false}
-                        />
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                        >
+                            <RawList
+                                data={activityResponse?.activities}
+                                renderer={ActivityListItem}
+                                rendererParams={simplifiedReportListRendererParams}
+                                keySelector={simplifiedKeySelector}
+                            />
+                        </ListView>
                     </Container>
                 </>
             )}

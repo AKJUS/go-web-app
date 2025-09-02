@@ -1,72 +1,66 @@
 import React from 'react';
-import {
-    _cs,
-    isDefined,
-} from '@togglecorp/fujs';
+import { isNotDefined } from '@togglecorp/fujs';
 
+import Description from '#components/Description';
 import InputError from '#components/InputError';
 import InputLabel from '#components/InputLabel';
+import ListView from '#components/ListView';
 import RawList from '#components/RawList';
+import { SpacingType } from '#utils/style';
 
 import Radio, { Props as RadioProps } from './Radio';
 
-import styles from './styles.module.css';
-
-export interface BaseProps<N, O, V, RRP extends RadioProps<V, N>> {
+export interface CommonProps<NAME, OPTION, VALUE, RADIO_RENDERER_PROPS extends RadioProps<VALUE>> {
     className?: string;
-    options: O[] | undefined;
-    name: N;
-    value: V | undefined | null;
-    keySelector: (option: O) => V;
-    labelSelector: (option: O) => React.ReactNode;
-    descriptionSelector?: (option: O) => React.ReactNode;
+    options: OPTION[] | undefined;
+    name: NAME;
+    value: VALUE | undefined | null;
+    keySelector: (option: OPTION) => VALUE;
+    labelSelector: (option: OPTION) => React.ReactNode;
+    descriptionSelector?: (option: OPTION) => React.ReactNode;
     label?: React.ReactNode;
     hint?: React.ReactNode;
     error?: React.ReactNode;
-    labelContainerClassName?: string;
-    hintContainerClassName?: string;
-    listContainerClassName?: string;
     disabled?: boolean;
     readOnly?: boolean;
-    renderer?: (p: RRP) => React.ReactElement;
-    rendererParams?: (o: O) => Omit<RRP, 'inputName' | 'label' | 'name' | 'onClick' | 'value'>;
-    clearable?: boolean;
+    renderer?: (p: RADIO_RENDERER_PROPS) => React.ReactElement;
+    rendererParams?: (o: OPTION) => Omit<RADIO_RENDERER_PROPS, 'inputName' | 'label' | 'name' | 'onClick' | 'value'>;
     required?: boolean;
     withAsterisk?: boolean;
+    errorOnTooltip?: boolean;
+    radioListLayout?: 'inline' | 'block' | 'grid';
+    radioListLayoutPreferredGridColumns?: number;
+    spacing?: SpacingType;
+    withPadding?: boolean;
+    withBackground?: boolean;
+    withDarkBackground?: boolean;
 }
 
-type NonClearableProps<V, N> = {
-    clearable?: false;
-    onChange: (value: V, name: N) => void;
-}
-
-type ClearableProps<V, N> = {
+type ClearableProps<VALUE, NAME> = {
     clearable: true;
-    onChange: (value: V | undefined, name: N) => void;
+    onChange: (value: VALUE | undefined, name: NAME) => void;
 }
 
-export type Props<N, O, V, RRP extends RadioProps<V, N>, OMISSION extends string> = (
-    Omit<BaseProps<N, O, V, RRP>, OMISSION>
-    & (
-        Omit<ClearableProps<V, N>, OMISSION>
-        | Omit<NonClearableProps<V, N>, OMISSION>
-    )
+type NonClearableProps<VALUE, NAME> = {
+    clearable?: never;
+    onChange: (value: VALUE, name: NAME) => void;
+}
+
+export type Props<
+NAME,
+OPTION,
+VALUE,
+RADIO_RENDERER_PROPS extends RadioProps<VALUE>
+> = CommonProps<NAME, OPTION, VALUE, RADIO_RENDERER_PROPS> & (
+    ClearableProps<VALUE, NAME> | NonClearableProps<VALUE, NAME>
 )
 
-function isClearable<N, O, V, RRP extends RadioProps<V, N>>(
-    props: Props<N, O, V, RRP, never>,
-): props is (BaseProps<N, O, V, RRP> & ClearableProps<V, N>) {
-    return !!props.clearable;
-}
-
 function RadioInput<
-    const N,
-    O extends object,
-    V extends string | number | boolean,
-    RRP extends RadioProps<V, N>,
->(props: Props<N, O, V, RRP, never>) {
-    const isClearableOptions = isClearable(props);
-
+    const NAME,
+    OPTION extends object,
+    VALUE extends string | number | boolean,
+    RADIO_RENDERER_PROPS extends RadioProps<VALUE>,
+>(props: Props<NAME, OPTION, VALUE, RADIO_RENDERER_PROPS>) {
     const {
         className,
         name,
@@ -76,49 +70,46 @@ function RadioInput<
         labelSelector,
         descriptionSelector,
         label,
-        labelContainerClassName,
         hint,
-        hintContainerClassName,
-        listContainerClassName,
         error,
         renderer = Radio,
         rendererParams: radioRendererParamsFromProps,
         disabled,
         readOnly,
         required,
-        onChange,
         withAsterisk,
+        errorOnTooltip,
+        radioListLayout = 'inline',
+        radioListLayoutPreferredGridColumns,
+        spacing,
+        withPadding,
+        withBackground,
+        withDarkBackground,
+        ...otherOptions
     } = props;
 
-    const handleRadioClick = React.useCallback((radioKey: V | undefined) => {
-        if (readOnly) {
+    const handleRadioClick = React.useCallback((radioKey: VALUE | undefined) => {
+        if (readOnly || disabled) {
             return;
         }
 
-        if (isClearableOptions) {
-            // eslint-disable-next-line react/destructuring-assignment
-            props.onChange(radioKey === value ? undefined : radioKey, name);
+        if (otherOptions.clearable) {
+            otherOptions.onChange(radioKey === value ? undefined : radioKey, name);
         }
 
-        if (!isClearableOptions && isDefined(radioKey)) {
-            onChange(radioKey, name);
+        if (isNotDefined(radioKey)) {
+            return;
         }
-    }, [
-        value,
-        props,
-        onChange,
-        isClearableOptions,
-        readOnly,
-        name,
-    ]);
+
+        otherOptions.onChange(radioKey, name);
+    }, [readOnly, disabled, otherOptions, name, value]);
 
     const rendererParams: (
-        k: V,
-        i: O,
-    ) => RRP = React.useCallback((key: V, item: O) => {
-        const radioProps: Pick<RRP, 'inputName' | 'label' | 'name' | 'onClick' | 'value' | 'disabled' | 'readOnly' | 'description'> = {
-            inputName: name,
-            label: labelSelector(item),
+        k: VALUE,
+        i: OPTION,
+    ) => RADIO_RENDERER_PROPS = React.useCallback((key: VALUE, item: OPTION) => {
+        const radioProps: Pick<RADIO_RENDERER_PROPS, 'children' | 'name' | 'onClick' | 'value' | 'disabled' | 'readOnly' | 'description'> = {
+            children: labelSelector(item),
             description: descriptionSelector ? descriptionSelector(item) : undefined,
             name: key,
             onClick: handleRadioClick,
@@ -130,11 +121,10 @@ function RadioInput<
         const combinedProps = {
             ...(radioRendererParamsFromProps ? radioRendererParamsFromProps(item) : undefined),
             ...radioProps,
-        } as RRP;
+        } as RADIO_RENDERER_PROPS;
 
         return combinedProps;
     }, [
-        name,
         labelSelector,
         value,
         handleRadioClick,
@@ -145,39 +135,76 @@ function RadioInput<
     ]);
 
     const isRequired = withAsterisk ?? required;
+    const radioList = (
+        <RawList
+            data={options}
+            rendererParams={rendererParams}
+            renderer={renderer}
+            keySelector={keySelector}
+        />
+    );
 
     return (
-        <div
-            className={_cs(
-                styles.radioInput,
-                disabled && styles.disabled,
-                className,
-            )}
+        <ListView
+            layout="block"
+            className={className}
+            withSpacingOpticalCorrection
+            spacing={spacing}
+            withBackground={withBackground}
+            withDarkBackground={withDarkBackground}
+            withPadding={withPadding}
         >
             <InputLabel
-                className={labelContainerClassName}
                 disabled={disabled}
                 required={isRequired}
             >
                 {label}
             </InputLabel>
-            <div className={_cs(styles.radioListContainer, listContainerClassName)}>
-                <RawList
-                    data={options}
-                    rendererParams={rendererParams}
-                    renderer={renderer}
-                    keySelector={keySelector}
-                />
-            </div>
-            {hint && (
-                <div className={_cs(styles.inputHint, hintContainerClassName)}>
-                    {hint}
-                </div>
+            {radioListLayout === 'inline' && (
+                <ListView
+                    withWrap
+                    withSpacingOpticalCorrection
+                    spacing={spacing}
+                >
+                    {radioList}
+                </ListView>
             )}
-            <InputError>
-                {error}
-            </InputError>
-        </div>
+            {radioListLayout === 'block' && (
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                    spacing={spacing}
+                >
+                    {radioList}
+                </ListView>
+            )}
+            {radioListLayout === 'grid' && (
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={radioListLayoutPreferredGridColumns}
+                    withSpacingOpticalCorrection
+                    spacing={spacing}
+                >
+                    {radioList}
+                </ListView>
+            )}
+            {!error && !errorOnTooltip && hint && (
+                <Description
+                    withLightText
+                    textSize="sm"
+                >
+                    {hint}
+                </Description>
+            )}
+            {error && (
+                <InputError
+                    disabled={disabled}
+                    floating={errorOnTooltip}
+                >
+                    {error}
+                </InputError>
+            )}
+        </ListView>
     );
 }
 

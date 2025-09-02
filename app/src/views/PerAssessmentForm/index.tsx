@@ -13,7 +13,7 @@ import {
     Button,
     ConfirmButton,
     Container,
-    Message,
+    ListView,
     Portal,
     Tab,
     TabList,
@@ -41,6 +41,7 @@ import {
 import FormFailedToLoadMessage from '#components/domain/FormFailedToLoadMessage';
 import PerAssessmentSummary from '#components/domain/PerAssessmentSummary';
 import NonFieldError from '#components/NonFieldError';
+import TabPage from '#components/TabPage';
 import useAlert from '#hooks/useAlert';
 import useRouting from '#hooks/useRouting';
 import { PER_PHASE_ASSESSMENT } from '#utils/domain/per';
@@ -63,7 +64,6 @@ import {
 } from './schema';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const defaultFormValue: PartialAssessment = {
     is_draft: true,
@@ -379,15 +379,7 @@ export function Component() {
         [error],
     );
 
-    if (dataPending) {
-        return (
-            <Message
-                pending
-            />
-        );
-    }
-
-    if (isNotDefined(assessmentId)) {
+    if (!dataPending && isNotDefined(assessmentId)) {
         return (
             <FormFailedToLoadMessage
                 description={strings.resourceNotFound}
@@ -395,49 +387,54 @@ export function Component() {
         );
     }
 
-    if (isDefined(perAssessmentResponseError)) {
-        return (
-            <FormFailedToLoadMessage
-                description={perAssessmentResponseError.value.messageForNotification}
-            />
-        );
-    }
-
     return (
-        <div className={styles.perAssessmentForm}>
+        <TabPage>
+            {actionDivRef.current && (
+                <Portal container={actionDivRef.current}>
+                    <Button
+                        name={undefined}
+                        onClick={handleFormSubmit}
+                        disabled={savePerPending || readOnlyMode}
+                    >
+                        {strings.saveAssessmentButtonLabel}
+                    </Button>
+                </Portal>
+            )}
             <PerAssessmentSummary
                 perOptionsResponse={perOptionsResponse}
                 areaResponses={value?.area_responses}
                 totalQuestionCount={questionsResponse?.count}
                 areaIdToTitleMap={areaIdToTitleMap}
             />
-            {isDefined(currentArea) && (
-                <Container
-                    heading={strings.assessmentHeading}
-                    headingLevel={2}
-                    withHeaderBorder
-                    footerContentClassName={styles.footerContent}
-                    footerContent={(
-                        <>
+            <Container
+                elementRef={formContentRef}
+                heading={strings.assessmentHeading}
+                withCenteredHeading
+                pending={dataPending}
+                errored={isDefined(perAssessmentResponseError)}
+                errorMessage={perAssessmentResponseError?.value.messageForNotification}
+                headingLevel={2}
+                spacing="xl"
+                footerActions={isDefined(currentArea) && (
+                    <ListView spacing="lg">
+                        <ListView spacing="sm">
                             <Button
                                 name={currentArea - 1}
-                                variant="secondary"
                                 onClick={handlePrevNextButtonClick}
-                                disabled={isNotDefined(currentArea) || currentArea <= minArea}
+                                disabled={isNotDefined(currentArea)
+                                    || currentArea <= minArea}
                             >
                                 {strings.prevButtonLabel}
                             </Button>
                             <Button
                                 name={currentArea + 1}
-                                variant="secondary"
                                 onClick={handlePrevNextButtonClick}
-                                disabled={isNotDefined(currentArea) || currentArea >= maxArea}
+                                disabled={isNotDefined(currentArea)
+                                    || currentArea >= maxArea}
                             >
                                 {strings.nextButtonLabel}
                             </Button>
-                        </>
-                    )}
-                    footerActions={(
+                        </ListView>
                         <ConfirmButton
                             name={undefined}
                             onConfirm={handleFormFinalSubmit}
@@ -447,37 +444,25 @@ export function Component() {
                         >
                             {strings.submitAssessmentButtonLabel}
                         </ConfirmButton>
-                    )}
+                    </ListView>
+                )}
+            >
+                <ListView
+                    layout="block"
+                    spacing="xl"
                 >
-                    {actionDivRef.current && (
-                        <Portal
-                            container={actionDivRef.current}
-                        >
-                            <Button
-                                name={undefined}
-                                variant="secondary"
-                                onClick={handleFormSubmit}
-                                disabled={savePerPending || readOnlyMode}
-                            >
-                                {strings.saveAssessmentButtonLabel}
-                            </Button>
-                        </Portal>
-                    )}
                     <NonFieldError
                         error={error}
                         withFallbackError
                     />
-                    <div
-                        ref={formContentRef}
-                        className={styles.content}
-                    >
+                    {isDefined(currentArea) && (
                         <Tabs
                             disabled={undefined}
                             onChange={setCurrentArea}
                             value={currentArea}
-                            variant="primary"
+                            styleVariant="tab"
                         >
-                            <TabList className={styles.tabList}>
+                            <TabList>
                                 {areas.map((area) => (
                                     <Tab
                                         key={area.id}
@@ -494,32 +479,38 @@ export function Component() {
                                     name={area.id}
                                     key={area.id}
                                 >
-                                    <AreaInput
-                                        key={area.id}
-                                        area={area}
-                                        readOnly={readOnlyMode}
-                                        questions={questionListByAreaId?.[area.id]}
-                                        components={componentListByAreaId?.[area.id]}
-                                        questionGroups={questionGroupResponse?.results}
-                                        index={areaResponseMapping[area.id]!.index}
-                                        value={areaResponseMapping[area.id]!.value}
-                                        disabled={savePerPending}
-                                        error={areaInputError?.[area.id]}
-                                        onChange={setAreaResponsesValue}
-                                        ratingOptions={perOptionsResponse?.componentratings}
-                                        epi_considerations={perOverviewResponse
-                                            ?.assess_preparedness_of_country}
-                                        urban_considerations={perOverviewResponse
-                                            ?.assess_urban_aspect_of_country}
-                                        climate_environmental_considerations={perOverviewResponse
-                                            ?.assess_climate_environment_of_country}
-                                    />
+                                    <ListView
+                                        layout="block"
+                                        spacing="lg"
+                                    >
+                                        <AreaInput
+                                            key={area.id}
+                                            area={area}
+                                            readOnly={readOnlyMode}
+                                            questions={questionListByAreaId?.[area.id]}
+                                            components={componentListByAreaId?.[area.id]}
+                                            questionGroups={questionGroupResponse?.results}
+                                            index={areaResponseMapping[area.id]?.index}
+                                            value={areaResponseMapping[area.id]?.value}
+                                            disabled={savePerPending}
+                                            error={areaInputError?.[area.id]}
+                                            onChange={setAreaResponsesValue}
+                                            ratingOptions={perOptionsResponse
+                                                ?.componentratings}
+                                            epi_considerations={perOverviewResponse
+                                                ?.assess_preparedness_of_country}
+                                            urban_considerations={perOverviewResponse
+                                                ?.assess_urban_aspect_of_country}
+                                            // eslint-disable-next-line max-len
+                                            climate_environmental_considerations={perOverviewResponse?.assess_climate_environment_of_country}
+                                        />
+                                    </ListView>
                                 </TabPanel>
                             ))}
                         </Tabs>
-                    </div>
-                </Container>
-            )}
-        </div>
+                    )}
+                </ListView>
+            </Container>
+        </TabPage>
     );
 }

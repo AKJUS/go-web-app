@@ -3,7 +3,10 @@ import {
     useOutletContext,
     useParams,
 } from 'react-router-dom';
-import { Container } from '@ifrc-go/ui';
+import {
+    Container,
+    Description,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     isDefined,
@@ -14,7 +17,7 @@ import getBbox from '@turf/bbox';
 
 import RiskImminentEvents, { type ImminentEventSource } from '#components/domain/RiskImminentEvents';
 import Link from '#components/Link';
-import WikiLink from '#components/WikiLink';
+import TabPage from '#components/TabPage';
 import useInputState from '#hooks/useInputState';
 import { multiMonthSelectDefaultValue } from '#utils/constants';
 import type { CountryOutletContext } from '#utils/outletContext';
@@ -132,36 +135,29 @@ export function Component() {
     ), [countryResponse]);
 
     return (
-        <Container
-            className={styles.riskWatch}
-            childrenContainerClassName={styles.countryRiskWatch}
-            headerDescription={strings.riskWatchDescription}
-            headerDescriptionContainerClassName={styles.riskWatchDescription}
-            withCenteredHeaderDescription
+        <TabPage
             pending={pendingImminentEventCounts}
-            contentViewType="vertical"
-            spacing="loose"
-            actions={(
-                <WikiLink
-                    href="user_guide/Country_Pages#risk-watch"
-                />
-            )}
+            wikiLinkPathName="user_guide/Country_Pages#risk-watch"
         >
-            {hasImminentEvents && isDefined(countryResponse) && isDefined(countryResponse.iso3) && (
-                <RiskImminentEvents
-                    variant="country"
-                    iso3={countryResponse.iso3}
-                    title={countryResponse.name}
-                    bbox={bbox}
-                    defaultSource={defaultImminentEventSource}
-                />
-            )}
+            <Description withCenteredContent>
+                {strings.riskWatchDescription}
+            </Description>
+            {hasImminentEvents
+                && isDefined(countryResponse)
+                && isDefined(countryResponse.iso3)
+                && (
+                    <RiskImminentEvents
+                        variant="country"
+                        iso3={countryResponse.iso3}
+                        title={countryResponse.name}
+                        bbox={bbox}
+                        defaultSource={defaultImminentEventSource}
+                    />
+                )}
             <Container
                 heading={strings.risksByMonthHeading}
-                headingLevel={2}
                 headerDescription={strings.risksByMonthDescription}
                 withHeaderBorder
-                childrenContainerClassName={styles.riskByMonthContent}
                 footerActions={<CountryRiskSourcesOutput />}
             >
                 <MultiMonthSelectInput
@@ -175,27 +171,28 @@ export function Component() {
                     dataPending={pendingCountryRiskResponse}
                 />
             </Container>
-            <div className={styles.eapSection}>
-                <Container
-                    className={styles.eapContainer}
-                    heading={strings.eapHeading}
-                    withHeaderBorder
-                    withInternalPadding
-                    spacing="comfortable"
-                    actions={(
-                        <Link
-                            href="https://www.ifrc.org/appeals?date_from=&date_to=&type%5B%5D=30&appeal_code=&text="
-                            external
-                            withLinkIcon
-                            variant="primary"
-                        >
-                            {strings.eapDownloadButtonLabel}
-                        </Link>
-                    )}
-                >
-                    {strings.eapDescription}
-                </Container>
-            </div>
+            <Container
+                className={styles.eapContainer}
+                heading={strings.eapHeading}
+                withHeaderBorder
+                headerActions={(
+                    <Link
+                        href="https://www.ifrc.org/appeals?date_from=&date_to=&type%5B%5D=30&appeal_code=&text="
+                        external
+                        withLinkIcon
+                        colorVariant="primary"
+                        styleVariant="filled"
+                    >
+                        {strings.eapDownloadButtonLabel}
+                    </Link>
+                )}
+                spacing="lg"
+                withShadow
+                withPadding
+                withBackground
+            >
+                {strings.eapDescription}
+            </Container>
             <RiskBarChart
                 pending={pendingCountryRiskResponse}
                 seasonalRiskData={riskResponse}
@@ -207,7 +204,7 @@ export function Component() {
             <ReturnPeriodTable
                 data={riskResponse?.return_period_data}
             />
-        </Container>
+        </TabPage>
     );
 }
 

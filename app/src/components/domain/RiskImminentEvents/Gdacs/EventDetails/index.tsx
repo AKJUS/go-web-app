@@ -1,5 +1,7 @@
 import {
     Container,
+    InlineLayout,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -83,22 +85,17 @@ function EventDetails(props: Props) {
     const eventDetails = event_details as GdacsEventDetails | undefined;
 
     return (
-        <Container
-            contentViewType="vertical"
-            spacing="cozy"
-            withBorderAndHeaderBackground
-            pending={pending}
-        >
-            <Container
-                contentViewType="vertical"
-                spacing="compact"
+        <Container pending={pending}>
+            <ListView
+                layout="block"
+                spacing="xs"
             >
                 {isDefined(eventDetails?.source) && (
                     <TextOutput
                         label={strings.eventSourceLabel}
                         value={eventDetails?.source}
                         strongValue
-                        withBackground
+                        withLightBackground
                     />
                 )}
                 {isDefined(populationExposure?.death) && (
@@ -109,7 +106,7 @@ function EventDetails(props: Props) {
                         compact
                         valueType="number"
                         strongValue
-                        withBackground
+                        withLightBackground
                     />
                 )}
                 {isDefined(populationExposure?.displaced) && (
@@ -120,7 +117,7 @@ function EventDetails(props: Props) {
                         compact
                         valueType="number"
                         strongValue
-                        withBackground
+                        withLightBackground
                     />
                 )}
                 {isDefined(populationExposure?.exposed_population) && (
@@ -128,7 +125,7 @@ function EventDetails(props: Props) {
                         label={strings.eventPopulationLabel}
                         value={populationExposure?.exposed_population}
                         strongValue
-                        withBackground
+                        withLightBackground
                     />
                 )}
                 {isDefined(populationExposure?.people_affected) && (
@@ -136,7 +133,7 @@ function EventDetails(props: Props) {
                         label={strings.eventPeopleAffectedLabel}
                         value={populationExposure?.people_affected}
                         strongValue
-                        withBackground
+                        withLightBackground
                     />
                 )}
                 {isDefined(populationExposure?.impact) && (
@@ -144,7 +141,7 @@ function EventDetails(props: Props) {
                         label={strings.eventImpactLabel}
                         value={populationExposure?.impact}
                         strongValue
-                        withBackground
+                        withLightBackground
                     />
                 )}
                 {isDefined(eventDetails?.severitydata)
@@ -153,7 +150,7 @@ function EventDetails(props: Props) {
                         label={strings.eventSeverityLabel}
                         value={eventDetails?.severitydata?.severitytext}
                         strongValue
-                        withBackground
+                        withLightBackground
                     />
                 )}
                 {isDefined(eventDetails?.alertlevel) && (
@@ -161,25 +158,29 @@ function EventDetails(props: Props) {
                         label={strings.eventAlertType}
                         value={eventDetails?.alertlevel}
                         strongValue
-                        withBackground
+                        withLightBackground
                     />
                 )}
-            </Container>
-            {isDefined(eventDetails)
-                && isDefined(eventDetails.url)
-                && isDefined(eventDetails.url.report)
-                && (
-                    <Link
-                        href={eventDetails?.url.report}
-                        external
-                        withLinkIcon
-                    >
-                        {strings.eventMoreDetailsLink}
-                    </Link>
-                )}
-            {/* NOTE: Intentional additional div to maintain gap */}
-            {children && <div />}
-            {children}
+                {isDefined(eventDetails)
+                    && isDefined(eventDetails.url)
+                    && isDefined(eventDetails.url.report)
+                    && (
+                        <InlineLayout
+                            after={(
+                                <Link
+                                    href={eventDetails?.url.report}
+                                    external
+                                    withLinkIcon
+                                >
+                                    {strings.eventMoreDetailsLink}
+                                </Link>
+                            )}
+                        />
+                    )}
+                {/* NOTE: Intentional additional div to maintain gap */}
+                {children && <div />}
+                {children}
+            </ListView>
         </Container>
     );
 }

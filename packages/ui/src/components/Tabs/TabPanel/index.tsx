@@ -1,9 +1,6 @@
 import React from 'react';
 
-import {
-    TabContext,
-    TabKey,
-} from '../TabContext';
+import TabContext, { type TabKey } from '#contexts/tab';
 
 export interface Props extends Omit<React.HTMLProps<HTMLDivElement>, 'name'> {
     name: TabKey;

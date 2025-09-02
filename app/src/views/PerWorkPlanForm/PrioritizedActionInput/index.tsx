@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import {
     Container,
     DateInput,
+    ListView,
     SelectInput,
     TextArea,
 } from '@ifrc-go/ui';
@@ -27,7 +28,6 @@ import { type GoApiResponse } from '#utils/restRequest';
 import { type PartialWorkPlan } from '../schema';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type PrioritizationResponse = GoApiResponse<'/api/v2/per-prioritization/{id}/', 'PATCH'>;
 
@@ -45,9 +45,9 @@ function organizationTypeKeySelector(option: PerWorkPlanOrganizationTypeOption) 
     return option.key;
 }
 interface Props {
-    value?: Value;
+    value: Value | undefined;
     onChange: (value: SetValueArg<Value>, index: number | undefined) => void;
-    index: number;
+    index: number | undefined;
     error: Error<Value> | undefined;
     component: ComponentResponse['component_details'];
     readOnly?: boolean;
@@ -94,7 +94,6 @@ function PrioritizedActionInput(props: Props) {
 
     return (
         <Container
-            className={styles.prioritizedActionInput}
             heading={isTruthyString(component.component_letter)
                 ? resolveToString(
                     strings.componentHeading,
@@ -111,69 +110,79 @@ function PrioritizedActionInput(props: Props) {
                         componentTitle: component.title,
                     },
                 )}
-            headingLevel={4}
-            spacing="compact"
-            childrenContainerClassName={styles.content}
+            headingLevel={5}
+            headerDescription={(
+                <NonFieldError error={error} />
+            )}
+            withPadding
+            withBackground
         >
-            <NonFieldError error={error} />
-            <TextArea
-                name="actions"
-                value={value?.actions}
-                onChange={onFieldChange}
-                placeholder={strings.componentActionsInputPlaceholder}
-                rows={2}
-                error={error?.actions}
-                readOnly={readOnly}
-                disabled={disabled}
-            />
-            <DateInput
-                label={strings.componentDueDateInputLabel}
-                name="due_date"
-                value={value?.due_date}
-                onChange={onFieldChange}
-                error={error?.due_date}
-                readOnly={readOnly}
-                disabled={disabled}
-            />
-            <SelectInput
-                name="supported_by_organization_type"
-                label={strings.componentSupportedByOrganizationInputLabel}
-                placeholder={strings.componentOrganizationInputPlaceholder}
-                options={per_supported_by_organization_type}
-                onChange={handleOrganizationTypeChange}
-                keySelector={organizationTypeKeySelector}
-                labelSelector={stringValueSelector}
-                value={value?.supported_by_organization_type}
-                error={error?.supported_by_organization_type}
-                readOnly={readOnly}
-                disabled={disabled}
-            />
-            {value?.supported_by_organization_type === NATIONAL_SOCIETY && (
-                <NationalSocietySelectInput
-                    name="supported_by"
-                    label={strings.componentSupportedByInputLabel}
-                    placeholder={strings.componentSupportedByInputPlaceholder}
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={value
+                    ?.supported_by_organization_type === NATIONAL_SOCIETY ? 5 : 4}
+            >
+                <TextArea
+                    name="actions"
+                    // FIXME: use translations
+                    label="Actions"
+                    value={value?.actions}
                     onChange={onFieldChange}
-                    value={value?.supported_by}
-                    error={error?.supported_by}
+                    placeholder={strings.componentActionsInputPlaceholder}
+                    rows={2}
+                    error={error?.actions}
                     readOnly={readOnly}
                     disabled={disabled}
                 />
-            )}
-            <SelectInput
-                name="status"
-                label={strings.componentStatusInputLabel}
-                placeholder={strings.componentStatusInputPlaceholder}
-                options={per_workplanstatus}
-                withAsterisk
-                onChange={onFieldChange}
-                keySelector={statusKeySelector}
-                labelSelector={stringValueSelector}
-                value={value?.status}
-                error={error?.status}
-                readOnly={readOnly}
-                disabled={disabled}
-            />
+                <DateInput
+                    label={strings.componentDueDateInputLabel}
+                    name="due_date"
+                    value={value?.due_date}
+                    onChange={onFieldChange}
+                    error={error?.due_date}
+                    readOnly={readOnly}
+                    disabled={disabled}
+                />
+                <SelectInput
+                    name="supported_by_organization_type"
+                    label={strings.componentSupportedByOrganizationInputLabel}
+                    placeholder={strings.componentOrganizationInputPlaceholder}
+                    options={per_supported_by_organization_type}
+                    onChange={handleOrganizationTypeChange}
+                    keySelector={organizationTypeKeySelector}
+                    labelSelector={stringValueSelector}
+                    value={value?.supported_by_organization_type}
+                    error={error?.supported_by_organization_type}
+                    readOnly={readOnly}
+                    disabled={disabled}
+                />
+                {value?.supported_by_organization_type === NATIONAL_SOCIETY && (
+                    <NationalSocietySelectInput
+                        name="supported_by"
+                        label={strings.componentSupportedByInputLabel}
+                        placeholder={strings.componentSupportedByInputPlaceholder}
+                        onChange={onFieldChange}
+                        value={value?.supported_by}
+                        error={error?.supported_by}
+                        readOnly={readOnly}
+                        disabled={disabled}
+                    />
+                )}
+                <SelectInput
+                    name="status"
+                    label={strings.componentStatusInputLabel}
+                    placeholder={strings.componentStatusInputPlaceholder}
+                    options={per_workplanstatus}
+                    withAsterisk
+                    onChange={onFieldChange}
+                    keySelector={statusKeySelector}
+                    labelSelector={stringValueSelector}
+                    value={value?.status}
+                    error={error?.status}
+                    readOnly={readOnly}
+                    disabled={disabled}
+                />
+            </ListView>
         </Container>
     );
 }

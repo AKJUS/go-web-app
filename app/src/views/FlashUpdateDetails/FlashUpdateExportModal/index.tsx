@@ -66,7 +66,7 @@ function FlashUpdateExportModal(props: Props) {
                     description={strings.flashUpdateExportCompletedDescription}
                     actions={(
                         <Link
-                            variant="secondary"
+                            colorVariant="primary"
                             href={exportResponse?.url}
                             external
                         >

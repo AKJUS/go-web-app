@@ -111,7 +111,7 @@ function ReferenceInput(props: Props) {
                     ariaLabel={strings.deleteButtonTitle}
                     title={strings.deleteButtonTitle}
                     onClick={onRemove}
-                    variant="tertiary"
+                    styleVariant="action"
                     disabled={disabled}
                 >
                     <DeleteBinLineIcon />

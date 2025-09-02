@@ -369,7 +369,7 @@ export function Component() {
             <Container
                 heading={containerHeading}
                 withHeaderBorder
-                actions={(
+                headerActions={(
                     <ExportButton
                         onClick={handleExportClick}
                         progress={progress}

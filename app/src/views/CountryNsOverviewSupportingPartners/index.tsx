@@ -1,16 +1,13 @@
 import { useOutletContext } from 'react-router-dom';
-import { Container } from '@ifrc-go/ui';
 import { isNotDefined } from '@togglecorp/fujs';
 
-import WikiLink from '#components/WikiLink';
+import TabPage from '#components/TabPage';
 import { type CountryOutletContext } from '#utils/outletContext';
 import { useRequest } from '#utils/restRequest';
 
 import MembershipCoordinationTable from './MembershipCoordinationTable';
 import Presence from './Presence';
 import SupportingPartnersContacts from './SupportingPartnersContacts';
-
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -33,15 +30,8 @@ export function Component() {
     });
 
     return (
-        <Container
-            className={styles.countryProfileSupportingPartners}
-            contentViewType="vertical"
-            spacing="loose"
-            actions={(
-                <WikiLink
-                    href="user_guide/Country_Pages#partners"
-                />
-            )}
+        <TabPage
+            wikiLinkPathName="user_guide/Country_Pages#partners"
         >
             <Presence />
             {countryResponse?.has_country_plan && (
@@ -51,7 +41,7 @@ export function Component() {
                 />
             )}
             <SupportingPartnersContacts />
-        </Container>
+        </TabPage>
     );
 }
 

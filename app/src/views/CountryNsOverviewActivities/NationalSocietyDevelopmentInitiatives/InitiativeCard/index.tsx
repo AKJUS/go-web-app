@@ -1,16 +1,15 @@
 import {
     Container,
+    ListView,
     NumberOutput,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
-import { _cs } from '@togglecorp/fujs';
 
 import { type GoApiResponse } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type CountryResponse = NonNullable<GoApiResponse<'/api/v2/country/{id}/'>>
 interface Props {
@@ -28,10 +27,14 @@ function InitiativeCard(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.initiativeCard, className)}
-            childrenContainerClassName={styles.content}
+            pending={false}
+            errored={false}
+            empty={false}
+            filtered={false}
+            className={className}
             headingLevel={4}
             withHeaderBorder
+            withFooterBorder
             heading={initiative.title}
             headerDescription={resolveToString(
                 strings.initiativeFund,
@@ -39,42 +42,44 @@ function InitiativeCard(props: Props) {
                     fundType: initiative.fund_type,
                 },
             )}
-            footerClassName={styles.footer}
-            footerContent={(
+            footer={(
                 <TextOutput
                     label={strings.initiativeCategoriesTitle}
                     value={initiative.categories}
                     valueType="text"
+                />
+            )}
+            withBackground
+            withShadow
+            withPadding
+        >
+            <ListView
+                layout="grid"
+                minGridColumnSize="6rem"
+            >
+                <TextOutput
+                    value={resolveToString(
+                        strings.initiativeYearApprovedAndDuration,
+                        {
+                            yearApproved: initiative.year,
+                            duration: initiative.funding_period,
+                        },
+                    )}
+                    description={strings.initiativeYearApprovedTitle}
                     strongValue
                     withoutLabelColon
                 />
-            )}
-        >
-            <TextOutput
-                className={styles.textOutput}
-                value={resolveToString(
-                    strings.initiativeYearApprovedAndDuration,
-                    {
-                        yearApproved: initiative.year,
-                        duration: initiative.funding_period,
-                    },
-                )}
-                description={strings.initiativeYearApprovedTitle}
-                strongValue
-                withoutLabelColon
-            />
-            <div className={styles.verticalSeparator} />
-            <TextOutput
-                className={styles.textOutput}
-                value={(
-                    <NumberOutput
-                        value={initiative.allocation}
-                    />
-                )}
-                description={strings.initiativeAllocationTitle}
-                strongValue
-                withoutLabelColon
-            />
+                <TextOutput
+                    value={(
+                        <NumberOutput
+                            value={initiative.allocation}
+                        />
+                    )}
+                    description={strings.initiativeAllocationTitle}
+                    strongValue
+                    withoutLabelColon
+                />
+            </ListView>
         </Container>
     );
 }

@@ -1,54 +1,24 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
 
-import { TabContext } from '#components/Tabs/TabContext';
+import TabListLayout, { type Props as TabListLayoutProps } from '#components/TabListLayout';
+import TabContext from '#contexts/tab';
 
-import styles from './styles.module.css';
-
-export interface Props extends React.HTMLProps<HTMLDivElement> {
-    children: React.ReactNode;
-    className?: string;
-    contentClassName?: string;
-}
-
-export default function TabList(props: Props) {
+export default function TabList(props: TabListLayoutProps) {
     const context = React.useContext(TabContext);
+
     const {
-        variant,
+        colorVariant,
+        styleVariant,
         disabled,
     } = context;
 
-    const {
-        children,
-        className,
-        contentClassName,
-        ...otherProps
-    } = props;
-
     return (
-        <div
+        <TabListLayout
             // eslint-disable-next-line react/jsx-props-no-spreading
-            {...otherProps}
-            className={_cs(
-                className,
-                styles.tabList,
-                disabled && styles.disabled,
-                variant === 'primary' && styles.primary,
-                variant === 'secondary' && styles.secondary,
-                variant === 'tertiary' && styles.tertiary,
-                variant === 'step' && styles.step,
-                variant === 'vertical' && styles.vertical,
-                variant === 'vertical-compact' && styles.verticalCompact,
-            )}
-            role="tablist"
-        >
-            <div className={styles.startDummyContent} />
-            <div
-                className={_cs(styles.content, contentClassName)}
-            >
-                {children}
-            </div>
-            <div className={styles.endDummyContent} />
-        </div>
+            {...props}
+            styleVariant={styleVariant}
+            colorVariant={colorVariant}
+            disabled={disabled}
+        />
     );
 }

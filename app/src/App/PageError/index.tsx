@@ -58,7 +58,7 @@ function PageError() {
                     <Button
                         name={undefined}
                         onClick={toggleFullErrorVisibility}
-                        variant="tertiary"
+                        styleVariant="action"
                     >
                         {fullErrorVisible ? strings.errorPageHide : strings.errorPageShowError}
                     </Button>
@@ -79,7 +79,8 @@ function PageError() {
                     <Link
                         href="/"
                         external
-                        variant="secondary"
+                        colorVariant="primary"
+                        styleVariant="outline"
                     >
                         {strings.errorPageGoBack}
                     </Link>

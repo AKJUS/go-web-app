@@ -4,7 +4,7 @@
         "operationCardLastUpdated": "Last updated",
         "operationCardTargetedPopulation": "Targeted Population",
         "operationCardFunding": "Funding Requirements",
-        "operationCardFundingCoverage": "{coverage}% received",
+        "operationCardFundingCoverage": "Funding coverage",
         "operationCardFollow": "Follow",
         "operationCardUnfollow": "Unfollow",
         "operationCardInvolvesMultipleCountries": "Involves multiple countries",

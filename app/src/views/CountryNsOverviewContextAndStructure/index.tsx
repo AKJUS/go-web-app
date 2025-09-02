@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Container } from '@ifrc-go/ui';
+import {
+    Container,
+    ListView,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     DEFAULT_INVALID_TEXT,
@@ -14,7 +17,7 @@ import {
 } from '@togglecorp/fujs';
 
 import Link from '#components/Link';
-import WikiLink from '#components/WikiLink';
+import TabPage from '#components/TabPage';
 import { type CountryOutletContext } from '#utils/outletContext';
 import { useRequest } from '#utils/restRequest';
 
@@ -41,6 +44,7 @@ export function Component() {
     const {
         response: databankResponse,
         pending: databankResponsePending,
+        error: databankResponseError,
     } = useRequest({
         skip: isNotDefined(countryId),
         url: '/api/v2/country/{id}/databank/',
@@ -64,27 +68,100 @@ export function Component() {
         },
     });
 
+    const countryName = countryResponse?.name ?? DEFAULT_INVALID_TEXT;
+
     return (
-        <Container
-            className={styles.countryNsOverviewContextAndStructure}
-            contentViewType="vertical"
-            spacing="loose"
+        <TabPage
+            wikiLinkPathName="user_guide/Country_Pages#context-and-structure"
             pending={databankResponsePending}
-            actions={(
-                <WikiLink
-                    href="user_guide/Country_Pages#context-and-structure"
-                />
-            )}
+            errored={isDefined(databankResponseError)}
         >
             <NationalSocietyIndicators
                 databankResponse={databankResponse}
             />
+            {isDefined(countryResponse) && (
+                <Container
+                    empty={false}
+                    pending={false}
+                    filtered={false}
+                    errored={false}
+                    heading={strings.keyLinksHeading}
+                    className={styles.keyLinks}
+                    withHeaderBorder
+                >
+                    <ListView withWrap>
+                        {isTruthyString(countryResponse.fdrs) && (
+                            <Link
+                                href={`https://data.ifrc.org/FDRS/national-society/${countryResponse.fdrs}`}
+                                external
+                                withLinkIcon
+                                colorVariant="primary"
+                                styleVariant="filled"
+                            >
+                                {strings.nationalSocietyPageOnFDRS}
+                            </Link>
+                        )}
+                        {isTruthyString(countryResponse.url_ifrc) && (
+                            <Link
+                                href={countryResponse.url_ifrc}
+                                external
+                                withLinkIcon
+                                colorVariant="primary"
+                                styleVariant="filled"
+                            >
+                                {resolveToString(
+                                    strings.countryOnIFRC,
+                                    { countryName },
+                                )}
+                            </Link>
+                        )}
+                        {isTruthyString(countryResponse.iso3) && (
+                            <Link
+                                href={`https://reliefweb.int/country/${countryResponse.iso3}`}
+                                external
+                                withLinkIcon
+                                colorVariant="primary"
+                                styleVariant="filled"
+                            >
+                                {resolveToString(
+                                    strings.countryOnReliefWeb,
+                                    { countryName },
+                                )}
+                            </Link>
+                        )}
+                        {isTruthyString(countryResponse.society_url) && (
+                            <Link
+                                href={countryResponse?.society_url}
+                                external
+                                withLinkIcon
+                                colorVariant="primary"
+                                styleVariant="filled"
+                            >
+                                {resolveToString(
+                                    strings.countryRCHomepage,
+                                    { countryName },
+                                )}
+                            </Link>
+                        )}
+                        {isTruthyString(countryResponse.disaster_law_url) && (
+                            <Link
+                                href={countryResponse.disaster_law_url}
+                                external
+                                withLinkIcon
+                                colorVariant="primary"
+                                styleVariant="filled"
+                            >
+                                {resolveToString(
+                                    strings.countryDisasterLaw,
+                                    { countryName },
+                                )}
+                            </Link>
+                        )}
+                    </ListView>
+                </Container>
+            )}
             <NationalSocietyLocalUnits />
-            <Container
-                contentViewType="grid"
-                numPreferredGridContentColumns={2}
-                spacing="relaxed"
-            >
+            <ListView layout="grid">
                 <NationalSocietyIncomeOverTime
                     selectedYear={selectedYearForIncome}
                     setSelectedYear={setSelectedYearForIncome}
@@ -96,84 +173,13 @@ export function Component() {
                         countryId={Number(countryId)}
                     />
                 )}
-            </Container>
-            <div className={styles.nsDirectoryAndContacts}>
-                <NationalSocietyDirectory className={styles.directory} />
-                <NationalSocietyContacts className={styles.contacts} />
-            </div>
+            </ListView>
+            <ListView layout="grid">
+                <NationalSocietyDirectory className={styles.nsDirectory} />
+                <NationalSocietyContacts className={styles.nsContacts} />
+            </ListView>
             <NationalSocietyKeyDocuments />
-            {isDefined(countryResponse) && (
-                <Container
-                    heading={strings.keyLinksHeading}
-                    className={styles.keyLinks}
-                    withHeaderBorder
-                    childrenContainerClassName={styles.keyLinksContent}
-                >
-                    {isTruthyString(countryResponse.fdrs) && (
-                        <Link
-                            href={`https://data.ifrc.org/FDRS/national-society/${countryResponse.fdrs}`}
-                            external
-                            withLinkIcon
-                            variant="primary"
-                        >
-                            {strings.nationalSocietyPageOnFDRS}
-                        </Link>
-                    )}
-                    {isTruthyString(countryResponse.url_ifrc) && (
-                        <Link
-                            href={countryResponse.url_ifrc}
-                            external
-                            withLinkIcon
-                            variant="primary"
-                        >
-                            {resolveToString(
-                                strings.countryOnIFRC,
-                                { countryName: countryResponse?.name ?? DEFAULT_INVALID_TEXT },
-                            )}
-                        </Link>
-                    )}
-                    {isTruthyString(countryResponse.iso3) && (
-                        <Link
-                            href={`https://reliefweb.int/country/${countryResponse.iso3}`}
-                            external
-                            withLinkIcon
-                            variant="primary"
-                        >
-                            {resolveToString(
-                                strings.countryOnReliefWeb,
-                                { countryName: countryResponse?.name ?? DEFAULT_INVALID_TEXT },
-                            )}
-                        </Link>
-                    )}
-                    {isTruthyString(countryResponse.society_url) && (
-                        <Link
-                            href={countryResponse?.society_url}
-                            external
-                            withLinkIcon
-                            variant="primary"
-                        >
-                            {resolveToString(
-                                strings.countryRCHomepage,
-                                { countryName: countryResponse?.name ?? DEFAULT_INVALID_TEXT },
-                            )}
-                        </Link>
-                    )}
-                    {isTruthyString(countryResponse.disaster_law_url) && (
-                        <Link
-                            href={countryResponse.disaster_law_url}
-                            external
-                            withLinkIcon
-                            variant="primary"
-                        >
-                            {resolveToString(
-                                strings.countryDisasterLaw,
-                                { countryName: countryResponse?.name ?? DEFAULT_INVALID_TEXT },
-                            )}
-                        </Link>
-                    )}
-                </Container>
-            )}
-        </Container>
+        </TabPage>
     );
 }
 

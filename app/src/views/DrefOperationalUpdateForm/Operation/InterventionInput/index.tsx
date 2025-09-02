@@ -3,7 +3,9 @@ import { DeleteBinTwoLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     Container,
+    InlineLayout,
     InputSection,
+    ListView,
     NumberInput,
     TextArea,
 } from '@ifrc-go/ui';
@@ -27,7 +29,6 @@ import { type PartialOpsUpdate } from '../../schema';
 import IndicatorInput from './IndicatorInput';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type PlannedInterventionFormFields = NonNullable<PartialOpsUpdate['planned_interventions']>[number];
 type IndicatorFormFields = NonNullable<PlannedInterventionFormFields['indicators']>[number];
@@ -46,7 +47,7 @@ interface Props {
     onRemove: (index: number) => void;
     index: number;
     titleMap: Record<string, string> | undefined;
-    readOnly: boolean;
+    readOnly?: boolean;
     disabled?: boolean;
 }
 
@@ -100,7 +101,6 @@ function InterventionInput(props: Props) {
 
     return (
         <InputSection
-            className={styles.interventionInput}
             title={interventionLabel ?? '--'}
             numPreferredColumns={1}
             description={(
@@ -146,18 +146,21 @@ function InterventionInput(props: Props) {
                 </>
             )}
         >
-            <div className={styles.action}>
-                <Button
-                    name={index}
-                    onClick={onRemove}
-                    variant="tertiary"
-                    title={strings.drefFormRemoveIntervention}
-                    disabled={disabled || readOnly}
-                    icons={<DeleteBinTwoLineIcon />}
-                >
-                    {strings.drefOperationalUpdateFormRemoveIntervention}
-                </Button>
-            </div>
+            <InlineLayout
+                after={(
+                    <Button
+                        name={index}
+                        onClick={onRemove}
+                        styleVariant="action"
+                        title={strings.drefFormRemoveIntervention}
+                        disabled={disabled}
+                        readOnly={readOnly}
+                        before={<DeleteBinTwoLineIcon />}
+                    >
+                        {strings.drefOperationalUpdateFormRemoveIntervention}
+                    </Button>
+                )}
+            />
             <NonFieldError error={error} />
             <TextArea
                 label={strings.drefFormListOfActivities}
@@ -181,10 +184,8 @@ function InterventionInput(props: Props) {
             <Container
                 heading={strings.drefFormIndicatorsLabel}
                 headingLevel={5}
-                spacing="compact"
                 footerIcons={(
                     <Button
-                        variant="secondary"
                         name={undefined}
                         onClick={handleIndicatorAddButtonClick}
                         disabled={disabled || readOnly}
@@ -192,28 +193,25 @@ function InterventionInput(props: Props) {
                         {strings.drefAddIndicatorButtonLabel}
                     </Button>
                 )}
-                childrenContainerClassName={styles.indicatorContent}
+                empty={isNotDefined(value.indicators) || value.indicators.length === 0}
+                emptyMessage={strings.drefFormNoIndicatorMessage}
             >
-                <NonFieldError error={getErrorObject(error?.indicators)} />
-                {value?.indicators?.map((indicator, i) => (
-                    <IndicatorInput
-                        key={indicator.client_id}
-                        index={i}
-                        value={indicator}
-                        onChange={onIndicatorChange}
-                        onRemove={onIndicatorRemove}
-                        error={getErrorObject(error?.indicators)}
-                        readOnly={readOnly}
-                        disabled={disabled}
-                    />
-                ))}
-                {(isNotDefined(value.indicators) || value.indicators.length === 0) && (
-                    <div className={styles.emptyMessage}>
-                        {strings.drefFormNoIndicatorMessage}
-                    </div>
-                )}
+                <ListView layout="block">
+                    <NonFieldError error={getErrorObject(error?.indicators)} />
+                    {value?.indicators?.map((indicator, i) => (
+                        <IndicatorInput
+                            key={indicator.client_id}
+                            index={i}
+                            value={indicator}
+                            onChange={onIndicatorChange}
+                            onRemove={onIndicatorRemove}
+                            error={getErrorObject(error?.indicators)}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                        />
+                    ))}
+                </ListView>
             </Container>
-
         </InputSection>
     );
 }

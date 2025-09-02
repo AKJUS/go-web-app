@@ -4,6 +4,7 @@ import { SearchLineIcon } from '@ifrc-go/icons';
 import {
     Container,
     DateInput,
+    ListView,
     RawList,
     TextInput,
     TextOutput,
@@ -58,7 +59,7 @@ function NationalSocietyKeyDocuments() {
         filter: {},
     });
     const {
-        response: documentResponse,
+        response: documentsResponse,
         pending: documentResponsePending,
         error: documentResponseError,
     } = useRequest({
@@ -76,7 +77,7 @@ function NationalSocietyKeyDocuments() {
 
     const groupedDocumentsByType = (
         listToGroupList(
-            documentResponse?.results,
+            documentsResponse?.results,
             (item) => item.document_type,
             (item) => item,
         )
@@ -127,10 +128,11 @@ function NationalSocietyKeyDocuments() {
                     label={strings.source}
                     value={(
                         <Link
-                            variant="tertiary"
+                            styleVariant="action"
                             href={`https://data.ifrc.org/fdrs/national-society/${countryResponse.fdrs}`}
                             external
                             withUnderline
+                            withLinkIcon
                         >
                             {resolveToString(
                                 strings.sourceFDRS,
@@ -143,15 +145,19 @@ function NationalSocietyKeyDocuments() {
             pending={documentResponsePending}
             errored={isDefined(documentResponseError)}
             filtered={filtered}
-            contentViewType="grid"
-            numPreferredGridContentColumns={3}
+            empty={isNotDefined(documentsResponse) || documentsResponse.results.length === 0}
         >
-            <RawList
-                data={groupedDocumentsList}
-                keySelector={groupedDocumentsListKeySelector}
-                renderer={DocumentListCard}
-                rendererParams={rendererParams}
-            />
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={3}
+            >
+                <RawList
+                    data={groupedDocumentsList}
+                    keySelector={groupedDocumentsListKeySelector}
+                    renderer={DocumentListCard}
+                    rendererParams={rendererParams}
+                />
+            </ListView>
         </Container>
     );
 }

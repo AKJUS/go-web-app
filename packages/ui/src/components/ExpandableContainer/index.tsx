@@ -1,13 +1,15 @@
 import {
-    useCallback,
     useEffect,
-    useRef,
+    useMemo,
 } from 'react';
 import {
     ChevronDownLineIcon,
     ChevronUpLineIcon,
 } from '@ifrc-go/icons';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    isDefined,
+} from '@togglecorp/fujs';
 
 import Button from '#components/Button';
 import useBooleanState from '#hooks/useBooleanState';
@@ -18,31 +20,32 @@ import Container, { Props as ContainerProps } from '../Container';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-export interface Props extends Omit<ContainerProps, 'withInternalPadding' | 'withoutWrapInHeading'> {
+export interface Props extends ContainerProps {
     initiallyExpanded?: boolean;
     onExpansionChange?: (isExpanded: boolean) => void;
-    showExpandButtonAtBottom?: boolean;
     componentRef?: React.MutableRefObject<{
         setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
     } | null>;
+    toggleButtonLabel?: [React.ReactNode, React.ReactNode];
+    withToggleButtonOnFooter?: boolean;
 }
 
 function ExpandableContainer(props: Props) {
     const {
         className,
         children,
-        actions,
+        headerActions,
         initiallyExpanded = false,
-        headerClassName,
         componentRef,
-        childrenContainerClassName,
         onExpansionChange,
         withHeaderBorder,
-        showExpandButtonAtBottom,
+        withToggleButtonOnFooter,
+        toggleButtonLabel,
+        footerActions,
         ...otherProps
     } = props;
 
-    const containerRef = useRef<HTMLDivElement>(null);
+    // const containerRef = useRef<HTMLDivElement>(null);
     const strings = useTranslation(i18n);
 
     const [
@@ -67,58 +70,74 @@ function ExpandableContainer(props: Props) {
         }
     }, [componentRef, setExpanded]);
 
+    /*
     const handleExpansionToggle = useCallback(() => {
         toggleExpanded();
         if (containerRef) {
             containerRef.current?.scrollIntoView();
         }
     }, [toggleExpanded]);
+    */
+
+    const [
+        expandLabel = <ChevronDownLineIcon className={styles.icon} />,
+        collapseLabel = <ChevronUpLineIcon className={styles.icon} />,
+    ] = toggleButtonLabel ?? [];
+
+    const hasToggleButtonLabel = isDefined(toggleButtonLabel);
+
+    const icon = useMemo(() => {
+        if (!hasToggleButtonLabel) {
+            return undefined;
+        }
+
+        if (expanded) {
+            return <ChevronUpLineIcon className={styles.icon} />;
+        }
+
+        return <ChevronDownLineIcon className={styles.icon} />;
+    }, [hasToggleButtonLabel, expanded]);
+
+    const toggleButton = useMemo(() => (
+        <Button
+            styleVariant="action"
+            name={undefined}
+            onClick={toggleExpanded}
+            title={expanded
+                ? strings.expandableContainerCollapse
+                : strings.expandableContainerExpand}
+            after={icon}
+        >
+            {expanded ? collapseLabel : expandLabel}
+        </Button>
+    ), [
+        toggleExpanded,
+        expanded,
+        strings.expandableContainerCollapse,
+        strings.expandableContainerExpand,
+        icon,
+        collapseLabel,
+        expandLabel,
+    ]);
+
     return (
         <Container
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...otherProps}
-            containerRef={containerRef}
+            // elementRef={containerRef}
             className={_cs(styles.expandableContainer, className)}
-            headerClassName={_cs(styles.header, headerClassName)}
-            childrenContainerClassName={_cs(styles.content, childrenContainerClassName)}
-            withInternalPadding
             withHeaderBorder={withHeaderBorder && expanded}
-            withoutWrapInHeading
-            actions={(
+            headerActions={(
                 <>
-                    {actions}
-                    <Button
-                        variant="tertiary"
-                        name={undefined}
-                        onClick={toggleExpanded}
-                        title={expanded
-                            ? strings.expandableContainerCollapse
-                            : strings.expandableContainerExpand}
-                    >
-                        {expanded ? (
-                            <ChevronUpLineIcon className={styles.icon} />
-                        ) : (
-                            <ChevronDownLineIcon className={styles.icon} />
-                        )}
-                    </Button>
+                    {headerActions}
+                    {!withToggleButtonOnFooter && toggleButton}
                 </>
             )}
-            actionsContainerClassName={styles.actionsContainer}
-            footerActions={showExpandButtonAtBottom && expanded && (
-                <Button
-                    variant="tertiary"
-                    name={undefined}
-                    onClick={handleExpansionToggle}
-                    title={expanded
-                        ? strings.expandableContainerCollapse
-                        : strings.expandableContainerExpand}
-                >
-                    {expanded ? (
-                        <ChevronUpLineIcon className={styles.icon} />
-                    ) : (
-                        <ChevronDownLineIcon className={styles.icon} />
-                    )}
-                </Button>
+            footerActions={(
+                <>
+                    {footerActions}
+                    {withToggleButtonOnFooter && toggleButton}
+                </>
             )}
         >
             {(expanded) && children}

@@ -1,6 +1,7 @@
 import { useOutletContext } from 'react-router-dom';
 import {
     Container,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -15,14 +16,13 @@ import {
 } from '@togglecorp/fujs';
 
 import Link from '#components/Link';
-import WikiLink from '#components/WikiLink';
+import TabPage from '#components/TabPage';
 import { type CountryOutletContext } from '#utils/outletContext';
 import { useRequest } from '#utils/restRequest';
 
 import CountryNsCapacityStrengthening from './CountryNsCapacityStrengthening';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -48,28 +48,27 @@ export function Component() {
         && countryPerProcessStatusResponse.results.length > 0;
 
     return (
-        <Container
-            className={styles.nsOverviewCapacity}
-            actions={(
-                <>
+        <TabPage
+            wikiLinkPathName="user_guide/Country_Pages#capacity"
+        >
+            <Container
+                headerActions={(
                     <Link
                         href="https://www.ifrc.org/evaluations/"
                         external
                         withLinkIcon
-                        variant="primary"
+                        colorVariant="primary"
+                        styleVariant="outline"
                     >
                         {strings.nsOverviewCapacityLink}
                     </Link>
-                    <WikiLink
-                        href="user_guide/Country_Pages#capacity"
-                    />
-                </>
-            )}
-            headerDescription={strings.nSOverviewCapacityDescription}
-            withCenteredHeaderDescription
-            contentViewType="vertical"
-            spacing="loose"
-        >
+                )}
+                headerDescription={strings.nSOverviewCapacityDescription}
+                withCenteredHeaderDescription
+                spacing="xl"
+            >
+                {null}
+            </Container>
             {/* Data is currently under review, it will be include in the next version */}
             {/* Hide this section */}
             {/* {countryResponse?.region === REGION_ASIA && (
@@ -80,13 +79,12 @@ export function Component() {
                 heading={strings.nsPreparednessHeading}
                 headerDescription={strings.nsPreparednessDescription}
                 withHeaderBorder
-                contentViewType="grid"
-                numPreferredGridContentColumns={3}
                 pending={countryPerProcessStatusPending}
-                actions={(
+                headerActions={(
                     <Link
                         to="newPerOverviewForm"
-                        variant="primary"
+                        colorVariant="primary"
+                        styleVariant="filled"
                     >
                         {strings.perStartPerProcess}
                     </Link>
@@ -96,9 +94,10 @@ export function Component() {
                         label={strings.moreDetails}
                         value={(
                             <Link
-                                variant="tertiary"
+                                styleVariant="action"
                                 to="preparednessLayout"
                                 withUnderline
+                                withLinkIcon
                             >
                                 {strings.perGlobalSummary}
                             </Link>
@@ -107,81 +106,85 @@ export function Component() {
                 )}
                 empty={!hasPer}
             >
-                {countryPerProcessStatusResponse?.results?.map(
-                    (perProcess) => (
-                        <Container
-                            key={perProcess.id}
-                            heading={
-                                resolveToString(
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                    minGridColumnSize="20rem"
+                >
+                    {countryPerProcessStatusResponse?.results?.map(
+                        (perProcess) => (
+                            <Container
+                                key={perProcess.id}
+                                heading={resolveToString(
                                     strings.perCycleHeading,
                                     {
                                         cycle: perProcess.assessment_number,
                                         countryName: perProcess.country_details.name,
                                     },
-                                )
-                            }
-                            headingLevel={4}
-                            headerDescription={
-                                resolveToString(
+                                )}
+                                headingLevel={4}
+                                headerDescription={resolveToString(
                                     strings.perCycleHeadingDescription,
-                                    {
-                                        updatedDate: formatDate(perProcess.updated_at),
-                                    },
-                                )
-                            }
-                            withHeaderBorder
-                            withInternalPadding
-                            className={styles.perCycleItem}
-                            childrenContainerClassName={styles.figures}
-                            footerContentClassName={styles.footerFigures}
-                            actions={(
-                                <Link
-                                    to="countryPreparedness"
-                                    urlParams={{
-                                        countryId,
-                                        perId: perProcess.id,
-                                    }}
-                                    variant="secondary"
+                                    { updatedDate: formatDate(perProcess.updated_at) },
+                                )}
+                                withHeaderBorder
+                                headerActions={(
+                                    <Link
+                                        to="countryPreparedness"
+                                        urlParams={{
+                                            countryId,
+                                            perId: perProcess.id,
+                                        }}
+                                        styleVariant="outline"
+                                        colorVariant="primary"
+                                    >
+                                        {strings.perViewLink}
+                                    </Link>
+                                )}
+                                footer={(
+                                    <ListView
+                                        layout="block"
+                                        withSpacingOpticalCorrection
+                                        spacing="sm"
+                                    >
+                                        <TextOutput
+                                            label={strings.perTypeOfAssessmentLabel}
+                                            value={perProcess.type_of_assessment_details?.name}
+                                        />
+                                        <TextOutput
+                                            label={strings.perFocalPointLabel}
+                                            value={[perProcess.ns_focal_point_name, perProcess.ns_focal_point_email].filter(isTruthyString).join(', ')}
+                                        />
+                                    </ListView>
+                                )}
+                                withFooterBorder
+                                withPadding
+                                withBackground
+                                withShadow
+                            >
+                                <ListView
+                                    layout="grid"
+                                    minGridColumnSize="6rem"
                                 >
-                                    {strings.perViewLink}
-                                </Link>
-                            )}
-                            footerContent={(
-                                <>
                                     <TextOutput
-                                        label={strings.perTypeOfAssessmentLabel}
-                                        value={perProcess.type_of_assessment_details?.name}
+                                        value={perProcess.phase_display}
+                                        description={strings.perPhaseLabel}
+                                        withBlockLayout
+                                        strongValue
                                     />
                                     <TextOutput
-                                        label={strings.perFocalPointLabel}
-                                        value={[perProcess.ns_focal_point_name, perProcess.ns_focal_point_email].filter(isTruthyString).join(' | ')}
+                                        value={perProcess.date_of_assessment}
+                                        description={strings.perAssessmentDateLabel}
+                                        withBlockLayout
+                                        strongValue
                                     />
-                                </>
-                            )}
-                            withFooterBorder
-                        >
-                            <div className={styles.phaseAssessmentDateSection}>
-                                <div className={styles.phaseAssessmentValue}>
-                                    {perProcess.phase_display}
-                                </div>
-                                <div className={styles.phaseAssessmentLabel}>
-                                    {strings.perPhaseLabel}
-                                </div>
-                            </div>
-                            <div className={styles.verticalSeparator} />
-                            <div className={styles.phaseAssessmentDateSection}>
-                                <div className={styles.phaseAssessmentValue}>
-                                    {perProcess.date_of_assessment}
-                                </div>
-                                <div className={styles.phaseAssessmentLabel}>
-                                    {strings.perAssessmentDateLabel}
-                                </div>
-                            </div>
-                        </Container>
-                    ),
-                )}
+                                </ListView>
+                            </Container>
+                        ),
+                    )}
+                </ListView>
             </Container>
-        </Container>
+        </TabPage>
     );
 }
 

@@ -5,6 +5,7 @@ import {
 import {
     Button,
     Container,
+    ListView,
     Modal,
     RadioInput,
     TextArea,
@@ -175,39 +176,38 @@ function LocalUnitValidateModal(props: Props) {
                     {strings.submitButtonLabel}
                 </Button>
             )}
-            contentViewType="vertical"
-            spacing="comfortable"
             withHeaderBorder
         >
-            <Container
-                heading={strings.requestedChangesTitle}
-                headingLevel={4}
-                withBorderAndHeaderBackground
-                spacing="cozy"
-            >
-                <LocalUnitView
-                    localUnitId={localUnitId}
+            <ListView layout="block">
+                <Container
+                    heading={strings.requestedChangesTitle}
+                    headingLevel={4}
+                    withDarkBackground
+                    withPadding
+                >
+                    <LocalUnitView
+                        localUnitId={localUnitId}
+                    />
+                </Container>
+                <RadioInput
+                    name={undefined}
+                    options={reviewActionOptions}
+                    keySelector={reviewActionKeySelector}
+                    labelSelector={stringLabelSelector}
+                    value={reviewAction}
+                    clearable
+                    onChange={setReviewAction}
                 />
-            </Container>
-            <div />
-            <RadioInput
-                name={undefined}
-                options={reviewActionOptions}
-                keySelector={reviewActionKeySelector}
-                labelSelector={stringLabelSelector}
-                value={reviewAction}
-                clearable
-                onChange={setReviewAction}
-            />
-            {reviewAction === 'reject' && (
-                <TextArea
-                    name="reason"
-                    required
-                    label={strings.rejectionReasonLabel}
-                    value={rejectionReason}
-                    onChange={setRejectionReason}
-                />
-            )}
+                {reviewAction === 'reject' && (
+                    <TextArea
+                        name="reason"
+                        required
+                        label={strings.rejectionReasonLabel}
+                        value={rejectionReason}
+                        onChange={setRejectionReason}
+                    />
+                )}
+            </ListView>
         </Modal>
     );
 }

@@ -2,32 +2,37 @@ import {
     useCallback,
     useState,
 } from 'react';
-import {
-    _cs,
-    randomString,
-} from '@togglecorp/fujs';
+import { randomString } from '@togglecorp/fujs';
 
-import type { ButtonFeatureProps } from '#components/Button';
-import { useButtonFeatures } from '#components/Button';
+import type { Props as ButtonLayoutProps } from '#components/ButtonLayout';
+import ButtonLayout from '#components/ButtonLayout';
 
 import styles from './styles.module.css';
 
-export type RawFileInputProps<NAME> = ButtonFeatureProps & {
+export type CommonRawFileInputProps<NAME> = Omit<ButtonLayoutProps, 'elementRef' | 'onChange'> & {
     accept?: string;
     disabled?: boolean;
     inputProps?: React.ComponentPropsWithoutRef<'input'>;
     inputRef?: React.RefObject<HTMLInputElement>;
     name: NAME;
     readOnly?: boolean;
-} & ({
+};
+
+export interface MultipleRawFileInputProps<NAME> {
     multiple: true;
     onChange: (files: File[] | undefined, name: NAME) => void;
-} | {
-    multiple?: false;
-    onChange: (files: File | undefined, name: NAME) => void;
-});
+}
 
-function RawFileInput<NAME>(props: RawFileInputProps<NAME>) {
+export interface SingleRawFileInputProps<NAME> {
+    multiple?: never;
+    onChange: (files: File | undefined, name: NAME) => void;
+}
+
+export type Props<NAME> = CommonRawFileInputProps<NAME> & (
+    SingleRawFileInputProps<NAME> | MultipleRawFileInputProps<NAME>
+);
+
+function RawFileInput<NAME>(props: Props<NAME>) {
     const {
         accept,
         disabled,
@@ -37,7 +42,8 @@ function RawFileInput<NAME>(props: RawFileInputProps<NAME>) {
         name,
         onChange,
         readOnly,
-        ...buttonFeatureProps
+        spacingOffset = -3,
+        ...buttonLayoutProps
     } = props;
 
     const [inputId] = useState(randomString);
@@ -56,20 +62,16 @@ function RawFileInput<NAME>(props: RawFileInputProps<NAME>) {
         }
     }, [multiple, name, onChange]);
 
-    const {
-        children,
-        className,
-    } = useButtonFeatures({
-        ...buttonFeatureProps,
-        disabled,
-    });
-
     return (
         <label
             htmlFor={inputId}
-            className={_cs(styles.fileInput, className)}
+            className={styles.fileInput}
         >
-            {children}
+            <ButtonLayout
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...buttonLayoutProps}
+                spacingOffset={spacingOffset}
+            />
             <input
                 id={inputId}
                 className={styles.input}

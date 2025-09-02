@@ -1,13 +1,12 @@
 import {
     Container,
-    DateOutput,
+    KeyFigure,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import { type CountryOutletContext } from '#utils/outletContext';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type CapacityItem = NonNullable<NonNullable<CountryOutletContext['countryResponse']>['capacity']>[number];
 
@@ -24,24 +23,27 @@ function OCACListItem(props: Props) {
 
     return (
         <Container
-            className={styles.ocacListItem}
+            empty={false}
+            errored={false}
+            filtered={false}
+            pending={false}
             heading={
                 `${capacity.assessment_type_display.toUpperCase()}
                 ${strings.capacityListItemAssessment}`
             }
             headingLevel={4}
-            withInternalPadding
+            withPadding
+            withBackground
+            withShadow
         >
-            <div className={styles.ocacDetail}>
-                <DateOutput
-                    className={styles.date}
-                    format="MMM yyyy"
-                    value={capacity.submission_date}
-                />
-                <div className={styles.label}>
-                    {strings.capacityListItemDateOfAssessment}
-                </div>
-            </div>
+            <KeyFigure
+                value={capacity.submission_date}
+                valueType="date"
+                valueOptions={{
+                    format: 'MMM yyyy',
+                }}
+                label={strings.capacityListItemDateOfAssessment}
+            />
         </Container>
     );
 }
