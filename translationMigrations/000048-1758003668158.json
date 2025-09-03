@@ -1,0 +1,35 @@
+{
+    "parent": "000047-1756465189151.json",
+    "actions": [
+        {
+            "action": "add",
+            "key": "nationalSocietyActionsHeading",
+            "namespace": "drefApplicationExport",
+            "value": "National Society anticipatory actions started"
+        },
+        {
+            "action": "add",
+            "key": "peopleAffectedLabel",
+            "namespace": "drefApplicationExport",
+            "value": "People Affected"
+        },
+        {
+            "action": "add",
+            "key": "situationUpdateSectionHeading",
+            "namespace": "drefApplicationExport",
+            "value": "Provide any updates in the situation since the field report and explain what is expected to happen."
+        },
+        {
+            "action": "add",
+            "key": "peopleAffectedLabel",
+            "namespace": "drefFinalReportExport",
+            "value": "People Affected"
+        },
+        {
+            "action": "add",
+            "key": "peopleAffectedLabel",
+            "namespace": "drefOperationalUpdateExport",
+            "value": "People Affected"
+        }
+    ]
+}
