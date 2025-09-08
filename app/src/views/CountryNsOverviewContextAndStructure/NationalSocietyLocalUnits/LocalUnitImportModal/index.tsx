@@ -181,7 +181,7 @@ function LocalUnitBulkUploadModal(props: Props) {
             onClose={onClose}
             headerDescriptionContainerClassName={styles.headerDescriptionContent}
             childrenContainerClassName={styles.bulkUploadContent}
-            headerDescription={importSummaryResponse?.status === BULK_UPLOAD_PENDING
+            headerDescription={!pending
                 ? strings.modalDescription
                 : strings.modalImportPendingDescription}
             contentViewType="vertical"

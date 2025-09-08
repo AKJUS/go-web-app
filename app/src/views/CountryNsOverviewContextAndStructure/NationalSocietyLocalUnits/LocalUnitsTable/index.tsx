@@ -110,16 +110,6 @@ function LocalUnitsTable(props: Props) {
     const columns = useMemo(() => {
         if (hasAddEditLocalUnitPermission) {
             return [
-                createElementColumn<LocalUnitsTableListItem, number, LocalUnitStatusProps>(
-                    'status',
-                    '',
-                    LocalUnitStatus,
-                    (_, item) => ({
-                        value: item.status,
-                        valueDisplay: item.status_details,
-                        compact: true,
-                    }),
-                ),
                 createStringColumn<LocalUnitsTableListItem, number>(
                     'branch_name',
                     strings.localUnitsTableName,
@@ -157,6 +147,16 @@ function LocalUnitsTable(props: Props) {
                     strings.localUnitsTableEmail,
                     (item) => item.email,
                 ),
+                createElementColumn<LocalUnitsTableListItem, number, LocalUnitStatusProps>(
+                    'status',
+                    strings.localUnitsTableStatus,
+                    LocalUnitStatus,
+                    (_, item) => ({
+                        value: item.status,
+                        valueDisplay: item.status_details,
+                        compact: true,
+                    }),
+                ),
                 createElementColumn<LocalUnitsTableListItem, number, LocalUnitsTableActionsProps>(
                     'actions',
                     '',
@@ -165,7 +165,6 @@ function LocalUnitsTable(props: Props) {
                     (_, item) => ({
                         countryId: item.country,
                         localUnitId: item.id,
-                        isLocked: item.is_locked,
                         status: item.status,
                         localUnitType: item.type,
                         isBulkUploadLocalUnit: isDefined(item.bulk_upload),
@@ -206,7 +205,6 @@ function LocalUnitsTable(props: Props) {
                 (_, item) => ({
                     countryId: item.country,
                     localUnitId: item.id,
-                    isLocked: item.is_locked,
                     status: item.status,
                     isBulkUploadLocalUnit: isDefined(item.bulk_upload),
                     manageResponse,
@@ -230,6 +228,7 @@ function LocalUnitsTable(props: Props) {
         strings.localUnitsTableFocal,
         strings.localUnitsTablePhoneNumber,
         strings.localUnitsTableEmail,
+        strings.localUnitsTableStatus,
         refetchLocalUnits,
     ]);
 
