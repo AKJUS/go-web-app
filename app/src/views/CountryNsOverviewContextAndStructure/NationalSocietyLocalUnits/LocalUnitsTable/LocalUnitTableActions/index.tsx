@@ -10,6 +10,7 @@ import {
 import { isDefined } from '@togglecorp/fujs';
 
 import DropdownMenuItem from '#components/DropdownMenuItem';
+import { environment } from '#config';
 import useAuth from '#hooks/domain/useAuth';
 import useCountry from '#hooks/domain/useCountry';
 import usePermissions from '#hooks/domain/usePermissions';
@@ -157,7 +158,7 @@ function LocalUnitsTableActions(props: Props) {
         <>
             <TableActions
                 persistent
-                extraActions={(
+                extraActions={environment !== 'production' && (
                     <>
                         <DropdownMenuItem
                             type="button"
@@ -188,7 +189,7 @@ function LocalUnitsTableActions(props: Props) {
                     </>
                 )}
             >
-                {hasValidatePermission && (
+                {hasValidatePermission && (environment !== 'production') && (
                     <LocalUnitValidateButton
                         onClick={handleValidateLocalUnitClick}
                         status={status}

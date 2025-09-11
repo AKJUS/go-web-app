@@ -33,6 +33,7 @@ import {
 } from '../LocalUnitsFormModal/LocalUnitsForm/schema';
 
 import i18n from './i18n.json';
+import styles from './styles.module.css';
 
 type VisibilityOptions = NonNullable<GoApiResponse<'/api/v2/global-enums/'>['api_visibility_choices']>[number]
 type LocalUnitResponse = NonNullable<GoApiResponse<'/api/v2/local-units/{id}/'>>;
@@ -104,6 +105,21 @@ function LocalUnitView(props: Props) {
             emptyMessage={strings.localUnitViewNoChanges}
             contentViewType="grid"
             numPreferredGridContentColumns={3}
+            footerContentClassName={styles.localUnitViewFooter}
+            footerContent={(
+                <DiffWrapper
+                    hideOnPristine
+                    diffViewEnabled
+                    value={newValue?.update_reason_overview}
+                    previousValue={oldValue?.update_reason_overview}
+                >
+                    <TextOutput
+                        strongValue
+                        value={newValue?.update_reason_overview}
+                        label={strings.localUnitViewUpdateReason}
+                    />
+                </DiffWrapper>
+            )}
         >
             <SelectDiffWrapper
                 showOnlyDiff

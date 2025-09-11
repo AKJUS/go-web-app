@@ -68,7 +68,6 @@
         "localUnitViewLocalUnitDeleteButtonLabel": "Delete",
         "localUnitViewDoneButtonLabel": "Done",
         "localUnitViewRevertButtonLabel": "Revert",
-        "localUnitViewReasonLabel": "Reason",
         "localUnitViewRevertChangesModalHeading": "Revert the Changes",
         "localUnitViewRevertChangesContentQuestion": "Are you sure you want to have these changes revert in this project?",
         "localUnitViewConfirmChangesModalHeading": "Confirm the Changes",
@@ -76,6 +75,7 @@
         "localUnitViewNewLocalUnitDescription": "New local unit",
         "localUnitViewLatitude": "Latitude",
         "localUnitViewLongitude": "Longitude",
+        "localUnitViewUpdateReason": "Edit reason",
         "localUnitViewNoChanges": "No changes found"
     }
 }

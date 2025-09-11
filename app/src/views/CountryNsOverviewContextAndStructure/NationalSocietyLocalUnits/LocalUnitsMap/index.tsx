@@ -71,6 +71,7 @@ import {
 import type { FilterValue } from '../Filters';
 import LocalUnitsFormModal from '../LocalUnitsFormModal';
 import { TYPE_HEALTH_CARE } from '../LocalUnitsFormModal/LocalUnitsForm/schema';
+import LocalUnitStatus from '../LocalUnitStatus';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -467,6 +468,7 @@ function LocalUnitsMap(props: Props) {
                             popupClassName={styles.mapPopup}
                             coordinates={clickedPointProperties.center}
                             onCloseButtonClick={handlePointClose}
+                            headingContainerClassName={styles.headingDescription}
                             heading={(
                                 <Button
                                     name=""
@@ -476,6 +478,12 @@ function LocalUnitsMap(props: Props) {
                                 >
                                     {localUnitName}
                                 </Button>
+                            )}
+                            headingDescription={(
+                                <LocalUnitStatus
+                                    value={localUnitDetail?.status}
+                                    valueDisplay={localUnitDetail?.status_details}
+                                />
                             )}
                             contentViewType="vertical"
                             pending={localUnitDetailPending}

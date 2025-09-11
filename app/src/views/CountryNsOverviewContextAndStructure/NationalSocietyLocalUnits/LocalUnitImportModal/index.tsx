@@ -89,13 +89,15 @@ function LocalUnitBulkUploadModal(props: Props) {
         || isLocalUnitRegionValidatorByType(countryResponse?.region, localUnitType);
 
     const { response: localUnitsOptions } = useRequest({ url: '/api/v2/local-units-options/' });
+
     const { response: bulkUploadHealthTemplate } = useRequest({
         url: '/api/v2/bulk-upload-local-unit/get-bulk-upload-template/',
-        pathVariables: { bulk_upload_template: 'health_care' },
+        query: { bulk_upload_template: 'health_care' },
     });
+
     const { response: bulkUploadDefaultTemplate } = useRequest({
         url: '/api/v2/bulk-upload-local-unit/get-bulk-upload-template/',
-        pathVariables: { bulk_upload_template: 'local_unit' },
+        query: { bulk_upload_template: 'local_unit' },
     });
 
     const {
@@ -213,6 +215,10 @@ function LocalUnitBulkUploadModal(props: Props) {
                     error={permissionError}
                 />
             )}
+            <NonFieldError
+                className={styles.nonFieldError}
+                error={importSummaryResponse?.error_message}
+            />
             {isNotDefined(importSummaryResponse) && (
                 <Container
                     className={styles.uploadSummary}

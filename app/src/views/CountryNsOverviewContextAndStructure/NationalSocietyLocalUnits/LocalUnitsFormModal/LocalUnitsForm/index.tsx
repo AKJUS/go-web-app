@@ -402,6 +402,7 @@ function LocalUnitsForm(props: Props) {
 
     const showChanges = !isNewLocalUnit
         && isLocked
+        && showValueChanges
         && !isExternallyManaged;
 
     const showViewChanges = !isNewLocalUnit
@@ -550,7 +551,7 @@ function LocalUnitsForm(props: Props) {
                                 onChange={setFieldValue}
                                 keySelector={numericIdSelector}
                                 labelSelector={stringNameSelector}
-                                readOnly={readOnly}
+                                readOnly={readOnlyFromProps || isLocked}
                                 error={error?.type}
                                 nonClearable
                             />
@@ -1842,7 +1843,6 @@ function LocalUnitsForm(props: Props) {
                         value={updateReason}
                         onChange={setUpdateReason}
                     />
-
                 </LocalUnitViewModal>
             )}
             {showValidateLocalUnitModal
