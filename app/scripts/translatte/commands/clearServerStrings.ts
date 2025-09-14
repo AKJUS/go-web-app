@@ -64,7 +64,7 @@ async function clearServerStrings(apiUrl: string, authToken: string) {
     logs.push({ responseFor: 'ar', response: arResponseJson });
 
     await writeFilePromisify(
-        'clear-server-strings-log.json',
+        '/tmp/clear-server-strings-log.json',
         JSON.stringify(logs, null, 2),
         'utf8',
     );

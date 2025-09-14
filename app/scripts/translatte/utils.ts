@@ -30,7 +30,7 @@ export function getCombinedKey(key: string, namespace: string) {
     return `${namespace}:${key}`;
 }
 
-export function resolveUrl(from: string, to: string) {
+function resolveUrl(from: string, to: string) {
     const resolvedUrl = new URL(to, new URL(from, 'resolve://'));
     if (resolvedUrl.protocol === 'resolve:') {
         const { pathname, search, hash } = resolvedUrl;
@@ -39,7 +39,7 @@ export function resolveUrl(from: string, to: string) {
     return resolvedUrl.toString();
 }
 
-export async function fetchLanguageStrings(language: Language, apiUrl: string, authToken?: string) {
+async function fetchLanguageStrings(language: Language, apiUrl: string, authToken?: string) {
     const endpoint = resolveUrl(apiUrl, `${language}/`);
     const headers: RequestInit['headers'] = {
         'Accept': 'application/json'
