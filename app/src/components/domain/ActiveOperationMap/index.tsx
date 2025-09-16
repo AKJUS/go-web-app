@@ -56,12 +56,10 @@ import { useRequest } from '#utils/restRequest';
 import GlobalMap, { type AdminZeroFeatureProperties } from '../GlobalMap';
 import {
     APPEAL_TYPE_DREF,
-    APPEAL_TYPE_EAP,
     APPEAL_TYPE_EMERGENCY,
     APPEAL_TYPE_MULTIPLE,
     basePointLayerOptions,
     COLOR_DREF,
-    COLOR_EAP,
     COLOR_EMERGENCY_APPEAL,
     COLOR_MULTIPLE_TYPES,
     optionKeySelector,
@@ -177,13 +175,20 @@ function ActiveOperationMap(props: Props) {
 
     const [scaleBy, setScaleBy] = useInputState<ScaleOption['value']>('peopleTargeted');
     const strings = useTranslation(i18n);
-    const { api_appeal_type: appealTypeOptions } = useGlobalEnums();
+    const { api_appeal_type: appealTypeOptionsRaw } = useGlobalEnums();
     const {
         response: appealResponse,
     } = useRequest({
         url: '/api/v2/appeal/',
         query,
     });
+
+    const appealTypeOptions = useMemo(() => (
+        appealTypeOptionsRaw?.filter(
+            (appealTypeOption) => appealTypeOption.key === APPEAL_TYPE_DREF
+                || appealTypeOption.key === APPEAL_TYPE_EMERGENCY,
+        )
+    ), [appealTypeOptionsRaw]);
 
     const countryResponse = useCountryRaw();
 
@@ -207,11 +212,6 @@ function ActiveOperationMap(props: Props) {
             color: COLOR_DREF,
         },
         {
-            value: APPEAL_TYPE_EAP,
-            label: strings.explanationBubbleEAP,
-            color: COLOR_EAP,
-        },
-        {
             value: APPEAL_TYPE_MULTIPLE,
             label: strings.explanationBubbleMultiple,
             color: COLOR_MULTIPLE_TYPES,
@@ -219,7 +219,8 @@ function ActiveOperationMap(props: Props) {
     ]), [
         strings.explanationBubbleEmergencyAppeal,
         strings.explanationBubbleDref,
-        strings.explanationBubbleEAP,
+        // FIXME: string to be removed
+        // strings.explanationBubbleEAP,
         strings.explanationBubbleMultiple,
     ]);
 
