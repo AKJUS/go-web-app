@@ -94,8 +94,8 @@ function EventNumericDetails(props: Props) {
                 value={value?.num_volunteers}
             />
             <KeyFigure
-                label={strings.eventIfrcStaffLabel}
-                value={value?.num_ifrc_staff}
+                label={strings.eventERULabel}
+                value={value?.num_emergency_response_unit}
             />
             <KeyFigure
                 label={strings.eventDelegatedLabel}

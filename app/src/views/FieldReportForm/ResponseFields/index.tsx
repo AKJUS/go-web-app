@@ -281,34 +281,32 @@ function ResponseFields(props: Props) {
                         />
                     </InputSection>
                     <InputSection
-                        title={strings.fieldsStep4PlannedResponseRowsIFRCStaffEVTEPIEWLabel}
+                        title={strings.fieldsStep4PlannedResponseRowsERUEVTEPIEWLabel}
                         numPreferredColumns={2}
                         // eslint-disable-next-line max-len
-                        withAsteriskOnTitle={isDefined(value.num_ifrc_staff) || isDefined(value.ifrc_staff)}
+                        withAsteriskOnTitle={isDefined(value.num_emergency_response_unit) || isDefined(value.emergency_response_unit)}
                     >
                         <RadioInput
-                            error={error?.ifrc_staff}
-                            name="ifrc_staff"
+                            error={error?.emergency_response_unit}
+                            name="emergency_response_unit"
                             onChange={onValueChange}
                             options={requestOptions}
                             // FIXME: do not use inline functions
                             keySelector={(item) => item.key}
                             labelSelector={(item) => item.value}
-                            value={value.ifrc_staff}
+                            value={value.emergency_response_unit}
                             clearable
                             disabled={disabled}
-                        // eslint-disable-next-line max-len
-                        // withAsterisk={isDefined(value.num_ifrc_staff) || isDefined(value.ifrc_staff)}
                         />
                         <NumberInput
-                            label={strings.fieldsStep4PlannedResponseRowsIFRCStaffValueFieldLabel}
-                            name="num_ifrc_staff"
-                            value={value.num_ifrc_staff}
+                            label={strings.fieldsStep4PlannedResponseRowsERUValueFieldLabel}
+                            name="num_emergency_response_unit"
+                            value={value.num_emergency_response_unit}
                             onChange={onValueChange}
-                            error={error?.num_ifrc_staff}
+                            error={error?.num_emergency_response_unit}
                             disabled={disabled}
                             // eslint-disable-next-line max-len
-                            withAsterisk={isDefined(value.num_ifrc_staff) || isDefined(value.ifrc_staff)}
+                            withAsterisk={isDefined(value.num_emergency_response_unit) || isDefined(value.emergency_response_unit)}
                         />
                     </InputSection>
                     {reportType === 'EW' && (

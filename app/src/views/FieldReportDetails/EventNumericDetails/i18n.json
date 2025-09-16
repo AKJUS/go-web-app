@@ -20,7 +20,7 @@
         "eventAssistedGovernmentLabel": "Assisted (Government)",
         "eventLocalStaffLabel": "Local Staff",
         "eventVolunteersLabel": "Volunteers",
-        "eventIfrcStaffLabel": "IFRC Staff",
+        "eventERULabel": "Emergency Response Units",
         "eventDelegatedLabel": "Delegates"
     }
 }

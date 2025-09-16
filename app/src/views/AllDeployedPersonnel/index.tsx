@@ -25,6 +25,7 @@ import {
 import { saveAs } from 'file-saver';
 import Papa from 'papaparse';
 
+import { type EventItem } from '#components/domain/ActivityEventSearchSelectInput';
 import CountrySelectInput from '#components/domain/CountrySelectInput';
 import EventSearchSelectInput from '#components/domain/EventSearchSelectInput';
 import ExportButton from '#components/domain/ExportButton';
@@ -135,7 +136,7 @@ export function Component() {
         (country) => country,
     );
 
-    const [positionFilter, setPositionFilter] = useUrlSearchState<string>(
+    const [positionFilter, setPositionFilter] = useUrlSearchState<string | undefined>(
         'role',
         (searchValue) => searchValue ?? '',
         (value) => value,
@@ -176,7 +177,7 @@ export function Component() {
                     summary: undefined,
                 },
                 name,
-            };
+            } satisfies EventItem;
 
             setEventOptions((prevOptions) => ([
                 ...prevOptions ?? [],
@@ -395,26 +396,22 @@ export function Component() {
                             name="role"
                             value={positionFilter}
                             onChange={setPositionFilter}
-                            placeholder={strings.defaultPlaceholder}
                         />
                         <NationalSocietySelectInput
                             label={strings.personnelTableDeployingParty}
                             name="deploying_party"
-                            placeholder={strings.defaultPlaceholder}
                             value={nationalSocietyFilter}
                             onChange={setNationalSocietyFilter}
                         />
                         <CountrySelectInput
                             label={strings.personnelTableDeployedTo}
                             name="deployed_to"
-                            placeholder={strings.defaultPlaceholder}
                             value={countryToFilter}
                             onChange={setCountryToFilter}
                         />
                         <EventSearchSelectInput
                             name="event"
                             label={strings.personnelTableEmergency}
-                            placeholder={strings.defaultPlaceholder}
                             value={eventFilter}
                             onChange={setEventFilter}
                             options={eventOptions}

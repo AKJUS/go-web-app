@@ -134,7 +134,7 @@ export function Component() {
     const dref = fieldReportResponse?.dref;
     const appeal = fieldReportResponse?.appeal;
     const fact = fieldReportResponse?.fact;
-    const ifrcStaff = fieldReportResponse?.ifrc_staff;
+    const emergencyResponseUnit = fieldReportResponse?.emergency_response_unit;
 
     // NOTE: Only in EW
 
@@ -193,7 +193,7 @@ export function Component() {
         {
             key: 'ifrc-staff',
             title: strings.fieldReportEmergencyResponseTitle,
-            value: reportType !== 'COVID' ? ifrcStaff : undefined,
+            value: reportType !== 'COVID' ? emergencyResponseUnit : undefined,
         },
         /*
         {

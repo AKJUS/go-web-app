@@ -226,8 +226,8 @@ const fieldsInResponse = [
     'appeal_amount',
     'fact',
     'num_fact',
-    'ifrc_staff',
-    'num_ifrc_staff',
+    'emergency_response_unit',
+    'num_emergency_response_unit',
     'forecast_based_action',
     'forecast_based_action_amount',
 ] satisfies (keyof PartialFormValue)[];
@@ -696,25 +696,28 @@ export const reportSchema: FormSchema = {
         baseSchema = addCondition(
             baseSchema,
             value,
-            ['ifrc_staff', 'num_ifrc_staff', 'status', 'is_covid_report', 'dtype'],
-            ['ifrc_staff', 'num_ifrc_staff'],
-            (val): Pick<FormSchemaFields, 'ifrc_staff' | 'num_ifrc_staff'> => {
+            ['emergency_response_unit', 'num_emergency_response_unit', 'status', 'is_covid_report', 'dtype'],
+            ['emergency_response_unit', 'num_emergency_response_unit'],
+            (val): Pick<FormSchemaFields, 'emergency_response_unit' | 'num_emergency_response_unit'> => {
                 const reportType = getReportType(val?.status, val?.is_covid_report, val?.dtype);
                 if (reportType === 'COVID') {
                     return {
-                        ifrc_staff: { forceValue: nullValue },
-                        num_ifrc_staff: { forceValue: nullValue },
+                        emergency_response_unit: { forceValue: nullValue },
+                        num_emergency_response_unit: { forceValue: nullValue },
                     };
                 }
-                if (isDefined(val?.ifrc_staff) || isDefined(val?.num_ifrc_staff)) {
+                if (
+                    isDefined(val?.emergency_response_unit)
+                    || isDefined(val?.num_emergency_response_unit)
+                ) {
                     return {
-                        ifrc_staff: { required: true },
-                        num_ifrc_staff: { required: true },
+                        emergency_response_unit: { required: true },
+                        num_emergency_response_unit: { required: true },
                     };
                 }
                 return {
-                    ifrc_staff: {},
-                    num_ifrc_staff: {},
+                    emergency_response_unit: {},
+                    num_emergency_response_unit: {},
                 };
             },
         );
