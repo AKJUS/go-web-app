@@ -38,12 +38,14 @@ export function Component() {
             <SurgeContentContainer
                 heading={strings.communityCaseEmergencyServices}
             >
-                <div>{strings.communityCaseEmergencyServicesDetail}</div>
+                <div>{strings.communityCaseEmergencyServicesDetailOne}</div>
+                <div>{strings.communityCaseEmergencyServicesDetailTwo}</div>
             </SurgeContentContainer>
             <SurgeContentContainer
                 heading={strings.communityCaseDesignedFor}
             >
-                <div>{strings.communityCaseDesignedForDetail}</div>
+                <div>{strings.communityCaseDesignedForDetailOne}</div>
+                <div>{strings.communityCaseDesignedForDetailTwo}</div>
             </SurgeContentContainer>
             <SurgeContentContainer
                 heading={strings.communityCasePersonnel}
@@ -76,9 +78,6 @@ export function Component() {
                     </li>
                     <li>
                         {strings.communityCaseStandardListItemFour}
-                    </li>
-                    <li>
-                        {strings.communityCaseStandardListItemFive}
                     </li>
                 </ul>
             </SurgeContentContainer>
