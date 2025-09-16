@@ -1,5 +1,3 @@
-.local-unit-view-footer {
-    border-top: var(--go-ui-width-separator-thin) solid var(--go-ui-color-separator);
-    padding-top: var(--go-ui-spacing-md);
+.update-reason-text {
     font-style: italic;
 }

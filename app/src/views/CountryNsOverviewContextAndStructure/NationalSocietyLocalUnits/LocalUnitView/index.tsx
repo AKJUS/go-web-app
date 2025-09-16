@@ -105,20 +105,14 @@ function LocalUnitView(props: Props) {
             emptyMessage={strings.localUnitViewNoChanges}
             contentViewType="grid"
             numPreferredGridContentColumns={3}
-            footerContentClassName={styles.localUnitViewFooter}
-            footerContent={(
-                <DiffWrapper
-                    hideOnPristine
-                    diffViewEnabled
+            withFooterBorder
+            footerContent={isDefined(newValue?.update_reason_overview) && (
+                <TextOutput
+                    valueClassName={styles.updateReasonText}
+                    strongLabel
                     value={newValue?.update_reason_overview}
-                    previousValue={oldValue?.update_reason_overview}
-                >
-                    <TextOutput
-                        strongValue
-                        value={newValue?.update_reason_overview}
-                        label={strings.localUnitViewUpdateReason}
-                    />
-                </DiffWrapper>
+                    label={strings.localUnitViewUpdateReason}
+                />
             )}
         >
             <SelectDiffWrapper
@@ -166,6 +160,7 @@ function LocalUnitView(props: Props) {
                     label={strings.localUnitViewLatitude}
                     value={newValue?.location_json?.lat}
                     valueType="number"
+                    maximumFractionDigits={10}
                 />
             </DiffWrapper>
             <DiffWrapper
@@ -179,6 +174,7 @@ function LocalUnitView(props: Props) {
                     label={strings.localUnitViewLongitude}
                     value={newValue?.location_json?.lng}
                     valueType="number"
+                    maximumFractionDigits={10}
                 />
             </DiffWrapper>
             <DiffWrapper

@@ -66,15 +66,12 @@ function LocalUnitsTableActions(props: Props) {
         isGuestUser,
     } = usePermissions();
 
-    const isLocked = (
-        isDefined(status)
-        && !(status === VALIDATED)
-    );
+    const isLocked = status !== VALIDATED;
 
-    const isExternallyManaged = (status === EXTERNALLY_MANAGED
+    const isExternallyManaged = status === EXTERNALLY_MANAGED
         || (isDefined(localUnitType)
             && isDefined(manageResponse)
-            && !!manageResponse[localUnitType]?.enabled));
+            && !!manageResponse[localUnitType]?.enabled);
 
     const hasPermission = isAuthenticated
         && !isExternallyManaged

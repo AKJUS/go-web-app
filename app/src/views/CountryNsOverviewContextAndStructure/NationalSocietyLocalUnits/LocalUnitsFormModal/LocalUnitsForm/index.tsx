@@ -456,9 +456,9 @@ function LocalUnitsForm(props: Props) {
 
     return (
         <div className={styles.localUnitsForm}>
-            {isDefined(actionsContainerRef.current) && (
+            {isDefined(actionsContainerRef.current) && environment !== 'production' && (
                 <Portal container={actionsContainerRef.current}>
-                    {isDefined(localUnitDetailsResponse) && environment !== 'production' && (
+                    {isDefined(localUnitDetailsResponse) && (
                         <>
                             {hasUpdatePermission && (
                                 <Button
