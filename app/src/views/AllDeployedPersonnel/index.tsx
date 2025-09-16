@@ -1,12 +1,14 @@
 import {
     useCallback,
     useMemo,
+    useState,
 } from 'react';
 import {
     Container,
     DateInput,
     Pager,
     Table,
+    TextInput,
 } from '@ifrc-go/ui';
 import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -23,11 +25,15 @@ import {
 import { saveAs } from 'file-saver';
 import Papa from 'papaparse';
 
+import CountrySelectInput from '#components/domain/CountrySelectInput';
+import EventSearchSelectInput from '#components/domain/EventSearchSelectInput';
 import ExportButton from '#components/domain/ExportButton';
+import NationalSocietySelectInput from '#components/domain/NationalSocietySelectInput';
 import Page from '#components/Page';
 import useAlert from '#hooks/useAlert';
 import useFilterState from '#hooks/useFilterState';
 import useRecursiveCsvExport from '#hooks/useRecursiveCsvRequest';
+import useUrlSearchState from '#hooks/useUrlSearchState';
 import { COUNTRY_RECORD_TYPE_REGION } from '#utils/constants';
 import { countryIdToRegionIdMap } from '#utils/domain/country';
 import { createLinkColumn } from '#utils/domain/tableHelpers';
@@ -61,6 +67,7 @@ export function Component() {
     } = useFilterState<{
         startDateAfter?: string,
         startDateBefore?: string,
+        type?: string,
     }>({
         filter: {},
         pageSize: 10,
@@ -92,6 +99,92 @@ export function Component() {
         return [ordering, defaultOrdering].join(',');
     }, [ordering]);
 
+    const [nationalSocietyFilter, setNationalSocietyFilter] = useUrlSearchState<number | undefined>(
+        'country',
+        (searchValue) => {
+            const potentialValue = isDefined(searchValue) ? Number(searchValue) : undefined;
+            if (potentialValue) {
+                setPage(0);
+            }
+            return potentialValue;
+        },
+        (country) => country,
+    );
+
+    const [countryToFilter, setCountryToFilter] = useUrlSearchState<number | undefined>(
+        'country2',
+        (searchValue) => {
+            const potentialValue = isDefined(searchValue) ? Number(searchValue) : undefined;
+            if (potentialValue) {
+                setPage(0);
+            }
+            return potentialValue;
+        },
+        (country) => country,
+    );
+
+    const [eventFilter, setEventFilter] = useUrlSearchState<number | undefined>(
+        'event',
+        (searchValue) => {
+            const potentialValue = isDefined(searchValue) ? Number(searchValue) : undefined;
+            if (potentialValue) {
+                setPage(0);
+            }
+            return potentialValue;
+        },
+        (country) => country,
+    );
+
+    const [positionFilter, setPositionFilter] = useUrlSearchState<string>(
+        'role',
+        (searchValue) => searchValue ?? '',
+        (value) => value,
+    );
+
+    const [eventOptions, setEventOptions] = useState<
+        EventItem[] | undefined | null
+    >([]);
+
+    useRequest({
+        skip: isNotDefined(eventFilter)
+            || (!!eventOptions?.find((event) => event.id === eventFilter)),
+        url: '/api/v2/event/{id}/',
+        pathVariables: isDefined(eventFilter) ? {
+            id: eventFilter,
+        } : undefined,
+        onSuccess: (response) => {
+            if (isNotDefined(response)) {
+                return;
+            }
+
+            const {
+                id,
+                dtype,
+                name,
+            } = response;
+
+            if (isNotDefined(id) || isNotDefined(dtype) || isNotDefined(name)) {
+                return;
+            }
+
+            const newOption = {
+                id,
+                dtype: {
+                    id: dtype,
+                    translation_module_original_language: 'en' as const,
+                    name: undefined,
+                    summary: undefined,
+                },
+                name,
+            };
+
+            setEventOptions((prevOptions) => ([
+                ...prevOptions ?? [],
+                newOption,
+            ]));
+        },
+    });
+
     const query = useMemo(() => ({
         limit,
         offset,
@@ -99,11 +192,20 @@ export function Component() {
         // FIXME: The server does not support date string
         start_date__gte: toDateTimeString(filter.startDateAfter),
         start_date__lte: toDateTimeString(filter.startDateBefore),
+        type: filter.type,
+        role__icontains: positionFilter,
+        country_from: nationalSocietyFilter,
+        country_to: countryToFilter,
+        event_deployed_to: eventFilter,
     }), [
         limit,
         offset,
         orderingWithFallback,
         filter,
+        positionFilter,
+        nationalSocietyFilter,
+        countryToFilter,
+        eventFilter,
     ]);
 
     const {
@@ -191,7 +293,7 @@ export function Component() {
                 { sortable: true },
             ),
             createLinkColumn<PersonnelTableItem, number>(
-                'event_deployed_to',
+                'deployment__event_deployed_to',
                 strings.personnelTableEmergency,
                 (item) => item.deployment?.event_deployed_to?.name,
                 (item) => ({
@@ -287,6 +389,36 @@ export function Component() {
                             label={strings.allDeployedPersonnelFilterStartDateBefore}
                             onChange={setFilterField}
                             value={rawFilter.startDateBefore}
+                        />
+                        <TextInput
+                            label={strings.personnelTablePosition}
+                            name="role"
+                            value={positionFilter}
+                            onChange={setPositionFilter}
+                            placeholder={strings.defaultPlaceholder}
+                        />
+                        <NationalSocietySelectInput
+                            label={strings.personnelTableDeployingParty}
+                            name="deploying_party"
+                            placeholder={strings.defaultPlaceholder}
+                            value={nationalSocietyFilter}
+                            onChange={setNationalSocietyFilter}
+                        />
+                        <CountrySelectInput
+                            label={strings.personnelTableDeployedTo}
+                            name="deployed_to"
+                            placeholder={strings.defaultPlaceholder}
+                            value={countryToFilter}
+                            onChange={setCountryToFilter}
+                        />
+                        <EventSearchSelectInput
+                            name="event"
+                            label={strings.personnelTableEmergency}
+                            placeholder={strings.defaultPlaceholder}
+                            value={eventFilter}
+                            onChange={setEventFilter}
+                            options={eventOptions}
+                            onOptionsChange={setEventOptions}
                         />
                     </>
                 )}
