@@ -38,6 +38,7 @@ import {
     type DisasterCategory,
     DREF_TYPE_ASSESSMENT,
     DREF_TYPE_IMMINENT,
+    DREF_TYPE_RESPONSE,
     ONSET_SLOW,
 } from '#utils/constants';
 import {
@@ -397,7 +398,9 @@ export function Component() {
                 />
                 <TextOutput
                     className={styles.metaItem}
-                    label={strings.peopleAtRiskLabel}
+                    label={drefResponse?.type_of_dref === DREF_TYPE_RESPONSE
+                        ? strings.peopleAffectedLabel
+                        : strings.peopleAtRiskLabel}
                     value={drefResponse?.number_of_people_affected}
                     valueType="number"
                     suffix={strings.peopleSuffix}
