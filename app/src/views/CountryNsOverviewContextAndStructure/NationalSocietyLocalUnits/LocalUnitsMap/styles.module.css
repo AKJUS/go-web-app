@@ -38,6 +38,10 @@
     }
 }
 
+.heading-description {
+    flex-direction: column;
+}
+
 .map-popup {
     height: 16rem;
 }

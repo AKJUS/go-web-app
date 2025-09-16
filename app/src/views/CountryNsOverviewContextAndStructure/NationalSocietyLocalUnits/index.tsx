@@ -34,6 +34,7 @@ import {
 } from '@togglecorp/fujs';
 
 import DropdownMenuItem from '#components/DropdownMenuItem';
+import { environment } from '#config';
 import useAuth from '#hooks/domain/useAuth';
 import usePermissions from '#hooks/domain/usePermissions';
 import useFilterState from '#hooks/useFilterState';
@@ -249,7 +250,7 @@ function NationalSocietyLocalUnits(props: Props) {
                         filtered={filtered}
                     />
                 )}
-                actions={isAuthenticated && (
+                actions={isAuthenticated && (environment !== 'production') && (
                     <>
                         <Button
                             name={undefined}

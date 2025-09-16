@@ -65,7 +65,9 @@ import {
 import { transformObjectError } from '#utils/restRequest/error';
 
 import {
+    EXTERNALLY_MANAGED,
     type ManageResponse,
+    UNVALIDATED,
     VALIDATED,
 } from '../../common';
 import FormGrid from '../../FormGrid';
@@ -219,8 +221,20 @@ function LocalUnitsForm(props: Props) {
         pathVariables: isDefined(localUnitId) ? { id: localUnitId } : undefined,
     });
 
+    const isLocked = (
+        isDefined(localUnitDetailsResponse?.status)
+        && !(localUnitDetailsResponse.status === VALIDATED)
+    );
+
+    const isNewLocalUnit = localUnitDetailsResponse?.status === UNVALIDATED;
+
+    const isExternallyManaged = (localUnitDetailsResponse?.status === EXTERNALLY_MANAGED
+        || (isDefined(value.type)
+            && isDefined(manageResponse)
+            && !!manageResponse[value.type]?.enabled));
+
     const readOnly = readOnlyFromProps
-        || localUnitDetailsResponse?.is_locked;
+        || isLocked || isExternallyManaged;
 
     const {
         response: localUnitsOptions,
@@ -322,13 +336,6 @@ function LocalUnitsForm(props: Props) {
         },
     });
 
-    const isExternallyManaged = useMemo(() => {
-        if (isDefined(value.type) && isDefined(manageResponse)) {
-            return manageResponse[value.type]?.enabled;
-        }
-        return false;
-    }, [value.type, manageResponse]);
-
     const hasValidatePermission = isAuthenticated
         && !isExternallyManaged
         && (isSuperUser
@@ -336,8 +343,9 @@ function LocalUnitsForm(props: Props) {
             || isLocalUnitCountryValidatorByType(countryResponse?.id, value.type)
             || isLocalUnitRegionValidatorByType(countryResponse?.region, value.type));
 
-    const hasUpdatePermission = isCountryAdmin(countryResponse?.id)
-        || hasValidatePermission;
+    const hasUpdatePermission = (isCountryAdmin(countryResponse?.id)
+        || hasValidatePermission)
+        && !isExternallyManaged;
 
     const handleFormSubmit = useCallback(
         () => {
@@ -392,13 +400,15 @@ function LocalUnitsForm(props: Props) {
         localUnitPreviousResponse?.previous_data_details as unknown as LocalUnitResponse | undefined
     );
 
-    const showChanges = !localUnitDetailsResponse?.is_new_local_unit
-        && !!localUnitDetailsResponse?.is_locked
-        && isNotDefined(localUnitDetailsResponse.bulk_upload);
+    const showChanges = !isNewLocalUnit
+        && isLocked
+        && showValueChanges
+        && !isExternallyManaged;
 
-    const showViewChanges = !localUnitDetailsResponse?.is_new_local_unit
+    const showViewChanges = !isNewLocalUnit
         && isDefined(localUnitId)
-        && !(localUnitDetailsResponse?.status === VALIDATED);
+        && isLocked
+        && !isExternallyManaged;
 
     const permissionError = useMemo(() => {
         if (isExternallyManaged) {
@@ -446,9 +456,9 @@ function LocalUnitsForm(props: Props) {
 
     return (
         <div className={styles.localUnitsForm}>
-            {isDefined(actionsContainerRef.current) && (
+            {isDefined(actionsContainerRef.current) && environment !== 'production' && (
                 <Portal container={actionsContainerRef.current}>
-                    {isDefined(localUnitDetailsResponse) && environment !== 'production' && (
+                    {isDefined(localUnitDetailsResponse) && (
                         <>
                             {hasUpdatePermission && (
                                 <Button
@@ -467,7 +477,7 @@ function LocalUnitsForm(props: Props) {
                                 />
                             )}
                             {readOnlyFromProps
-                                && !localUnitDetailsResponse.is_locked
+                                && !isLocked
                                 && hasUpdatePermission && (
                                 <Button
                                     name={undefined}
@@ -541,7 +551,7 @@ function LocalUnitsForm(props: Props) {
                                 onChange={setFieldValue}
                                 keySelector={numericIdSelector}
                                 labelSelector={stringNameSelector}
-                                readOnly={readOnly}
+                                readOnly={readOnlyFromProps || isLocked}
                                 error={error?.type}
                                 nonClearable
                             />
@@ -1833,7 +1843,6 @@ function LocalUnitsForm(props: Props) {
                         value={updateReason}
                         onChange={setUpdateReason}
                     />
-
                 </LocalUnitViewModal>
             )}
             {showValidateLocalUnitModal

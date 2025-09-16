@@ -1,6 +1,5 @@
 import {
     useCallback,
-    useMemo,
     useState,
 } from 'react';
 import { TableActions } from '@ifrc-go/ui';
@@ -11,11 +10,16 @@ import {
 import { isDefined } from '@togglecorp/fujs';
 
 import DropdownMenuItem from '#components/DropdownMenuItem';
+import { environment } from '#config';
 import useAuth from '#hooks/domain/useAuth';
 import useCountry from '#hooks/domain/useCountry';
 import usePermissions from '#hooks/domain/usePermissions';
 
-import { type ManageResponse } from '../../common';
+import {
+    EXTERNALLY_MANAGED,
+    type ManageResponse,
+    VALIDATED,
+} from '../../common';
 import LocalUnitDeleteModal from '../../LocalUnitDeleteModal';
 import LocalUnitsFormModal from '../../LocalUnitsFormModal';
 import LocalUnitValidateButton from '../../LocalUnitValidateButton';
@@ -33,7 +37,6 @@ export interface Props {
     onDeleteActionSuccess: () => void;
     onValidationActionSuccess: () => void;
     manageResponse: ManageResponse;
-    isLocked: boolean;
 }
 
 function LocalUnitsTableActions(props: Props) {
@@ -46,7 +49,6 @@ function LocalUnitsTableActions(props: Props) {
         isBulkUploadLocalUnit,
         onValidationActionSuccess,
         onDeleteActionSuccess,
-        isLocked,
         manageResponse,
     } = props;
 
@@ -64,12 +66,12 @@ function LocalUnitsTableActions(props: Props) {
         isGuestUser,
     } = usePermissions();
 
-    const isExternallyManaged = useMemo(() => {
-        if (isDefined(localUnitType) && isDefined(manageResponse)) {
-            return manageResponse[localUnitType]?.enabled;
-        }
-        return false;
-    }, [localUnitType, manageResponse]);
+    const isLocked = status !== VALIDATED;
+
+    const isExternallyManaged = status === EXTERNALLY_MANAGED
+        || (isDefined(localUnitType)
+            && isDefined(manageResponse)
+            && !!manageResponse[localUnitType]?.enabled);
 
     const hasPermission = isAuthenticated
         && !isExternallyManaged
@@ -153,7 +155,7 @@ function LocalUnitsTableActions(props: Props) {
         <>
             <TableActions
                 persistent
-                extraActions={(
+                extraActions={environment !== 'production' && (
                     <>
                         <DropdownMenuItem
                             type="button"
@@ -184,7 +186,7 @@ function LocalUnitsTableActions(props: Props) {
                     </>
                 )}
             >
-                {hasValidatePermission && (
+                {hasValidatePermission && (environment !== 'production') && (
                     <LocalUnitValidateButton
                         onClick={handleValidateLocalUnitClick}
                         status={status}

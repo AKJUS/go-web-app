@@ -1,0 +1,22 @@
+{
+    "parent": "000049-1758005186095.json",
+    "actions": [
+        {
+            "action": "add",
+            "key": "localUnitsTableStatus",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Status"
+        },
+        {
+            "action": "add",
+            "key": "localUnitViewUpdateReason",
+            "namespace": "countryNsOverviewContextAndStructure",
+            "value": "Edit reason"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewReasonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        }
+    ]
+}

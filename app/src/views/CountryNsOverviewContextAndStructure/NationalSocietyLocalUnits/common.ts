@@ -13,6 +13,7 @@ export type ManageResponse = Record<number, {
 export const VALIDATED = 1 satisfies ValidationStatusKey;
 export const UNVALIDATED = 2 satisfies ValidationStatusKey;
 export const PENDING_VALIDATION = 3 satisfies ValidationStatusKey;
+export const EXTERNALLY_MANAGED = 4 satisfies ValidationStatusKey;
 
 export const AUTHENTICATED = 'authenticated' satisfies RequestType;
 export const PUBLIC = 'public' satisfies RequestType;

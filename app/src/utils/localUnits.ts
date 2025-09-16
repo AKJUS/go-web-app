@@ -23,8 +23,6 @@ export function getFormFields(value: LocalUnitResponse | PartialLocalUnits) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         modified_by_details,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        is_locked,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         status,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         version_id,

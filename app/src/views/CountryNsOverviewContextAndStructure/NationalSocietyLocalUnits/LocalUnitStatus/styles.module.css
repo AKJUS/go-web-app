@@ -17,4 +17,8 @@
     &.pending-validation {
         color: var(--go-ui-color-blue);
     }
+
+    &.externally-managed {
+        color: var(--go-ui-color-gray-60);
+    }
 }
