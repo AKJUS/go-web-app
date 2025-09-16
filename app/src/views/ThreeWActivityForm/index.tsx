@@ -173,6 +173,14 @@ export function Component() {
         DistrictItem[] | undefined | null
     >([]);
 
+    const { response: selectedEventDetail } = useRequest({
+        skip: isNotDefined(value.event),
+        url: '/api/v2/event/{id}/',
+        pathVariables: isDefined(value.event) ? {
+            id: value.event,
+        } : undefined,
+    });
+
     const {
         pending: fetchingActivity,
         response: activityResponse,
@@ -541,13 +549,6 @@ export function Component() {
         activityId,
         updateActivity,
         createActivity,
-    ]);
-
-    const selectedEventDetail = useMemo(() => (
-        eventOptions?.find((event) => event.id === value?.event)
-    ), [
-        eventOptions,
-        value?.event,
     ]);
 
     const countries = useCountry();

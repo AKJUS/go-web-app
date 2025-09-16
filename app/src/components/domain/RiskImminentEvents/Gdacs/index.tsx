@@ -3,6 +3,7 @@ import { numericIdSelector } from '@ifrc-go/ui/utils';
 import {
     isDefined,
     isNotDefined,
+    isObject,
 } from '@togglecorp/fujs';
 import { type LngLatBoundsLike } from 'mapbox-gl';
 
@@ -229,7 +230,13 @@ function Gdacs(props: Props) {
                 ? footprint_geojson
                 : undefined;
 
-            const hazardDate = (footprint?.metadata as ({ todate?: string } | undefined))?.todate;
+            const hazardDate = (isDefined(footprint)
+                && 'metadata' in footprint
+                && isObject(footprint.metadata)
+                && 'todate' in footprint.metadata
+            )
+                ? String(footprint.metadata.todate)
+                : undefined;
 
             const geoJson: GeoJSON.FeatureCollection<GeoJSON.Geometry, RiskLayerProperties> = {
                 type: 'FeatureCollection' as const,

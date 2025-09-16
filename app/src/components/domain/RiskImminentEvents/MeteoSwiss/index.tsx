@@ -3,6 +3,7 @@ import { numericIdSelector } from '@ifrc-go/ui/utils';
 import {
     isDefined,
     isNotDefined,
+    isObject,
 } from '@togglecorp/fujs';
 import type { LngLatBoundsLike } from 'mapbox-gl';
 
@@ -155,7 +156,11 @@ function MeteoSwiss(props: Props) {
             }
 
             // FIXME: fix typing in server (low priority)
-            const footprint_geojson = exposure?.footprint_geojson?.footprint_geojson;
+            const footprint_geojson = 'footprint_geojson' in exposure
+                && isObject(exposure.footprint_geojson)
+                && 'footprint_geojson' in exposure.footprint_geojson
+                ? exposure.footprint_geojson?.footprint_geojson
+                : undefined;
 
             if (isNotDefined(footprint_geojson)) {
                 return undefined;

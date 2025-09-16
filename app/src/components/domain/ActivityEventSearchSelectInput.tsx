@@ -13,7 +13,7 @@ import {
 
 type GetEventParams = GoApiUrlQuery<'/api/v2/event/response-activity/'>;
 type GetEventResponse = GoApiResponse<'/api/v2/event/response-activity/'>;
-export type EventItem = Pick<NonNullable<GetEventResponse['results']>[number], 'id' | 'name' | 'dtype' | 'emergency_response_contact_email'>;
+export type EventItem = Pick<NonNullable<GetEventResponse['results']>[number], 'id' | 'name' | 'dtype'>;
 
 const keySelector = (d: EventItem) => d.id;
 const labelSelector = (d: EventItem) => d.name ?? '???';

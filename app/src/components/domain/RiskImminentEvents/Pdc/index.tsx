@@ -138,7 +138,8 @@ function Pdc(props: Props) {
             } = exposure;
 
             // FIXME: showing five days cou when three days cou is not available
-            const cyclone_cou = cyclone_three_days_cou?.[0] ?? cyclone_five_days_cou?.[0];
+            const cyclone_cou = (cyclone_three_days_cou as unknown[] | null)?.[0]
+                ?? (cyclone_five_days_cou as unknown[])?.[0];
 
             if (isNotDefined(footprint_geojson) && isNotDefined(storm_position_geojson)) {
                 return undefined;
