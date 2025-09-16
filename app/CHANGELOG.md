@@ -1,5 +1,32 @@
 # go-web-app
 
+## 7.22.0-beta.2
+
+### Minor Changes
+
+- aecaaa2: Revert export structure for DREF Imminent Application v1
+  - For Response type DREFs exports, update export label to "People Affected" from "People at Risk"
+
+- 7ef5534: Update visible appeal types in Active Operations map
+  - Remove `Forecased Based Action` and `International Appeal` options from appeals filter
+  - Remove Early Action Protocol Activation from legend
+
+- Replace `IFRC staff` with `Emergency Response Unit` in field report form
+
+### Patch Changes
+
+- 78f990a: Update local units UI
+  - Add icon for externally managed status
+  - Relocate status column in local units table
+  - Improve overall UI
+
+- daa659c: Textual changes in Community Case Management of Cholera (CCMC) section of Surge pages
+- ee7330c: Fix ordering by Deployed To / Emergency in All Deployed Personnel & add 4 new filters:
+  - Position
+  - Deploying Party
+  - Deployed To
+  - Emergency
+
 ## 7.22.0-beta.1
 
 ### Minor Changes
