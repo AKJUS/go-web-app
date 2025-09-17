@@ -99,8 +99,6 @@ function Pdc(props: Props) {
                 isNotDefined(latitude)
                 || isNotDefined(longitude)
                 || isNotDefined(hazard_type)
-                // FIXME: hazard_type should not be ''
-                || hazard_type === ''
             ) {
                 return undefined;
             }
@@ -138,8 +136,8 @@ function Pdc(props: Props) {
             } = exposure;
 
             // FIXME: showing five days cou when three days cou is not available
-            const cyclone_cou = (cyclone_three_days_cou as unknown[] | null)?.[0]
-                ?? (cyclone_five_days_cou as unknown[])?.[0];
+            const cyclone_cou = (cyclone_three_days_cou as unknown as object[] | null)?.[0]
+                ?? (cyclone_five_days_cou as unknown as object[] | null)?.[0];
 
             if (isNotDefined(footprint_geojson) && isNotDefined(storm_position_geojson)) {
                 return undefined;

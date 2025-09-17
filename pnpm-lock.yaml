@@ -15,7 +15,7 @@ patchedDependencies:
     hash: f6b966f3d2d5a66fd961363e20ecdfad1b807ae7ba8d56eb6bd57592b3fa13af
     path: patches/@turf__buffer@6.5.0.patch
   openapi-typescript@6.5.5:
-    hash: d4560ec912b068fc108fbfdee345218ad4e59ac3ed2f4810e8b573aa8e99958c
+    hash: 9a61b39461db28b6c2c2c2aadf8c62fea41c46d160e8560bc08e15233ad27f12
     path: patches/openapi-typescript@6.5.5.patch
   vite-plugin-webfont-dl@3.10.4:
     hash: 602a60d690d6faa406886cade670a7057f2a6ede3a7cc81506408a993cdd7e2b
@@ -190,7 +190,7 @@ importers:
         version: 9.20.3
       openapi-typescript:
         specifier: 6.5.5
-        version: 6.5.5(patch_hash=d4560ec912b068fc108fbfdee345218ad4e59ac3ed2f4810e8b573aa8e99958c)
+        version: 6.5.5(patch_hash=9a61b39461db28b6c2c2c2aadf8c62fea41c46d160e8560bc08e15233ad27f12)
       postcss:
         specifier: ^8.5.3
         version: 8.5.3
@@ -11513,7 +11513,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openapi-typescript@6.5.5(patch_hash=d4560ec912b068fc108fbfdee345218ad4e59ac3ed2f4810e8b573aa8e99958c):
+  openapi-typescript@6.5.5(patch_hash=9a61b39461db28b6c2c2c2aadf8c62fea41c46d160e8560bc08e15233ad27f12):
     dependencies:
       ansi-colors: 4.1.3
       fast-glob: 3.3.3

@@ -32,7 +32,7 @@ import {
 } from '#utils/constants';
 import { type RiskApiResponse } from '#utils/restRequest';
 
-export type HazardType = components<'read'>['schemas']['HazardTypeEnum'];
+export type HazardType = components<'read'>['schemas']['CommonHazardTypeEnumKey'];
 type IpcEstimationType = components<'read'>['schemas']['EstimationTypeEnum'];
 type CountrySeasonal = RiskApiResponse<'/api/v1/country-seasonal/'>;
 type IpcData = CountrySeasonal[number]['ipc_displacement_data'];
@@ -189,7 +189,7 @@ export function getPrioritizedIpcData(data: IpcData) {
         (item) => {
             // FIXME: Update isFalsyString to Exclude empty string
             // FIXME: Also fix this in server
-            if (isFalsyString(item.estimation_type) || item.estimation_type === '') {
+            if (isFalsyString(item.estimation_type)) {
                 return undefined;
             }
 

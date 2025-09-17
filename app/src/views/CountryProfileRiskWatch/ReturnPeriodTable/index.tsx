@@ -28,7 +28,7 @@ import i18n from './i18n.json';
 
 type GetCountryRisk = paths['/api/v1/country-seasonal/']['get'];
 type CountryRiskResponse = GetCountryRisk['responses']['200']['content']['application/json'];
-type HazardType = components<'read'>['schemas']['HazardTypeEnum'];
+type HazardType = components<'read'>['schemas']['CommonHazardTypeEnumKey'];
 interface HazardTypeOption {
     hazard_type: HazardType;
     hazard_type_display: string;
@@ -66,7 +66,7 @@ function ReturnPeriodTable(props: Props) {
                     (datum) => {
                         // FIXME: Update isFalsyString to Exclude empty string
                         // FIXME: Also fix this in server
-                        if (isFalsyString(datum.hazard_type) || datum.hazard_type === '') {
+                        if (isFalsyString(datum.hazard_type)) {
                             return undefined;
                         }
 

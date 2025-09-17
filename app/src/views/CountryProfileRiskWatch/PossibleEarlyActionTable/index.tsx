@@ -29,7 +29,7 @@ import { useRiskRequest } from '#utils/restRequest';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type HazardType = riskApiComponents['schemas']['HazardTypeEnum'];
+type HazardType = riskApiComponents['schemas']['CommonHazardTypeEnumKey'];
 
 type PossibleEarlyActionsResponse = RiskApiResponse<'/api/v1/early-actions/'>;
 type ResponseItem = NonNullable<PossibleEarlyActionsResponse['results']>[number];
