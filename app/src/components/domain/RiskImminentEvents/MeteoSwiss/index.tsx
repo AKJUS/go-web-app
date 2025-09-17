@@ -128,8 +128,6 @@ function MeteoSwiss(props: Props) {
                 isNotDefined(latitude)
                 || isNotDefined(longitude)
                 || isNotDefined(hazard_type)
-                // FIXME: hazard_type should not be ''
-                || hazard_type === ''
             ) {
                 return undefined;
             }

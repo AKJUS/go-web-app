@@ -33,9 +33,9 @@ import {
     type RiskLayerTypes,
 } from './utils';
 
-type HazardType = components<'read'>['schemas']['HazardTypeEnum'];
+type CommonHazardType = components<'read'>['schemas']['CommonHazardTypeEnumKey'];
 
-export const hazardKeyToIconMap: Record<HazardType, string | null> = {
+export const hazardKeyToIconMap: Record<CommonHazardType, string | null> = {
     EQ: earthquakeIcon,
     FL: floodIcon,
     TC: cycloneIcon,

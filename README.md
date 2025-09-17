@@ -41,13 +41,19 @@ To begin, ensure you have network access. Then, you'll need the following:
    gh repo clone IFRCGo/go-web-app # GitHub CLI
    ```
 
-2. Install the dependencies:
+2. Initialize submodules
+
+    ```bash
+    git submodule update --init --recursive --remote
+    ```
+
+3. Install the dependencies:
 
    ```bash
    pnpm install
    ```
 
-3. Create a `.env` file in the `app` directory and add variables from [env.ts](https://github.com/IFRCGo/go-web-app/blob/develop/app/env.ts). Any variables marked with `.optional()` are not mandatory for setup and can be skipped.
+4. Create a `.env` file in the `app` directory and add variables from [env.ts](https://github.com/IFRCGo/go-web-app/blob/develop/app/env.ts). Any variables marked with `.optional()` are not mandatory for setup and can be skipped.
 
    ```bash
    cd app
@@ -61,10 +67,10 @@ To begin, ensure you have network access. Then, you'll need the following:
    ...
    ```
 
-4. Start the development server:
+5. Start the development server:
 
    ```bash
-   pnpm start:app
+   pnpm start
    ```
 
 ## Contributing

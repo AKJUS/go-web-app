@@ -66,9 +66,9 @@ const mapImageOption = {
     sdf: true,
 };
 
-type HazardType = components<'read'>['schemas']['HazardTypeEnum'];
+type CommonHazardType = components<'read'>['schemas']['CommonHazardTypeEnumKey'];
 
-const hazardKeys = Object.keys(hazardKeyToIconMap) as HazardType[];
+const hazardKeys = Object.keys(hazardKeyToIconMap) as CommonHazardType[];
 
 const mapIcons = mapToList(
     hazardKeyToIconMap,
@@ -77,7 +77,7 @@ const mapIcons = mapToList(
 
 type EventPointProperties = {
     id: string | number,
-    hazard_type: HazardType,
+    hazard_type: CommonHazardType,
 }
 
 export type EventPointFeature = GeoJSON.Feature<GeoJSON.Point, EventPointProperties>;
@@ -108,7 +108,7 @@ interface Props<EVENT, EXPOSURE, KEY extends string | number> {
     source: ImminentEventSource;
     events: EVENT[] | undefined;
     keySelector: (event: EVENT) => KEY;
-    hazardTypeSelector: (event: EVENT) => HazardType | '' | undefined;
+    hazardTypeSelector: (event: EVENT) => CommonHazardType | '' | undefined;
     pointFeatureSelector: (event: EVENT) => EventPointFeature | undefined;
     footprintSelector: (activeEventExposure: EXPOSURE | undefined) => Footprint | undefined;
     activeEventExposure: EXPOSURE | undefined;
@@ -306,7 +306,7 @@ function RiskImminentEventMap<
     const [loadedIcons, setLoadedIcons] = useState<Record<string, boolean>>({});
 
     const handleIconLoad = useCallback(
-        (loaded: boolean, key: HazardType) => {
+        (loaded: boolean, key: CommonHazardType) => {
             setLoadedIcons((prevValue) => ({
                 ...prevValue,
                 [key]: loaded,

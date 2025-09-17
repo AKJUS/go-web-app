@@ -1,0 +1,6 @@
+[submodule "go-api"]
+	path = go-api
+	url = git@github.com:IFRCGo/go-api.git
+[submodule "go-risk-module-api"]
+	path = go-risk-module-api
+	url = git@github.com:IFRCGo/go-risk-module-api.git

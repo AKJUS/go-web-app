@@ -42,7 +42,7 @@ index 716afaa50ea30a433178843def931d6d1c4fbe33..28c9250a19081e0569b1de30662510ee
      if (output.join("\n").includes("OneOf")) {
          output.splice(1, 0, "/** OneOf type helpers */", "type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };", "type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;", "type OneOf<T extends any[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;", "");
 diff --git a/dist/load.js b/dist/load.js
-index aea4fe09436722e0c2d1fb272b1e067c17a9af60..69bb601d8d6bcf022acad9f5e9b0221b230d376b 100644
+index aea4fe09436722e0c2d1fb272b1e067c17a9af60..eb2f1dbbeaba9fc177943e2ac8b826b2fe80788e 100644
 --- a/dist/load.js
 +++ b/dist/load.js
 @@ -67,8 +67,7 @@ export default async function load(schema, options) {
@@ -55,22 +55,23 @@ index aea4fe09436722e0c2d1fb272b1e067c17a9af60..69bb601d8d6bcf022acad9f5e9b0221b
              const headers = { "User-Agent": "openapi-typescript" };
              if (options.auth)
                  headers.Authorization = options.auth;
-@@ -83,6 +82,14 @@ export default async function load(schema, options) {
+@@ -83,6 +82,15 @@ export default async function load(schema, options) {
                  headers,
              });
              const contentType = res.headers.get("content-type");
-+            const contentDisposition = res.headers.get("content-disposition");
++            const contentDisposition = res.headers.get("content-disposition") ?? '';
 +
 +            const match = contentDisposition.match(/^.*filename="?(?<name>.+?)"?(?:;|$)/);
 +            const filename = match
 +                ? match.groups.name
-+                : undefined;
++                : schema.pathname.substring(schema.pathname.lastIndexOf('/') + 1);
++;
 +
 +            const ext = path.extname(filename).toLowerCase();
              if (ext === ".json" || contentType?.includes("json")) {
                  options.schemas[schemaID] = {
                      hint,
-@@ -97,6 +104,7 @@ export default async function load(schema, options) {
+@@ -97,6 +105,7 @@ export default async function load(schema, options) {
              }
          }
          else {
