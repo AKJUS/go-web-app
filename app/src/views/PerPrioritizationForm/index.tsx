@@ -201,7 +201,7 @@ export function Component() {
                     const match = matchArray(locations, ['prioritized_action_responses', NUM]);
                     if (isDefined(match)) {
                         const [response_index] = match;
-                        return value?.prioritized_action_responses?.[response_index]?.component;
+                        return value?.prioritized_action_responses?.[response_index!]?.component;
                     }
                     return undefined;
                 },
@@ -523,8 +523,8 @@ export function Component() {
                     return (
                         <ComponentInput
                             key={component.id}
-                            index={componentResponseMapping[component.id]?.index}
-                            value={componentResponseMapping[component.id]?.value}
+                            index={componentResponseMapping[component.id]!.index}
+                            value={componentResponseMapping[component.id]!.value}
                             onChange={setComponentValue}
                             component={component}
                             error={componentInputError?.[component.id]}

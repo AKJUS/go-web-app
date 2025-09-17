@@ -74,7 +74,7 @@ function isValidDisaster(
     if (isFalsyString(disaster.name)) {
         return false;
     }
-    return validDisastersForChart[disaster.id];
+    return validDisastersForChart[disaster.id]!;
 }
 
 const hazardIdToColorMap: Record<number, string> = {

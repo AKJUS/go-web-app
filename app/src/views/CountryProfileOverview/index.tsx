@@ -80,7 +80,7 @@ function SeasonalCalendarEvent(props: SeasonalCalendarEventProps) {
             style={{
                 gridColumnStart: start,
                 gridColumnEnd: end,
-                backgroundColor: colorMap[event_type[0]],
+                backgroundColor: colorMap[event_type[0]!],
             }}
         >
             {data.label}
@@ -175,7 +175,7 @@ export function Component() {
                     );
 
                     const monthIndices = orderedMonth.map(
-                        (monthName) => monthToOrderMap[monthName],
+                        (monthName) => monthToOrderMap[monthName]!,
                     );
 
                     const discreteMonthIndices = splitList<number, number>(
@@ -183,7 +183,7 @@ export function Component() {
                         (item, index): item is number => (
                             index === 0
                                 ? false
-                                : (item - monthIndices[index - 1]) > 1
+                                : (item - monthIndices[index - 1]!) > 1
                         ),
                         true,
                     );
@@ -195,11 +195,11 @@ export function Component() {
                         monthIndices: discreteMonthIndices.map(
                             (continuousList, i) => ({
                                 key: i,
-                                start: continuousList[0],
-                                end: continuousList[continuousList.length - 1] + 1,
+                                start: continuousList[0]!,
+                                end: continuousList[continuousList.length - 1]! + 1,
                             }),
                         ).sort((a, b) => compareNumber(a.start, b.start)),
-                        startMonth: monthToOrderMap[orderedMonth[0]],
+                        startMonth: monthToOrderMap[orderedMonth[0]!],
                     };
                 },
             ).filter(isDefined).sort(
@@ -212,7 +212,7 @@ export function Component() {
     const eventTypeGroupedData = mapToList(
         listToGroupList(
             seasonalCalendarData,
-            ({ event_type }) => event_type[0],
+            ({ event_type }) => event_type[0]!,
         ),
         (list, key) => ({
             event_type: key,

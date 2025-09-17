@@ -242,18 +242,18 @@ export function Component() {
                     if (isDefined(match)) {
                         const [response_index, component_index, question_index] = match;
                         // eslint-disable-next-line max-len
-                        return value?.area_responses?.[response_index]?.component_responses?.[component_index]?.question_responses?.[question_index]?.question;
+                        return value?.area_responses?.[response_index!]?.component_responses?.[component_index!]?.question_responses?.[question_index!]?.question;
                     }
                     match = matchArray(locations, ['area_responses', NUM, 'component_responses', NUM]);
                     if (isDefined(match)) {
                         const [response_index, component_index] = match;
                         // eslint-disable-next-line max-len
-                        return value?.area_responses?.[response_index]?.component_responses?.[component_index]?.component;
+                        return value?.area_responses?.[response_index!]?.component_responses?.[component_index!]?.component;
                     }
                     match = matchArray(locations, ['area_responses', NUM]);
                     if (isDefined(match)) {
                         const [response_index] = match;
-                        return value?.area_responses?.[response_index]?.area;
+                        return value?.area_responses?.[response_index!]?.area;
                     }
                     return undefined;
                 },
@@ -501,8 +501,8 @@ export function Component() {
                                         questions={questionListByAreaId?.[area.id]}
                                         components={componentListByAreaId?.[area.id]}
                                         questionGroups={questionGroupResponse?.results}
-                                        index={areaResponseMapping[area.id]?.index}
-                                        value={areaResponseMapping[area.id]?.value}
+                                        index={areaResponseMapping[area.id]!.index}
+                                        value={areaResponseMapping[area.id]!.value}
                                         disabled={savePerPending}
                                         error={areaInputError?.[area.id]}
                                         onChange={setAreaResponsesValue}

@@ -44,7 +44,7 @@ const dataKeyToClassNameMap = {
     dref: styles.dref,
     emergencyAppeal: styles.emergencyAppeal,
 };
-const classNameSelector = (dataKey: DATA_KEY) => dataKeyToClassNameMap[dataKey];
+const classNameSelector = (dataKey: DATA_KEY) => dataKeyToClassNameMap[dataKey]!;
 const xAxisFormatter = (date: Date) => date.toLocaleString(
     navigator.language,
     { month: 'short' },
@@ -81,7 +81,8 @@ function MonthlyChart(props: Props) {
     );
 
     const [activePointKey, setActivePointKey] = useState<string>(
-        () => getFormattedDateKey(dateList[0]),
+        // FIXME: add proper not null check
+        () => getFormattedDateKey(dateList[0]!),
     );
 
     const query = {

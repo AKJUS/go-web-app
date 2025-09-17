@@ -243,7 +243,7 @@ function LocalUnitsForm(props: Props) {
         url: '/api/v2/local-units-options/',
         onSuccess: (response) => {
             if (isNotDefined(localUnitId)) {
-                setFieldValue(response.type[0].code, 'type');
+                setFieldValue(response.type[0]?.code, 'type');
             }
         },
     });

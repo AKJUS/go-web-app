@@ -126,7 +126,7 @@ function EventDetails(props: Props) {
 
                 if (impact_type.startsWith('exposed_population_')) {
                     const windspeed = Number.parseInt(
-                        impact_type.split('exposed_population_')[1],
+                        impact_type.split('exposed_population_')[1]!,
                         10,
                     );
 

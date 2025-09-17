@@ -297,25 +297,25 @@ export function Component() {
                     if (isDefined(match)) {
                         const [activity_index, supply_index] = match;
                         // eslint-disable-next-line max-len
-                        return value?.activities?.[activity_index]?.supplies?.[supply_index]?.client_id;
+                        return value?.activities?.[activity_index!]?.supplies?.[supply_index!]?.client_id;
                     }
                     match = matchArray(locations, ['activities', NUM, 'custom_supplies', NUM]);
                     if (isDefined(match)) {
                         const [activity_index, supply_index] = match;
                         // eslint-disable-next-line max-len
-                        return value?.activities?.[activity_index]?.custom_supplies?.[supply_index]?.client_id;
+                        return value?.activities?.[activity_index!]?.custom_supplies?.[supply_index!]?.client_id;
                     }
                     match = matchArray(locations, ['activities', NUM, 'points', NUM]);
                     if (isDefined(match)) {
                         const [activity_index, point_index] = match;
                         // eslint-disable-next-line max-len
-                        return value?.activities?.[activity_index]?.points?.[point_index]?.client_id;
+                        return value?.activities?.[activity_index!]?.points?.[point_index!]?.client_id;
                     }
                     match = matchArray(locations, ['activities', NUM]);
                     if (isDefined(match)) {
                         const [activity_index] = match;
 
-                        return value?.activities?.[activity_index]?.client_id;
+                        return value?.activities?.[activity_index!]?.client_id;
                     }
                     return undefined;
                 },
@@ -370,25 +370,25 @@ export function Component() {
                     if (isDefined(match)) {
                         const [activity_index, supply_index] = match;
                         // eslint-disable-next-line max-len
-                        return value?.activities?.[activity_index]?.supplies?.[supply_index]?.client_id;
+                        return value?.activities?.[activity_index!]?.supplies?.[supply_index!]?.client_id;
                     }
                     match = matchArray(locations, ['activities', NUM, 'custom_supplies', NUM]);
                     if (isDefined(match)) {
                         const [activity_index, supply_index] = match;
                         // eslint-disable-next-line max-len
-                        return value?.activities?.[activity_index]?.custom_supplies?.[supply_index]?.client_id;
+                        return value?.activities?.[activity_index!]?.custom_supplies?.[supply_index!]?.client_id;
                     }
                     match = matchArray(locations, ['activities', NUM, 'points', NUM]);
                     if (isDefined(match)) {
                         const [activity_index, point_index] = match;
                         // eslint-disable-next-line max-len
-                        return value?.activities?.[activity_index]?.points?.[point_index]?.client_id;
+                        return value?.activities?.[activity_index!]?.points?.[point_index!]?.client_id;
                     }
                     match = matchArray(locations, ['activities', NUM]);
                     if (isDefined(match)) {
                         const [activity_index] = match;
 
-                        return value?.activities?.[activity_index]?.client_id;
+                        return value?.activities?.[activity_index!]?.client_id;
                     }
                     return undefined;
                 },
@@ -946,7 +946,7 @@ export function Component() {
                                             className={styles.sector}
                                             key={sectorId}
                                         >
-                                            {sectorOptionsMap?.[sectorId].title ?? '---'}
+                                            {sectorOptionsMap?.[sectorId!]?.title ?? '---'}
                                             {(value?.activities?.filter(
                                                 (activity) => (
                                                     activity.sector === sectorId
@@ -959,8 +959,8 @@ export function Component() {
                                                     value={(
                                                         activity.action
                                                             ? (actionOptionsMap?.[
-                                                                activity.action
-                                                            ].title ?? '---')
+                                                                activity.action!
+                                                            ]?.title ?? '---')
                                                             : undefined
                                                     )}
                                                 />

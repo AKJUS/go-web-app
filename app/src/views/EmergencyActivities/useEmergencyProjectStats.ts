@@ -114,6 +114,7 @@ function useEmergencyProjectStats(
         const emergencyProjectCountListBySector = Object.values(
             sectorList.reduce((acc, val) => {
                 const newAcc = { ...acc };
+
                 if (!acc[val.id]) {
                     newAcc[val.id] = {
                         id: val.id,
@@ -122,9 +123,9 @@ function useEmergencyProjectStats(
                     };
                 } else {
                     newAcc[val.id] = {
-                        ...newAcc[val.id],
-                        count: newAcc[val.id].count + 1,
-                    };
+                        ...newAcc[val.id]!,
+                        count: newAcc[val.id]!.count + 1,
+                    } satisfies SectorCount;
                 }
 
                 return newAcc;
@@ -171,11 +172,11 @@ function useEmergencyProjectStats(
                     };
                 }
 
-                const projectIndex = newAcc[activity.sector].projects
+                const projectIndex = newAcc[activity.sector]!.projects
                     .findIndex((d) => d.id === val.id);
 
                 if (projectIndex === -1) {
-                    newAcc[activity.sector].projects.push(val);
+                    newAcc[activity.sector]!.projects.push(val);
                 }
             });
 

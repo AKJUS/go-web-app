@@ -155,14 +155,14 @@ function EmergenciesMap(props: Props) {
                 type: 'FeatureCollection' as const,
                 features: countryKeys
                     .filter((key) => {
-                        const groupedEvents = countryGroupedEvents[key];
-                        const currentCountry = groupedEvents[0].country;
+                        const groupedEvents = countryGroupedEvents[key]!;
+                        const currentCountry = groupedEvents[0]!.country;
 
                         return currentCountry.independent || currentCountry.record_type;
                     })
                     .map((key) => {
-                        const groupedEvents = countryGroupedEvents[key];
-                        const currentEvent = groupedEvents[0];
+                        const groupedEvents = countryGroupedEvents[key]!;
+                        const currentEvent = groupedEvents[0]!;
                         const currentCountry = currentEvent.country;
 
                         if (

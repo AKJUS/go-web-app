@@ -215,7 +215,7 @@ export function Component() {
                             {(documentResponse?.results?.length ?? 0) > 0 && (
                                 <Link
                                     variant="secondary"
-                                    href={documentResponse?.results?.[0].url}
+                                    href={documentResponse?.results?.[0]?.url}
                                     external
                                     className={styles.downloadLink}
                                     icons={<DownloadLineIcon className={styles.icon} />}
@@ -223,7 +223,7 @@ export function Component() {
                                     {resolveToString(
                                         strings.strategicPlan,
                                         {
-                                            year: documentResponse?.results?.[0].year_text,
+                                            year: documentResponse?.results?.[0]?.year_text,
                                         },
                                     )}
                                 </Link>

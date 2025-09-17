@@ -111,7 +111,7 @@ function OperationCard(props: Props) {
 
     let countriesInfoDisplay = strings.operationCardNoCountryInvolved;
     if (countries.length === 1) {
-        countriesInfoDisplay = countries[0].name ?? '?';
+        countriesInfoDisplay = countries[0]!.name ?? '?';
     } else if (countries.length > 1) {
         countriesInfoDisplay = strings.operationCardInvolvesMultipleCountries;
     }

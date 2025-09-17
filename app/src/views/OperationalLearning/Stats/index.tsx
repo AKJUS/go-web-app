@@ -62,12 +62,12 @@ const dataKeys: SourceType[] = [
     'emergencyAppeal',
     'others',
 ];
-const dataKeyToClassNameMap: Record<SourceType, string> = {
+const dataKeyToClassNameMap: Record<SourceType, string | undefined> = {
     dref: styles.dref,
     emergencyAppeal: styles.emergencyAppeal,
     others: styles.others,
 };
-const sourceClassNameSelector = (dataKey: SourceType) => dataKeyToClassNameMap[dataKey];
+const sourceClassNameSelector = (dataKey: SourceType) => dataKeyToClassNameMap[dataKey] ?? '';
 const xAxisFormatter = (date: Date) => date.toLocaleString(
     navigator.language,
     { year: 'numeric' },

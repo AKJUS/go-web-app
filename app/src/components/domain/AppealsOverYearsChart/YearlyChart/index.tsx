@@ -49,7 +49,7 @@ const dataKeyToClassNameMap = {
     dref: styles.dref,
     emergencyAppeal: styles.emergencyAppeal,
 };
-const classNameSelector = (dataKey: DATA_KEY) => dataKeyToClassNameMap[dataKey];
+const classNameSelector = (dataKey: DATA_KEY) => dataKeyToClassNameMap[dataKey]!;
 const xAxisFormatter = (date: Date) => date.toLocaleString(
     navigator.language,
     { year: 'numeric' },
@@ -68,7 +68,7 @@ function YearlyChart(props: Props) {
     const strings = useTranslation(i18n);
 
     const [activePointKey, setActivePointKey] = useState<string>(
-        () => getFormattedDateKey(dateList[dateList.length - 1]),
+        () => getFormattedDateKey(dateList[dateList.length - 1]!),
     );
 
     const queryParams = {

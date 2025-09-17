@@ -17,7 +17,8 @@ function SeverityIndicator(props: Props) {
         title,
         className,
     } = props;
-    const classNameMap: Record<number, string> = {
+
+    const classNameMap: Record<number, string | undefined> = {
         0: styles.yellow,
         1: styles.orange,
         2: styles.red,

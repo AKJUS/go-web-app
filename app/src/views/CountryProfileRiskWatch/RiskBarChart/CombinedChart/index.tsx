@@ -198,7 +198,7 @@ function CombinedChart(props: Props) {
             return (
                 monthKeys.map(
                     (monthKey) => {
-                        const month = monthNumberToNameMap[monthKey];
+                        const month = monthNumberToNameMap[monthKey]!;
                         const value = listToMap(
                             hazardKeysFromSelectedRisk,
                             (hazardKey) => hazardKey,

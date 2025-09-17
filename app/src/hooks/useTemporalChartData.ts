@@ -243,7 +243,7 @@ function useTemporalChartData<DATUM>(data: DATUM[] | undefined | null, options: 
 
             const tickWithLowestOffset = [...potentialTicks].sort(
                 (a, b) => compareNumber(a.rank, b.rank, -1),
-            )[0];
+            )[0]!;
 
             return bound(
                 tickWithLowestOffset.numTicks,

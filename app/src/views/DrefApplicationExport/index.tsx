@@ -65,7 +65,7 @@ import PgaExport, { BlockTextOutput } from './PgaExport';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-const colorMap: Record<DisasterCategory, string> = {
+const colorMap: Record<DisasterCategory, string | undefined> = {
     [DISASTER_CATEGORY_YELLOW]: styles.yellow,
     [DISASTER_CATEGORY_ORANGE]: styles.orange,
     [DISASTER_CATEGORY_RED]: styles.red,
@@ -240,7 +240,7 @@ export function Component() {
 
                 return {
                     key,
-                    title: list[0].proposed_type_display,
+                    title: list[0]?.proposed_type_display,
                     numActivities,
                     actions: list,
                     icon: proposedActivityIconMap[key],

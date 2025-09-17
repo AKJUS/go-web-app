@@ -219,7 +219,7 @@ export function Component() {
         onSuccess: (response) => {
             const results = response?.results ?? [];
             if (results?.length > 0) {
-                patchEruFormValues(results[0]);
+                patchEruFormValues(results[0]!);
             } else {
                 setEruReadinessId(undefined);
                 setValue((oldValues) => ({

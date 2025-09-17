@@ -157,7 +157,7 @@ function createInsPlugin(
             const [optionField, valueField] = token.split('.');
             const currOptions = context?.find((item) => item.field === optionField);
             const selectedOption = currOptions
-                ? optionsMap?.[optionField]?.find(
+                ? optionsMap?.[optionField!]?.find(
                     (option) => String(option.key) === currOptions?.key,
                 )
                 : undefined;
@@ -261,7 +261,7 @@ export function createImportTemplate<
         context,
     } satisfies HeadingTemplateField;
 
-    const options = optionsMap[schema.optionsKey];
+    const options = optionsMap[schema.optionsKey]!;
 
     const optionFields = options.flatMap((option) => {
         const subHeadingField = {
@@ -375,7 +375,7 @@ export function getValueFromImportTemplate<
         return valueKey;
     }
 
-    const options = optionsMap[schema.optionsKey];
+    const options = optionsMap[schema.optionsKey]!;
 
     const listValue = options.map((option) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
