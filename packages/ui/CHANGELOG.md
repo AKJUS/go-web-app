@@ -1,5 +1,13 @@
 # @ifrc-go/ui
 
+## 1.5.2
+
+### Patch Changes
+
+- 7e470bc: - Update `name` prop in Switch component to support number
+  - Update value of `--go-ui-color-semantic-yellow`
+- b52d175: add info heading and description in element column in table component
+
 ## 1.5.2-beta.1
 
 ### Patch Changes

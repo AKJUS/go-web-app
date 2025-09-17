@@ -1,8 +1,25 @@
 # go-web-app
 
-## 7.22.0-beta.2
+## 7.22.0
 
 ### Minor Changes
+
+- 7e470bc: Update Local Units
+
+  - Add option to manage local units externally by types for each country.
+    - Externally managed local units cannot be edited or removed from the UI
+  - Add option to bulk upload local units
+  - Add option to view bulk upload history
+  - Update permission in local unit
+  - Fix legend and map icon mismatch
+  - Add option to show changes while validating a local unit
+  - Add an additional validation state to reflect validation of changes
+
+- d710888: Improve overall review workflow of local units
+
+  - Add a separate column for status
+  - Rename "Validate" button to "Review"
+  - Add accept / reject input in review modal
 
 - aecaaa2: Revert export structure for DREF Imminent Application v1
   - For Response type DREFs exports, update export label to "People Affected" from "People at Risk"
@@ -11,11 +28,38 @@
   - Remove `Forecased Based Action` and `International Appeal` options from appeals filter
   - Remove Early Action Protocol Activation from legend
 
+### Patch Changes
+
+- daa659c: Textual changes in Community Case Management of Cholera (CCMC) section of Surge pages
+- ee7330c: Fix ordering by Deployed To / Emergency in All Deployed Personnel
+  Add 4 new filters:
+  - Position
+  - Deploying Party
+  - Deployed To
+  - Emergency
+- Updated dependencies [7e470bc]
+- Updated dependencies [b52d175]
+  - @ifrc-go/ui@1.5.2
+
+## 7.22.0-beta.2
+
+### Minor Changes
+
+- aecaaa2: Revert export structure for DREF Imminent Application v1
+
+  - For Response type DREFs exports, update export label to "People Affected" from "People at Risk"
+
+- 7ef5534: Update visible appeal types in Active Operations map
+
+  - Remove `Forecased Based Action` and `International Appeal` options from appeals filter
+  - Remove Early Action Protocol Activation from legend
+
 - Replace `IFRC staff` with `Emergency Response Unit` in field report form
 
 ### Patch Changes
 
 - 78f990a: Update local units UI
+
   - Add icon for externally managed status
   - Relocate status column in local units table
   - Improve overall UI
