@@ -35,7 +35,8 @@
         "types": ["vite-plugin-svgr/client", "node"],
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true
     },
     "include": ["src", "env.ts"]
 }

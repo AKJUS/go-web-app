@@ -154,7 +154,7 @@ export function getValueForSelectedMonths(
     const valueList = monthKeys.map(
         (key) => (
             selectedMonths[key]
-                ? riskDataItem?.[monthNumberToNameMap[key]]
+                ? riskDataItem?.[monthNumberToNameMap[key]!]
                 : undefined
         ),
     );
@@ -230,7 +230,7 @@ function getAverageIpcData(uniqueData: IpcData) {
 
     const ipcRiskDataItem = mapToMap(
         monthGroupedIpcData,
-        (key) => monthNumberToNameMap[Number(key) - 1],
+        (key) => monthNumberToNameMap[Number(key) - 1]!,
         (item) => avgSafe(item),
     );
 
@@ -281,7 +281,7 @@ export function getWfRiskDataItem(data: GwisData | undefined) {
 
     const gwisRiskDataItem = mapToMap(
         monthGroupedGwisData,
-        (monthKey) => monthNumberToNameMap[Number(monthKey) - 1],
+        (monthKey) => monthNumberToNameMap[Number(monthKey) - 1]!,
         (item) => avgSafe(item),
     );
 

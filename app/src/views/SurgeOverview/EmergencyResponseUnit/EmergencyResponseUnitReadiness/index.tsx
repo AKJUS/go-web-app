@@ -147,7 +147,7 @@ function EmergencyResponseUnitReadiness() {
                 (readinessList, eruType) => ({
                     key: eruType,
                     readinessList,
-                    eruType: readinessList?.[0].type_display,
+                    eruType: readinessList[0]!.type_display,
                 }),
             )?.sort((a, b) => (compareString(a.eruType, b.eruType)))
         );
@@ -158,7 +158,7 @@ function EmergencyResponseUnitReadiness() {
         readinessList: ReadinessList;
         updatedAt: number | undefined;
     }) => ({
-        typeDisplay: item.readinessList?.[0]?.type_display,
+        typeDisplay: item.readinessList[0]!.type_display,
         nationalSocieties: joinStrings(unique(item.readinessList.map((v) => (
             v.eruOwner.national_society_country_details.society_name
         ))).filter(isDefined)),

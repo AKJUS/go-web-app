@@ -169,7 +169,7 @@ function useNumericChartData<DATUM>(data: DATUM[] | null | undefined, options: O
 
             const tickWithLowestOffset = [...potentialTicks].sort(
                 (a, b) => compareNumber(a.rank, b.rank, -1),
-            )[0];
+            )[0]!;
 
             return bound(
                 tickWithLowestOffset.numTicks,

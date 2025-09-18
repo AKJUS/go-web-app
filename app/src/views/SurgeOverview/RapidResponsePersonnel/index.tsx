@@ -39,7 +39,7 @@ const xAxisFormatter = (date: Date) => date.toLocaleString(
 );
 
 function timeseriesChartClassNameSelector() {
-    return styles.deploymentsChart;
+    return styles.deploymentsChart ?? '';
 }
 
 function deploymentSelector(deployment: DeploymentsByNationalSociety) {

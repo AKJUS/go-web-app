@@ -205,7 +205,7 @@ function FoodInsecurityChart(props: Props) {
 
                     return {
                         key: month,
-                        x: list[0].x,
+                        x: list[0]!.x,
                         y: chartData.yScaleFn(averageDisplacement),
                         originalData: {
                             total_displacement: averageDisplacement,

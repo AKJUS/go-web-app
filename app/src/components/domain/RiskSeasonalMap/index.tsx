@@ -94,7 +94,7 @@ interface TooltipContentProps {
         value: number;
         riskCategory: number;
         hazard_type: HazardType;
-        hazard_type_display: string;
+        hazard_type_display: string | undefined;
     }[];
 }
 
@@ -603,12 +603,12 @@ function RiskSeasonalMap(props: Props) {
 
             type RiskDataItemWithHazard = RiskDataItem & {
                 hazard_type: HazardType;
-                hazard_type_display: string;
+                hazard_type_display: string | undefined;
                 country_details: {
                     id: number;
                     name?: string | null;
                     iso3?: string | null;
-                }
+                } | undefined;
             }
 
             function groupByCountry(riskDataList: RiskDataItemWithHazard[] | undefined) {
@@ -647,7 +647,7 @@ function RiskSeasonalMap(props: Props) {
                 const transformedList = mapToList(
                     groupByCountry(riskDataList),
                     (itemList, key) => {
-                        const firstItem = itemList[0];
+                        const firstItem = itemList[0]!;
                         const valueListByHazard = itemList.map(
                             (item) => {
                                 const value = getValueForSelectedMonths(
@@ -767,21 +767,25 @@ function RiskSeasonalMap(props: Props) {
                 ).sort((a, b) => compareNumber(a.riskCategorySum, b.riskCategorySum, -1));
             }
 
+            if (isNotDefined(data)) {
+                return undefined;
+            }
+
             if (filters.riskMetric === 'displacement') {
                 return transformRiskData(
-                    data?.displacement,
+                    data.displacement,
                 );
             }
 
             if (filters.riskMetric === 'exposure') {
                 return transformRiskData(
-                    data?.exposure,
+                    data.exposure,
                 );
             }
 
             if (filters.riskMetric === 'riskScore') {
                 const transformedData = transformRiskData(
-                    data?.riskScore,
+                    data.riskScore,
                     'max',
                 );
 

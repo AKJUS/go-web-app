@@ -252,7 +252,7 @@ function SurgeMap(props: Props) {
                     (eru) => eru.event.id ?? -1,
                 ),
                 (eru) => ({
-                    ...eru[0].event,
+                    ...eru[0]!.event,
                     eruType: unique(
                         eru.map((e) => e.eruType).filter(isDefined),
                     ).map((eruType) => ({ name: eruType })),
@@ -268,7 +268,7 @@ function SurgeMap(props: Props) {
                     (personnel) => personnel.event.id,
                 ),
                 (personnel) => ({
-                    ...personnel[0].event,
+                    ...personnel[0]!.event,
                     roleProfile: unique(personnel.map(
                         (p) => p.roleProfile,
                     ).filter(isDefined)).map((roleProfile) => ({ name: roleProfile })),

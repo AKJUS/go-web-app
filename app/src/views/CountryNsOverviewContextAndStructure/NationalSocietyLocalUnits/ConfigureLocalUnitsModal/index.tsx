@@ -64,9 +64,12 @@ function ConfigureLocalUnitsModal(props: Props) {
 
     const handleLocalUnitSwitchChange = useCallback((value: boolean, name: number) => {
         setLocalUnitType(name);
-        if (isDefined(manageResponse) && isDefined(countryResponse)) {
+        if (isDefined(manageResponse)
+            && isDefined(manageResponse[name])
+            && isDefined(countryResponse)
+        ) {
             setManageLocalUnitsValues({
-                id: manageResponse[name]?.externallyManagedId,
+                id: manageResponse[name].externallyManagedId,
                 country: countryResponse.id,
                 local_unit_type: name,
                 enabled: value,

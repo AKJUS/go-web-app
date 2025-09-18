@@ -60,7 +60,7 @@ export function Component() {
                 (a, b) => compareNumber(a, b, -1),
             );
 
-            setSelectedYearForIncome(new Date(sortedIncomeList[0]).getFullYear());
+            setSelectedYearForIncome(new Date(sortedIncomeList[0]!).getFullYear());
         },
     });
 

@@ -105,7 +105,7 @@ function Application() {
             }
 
             const updatedAlert = {
-                ...prevAlerts[i],
+                ...prevAlerts[i]!,
                 paramsWithoutName,
             };
 

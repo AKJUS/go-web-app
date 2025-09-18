@@ -80,8 +80,8 @@ function MembershipCoordinationTable(props: Props) {
                 ),
                 (membershipList, key) => ({
                     key: Number(key),
-                    national_society: membershipList[0].national_society,
-                    national_society_name: membershipList[0].national_society_name,
+                    national_society: membershipList[0]?.national_society,
+                    national_society_name: membershipList[0]?.national_society_name,
                     sectors: listToMap(
                         membershipList,
                         (membership) => membership.sector,

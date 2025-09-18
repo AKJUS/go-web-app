@@ -363,33 +363,33 @@ export function Component() {
                     let match = matchArray(locations, ['images_file', NUM]);
                     if (isDefined(match)) {
                         const [index] = match;
-                        return value?.images_file?.[index]?.client_id;
+                        return value?.images_file?.[index!]?.client_id;
                     }
                     match = matchArray(locations, ['national_society_actions', NUM]);
                     if (isDefined(match)) {
                         const [index] = match;
-                        return value?.national_society_actions?.[index]?.client_id;
+                        return value?.national_society_actions?.[index!]?.client_id;
                     }
                     match = matchArray(locations, ['needs_identified', NUM]);
                     if (isDefined(match)) {
                         const [index] = match;
-                        return value?.needs_identified?.[index]?.client_id;
+                        return value?.needs_identified?.[index!]?.client_id;
                     }
                     match = matchArray(locations, ['risk_security', NUM]);
                     if (isDefined(match)) {
                         const [index] = match;
-                        return value?.risk_security?.[index]?.client_id;
+                        return value?.risk_security?.[index!]?.client_id;
                     }
                     match = matchArray(locations, ['planned_interventions', NUM, 'indicators', NUM]);
                     if (isDefined(match)) {
                         const [planned_intervention_index, index] = match;
                         // eslint-disable-next-line max-len
-                        return value?.planned_interventions?.[planned_intervention_index]?.indicators?.[index]?.client_id;
+                        return value?.planned_interventions?.[planned_intervention_index!]?.indicators?.[index!]?.client_id;
                     }
                     match = matchArray(locations, ['planned_interventions', NUM]);
                     if (isDefined(match)) {
                         const [index] = match;
-                        return value?.planned_interventions?.[index]?.client_id;
+                        return value?.planned_interventions?.[index!]?.client_id;
                     }
                     return undefined;
                 },

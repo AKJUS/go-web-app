@@ -142,7 +142,7 @@ function WildfireChart(props: Props) {
     const tooltipSelector = useCallback(
         (_: number | string, i: number) => {
             const date = new Date(currentYear, i, 1);
-            const monthData = aggregatedList[i];
+            const monthData = aggregatedList[i]!;
 
             return (
                 <Tooltip

@@ -125,7 +125,7 @@ function ActiveDrefTable(props: Props) {
 
             if (has_ops_update) {
                 const opsUpdateList = operational_update_details;
-                return opsUpdateList[0];
+                return opsUpdateList[0]!;
             }
 
             return dref;

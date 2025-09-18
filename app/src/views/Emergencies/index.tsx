@@ -46,7 +46,7 @@ import i18n from './i18n.json';
 import styles from './styles.module.css';
 
 function timeseriesChartClassNameSelector() {
-    return styles.eventsChart;
+    return styles.eventsChart ?? '';
 }
 
 const xAxisFormatter = (date: Date) => date.toLocaleString(
@@ -189,7 +189,7 @@ export function Component() {
             return mapToList(
                 emergenciesMapByType,
                 (event, disasterType) => {
-                    const dtype = event[0].dtype?.name;
+                    const dtype = event[0]?.dtype?.name;
                     if (isFalsyString(dtype)) {
                         return undefined;
                     }

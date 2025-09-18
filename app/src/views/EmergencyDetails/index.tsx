@@ -91,7 +91,7 @@ export function Component() {
     const mdrCode = isDefined(emergencyResponse)
         && isDefined(emergencyResponse?.appeals)
         && emergencyResponse.appeals.length > 0
-        ? emergencyResponse?.appeals[0].code : undefined;
+        ? emergencyResponse?.appeals[0]?.code : undefined;
 
     const hasFieldReports = isDefined(emergencyResponse)
         && isDefined(emergencyResponse?.field_reports)

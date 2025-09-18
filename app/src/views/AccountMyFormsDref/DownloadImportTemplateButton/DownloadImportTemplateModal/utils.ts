@@ -377,8 +377,8 @@ async function generateCoverWorksheet(
         const [endCellColumn, endRow] = endCell.split(':', 2);
         const [startCellColumn, startRow] = startCell.split(':', 2);
 
-        const endColumn = sheet.getColumn(endCellColumn);
-        const startColumn = sheet.getColumn(startCellColumn);
+        const endColumn = sheet.getColumn(endCellColumn!);
+        const startColumn = sheet.getColumn(startCellColumn!);
 
         const startColumnNum = startColumn.number;
         const endColumnNum = endColumn.number;
@@ -540,8 +540,8 @@ async function generateOtherWorksheets(
             templateActions,
             (templateAction) => {
                 // FIXME: We should instead use a helper function to get the fieldName
-                const fieldName = String(templateAction.name).split('__')[0];
-                return fieldNameToTabNameMap[fieldName];
+                const fieldName = String(templateAction.name).split('__')[0]!;
+                return fieldNameToTabNameMap[fieldName]!;
             },
         ),
         (actions, tabName) => {

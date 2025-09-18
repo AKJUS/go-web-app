@@ -258,10 +258,10 @@ export function Component() {
                     (component) => component.area.id,
                 ),
                 (groupedComponentList) => ({
-                    id: groupedComponentList[0].area.id,
-                    areaNum: groupedComponentList[0].area.area_num,
-                    title: groupedComponentList[0].area.title,
-                    color: getPerAreaColor(groupedComponentList[0].area.area_num),
+                    id: groupedComponentList[0]!.area.id,
+                    areaNum: groupedComponentList[0]!.area.area_num,
+                    title: groupedComponentList[0]!.area.title,
+                    color: getPerAreaColor(groupedComponentList[0]!.area.area_num),
                     value: getAverage(
                         groupedComponentList.map(
                             (component) => (
@@ -296,10 +296,10 @@ export function Component() {
                     (component) => component.rating.value,
                 ),
                 (ratingList) => ({
-                    id: ratingList[0].rating?.id,
-                    value: ratingList[0].rating?.value,
+                    id: ratingList[0]!.rating?.id,
+                    value: ratingList[0]!.rating?.value,
                     count: ratingList.length,
-                    title: ratingList[0].rating?.title,
+                    title: ratingList[0]!.rating?.title,
                 }),
             ).sort((a, b) => (
                 compareNumber(a.value, b.value, -1)
@@ -331,9 +331,9 @@ export function Component() {
                     (questionResponse) => questionResponse.answer,
                 ),
                 (answerList) => ({
-                    id: answerList[0].answer,
+                    id: answerList[0]!.answer,
                     // FIXME: use strings
-                    label: `${formAnswerMap[answerList[0].answer]} ${answerList.length}`,
+                    label: `${formAnswerMap[answerList[0]!.answer]} ${answerList.length}`,
                     count: answerList.length,
                 }),
             );

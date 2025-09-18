@@ -167,8 +167,8 @@ function ComponentInput(props: Props) {
                 questionsInGroup,
             }),
         )?.sort((g1, g2) => compareNumber(
-            g1.questionsInGroup[0].question_num,
-            g2.questionsInGroup[0].question_num,
+            g1.questionsInGroup[0]?.question_num,
+            g2.questionsInGroup[0]?.question_num,
         )),
         [groupedQuestions],
     );

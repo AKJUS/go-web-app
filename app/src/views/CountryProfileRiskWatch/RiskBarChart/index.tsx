@@ -113,7 +113,7 @@ function RiskBarChart(props: Props) {
     const selectedRiskMetricDetail = useMemo(
         () => riskMetricOptions.find(
             (option) => option.key === selectedRiskMetric,
-        ) ?? riskMetricOptions[0],
+        ) ?? riskMetricOptions[0]!,
         [selectedRiskMetric, riskMetricOptions],
     );
 
