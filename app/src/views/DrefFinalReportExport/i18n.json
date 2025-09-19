@@ -1,7 +1,6 @@
 {
     "namespace": "drefFinalReportExport",
     "strings": {
-        "drefApplicationFormImageAlt": "Image",
         "imageLogoIFRCAlt": "IFRC",
         "exportTitle": "DREF Final Report",
         "imminentExportTitle": "Imminent DREF Final Report",
@@ -10,7 +9,6 @@
         "appealLabel": "Appeal",
         "countryLabel": "Country",
         "hazardLabel": "Hazard",
-        "typeOfDrefLabel": "Type of DREF",
         "crisisCategoryLabel": "Crisis Category",
         "publicationDate": "Publication Date",
         "eventOnsetLabel": "Event Onset",
@@ -32,7 +30,6 @@
         "operationTimeframeLabel": "Total Operating Timeframe",
         "monthsSuffix": " months",
         "operationEndDateLabel": "Operational End Date",
-        "additionalAllocationRequestedLabel": "Additional Allocation Requested",
         "targetedAreasLabel": "Targeted Regions",
         "eventDescriptionSectionHeading": "Description of the Event",
         "eventDevelopmentHeading": "Event development",
@@ -42,8 +39,6 @@
         "dateWhenTriggerWasMetHeading": "Date when the trigger was met",
 
         "eventDevelopmentSectionHeading": "Update regarding the event’s development",
-        "eventDevelopmentSectionDescription": "In case of the event not materialising please explain why not.",
-        "anticipatoryActionsHeading": "Why your National Society is acting now and what criteria is used to launch this operation.",
         "scopeAndScaleSectionHeading": "Scope and Scale",
         "eventsImpactHeading": "Events impact",
         "nationalSocietyActionsHeading": "National Society Actions",

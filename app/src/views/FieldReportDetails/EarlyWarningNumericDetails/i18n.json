@@ -11,11 +11,6 @@
         "earlyAffectedGovernmentLabel": "Affected (Government)",
         "earlyAffectedPopCentersOtherLabel": "Affected Pop Centres (Other)",
         "earlyAssistedRCLabel": "Assisted (RC)",
-        "earlyAssistedRCGovernmentLabel": "Assisted (Government)",
-        "earlySourceForDataMarkedLabel": "Sources for data marked as Other",
-        "earlyRiskAnalysis": "Risk Analysis",
-        "earlyVisibilityLabel": "Visibility",
-        "earlyForecastedDateOfImpact":"Forecasted Date of Impact",
-        "earlyReportDateLabel": "Report Date"
+        "earlyAssistedRCGovernmentLabel": "Assisted (Government)"
     }
 }

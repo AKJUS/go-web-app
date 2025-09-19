@@ -88,6 +88,10 @@ function getViewComponent(body: TSESTree.ProgramStatement[]) {
         return undefined;
     }
 
+    if (defaultExportDeclaration.declaration.type === AST_NODE_TYPES.FunctionDeclaration) {
+        return defaultExportDeclaration.declaration;
+    }
+
     const defaultComponentName = defaultExportDeclaration.declaration.type === AST_NODE_TYPES.Identifier
         ? defaultExportDeclaration.declaration.name
         : undefined;
@@ -106,21 +110,19 @@ function getViewComponent(body: TSESTree.ProgramStatement[]) {
 
 function traverseForStringsKeyUsage(node: TSESTree.Node, stringsVarName: string): string[] {
     if (node?.type === AST_NODE_TYPES.MemberExpression) {
-        if (node.object?.type !== AST_NODE_TYPES.Identifier) {
-            return [];
+        if (node.object?.type === AST_NODE_TYPES.Identifier) {
+            if (stringsVarName !== node.object.name) {
+                return [];
+            }
+
+            const stringKey = getMemberKey(node);
+
+            if (isNotDefined(stringKey)) {
+                return [];
+            }
+
+            return [stringKey];
         }
-
-        if (stringsVarName !== node.object.name) {
-            return [];
-        }
-
-        const stringKey = getMemberKey(node);
-
-        if (isNotDefined(stringKey)) {
-            return [];
-        }
-
-        return [stringKey];
     }
 
     const keysToVisit = visitorKeys[node?.type];
@@ -196,7 +198,7 @@ function getUsedKeys(code: string) {
         return [];
     }
 
-    const usedStringKeys = viewComponent.body.body.flatMap((node) => (
+    const usedStringKeys = ast.body.flatMap((node) => (
         traverseForStringsKeyUsage(
             node,
             stringsVarName,
@@ -207,7 +209,7 @@ function getUsedKeys(code: string) {
 }
 
 
-const plugin: ESLint.Plugin = {
+const i18nUsage: ESLint.Plugin = {
     meta: {
         name: 'eslint-plugin-i18n-usage',
         version: '0.0.1',
@@ -228,8 +230,8 @@ const plugin: ESLint.Plugin = {
             meta: {
                 type: "problem",
                 docs: {
-                    description: "Ensure all kesy in i18n.json are used in the component",
-                    recommended: false
+                    description: "Ensure all keys in i18n.json are used in the component",
+                    recommended: true
                 },
                 fixable: "code",
                 schema: [],
@@ -358,4 +360,4 @@ const plugin: ESLint.Plugin = {
     },
 }
 
-export default plugin;
+export default i18nUsage;

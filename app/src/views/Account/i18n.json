@@ -4,11 +4,6 @@
         "accountPageTitle": "IFRC GO - Account",
         "accountDetailsTabTitle":"Account Details",
         "accountMyFormTabTitle": "My Forms",
-        "accountNotificationTabTitle":"Notifications",
-
-        "accountPerForms":"PER forms",
-        "accountThreeWForms":"3W forms",
-        "accountMyDrefApplications":"DREF Application forms",
-        "accountGOWiki": "GO Wiki"
+        "accountNotificationTabTitle":"Notifications"
     }
 }

@@ -7,13 +7,11 @@
         "searchEmergencyTableFundingRequirements": "Funding Requirements",
         "searchEmergencyTableFundingCoverage": "Funding Coverage",
         "searchEmergencyTableCountry": "Country",
-        "searchEmergencyTableMultipleCountries": "Multiple Countries",
 
         "searchFieldReportTableDate": "Date",
         "searchFieldReportTableType": "Type",
         "searchFieldReportTableTitle": "Title",
 
-        "searchIFRCRapidResponseDeployment": "Ongoing Rapid Response Deployments",
         "searchRapidDeploymentTableStartDate":"Start Date",
         "searchRapidDeploymentTableEndDate":"End Date",
         "searchRapidDeploymentTableName":"Name",
@@ -31,14 +29,12 @@
         "searchSurgeAlertTableEmergency": "Emergency",
         "searchSurgeAlertTableCountry": "Country",
         "searchSurgeAlertTableStatus": "Status",
-        "searchIfrcOpenSurgeAlerts": "Open Surge Alerts",
 
         "searchSurgeDeploymentTableOwner": "Owner",
         "searchSurgeDeploymentTableType": "Type",
         "searchSurgeDeploymentTablePersonnelUnits": "Personnel Units",
         "searchSurgeDeploymentTableEquipmentUnits": "Equipment Units",
         "searchSurgeDeploymentsTableCountryDeployedTo": "Country Deployed to",
-        "searchSurgeDeploymentsTableEmergency": "Emergency",
-        "searchIfrcSurgeDeployments": "Deployed ERUs"
+        "searchSurgeDeploymentsTableEmergency": "Emergency"
     }
 }

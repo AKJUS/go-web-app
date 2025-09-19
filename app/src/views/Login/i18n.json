@@ -7,15 +7,11 @@
         "loginEmailUsername":"Email/Username",
         "loginPassword":"Password",
         "loginRecoverTitle":"Recover password",
-        "loginShowUsernameTitle":"Show me my username",
         "loginResendValidation":"Re-send validation email",
         "loginResendValidationTitle":"I didn't get my validation email",
         "loginForgotUserPass":"Forgot your password/username?",
-        "loginInvalid":"Invalid username or password",
-        "loginErrorMessage":"Error: {message}",
         "loginButton":"Login",
         "loginDontHaveAccount":"Don’t have an account? {signUpLink}",
-        "loginCreateAccountTitle":"Create new account",
         "loginSignUp":"Sign up",
         "loginFailureMessage": "Sorry, failed to login!"
     }

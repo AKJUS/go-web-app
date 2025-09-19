@@ -11,8 +11,6 @@
         "includePgaLabel": "Include PGA",
         "startExportLabel": "Start Export",
         "configureExportLabel": "Configure export",
-        "drefDownloadPDFWithPGA": "Download PDF with PGA",
-        "drefDownloadPDFwithoutPGA": "Download PDF without PGA",
         "drefFailureToExportMessage":"Failed to export PDF."
     }
 }

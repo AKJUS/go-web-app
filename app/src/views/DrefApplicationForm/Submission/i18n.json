@@ -39,7 +39,6 @@
         "drefFormIntegrityContactTitleLabel": "Title",
         "drefFormIntegrityContactPhoneNumberLabel": "Phone Number",
         "drefFormNationalSocietyHotlineNumberTitle": "National Society Hotline",
-        "drefFormNationalSocietyHotlineNumberLabel": "Phone Number",
-        "drefApplicationFormImageAlt": "Image"
+        "drefFormNationalSocietyHotlineNumberLabel": "Phone Number"
     }
 }

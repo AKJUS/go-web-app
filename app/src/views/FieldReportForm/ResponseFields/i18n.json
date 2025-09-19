@@ -1,13 +1,9 @@
 {
     "namespace": "fieldReportForm",
     "strings": {
-        "fieldReportConstantVisibilityIFRCandNSLabel": "IFRC and NS",
         "fieldReportConstantVisibilityIFRCandNSTooltipTitle": "Available to only those with an active IFRC account or NS assignment",
-        "fieldReportConstantVisibilityIFRCSecretariatLabel": "IFRC Secretariat",
         "fieldReportConstantVisibilityIFRCSecretariatTooltipTitle": "Available to only those with an active IFRC account",
-        "fieldReportConstantVisibilityPublicLabel": "Public",
         "fieldReportConstantVisibilityPublicTooltipTitle": "Available to all stakeholders on the GO platform",
-        "fieldReportConstantVisibilityRCRCMovementLabel": "RCRC Movement",
         "fieldReportConstantVisibilityRCRCMovementTooltipTitle": "Available to those who have an IFRC GO login across the RCRC Movement",
         "fieldReportFormContactsTitle": "Contacts",
         "fieldReportFormResponseLabel": "Planned International Response (Indicate status of global and regional tools.)",

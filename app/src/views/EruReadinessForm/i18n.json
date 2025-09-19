@@ -12,7 +12,6 @@
         "eruSelectErus": "Select ERU Type(s)",
         "eruFormSuccessfullyUpdated": "Successfully updated ERU readiness",
         "eruFormFailedToUpdate": "Failed to update ERU readiness",
-        "eruNoRecord": "No existing record",
         "eruOwnerFailedToFetch": "Failed to fetch ERU owners!",
         "eruReadinessFailedToFetch": "Failed to fetch ERU readiness information!",
         "eruFormSuccessfullyCreated": "Successfully created ERU readiness",
