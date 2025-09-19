@@ -1,8 +1,12 @@
+// eslint.config.js
+// @ts-expect-error: @eslint/eslintrc has no types
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import json from "@eslint/json";
 import tseslint from "typescript-eslint";
 import process from 'process';
+
+import i18nUsage from './scripts/eslint/i18n-usage';
 
 const dirname = process.cwd();
 
@@ -33,7 +37,7 @@ const appConfigs = compat.config({
         '@typescript-eslint',
         'react-refresh',
         'simple-import-sort',
-        'import-newlines'
+        'import-newlines',
     ],
     settings: {
         'import/parsers': {
@@ -101,7 +105,9 @@ const appConfigs = compat.config({
         'react/require-default-props': ['warn', { ignoreFunctionalComponents: true }],
         'simple-import-sort/imports': 'warn',
         'simple-import-sort/exports': 'warn',
-        'import-newlines/enforce': ['warn', 1]
+        'import-newlines/enforce': ['warn', 1],
+
+        // 'i18n-usage/ensure-i18n-keys-used': ['warn']
     },
     overrides: [
         {
@@ -128,7 +134,7 @@ const appConfigs = compat.config({
             }
         }
     ]
-}).map((conf) => ({
+}).map((conf: object) => ({
     ...conf,
     files: ['src/**/*.tsx', 'src/**/*.jsx', 'src/**/*.ts', 'src/**/*.js'],
     ignores: [
@@ -139,10 +145,14 @@ const appConfigs = compat.config({
     ],
 }));
 
+const tseslintRecommendedRules = tseslint.configs.recommended.map((conf) => ({
+    ...(conf.rules)
+}));
+
 const otherConfig = {
     files: ['*.js', '*.ts', '*.cjs'],
     ...js.configs.recommended,
-    ...tseslint.configs.recommended,
+    ...tseslintRecommendedRules,
 };
 
 const jsonConfig = {
@@ -150,16 +160,28 @@ const jsonConfig = {
     language: 'json/json',
     rules: {
         'json/no-duplicate-keys': 'error',
+        'json/no-empty-keys': 'error',
+        'i18n-usage/ensure-i18n-keys-used': 'warn',
     },
 };
+
+// const i18nJsonConfig = {
+//     files: ['**/i18n.json'],
+//     language: 'json/json',
+//     rules: {
+//         'i18n-usage/ensure-i18n-keys-used': 'warn',
+//     },
+// };
 
 export default [
     {
         plugins: {
             json,
+            'i18n-usage': i18nUsage,
         },
     },
     ...appConfigs,
     otherConfig,
     jsonConfig,
+    // i18nJsonConfig,
 ];

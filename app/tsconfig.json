@@ -38,5 +38,5 @@
         "noFallthroughCasesInSwitch": true,
         "noUncheckedIndexedAccess": true
     },
-    "include": ["src", "env.ts"]
+    "include": ["src", "env.ts", "eslint.config.ts"]
 }

@@ -53,7 +53,7 @@ async function exportMigration(
     });
 
     const fileName = isNotDefined(exportFileName)
-        ? `go-strings-${yyyy}-${mm}-${dd}`
+        ? `go-migration-strings-${yyyy}-${mm}-${dd}`
         : exportFileName;
 
     await workbook.xlsx.writeFile(`${fileName}.xlsx`);

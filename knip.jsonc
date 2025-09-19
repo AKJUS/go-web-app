@@ -30,11 +30,12 @@
                 "eslint-plugin-simple-import-sort",
                 // We are using this with dotenv and cross-var so we are getting a false positive
                 "openapi-typescript",
-                // We are using this in eslint.config.js but we are getting a false positive
+                // We are using this in eslint.config.ts but we are getting a false positive
                 "@typescript-eslint/parser",
                 "@typescript-eslint/eslint-plugin"
             ],
             "entry": [
+                "eslint.config.ts",
                 "scripts/translatte/main.ts",
                 "scripts/**/*.test.ts",
                 "generated/**/*.ts",
