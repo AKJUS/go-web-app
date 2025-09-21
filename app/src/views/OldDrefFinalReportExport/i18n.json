@@ -1,15 +1,12 @@
 {
     "namespace": "oldDrefFinalReportExport",
     "strings": {
-        "drefApplicationFormImageAlt": "Image",
         "imageLogoIFRCAlt": "IFRC",
         "exportTitle": "DREF Final Report",
         "drefExportReference": "Click here for reference",
         "downloadFinancialReport": "Click here for the complete financial report",
         "appealLabel": "Appeal",
-        "countryLabel": "Country",
         "hazardLabel": "Hazard",
-        "typeOfDrefLabel": "Type of DREF",
         "crisisCategoryLabel": "Crisis Category",
         "eventOnsetLabel": "Event Onset",
         "drefAllocationLabel": "Total DREF Allocation",
@@ -29,7 +26,6 @@
         "operationTimeframeLabel": "Total Operating Timeframe",
         "monthsSuffix": " months",
         "operationEndDateLabel": "Operational End Date",
-        "additionalAllocationRequestedLabel": "Additional Allocation Requested",
         "targetedAreasLabel": "Targeted Regions",
         "eventDescriptionSectionHeading": "Description of the Event",
         "approximateDateOfImpactHeading": "Approximate date of impact",
@@ -38,7 +34,6 @@
         "dateWhenTriggerWasMetHeading": "Date when the trigger was met",
 
         "situationUpdateSectionHeading": "Provide any updates in the situation since the field report and explain what is expected to happen.",
-        "anticipatoryActionsHeading": "Why your National Society is acting now and what criteria is used to launch this operation.",
         "scopeAndScaleSectionHeading": "Scope and Scale",
         "nationalSocietyActionsHeading": "National Society Actions",
         "nsConductedInterventionLabel": "Have the National Society conducted any intervention additionally to those part of this DREF Operation?",

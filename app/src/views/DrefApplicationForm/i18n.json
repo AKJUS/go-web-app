@@ -3,7 +3,6 @@
     "strings": {
         "formPageTitle": "IFRC GO - DREF Application",
         "formSaveButtonLabel": "Save",
-        "formSubmitButtonLabel": "Submit",
         "formContinueButtonLabel": "Continue",
         "formSaveRequestSuccessMessage": "DREF Application created/updated successfully",
         "formSaveRequestFailureMessage": "Failed to create/update DREF Application",
@@ -18,7 +17,6 @@
         "formTabSubmissionLabel": "Operational timeframes and contacts",
         "formLoadErrorTitle": "Failed to load DREF Application!",
         "formBackButtonLabel": "Back",
-        "formImportFromDocument": "Import from Document",
         "formLoadingMessage": "Loading DREF Application...",
         "formNotAvailableInNonEnglishMessage": "DREF Application is not available in the selected language!",
         "formEditNotAvailableInSelectedLanguageMessage": "DREF Application is not available for edit in the selected language!",

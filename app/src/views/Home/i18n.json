@@ -4,7 +4,6 @@
         "homeTitle":"IFRC GO - Home",
         "homeHeading":"IFRC Disaster Response and Preparedness",
         "homeDescription":"IFRC GO aims to make all disaster information universally accessible and useful to IFRC responders for better decision making.",
-        "homeSurgeAlerts":"Open Surge Alerts",
         "homeKeyFiguresActiveDrefs":"Active DREF Operations",
         "homeKeyFiguresActiveAppeals":"Active Emergency Appeals",
         "keyFiguresDrefTitle": "DREF",
@@ -15,16 +14,6 @@
         "homeKeyFiguresAppealsFunding":"Funding Coverage",
         "homeKeyFiguresTargetPop":"Targeted Population",
         "fullScreenHeading":"IFRC Disaster Response and Preparedness",
-        "homeKeyFiguresCountryPlan":"Active Country Plan",
-        "homeIconButtonLabel": "Close",
-        "homeOperationFollowingHeading": "Operations Following",
-        "homeUserNameHeading":"Hello {userName}!",
-        "homeQuickLinksTitle": "Quick Links",
-        "homeYourCountryLabel": "Your Country",
-        "homeFieldReportLabel": "Field Report",
-        "homeCreateFieldReport":"Create Field Report",
-        "homeYourRegionLabel": "Your Region",
-        "homeFlashUpdateLabel": "Flash Update",
-        "homeCreateFlashUpdate": "Create Flash Update"
+        "homeIconButtonLabel": "Close"
     }
 }

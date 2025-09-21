@@ -9,7 +9,6 @@
         "covidNumberOfNewDeathsLabel": "Number of new deaths since last Field Report",
         "covidLocalStaff": "Local Staff",
         "covidSourceLabel": "Source",
-        "covidNotesLabel": "Notes",
         "covidVolunteersLabel": "Volunteers"
     }
 }

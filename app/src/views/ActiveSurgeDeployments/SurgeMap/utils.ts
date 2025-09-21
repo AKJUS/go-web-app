@@ -10,38 +10,14 @@ import {
     COLOR_YELLOW,
 } from '#utils/constants';
 
-type i18nType = typeof import('./i18n.json');
-
-const COLOR_ERU_AND_PERSONNEL = COLOR_BLUE;
-const COLOR_ERU_ONLY = COLOR_RED;
-const COLOR_PERSONNEL_ONLY = COLOR_YELLOW;
+export const COLOR_ERU_AND_PERSONNEL = COLOR_BLUE;
+export const COLOR_ERU_ONLY = COLOR_RED;
+export const COLOR_PERSONNEL_ONLY = COLOR_YELLOW;
 const COLOR_DEFAULT = COLOR_BLACK;
 
-const SURGE_TYPE_ERU = 0;
-const SURGE_TYPE_PERSONNEL = 1;
-const SURGE_TYPE_ERU_AND_PERSONNEL = 2;
-
-export function getLegendOptions(strings: i18nType['strings']) {
-    const legendOptions = [
-        {
-            value: SURGE_TYPE_ERU_AND_PERSONNEL,
-            label: strings.eruAndPersonnel,
-            color: COLOR_ERU_AND_PERSONNEL,
-        },
-        {
-            value: SURGE_TYPE_ERU,
-            label: strings.surgeEruOnly,
-            color: COLOR_ERU_ONLY,
-        },
-        {
-            value: SURGE_TYPE_PERSONNEL,
-            label: strings.surgePersonnelOnly,
-            color: COLOR_PERSONNEL_ONLY,
-        },
-    ];
-
-    return legendOptions;
-}
+export const SURGE_TYPE_ERU = 0;
+export const SURGE_TYPE_PERSONNEL = 1;
+export const SURGE_TYPE_ERU_AND_PERSONNEL = 2;
 
 const circleColor: CirclePaint['circle-color'] = [
     'case',
@@ -117,15 +93,6 @@ export const outerCircleLayerOptionsForPersonnel: Omit<CircleLayer, 'id'> = {
 export interface ScaleOption {
     label: string;
     value: 'eru' | 'personnel';
-}
-
-export function getScaleOptions(strings: i18nType['strings']) {
-    const scaleOptions: ScaleOption[] = [
-        { value: 'eru', label: strings.eruLabel },
-        { value: 'personnel', label: strings.personnelLabel },
-    ];
-
-    return scaleOptions;
 }
 
 export function optionKeySelector(option: ScaleOption) {

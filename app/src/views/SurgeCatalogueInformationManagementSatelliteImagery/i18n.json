@@ -37,7 +37,6 @@
         "satelliteUNOSATItemThree": "IFRC IM team will submit the request to the UNOSAT Rapid Mapping Service according to the {link} with the requester in copy.",
         "satelliteUNOSATItemThreeLink": "instructions on their website",
         "satelliteUNOSATItemFour": "If the request is accepted, follow up can then be directly between UNOSAT and the data requester.",
-        "satelliteMapSwipeTitle": "MapSwipe",
         "satelliteMapSwipeLink": "https://mapswipe.org",
         "satelliteMapSwipeTextOne": "MapSwipe is a community-based satellite imagery analysis tool supported by the British Red Cross. Anyone in the humanitarian sector is able to add projects which will then be completed by the users of the app. The main applications are:",
         "satelliteMapSwipeTextOneListOne": "Finding and identifying features - e.g. buildings, roads, waste",

@@ -1,0 +1,1505 @@
+{
+    "parent": "000050-1758013961153.json",
+    "actions": [
+        {
+            "action": "remove",
+            "key": "accountGOWiki",
+            "namespace": "account"
+        },
+        {
+            "action": "remove",
+            "key": "accountMyDrefApplications",
+            "namespace": "account"
+        },
+        {
+            "action": "remove",
+            "key": "accountPerForms",
+            "namespace": "account"
+        },
+        {
+            "action": "remove",
+            "key": "accountThreeWForms",
+            "namespace": "account"
+        },
+        {
+            "action": "remove",
+            "key": "countryInputLabel",
+            "namespace": "accountDetails"
+        },
+        {
+            "action": "remove",
+            "key": "typeOfDrefInputLabel",
+            "namespace": "accountMyFormsDref"
+        },
+        {
+            "action": "remove",
+            "key": "tableActionViewWorkPlan",
+            "namespace": "accountMyFormsPer"
+        },
+        {
+            "action": "remove",
+            "key": "threeWProjects",
+            "namespace": "accountMyFormsThreeW"
+        },
+        {
+            "action": "remove",
+            "key": "threeWViewAllProjectLabel",
+            "namespace": "accountMyFormsThreeW"
+        },
+        {
+            "action": "remove",
+            "key": "explanationBubbleDeployments",
+            "namespace": "activeOperationMap"
+        },
+        {
+            "action": "remove",
+            "key": "explanationBubbleEAP",
+            "namespace": "activeOperationMap"
+        },
+        {
+            "action": "remove",
+            "key": "explanationBubbleType",
+            "namespace": "activeOperationMap"
+        },
+        {
+            "action": "remove",
+            "key": "operationPopoverActivity",
+            "namespace": "activeOperationMap"
+        },
+        {
+            "action": "remove",
+            "key": "operationPopoverEnd",
+            "namespace": "activeOperationMap"
+        },
+        {
+            "action": "remove",
+            "key": "operationPopoverStart",
+            "namespace": "activeOperationMap"
+        },
+        {
+            "action": "remove",
+            "key": "activeSurgeDeploymentsPageTitle",
+            "namespace": "activeSurgeDeployments"
+        },
+        {
+            "action": "remove",
+            "key": "allEmergenciesTableFilterDisastersPlaceholder",
+            "namespace": "allEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "allEmergenciesViewAll",
+            "namespace": "allEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "allFieldReportsViewAllReports",
+            "namespace": "allFieldReports"
+        },
+        {
+            "action": "remove",
+            "key": "allThreeWActivityCountry",
+            "namespace": "allThreeWActivity"
+        },
+        {
+            "action": "remove",
+            "key": "footerFindOutMore",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "footerHelpfulLinks",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "headerAppName",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "headerDropdownCovid19IndicatorTracking",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "headerDropdownCovid19NSFinancialOverview",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "headerDropdownDrefApplication",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "headerMenuResources",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "headerMenuSurge",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "headerSearchLabel",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "headerSearchPlaceholder",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "userMenuAccess",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "userMenuSubmit3WProject",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "userMenuSubmitEAPActivation",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "userMenuSubmitEAPFinalReport",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "userMenuViewAccount",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "country3WTab",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryCountryPlanTab",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFigureActiveAppealDescription",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFiguresActiveAppeals",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFiguresActiveAppealsTitle",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFiguresActiveDrefs",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFiguresAppealsFunding",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFiguresBudget",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFiguresCountryPlan",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFiguresDrefDescription",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFiguresDrefTitle",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryKeyFiguresTargetPop",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryOperationsTab",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryPreparednessTab",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "countryRiskTab",
+            "namespace": "country"
+        },
+        {
+            "action": "remove",
+            "key": "initiativeFundNameTitle",
+            "namespace": "countryNsOverviewActivities"
+        },
+        {
+            "action": "remove",
+            "key": "initiativeTitle",
+            "namespace": "countryNsOverviewActivities"
+        },
+        {
+            "action": "remove",
+            "key": "englishLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "focalPointName",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "latitude",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitActionsLatestChangesFailureMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitDetail",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitDetailAddressValue",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitDetailType",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitsMapFocalPerson",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitsMapLatestChangesFailureMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitsMapPhoneNumber",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewAddressAndContactTitle",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewConfirmChangesContentQuestion",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewConfirmChangesModalHeading",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewDoneButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewEditButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewFocalPointName",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewHumanResourcesTitle",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewLocalUnitDeleteButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewLocalUnitDetail",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewNewLocalUnitDescription",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewRevertButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewRevertChangesContentQuestion",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewRevertChangesModalHeading",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewServicesTitle",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitViewSubmitButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "longitude",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "newLocalUnitDescription",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "noChangesMessage",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "nSContactEmail",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "nSContactName",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "nSContactTitle",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "reasonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "revertButtonLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "revertChangesContentQuestion",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "revertChangesModalHeading",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "servicesTitle",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "countryPlanStrategicPrioritiesTableHeading",
+            "namespace": "countryNsOverviewStrategicPriorities"
+        },
+        {
+            "action": "remove",
+            "key": "countryIFRCContact",
+            "namespace": "countryNsOverviewSupportingPartners"
+        },
+        {
+            "action": "remove",
+            "key": "fdrs",
+            "namespace": "countryNsOverviewSupportingPartners"
+        },
+        {
+            "action": "remove",
+            "key": "threeWActivitiesTabTitle",
+            "namespace": "countryOngoingActivities"
+        },
+        {
+            "action": "remove",
+            "key": "activeOperationLabel",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsFundedAmount",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsRequestedAmount",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsStartDate",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsTableClearFilters",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsTableFilterDisastersPlaceholder",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsTableFilterDistrictPlaceholder",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsTableFilterTypePlaceholder",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsTableProvinces",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsTableStartDateAfter",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "appealsTableStartDateBefore",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "countryOngoingActivitiesDREFOperations",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "activitySectors",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "activityStatus",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryThreeWActivityFilterCountry",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "componentContactPERTeam",
+            "namespace": "countryPreparedness"
+        },
+        {
+            "action": "remove",
+            "key": "componentFetchingData",
+            "namespace": "countryPreparedness"
+        },
+        {
+            "action": "remove",
+            "key": "componentHeading",
+            "namespace": "countryPreparedness"
+        },
+        {
+            "action": "remove",
+            "key": "componentMessageDescription",
+            "namespace": "countryPreparedness"
+        },
+        {
+            "action": "remove",
+            "key": "componentMessagePERDataNotAvailable",
+            "namespace": "countryPreparedness"
+        },
+        {
+            "action": "remove",
+            "key": "pastEventsPeopleExposed",
+            "namespace": "countryProfilePreviousEvents"
+        },
+        {
+            "action": "remove",
+            "key": "sourceInformationAttachments",
+            "namespace": "drefApplicationExport"
+        },
+        {
+            "action": "remove",
+            "key": "drefApplicationFormImageAlt",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormAssessmentReportUploadLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormBudgetSummaryTemplate",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormBudgetTemplateLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormImminentDisasterCategoryLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormInstantShareLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormPeopleInNeedDescriptionImminent",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormPeopleTargetedWithEarlyActions",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormProposedActionActivityLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormProposedActionAddActivityLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormProposedActionEarlyActionsLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormProposedActionEarlyResponseLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormProposedActionSelectActivitiesLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormRemoveActivity",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefOperationalUpdateIndicatorActualLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "formImportFromDocument",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "formSubmitButtonLabel",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefDownloadPDFwithoutPGA",
+            "namespace": "drefExportModal"
+        },
+        {
+            "action": "remove",
+            "key": "drefDownloadPDFWithPGA",
+            "namespace": "drefExportModal"
+        },
+        {
+            "action": "remove",
+            "key": "additionalAllocationRequestedLabel",
+            "namespace": "drefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "anticipatoryActionsHeading",
+            "namespace": "drefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "drefApplicationFormImageAlt",
+            "namespace": "drefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "eventDevelopmentSectionDescription",
+            "namespace": "drefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "typeOfDrefLabel",
+            "namespace": "drefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormAssessmentReportUploadLabel",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormBudgetTemplateLabel",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormDisasterCategoryLabel",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormImminentDisasterCategoryLabel",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormInstantShareLabel",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormPeopleInNeedDescriptionImminent",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormProposedActionActivityLabel",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormRemoveActivity",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormUNorOtherActorsDescription",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "formLoadErrorDescription",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "formLoadRequestFailureMessage",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "formSubmitButtonLabel",
+            "namespace": "drefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "countryLabel",
+            "namespace": "drefOperationalUpdateExport"
+        },
+        {
+            "action": "remove",
+            "key": "drefOperationalOtherImageAlt",
+            "namespace": "drefOperationalUpdateExport"
+        },
+        {
+            "action": "remove",
+            "key": "eventMaterializedLabel",
+            "namespace": "drefOperationalUpdateExport"
+        },
+        {
+            "action": "remove",
+            "key": "typeOfDrefLabel",
+            "namespace": "drefOperationalUpdateExport"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormAssessmentReportUploadLabel",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormBudgetTemplateLabel",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormInstantShareLabel",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormNationalSocietiesActionsLabel",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormPeopleTargetedDescription",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormSelectImages",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefOperationalUpdateEventMaterialize",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "formSubmitButtonLabel",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "overviewChangeTypeButtonLabel",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "overviewChangeTypeHeading",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "overviewChangeTypeMessage",
+            "namespace": "drefOperationalUpdateForm"
+        },
+        {
+            "action": "remove",
+            "key": "fieldReportsTableFooter",
+            "namespace": "emergencies"
+        },
+        {
+            "action": "remove",
+            "key": "fieldReportsTablePerformance",
+            "namespace": "emergencies"
+        },
+        {
+            "action": "remove",
+            "key": "activitySectors",
+            "namespace": "emergencyActivities"
+        },
+        {
+            "action": "remove",
+            "key": "activityStatus",
+            "namespace": "emergencyActivities"
+        },
+        {
+            "action": "remove",
+            "key": "exportMap",
+            "namespace": "emergencyDetails"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyReportAndDocumentTempContent",
+            "namespace": "emergencyReportAndDocument"
+        },
+        {
+            "action": "remove",
+            "key": "fieldReportsTableTitle",
+            "namespace": "emergencyReportAndDocument"
+        },
+        {
+            "action": "remove",
+            "key": "eruLead",
+            "namespace": "eruReadinessForm"
+        },
+        {
+            "action": "remove",
+            "key": "eruNoRecord",
+            "namespace": "eruReadinessForm"
+        },
+        {
+            "action": "remove",
+            "key": "eruSupport",
+            "namespace": "eruReadinessForm"
+        },
+        {
+            "action": "remove",
+            "key": "covidNotesLabel",
+            "namespace": "fieldReportDetails"
+        },
+        {
+            "action": "remove",
+            "key": "earlyForecastedDateOfImpact",
+            "namespace": "fieldReportDetails"
+        },
+        {
+            "action": "remove",
+            "key": "earlyReportDateLabel",
+            "namespace": "fieldReportDetails"
+        },
+        {
+            "action": "remove",
+            "key": "earlyRiskAnalysis",
+            "namespace": "fieldReportDetails"
+        },
+        {
+            "action": "remove",
+            "key": "earlySourceForDataMarkedLabel",
+            "namespace": "fieldReportDetails"
+        },
+        {
+            "action": "remove",
+            "key": "earlyVisibilityLabel",
+            "namespace": "fieldReportDetails"
+        },
+        {
+            "action": "remove",
+            "key": "fieldReportConstantVisibilityIFRCandNSLabel",
+            "namespace": "fieldReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "fieldReportConstantVisibilityIFRCSecretariatLabel",
+            "namespace": "fieldReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "fieldReportConstantVisibilityPublicLabel",
+            "namespace": "fieldReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "fieldReportConstantVisibilityRCRCMovementLabel",
+            "namespace": "fieldReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "flashUpdateMapImage",
+            "namespace": "flashUpdateDetails"
+        },
+        {
+            "action": "remove",
+            "key": "operationCardDeployed",
+            "namespace": "highlightedOperations"
+        },
+        {
+            "action": "remove",
+            "key": "operationCardDeployedUnits",
+            "namespace": "highlightedOperations"
+        },
+        {
+            "action": "remove",
+            "key": "operationCardIFRCSurgePersonnel",
+            "namespace": "highlightedOperations"
+        },
+        {
+            "action": "remove",
+            "key": "operationCardNSReportingActivities",
+            "namespace": "highlightedOperations"
+        },
+        {
+            "action": "remove",
+            "key": "homeCreateFieldReport",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeCreateFlashUpdate",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeFieldReportLabel",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeFlashUpdateLabel",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeKeyFiguresCountryPlan",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeOperationFollowingHeading",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeQuickLinksTitle",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeSurgeAlerts",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeUserNameHeading",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeYourCountryLabel",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "homeYourRegionLabel",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "errorDetailsLabel",
+            "namespace": "localUnitImportSummary"
+        },
+        {
+            "action": "remove",
+            "key": "heading",
+            "namespace": "localUnitImportSummary"
+        },
+        {
+            "action": "remove",
+            "key": "loginCreateAccountTitle",
+            "namespace": "login"
+        },
+        {
+            "action": "remove",
+            "key": "loginErrorMessage",
+            "namespace": "login"
+        },
+        {
+            "action": "remove",
+            "key": "loginInvalid",
+            "namespace": "login"
+        },
+        {
+            "action": "remove",
+            "key": "loginShowUsernameTitle",
+            "namespace": "login"
+        },
+        {
+            "action": "remove",
+            "key": "montandonEoapi",
+            "namespace": "montandonLandingPage"
+        },
+        {
+            "action": "remove",
+            "key": "sourceButtonTitle",
+            "namespace": "montandonLandingPage"
+        },
+        {
+            "action": "remove",
+            "key": "additionalAllocationRequestedLabel",
+            "namespace": "oldDrefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "anticipatoryActionsHeading",
+            "namespace": "oldDrefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "countryLabel",
+            "namespace": "oldDrefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "drefApplicationFormImageAlt",
+            "namespace": "oldDrefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "typeOfDrefLabel",
+            "namespace": "oldDrefFinalReportExport"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormAssessmentReportUploadLabel",
+            "namespace": "oldDrefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormBudgetTemplateLabel",
+            "namespace": "oldDrefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormInstantShareLabel",
+            "namespace": "oldDrefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "drefFormUNorOtherActorsDescription",
+            "namespace": "oldDrefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "formLoadErrorDescription",
+            "namespace": "oldDrefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "formLoadRequestFailureMessage",
+            "namespace": "oldDrefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "formSubmitButtonLabel",
+            "namespace": "oldDrefFinalReportForm"
+        },
+        {
+            "action": "remove",
+            "key": "operationFollowButtonLabel",
+            "namespace": "operationListItem"
+        },
+        {
+            "action": "remove",
+            "key": "environmentConsiderationDescriptionOne",
+            "namespace": "perAssessmentForm"
+        },
+        {
+            "action": "remove",
+            "key": "environmentConsiderationDescriptionTwo",
+            "namespace": "perAssessmentForm"
+        },
+        {
+            "action": "remove",
+            "key": "epiConsiderationDescriptionOne",
+            "namespace": "perAssessmentForm"
+        },
+        {
+            "action": "remove",
+            "key": "epiConsiderationDescriptionTwo",
+            "namespace": "perAssessmentForm"
+        },
+        {
+            "action": "remove",
+            "key": "urbanConsiderationDescription",
+            "namespace": "perAssessmentForm"
+        },
+        {
+            "action": "remove",
+            "key": "perExportTitle",
+            "namespace": "perExport"
+        },
+        {
+            "action": "remove",
+            "key": "estimatedDateOfAssessmentInputLabel",
+            "namespace": "perOverviewForm"
+        },
+        {
+            "action": "remove",
+            "key": "estimatedDateOfMidTermReviewInputLabel",
+            "namespace": "perOverviewForm"
+        },
+        {
+            "action": "remove",
+            "key": "previousPerAssessmentInputLabel",
+            "namespace": "perOverviewForm"
+        },
+        {
+            "action": "remove",
+            "key": "processCycleInputDescription",
+            "namespace": "perOverviewForm"
+        },
+        {
+            "action": "remove",
+            "key": "processCycleNumberInputLabel",
+            "namespace": "perOverviewForm"
+        },
+        {
+            "action": "remove",
+            "key": "reviewsPlannedInputLabel",
+            "namespace": "perOverviewForm"
+        },
+        {
+            "action": "remove",
+            "key": "perFormSetUpPerProcess",
+            "namespace": "perProcessForm"
+        },
+        {
+            "action": "remove",
+            "key": "perProcessTitle",
+            "namespace": "perProcessForm"
+        },
+        {
+            "action": "remove",
+            "key": "actionInputSupportedByPlaceholder",
+            "namespace": "perWorkPlanForm"
+        },
+        {
+            "action": "remove",
+            "key": "regionEmergenciesTableAffected",
+            "namespace": "regionOperations"
+        },
+        {
+            "action": "remove",
+            "key": "regionalProfileFundingAndOperationsDashboards",
+            "namespace": "regionProfile"
+        },
+        {
+            "action": "remove",
+            "key": "regionalProfileNationalSocietyName",
+            "namespace": "regionProfile"
+        },
+        {
+            "action": "remove",
+            "key": "aboutCCF",
+            "namespace": "resources"
+        },
+        {
+            "action": "remove",
+            "key": "goInfoArchitecture",
+            "namespace": "resources"
+        },
+        {
+            "action": "remove",
+            "key": "goSystemAnalysis",
+            "namespace": "resources"
+        },
+        {
+            "action": "remove",
+            "key": "goUserStudies",
+            "namespace": "resources"
+        },
+        {
+            "action": "remove",
+            "key": "surgeEventTrainings",
+            "namespace": "resources"
+        },
+        {
+            "action": "remove",
+            "key": "meteoSwissHazardName",
+            "namespace": "riskImminentEvents"
+        },
+        {
+            "action": "remove",
+            "key": "riskPopupLabel",
+            "namespace": "riskSeasonalMap"
+        },
+        {
+            "action": "remove",
+            "key": "searchEmergencyOperations",
+            "namespace": "search"
+        },
+        {
+            "action": "remove",
+            "key": "searchEmergencyPlanningAndReporting",
+            "namespace": "search"
+        },
+        {
+            "action": "remove",
+            "key": "searchEmergencyTableMultipleCountries",
+            "namespace": "search"
+        },
+        {
+            "action": "remove",
+            "key": "searchIfrcOpenSurgeAlerts",
+            "namespace": "search"
+        },
+        {
+            "action": "remove",
+            "key": "searchIFRCRapidResponseDeployment",
+            "namespace": "search"
+        },
+        {
+            "action": "remove",
+            "key": "searchIfrcSurgeDeployments",
+            "namespace": "search"
+        },
+        {
+            "action": "remove",
+            "key": "activeDeploymentsTitle",
+            "namespace": "surge"
+        },
+        {
+            "action": "remove",
+            "key": "basecampEmergencyResponseUnit",
+            "namespace": "surgeCatalogueBasecamp"
+        },
+        {
+            "action": "remove",
+            "key": "basecampEruComponentListItemTwelve",
+            "namespace": "surgeCatalogueBasecampEruLarge"
+        },
+        {
+            "action": "remove",
+            "key": "goBack",
+            "namespace": "surgeCatalogueBasecampFacilityManagement"
+        },
+        {
+            "action": "remove",
+            "key": "communicationErtThreeImageTwo",
+            "namespace": "surgeCatalogueCommunicationErtThree"
+        },
+        {
+            "action": "remove",
+            "key": "communityCaseLink",
+            "namespace": "surgeCatalogueHealth"
+        },
+        {
+            "action": "remove",
+            "key": "healthCCMMTitle",
+            "namespace": "surgeCatalogueHealth"
+        },
+        {
+            "action": "remove",
+            "key": "communityBasedSpecificationsAdditionalResources",
+            "namespace": "surgeCatalogueHealthCommunityBasedSurveillance"
+        },
+        {
+            "action": "remove",
+            "key": "communityBasedSpecificationsAdditionalResourcesListItemOne",
+            "namespace": "surgeCatalogueHealthCommunityBasedSurveillance"
+        },
+        {
+            "action": "remove",
+            "key": "choleraCapacityDescription",
+            "namespace": "surgeCatalogueHealthEruCholeraTreatment"
+        },
+        {
+            "action": "remove",
+            "key": "choleraEmergencyServicesTitle",
+            "namespace": "surgeCatalogueHealthEruCholeraTreatment"
+        },
+        {
+            "action": "remove",
+            "key": "accommodationModuleLabel",
+            "namespace": "surgeCatalogueHealthEruClinic"
+        },
+        {
+            "action": "remove",
+            "key": "accommodationModuleValue",
+            "namespace": "surgeCatalogueHealthEruClinic"
+        },
+        {
+            "action": "remove",
+            "key": "vehicleModuleLabel",
+            "namespace": "surgeCatalogueHealthEruClinic"
+        },
+        {
+            "action": "remove",
+            "key": "vehicleModuleValue",
+            "namespace": "surgeCatalogueHealthEruClinic"
+        },
+        {
+            "action": "remove",
+            "key": "healthBurialsDetailUnderDevelopment",
+            "namespace": "surgeCatalogueHealthSafeDignifiedBurials"
+        },
+        {
+            "action": "remove",
+            "key": "iMCompositionImageAlt",
+            "namespace": "surgeCatalogueInformationManagementComposition"
+        },
+        {
+            "action": "remove",
+            "key": "iMCompositionItemEight",
+            "namespace": "surgeCatalogueInformationManagementComposition"
+        },
+        {
+            "action": "remove",
+            "key": "iMCompositionItemSeven",
+            "namespace": "surgeCatalogueInformationManagementComposition"
+        },
+        {
+            "action": "remove",
+            "key": "iMRolesDataCollectionItemFive",
+            "namespace": "surgeCatalogueInformationManagementRolesResponsibility"
+        },
+        {
+            "action": "remove",
+            "key": "satelliteMapSwipeTitle",
+            "namespace": "surgeCatalogueInformationManagementSatelliteImagery"
+        },
+        {
+            "action": "remove",
+            "key": "catalogueLivelihoodAdditionalResources",
+            "namespace": "surgeCatalogueLivelihood"
+        },
+        {
+            "action": "remove",
+            "key": "catalogueLogisticsERU",
+            "namespace": "surgeCatalogueLogistics"
+        },
+        {
+            "action": "remove",
+            "key": "logisticsEmergencyServicesItemTwo",
+            "namespace": "surgeCatalogueLogisticsEru"
+        },
+        {
+            "action": "remove",
+            "key": "otherOverview",
+            "namespace": "surgeCatalogueOtherPreparednessEffectiveResponse"
+        },
+        {
+            "action": "remove",
+            "key": "rapidResponse",
+            "namespace": "surgeCatalogueOtherStrategicPartnershipsResourceMobilisation"
+        },
+        {
+            "action": "remove",
+            "key": "rapidResponseDetail",
+            "namespace": "surgeCatalogueOtherStrategicPartnershipsResourceMobilisation"
+        },
+        {
+            "action": "remove",
+            "key": "catalogueTechnicalPGI",
+            "namespace": "surgeCataloguePgi"
+        },
+        {
+            "action": "remove",
+            "key": "capacityDetailsSectionOne",
+            "namespace": "surgeCatalogueShelterCoordinatorTeam"
+        },
+        {
+            "action": "remove",
+            "key": "capacityDetailsSectionOne",
+            "namespace": "surgeCatalogueShelterTechnicalTeam"
+        },
+        {
+            "action": "remove",
+            "key": "personnelDetail",
+            "namespace": "surgeCatalogueWashHwts"
+        },
+        {
+            "action": "remove",
+            "key": "washKitShelterCapacityTextOne",
+            "namespace": "surgeCatalogueWashKit2"
+        },
+        {
+            "action": "remove",
+            "key": "washKitShelterCapacityTextTwo",
+            "namespace": "surgeCatalogueWashKit2"
+        },
+        {
+            "action": "remove",
+            "key": "washKit5ShelterCapacityTextOne",
+            "namespace": "surgeCatalogueWashKit5"
+        },
+        {
+            "action": "remove",
+            "key": "washKit5ShelterCapacityTextTwo",
+            "namespace": "surgeCatalogueWashKit5"
+        },
+        {
+            "action": "remove",
+            "key": "washCapacityTextOne",
+            "namespace": "surgeCatalogueWashKitM15Eru"
+        },
+        {
+            "action": "remove",
+            "key": "washCapacityTextOne",
+            "namespace": "surgeCatalogueWashKitM40Eru"
+        },
+        {
+            "action": "remove",
+            "key": "washCapacityTextOne",
+            "namespace": "surgeCatalogueWashKitMsm20Eru"
+        },
+        {
+            "action": "remove",
+            "key": "specificationNSItem",
+            "namespace": "surgeCatalogueWashSludge"
+        },
+        {
+            "action": "remove",
+            "key": "personnelDetail",
+            "namespace": "surgeCatalogueWashWaterSupplyRehabilitation"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyResponseUnitOwnerCardDeployed",
+            "namespace": "surgeOverview"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyResponseUnitOwnerCardReady",
+            "namespace": "surgeOverview"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyResponseUnitOwnerNSCardDeployed",
+            "namespace": "surgeOverview"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyResponseUnitOwnerNSCardReady",
+            "namespace": "surgeOverview"
+        },
+        {
+            "action": "remove",
+            "key": "exportEruReadinessFailed",
+            "namespace": "surgeOverview"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyEditProject",
+            "namespace": "threeWActivityDetail"
+        }
+    ]
+}

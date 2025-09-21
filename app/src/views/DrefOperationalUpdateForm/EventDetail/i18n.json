@@ -9,7 +9,6 @@
         "drefOperationalUpdateSummaryAreYouChangingBudget": "Are you making changes to the budget",
         "drefOperationalUpdateAllocationSoFarForTypeLoan": "Budget Allocated so far",
         "drefOperationalUpdateSummaryRequestForSecondAllocation": "Are you requesting an additional allocation?",
-        "drefOperationalUpdateEventMaterialize": "Has the forecasted event materialize?",
         "drefOperationalUpdateEventMaterializeExplain": "Please explain how is the operation is transitioning from Anticipatory to Response",
         "drefOperationalUpdateEventMaterializeExplainDescription": "Explain on whether the specified triggers have been met, and if the event has materialized either as forecasted or if there were any differences. Also please provide an update on the readiness, prepositioning and/or early actions implemented so far",
         "drefOperationalUpdateSummaryExplain": "Please explain the summary of changes and justification",
@@ -26,7 +25,6 @@
         "drefFormSourceInformationTitle": "Source Information",
         "drefFormSourceInformationDescription": "Add the links and the name of the sources, the name will be shown in the export, as an hyperlink.",
         "drefFormSourceInformationAddButton": "Add New Source Information",
-        "drefFormSelectImages": "Select images",
         "drefFormSlowEventDate": "Date when the trigger was met",
         "drefFormTargetCommunities": "Explain why your National Society is acting now and what criteria is used to launch this operation.",
         "drefFormTargetCommunitiesDescription": "If the operation uses triggers related to different phases (such as readiness activities and early actions) add your triggers and data sources",
@@ -47,7 +45,6 @@
         "drefFormEstimatedPeopleInNeed": "Estimated people in need (Optional)",
         "drefFormPeopleInNeed": "People in need (Optional)",
         "drefFormPeopleInNeedDescriptionImminent": "Include all those whose physical security, basic rights, dignity, living conditions or livelihoods are threatened or have been disrupted, and whose current level of access to basic services, goods and social protection will be inadequate to re-establish normal living conditions without additional assistance",
-        "drefFormPeopleInNeedDescriptionSlowSudden": "People in Need (PIN) are those members whose physical security, basic rights, dignity, living conditions or livelihoods are threatened or have been disrupted, and whose current level of access to basic services, goods and social protection is inadequate to re-establish normal living conditions without additional assistance.",
-        "drefFormPeopleTargetedDescription": "Include all those whose the National Society assisted"
+        "drefFormPeopleInNeedDescriptionSlowSudden": "People in Need (PIN) are those members whose physical security, basic rights, dignity, living conditions or livelihoods are threatened or have been disrupted, and whose current level of access to basic services, goods and social protection is inadequate to re-establish normal living conditions without additional assistance."
     }
 }

@@ -1,4 +1,3 @@
-// eslint.config.js
 // @ts-expect-error: @eslint/eslintrc has no types
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
@@ -7,6 +6,7 @@ import tseslint from "typescript-eslint";
 import process from 'process';
 
 import i18nUsage from './scripts/eslint/i18n-usage';
+import { Linter } from 'eslint';
 
 const dirname = process.cwd();
 
@@ -106,8 +106,6 @@ const appConfigs = compat.config({
         'simple-import-sort/imports': 'warn',
         'simple-import-sort/exports': 'warn',
         'import-newlines/enforce': ['warn', 1],
-
-        // 'i18n-usage/ensure-i18n-keys-used': ['warn']
     },
     overrides: [
         {
@@ -145,17 +143,12 @@ const appConfigs = compat.config({
     ],
 }));
 
-const tseslintRecommendedRules = tseslint.configs.recommended.map((conf) => ({
-    ...(conf.rules)
-}));
-
-const otherConfig = {
+const otherConfig: Linter.Config = {
     files: ['*.js', '*.ts', '*.cjs'],
     ...js.configs.recommended,
-    ...tseslintRecommendedRules,
 };
 
-const jsonConfig = {
+const jsonConfig: Linter.Config = {
     files: ['**/*.json'],
     language: 'json/json',
     rules: {
@@ -173,7 +166,7 @@ const jsonConfig = {
 //     },
 // };
 
-export default [
+const config: Linter.Config[] = [
     {
         plugins: {
             json,
@@ -184,4 +177,7 @@ export default [
     otherConfig,
     jsonConfig,
     // i18nJsonConfig,
+    ...tseslint.configs.recommended
 ];
+
+export default config;

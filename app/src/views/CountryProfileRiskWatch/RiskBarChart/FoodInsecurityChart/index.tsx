@@ -2,11 +2,7 @@ import { useMemo } from 'react';
 import {
     ChartAxes,
     ChartContainer,
-    ChartPoint,
-    TextOutput,
-    Tooltip,
 } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     avgSafe,
     getDiscretePathDataList,
@@ -22,7 +18,8 @@ import useTemporalChartData from '#hooks/useTemporalChartData';
 import { getPrioritizedIpcData } from '#utils/domain/risk';
 import { type RiskApiResponse } from '#utils/restRequest';
 
-import i18n from './i18n.json';
+import FiChartPoint from './FiChartPoint';
+
 import styles from './styles.module.css';
 
 type CountryRiskResponse = RiskApiResponse<'/api/v1/country-seasonal/'>;
@@ -37,89 +34,6 @@ const colors = [
     'var(--go-ui-color-gray-80)',
     'var(--go-ui-color-gray-90)',
 ];
-
-const currentYear = new Date().getFullYear();
-
-type FiChartPointProps = {
-    dataPoint: {
-        originalData: {
-            year?: number;
-            month: number;
-            analysis_date?: string;
-            total_displacement: number;
-        },
-        key: number | string;
-        x: number;
-        y: number;
-    };
-};
-
-function FiChartPoint(props: FiChartPointProps) {
-    const {
-        dataPoint: {
-            x,
-            y,
-            originalData,
-        },
-    } = props;
-    const strings = useTranslation(i18n);
-
-    const title = useMemo(
-        () => {
-            const {
-                year,
-                month,
-            } = originalData;
-
-            if (isDefined(year)) {
-                return new Date(year, month - 1, 1).toLocaleString(
-                    navigator.language,
-                    {
-                        year: 'numeric',
-                        month: 'long',
-                    },
-                );
-            }
-
-            const formattedMonth = new Date(currentYear, month - 1, 1).toLocaleString(
-                navigator.language,
-                { month: 'long' },
-            );
-
-            return `${strings.foodInsecurityChartAverage} ${formattedMonth}`;
-        },
-        [originalData, strings.foodInsecurityChartAverage],
-    );
-
-    return (
-        <ChartPoint
-            className={styles.point}
-            x={x}
-            y={y}
-        >
-            <Tooltip
-                title={title}
-                description={(
-                    <>
-                        {isDefined(originalData.analysis_date) && (
-                            <TextOutput
-                                label={strings.foodInsecurityAnalysisDate}
-                                value={originalData.analysis_date}
-                                valueType="date"
-                            />
-                        )}
-                        <TextOutput
-                            label={strings.foodInsecurityPeopleExposed}
-                            value={originalData.total_displacement}
-                            valueType="number"
-                            maximumFractionDigits={0}
-                        />
-                    </>
-                )}
-            />
-        </ChartPoint>
-    );
-}
 
 interface Props {
     ipcData: RiskData['ipc_displacement_data'] | undefined;
@@ -254,6 +168,7 @@ function FoodInsecurityChart(props: Props) {
                         {historicalPointsData.list.map(
                             (pointData) => (
                                 <FiChartPoint
+                                    className={styles.point}
                                     dataPoint={pointData}
                                     key={pointData.key}
                                 />

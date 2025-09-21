@@ -45,13 +45,17 @@ import { useRequest } from '#utils/restRequest';
 
 import {
     basePointLayerOptions,
-    getLegendOptions,
-    getScaleOptions,
+    COLOR_ERU_AND_PERSONNEL,
+    COLOR_ERU_ONLY,
+    COLOR_PERSONNEL_ONLY,
     optionKeySelector,
     optionLabelSelector,
     outerCircleLayerOptionsForEru,
     outerCircleLayerOptionsForPersonnel,
     type ScaleOption,
+    SURGE_TYPE_ERU,
+    SURGE_TYPE_ERU_AND_PERSONNEL,
+    SURGE_TYPE_PERSONNEL,
 } from './utils';
 
 import i18n from './i18n.json';
@@ -144,12 +148,27 @@ function SurgeMap(props: Props) {
         [],
     );
 
-    const [
-        scaleOptions,
-        legendOptions,
-    ] = useMemo(() => ([
-        getScaleOptions(strings),
-        getLegendOptions(strings),
+    const legendOptions = useMemo(() => ([
+        {
+            value: SURGE_TYPE_ERU_AND_PERSONNEL,
+            label: strings.eruAndPersonnel,
+            color: COLOR_ERU_AND_PERSONNEL,
+        },
+        {
+            value: SURGE_TYPE_ERU,
+            label: strings.surgeEruOnly,
+            color: COLOR_ERU_ONLY,
+        },
+        {
+            value: SURGE_TYPE_PERSONNEL,
+            label: strings.surgePersonnelOnly,
+            color: COLOR_PERSONNEL_ONLY,
+        },
+    ]), [strings]);
+
+    const scaleOptions = useMemo<ScaleOption[]>(() => ([
+        { value: 'eru', label: strings.eruLabel },
+        { value: 'personnel', label: strings.personnelLabel },
     ]), [strings]);
 
     const countryGroupedErus = useMemo(() => {
