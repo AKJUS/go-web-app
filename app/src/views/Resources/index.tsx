@@ -92,7 +92,7 @@ export function Component() {
                         {strings.goBlog}
                     </Link>
                     <Link
-                        href="https://app.powerbi.com/view?r=eyJrIjoiY2RlOTRkOGQtMDU5Yy00OWIwLWE2NmYtNTQ5NTQ3YjEwY2ZmIiwidCI6ImEyYjUzYmU1LTczNGUtNGU2Yy1hYjBkLWQxODRmNjBmZDkxNyIsImMiOjh9&pageName=ReportSectione263ecb5066f3105a8fa"
+                        href="https://app.powerbi.com/view?r=eyJrIjoiMmE2OTg5ZDgtYzMyNC00NjQ1LWJkZWUtMDI1ZDc5M2Q5ZDFlIiwidCI6ImEyYjUzYmU1LTczNGUtNGU2Yy1hYjBkLWQxODRmNjBmZDkxNyIsImMiOjh9"
                         external
                         withLinkIcon
                     >
