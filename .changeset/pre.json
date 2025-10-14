@@ -1,0 +1,15 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "go-web-app": "7.22.0",
+    "go-ui-storybook": "1.0.8",
+    "@ifrc-go/ui": "1.5.2"
+  },
+  "changesets": [
+    "fluffy-lions-nail",
+    "many-pans-tell",
+    "nice-regions-spend",
+    "tame-deer-mix"
+  ]
+}

@@ -1,5 +1,28 @@
 # go-web-app
 
+## 7.23.0-beta.0
+
+### Minor Changes
+
+- 1cf2aca: Update DREF export
+
+  - Add scope and scale for Response DREFs
+
+### Patch Changes
+
+- fabcd22: Surge updates
+  - Fix the "Catalogue of Surge Services" tab highlight issue
+  - CoS – Logistics ERU: Minor textual changes on /surge/catalogue/logistics/eru
+  - Operational Timeline Toolbox update (email replacement)
+  - Add HR technical competency framework box (and PDF)
+- 8b06d25: Update Imminent DREF Application export
+
+  - Add missing hazard date and risk section
+  - Improve layout of `Proposed Actions` table
+
+- 8e2b2d6: AppealType filter to 2 values, landing page Appeals table
+  Update goUserAnalytics URL on /resources page
+
 ## 7.22.0
 
 ### Minor Changes
@@ -22,6 +45,7 @@
   - Add accept / reject input in review modal
 
 - aecaaa2: Revert export structure for DREF Imminent Application v1
+
   - For Response type DREFs exports, update export label to "People Affected" from "People at Risk"
 
 - 7ef5534: Update visible appeal types in Active Operations map
