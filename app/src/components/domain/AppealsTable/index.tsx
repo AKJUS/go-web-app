@@ -38,6 +38,11 @@ import type {
 } from '#utils/restRequest';
 import { useRequest } from '#utils/restRequest';
 
+import {
+    APPEAL_TYPE_DREF,
+    APPEAL_TYPE_EMERGENCY,
+} from '../ActiveOperationMap/utils';
+
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
@@ -106,7 +111,7 @@ function AppealsTable(props: Props) {
     });
 
     const strings = useTranslation(i18n);
-    const { api_appeal_type: appealTypeOptions } = useGlobalEnums();
+    const { api_appeal_type: appealTypeOptionsRaw } = useGlobalEnums();
 
     const handleClearFiltersButtonClick = useCallback(() => {
         setFilter({});
@@ -268,6 +273,13 @@ function AppealsTable(props: Props) {
         preserveResponse: true,
         query,
     });
+
+    const appealTypeOptions = useMemo(() => (
+        appealTypeOptionsRaw?.filter(
+            (appealTypeOption) => appealTypeOption.key === APPEAL_TYPE_DREF
+                || appealTypeOption.key === APPEAL_TYPE_EMERGENCY,
+        )
+    ), [appealTypeOptionsRaw]);
 
     return (
         <Container
