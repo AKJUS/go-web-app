@@ -25,7 +25,6 @@ function InitiativeCard(props: Props) {
     } = props;
 
     const strings = useTranslation(i18n);
-    const categories = initiative.categories?.join(', ');
 
     return (
         <Container
@@ -44,7 +43,7 @@ function InitiativeCard(props: Props) {
             footerContent={(
                 <TextOutput
                     label={strings.initiativeCategoriesTitle}
-                    value={categories}
+                    value={initiative.categories}
                     valueType="text"
                     strongValue
                     withoutLabelColon
