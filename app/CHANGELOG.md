@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.23.0-beta.1
+
+### Patch Changes
+
+- cc7fa84: Integrate hotjar
+
 ## 7.23.0-beta.0
 
 ### Minor Changes
