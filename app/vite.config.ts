@@ -1,4 +1,5 @@
 import { ValidateEnv as validateEnv } from '@julr/vite-plugin-validate-env';
+import { isDefined } from '@togglecorp/fujs';
 import { defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import webfontDownload from 'vite-plugin-webfont-dl';
@@ -52,6 +53,9 @@ export default defineConfig(({ mode }) => {
                 analytics: {
                     id: env.APP_GOOGLE_ANALYTICS_ID,
                 },
+                hotjar: isDefined(env.APP_HOTJAR_ID) ? ({
+                    id: Number(env.APP_HOTJAR_ID),
+                }) : undefined,
             })
         ],
         css: {
