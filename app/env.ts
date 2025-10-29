@@ -26,4 +26,7 @@ export default defineConfig({
     APP_SENTRY_REPLAYS_SESSION_SAMPLE_RATE: Schema.number.optional(),
     APP_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE: Schema.number.optional(),
     APP_GOOGLE_ANALYTICS_ID: Schema.string.optional(),
+
+    // FIXME this should be number
+    APP_HOTJAR_ID: Schema.string.optional(),
 });
