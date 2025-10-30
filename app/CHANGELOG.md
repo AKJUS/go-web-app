@@ -1,5 +1,12 @@
 # go-web-app
 
+## 7.23.0-beta.2
+
+### Patch Changes
+
+- 74d653e: Update Montandon contact information on /montandon-landing page
+- 4299710: A demo to embed a Power BI report which is visible to logged in users only
+
 ## 7.23.0-beta.1
 
 ### Patch Changes
