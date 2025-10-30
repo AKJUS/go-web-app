@@ -390,6 +390,7 @@ const schema: DrefFormSchema = {
                             member: () => ({
                                 fields: (): SourceInformationFields => ({
                                     client_id: {},
+                                    id: { defaultValue: undefinedValue },
                                     source_name: {
                                         required: true,
                                         requiredValidation: requiredStringCondition,
@@ -418,6 +419,7 @@ const schema: DrefFormSchema = {
                             member: () => ({
                                 fields: (): SourceInformationFields => ({
                                     client_id: {},
+                                    id: { defaultValue: undefinedValue },
                                     source_name: {
                                         required: true,
                                         requiredValidation: requiredStringCondition,
@@ -587,6 +589,7 @@ const schema: DrefFormSchema = {
                         member: () => ({
                             fields: (): NationalSocietyFields => ({
                                 client_id: {},
+                                id: { defaultValue: undefinedValue },
                                 title: {
                                     required: true,
                                     requiredValidation: requiredStringCondition,
@@ -617,6 +620,7 @@ const schema: DrefFormSchema = {
                             member: () => ({
                                 fields: (): NeedsIdentifiedFields => ({
                                     client_id: {},
+                                    id: { defaultValue: undefinedValue },
                                     title: {
                                         required: true,
                                         requiredValidation: requiredStringCondition,
@@ -874,6 +878,7 @@ const schema: DrefFormSchema = {
                         member: () => ({
                             fields: (): RiskSecurityFields => ({
                                 client_id: {},
+                                id: { defaultValue: undefinedValue },
                                 risk: {
                                     required: true,
                                     requiredValidation: requiredStringCondition,
@@ -893,6 +898,7 @@ const schema: DrefFormSchema = {
                         member: () => ({
                             fields: (): PlannedInterventionFields => ({
                                 client_id: {},
+                                id: { defaultValue: undefinedValue },
                                 title: {
                                     required: true,
                                     requiredValidation: requiredStringCondition,
@@ -915,6 +921,7 @@ const schema: DrefFormSchema = {
                                     member: () => ({
                                         fields: (): IndicatorFields => ({
                                             client_id: {},
+                                            id: { defaultValue: undefinedValue },
                                             title: {},
                                             target: { validations: [positiveNumberCondition] },
                                         }),
