@@ -741,6 +741,20 @@ const resources = customWrapRoute({
         visibility: 'anything',
     },
 });
+
+const spark = customWrapRoute({
+    parent: rootLayout,
+    path: 'spark',
+    component: {
+        render: () => import('#views/Spark'),
+        props: {},
+    },
+    wrapperComponent: Auth,
+    context: {
+        title: 'SPARK',
+        visibility: 'is-authenticated',
+    },
+});
 const operationalLearning = customWrapRoute({
     parent: rootLayout,
     path: 'operational-learning',
@@ -1317,6 +1331,7 @@ const wrappedRoutes = {
     accountMyFormsDref,
     accountMyFormsThreeW,
     resources,
+    spark,
     search,
     allThreeWProject,
     allThreeWActivity,
