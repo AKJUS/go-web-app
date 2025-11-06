@@ -1,5 +1,29 @@
 # go-web-app
 
+## 7.23.0
+
+### Minor Changes
+
+- 1cf2aca: Update DREF export
+  - Add scope and scale for Response DREFs
+
+### Patch Changes
+
+- fabcd22: Surge updates
+  - Fix the "Catalogue of Surge Services" tab highlight issue
+  - CoS – Logistics ERU: Minor textual changes on /surge/catalogue/logistics/eru
+  - Operational Timeline Toolbox update (email replacement)
+  - Add HR technical competency framework box (and PDF)
+- 2a7574a: Fix DREF form list field re-creation issue
+- 74d653e: Update Montandon contact information on /montandon-landing page
+- 8b06d25: Update Imminent DREF Application export
+  - Add missing hazard date and risk section
+  - Improve layout of `Proposed Actions` table
+- 4299710: A demo to embed a Power BI report which is visible to logged in users only
+- 8e2b2d6: AppealType filter to 2 values, landing page Appeals table
+  Update goUserAnalytics URL on /resources page
+- cc7fa84: Integrate hotjar
+
 ## 7.23.0-beta.3
 
 ### Patch Changes
