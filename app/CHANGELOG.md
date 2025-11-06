@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.23.0-beta.3
+
+### Patch Changes
+
+- Fix DREF form list field re-creation issue
+
 ## 7.23.0-beta.2
 
 ### Patch Changes
