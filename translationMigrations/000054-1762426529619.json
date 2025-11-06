@@ -1,0 +1,148 @@
+{
+    "parent": "000053-1761568674475.json",
+    "actions": [
+        {
+            "action": "add",
+            "key": "activeDrefTableStatusApprovedDescription",
+            "namespace": "accountMyFormsDref",
+            "value": "Approved: The form has been reviewed and approved."
+        },
+        {
+            "action": "add",
+            "key": "activeDrefTableStatusDraftDescription",
+            "namespace": "accountMyFormsDref",
+            "value": "The form is in its initial stage and has not been finalized yet."
+        },
+        {
+            "action": "add",
+            "key": "activeDrefTableStatusFailedDescription",
+            "namespace": "accountMyFormsDref",
+            "value": "The form finalization process has failed. You can retry to finalize the form again"
+        },
+        {
+            "action": "add",
+            "key": "activeDrefTableStatusFinalizedDescription",
+            "namespace": "accountMyFormsDref",
+            "value": "The form has been finalized, and the original language has been switched to English. All further edits must now be made in English."
+        },
+        {
+            "action": "add",
+            "key": "activeDrefTableStatusFinalizingDescription",
+            "namespace": "accountMyFormsDref",
+            "value": "The form is being finalizing. The original language content is being translated into English."
+        },
+        {
+            "action": "add",
+            "key": "drefAccountFinalizeConfirmMessage",
+            "namespace": "accountMyFormsDref",
+            "value": "You are about to finalize this DREF. Once finalized, the original language will change to English, and it will no longer be editable in the {selectedLanguage} language. Are you sure you want to proceed?"
+        },
+        {
+            "action": "add",
+            "key": "drefFinalizeFailureTitle",
+            "namespace": "accountMyFormsDref",
+            "value": "Failed to finalize the DREF!"
+        },
+        {
+            "action": "add",
+            "key": "drefFinalizeSuccessTitle",
+            "namespace": "accountMyFormsDref",
+            "value": "Successfully finalized the DREF!"
+        },
+        {
+            "action": "add",
+            "key": "drefOpsUpdateStartingLanguageLabel",
+            "namespace": "accountMyFormsDref",
+            "value": "DREF Starting Language"
+        },
+        {
+            "action": "add",
+            "key": "dropdownActionAddFinalReportLabel",
+            "namespace": "accountMyFormsDref",
+            "value": "Add Final Report"
+        },
+        {
+            "action": "add",
+            "key": "dropdownActionFinalizeLabel",
+            "namespace": "accountMyFormsDref",
+            "value": "Finalize"
+        },
+        {
+            "action": "add",
+            "key": "dropdownActionNewFinalReportConfirmationHeading",
+            "namespace": "accountMyFormsDref",
+            "value": "Confirm addition of Final Report"
+        },
+        {
+            "action": "add",
+            "key": "dropdownActionNewFinalReportConfirmationMessage",
+            "namespace": "accountMyFormsDref",
+            "value": "You are about to create a new DREF Final Report."
+        },
+        {
+            "action": "add",
+            "key": "dropdownActionNewFinalReportLanguageSelectLanguageMessage",
+            "namespace": "accountMyFormsDref",
+            "value": "Please select the language to create the DREF Final Report."
+        },
+        {
+            "action": "add",
+            "key": "dropdownActionNewOpsUpdateConfirmationMessage",
+            "namespace": "accountMyFormsDref",
+            "value": "You are about to create a new DREF Operational Update."
+        },
+        {
+            "action": "add",
+            "key": "dropdownActionNewOpsUpdateLanguageSelectLanguageMessage",
+            "namespace": "accountMyFormsDref",
+            "value": "Please select the language to create the DREF Operation Update."
+        },
+        {
+            "action": "update",
+            "key": "drefAccountConfirmMessage",
+            "namespace": "accountMyFormsDref",
+            "newValue": "You're about to approve this DREF. Once approved, it can no longer be edited. Are you sure you want to approve?"
+        },
+        {
+            "action": "remove",
+            "key": "formNotAvailableInNonEnglishMessage",
+            "namespace": "drefApplicationForm"
+        },
+        {
+            "action": "update",
+            "key": "formEditNotAvailableInSelectedLanguageMessage",
+            "namespace": "drefApplicationForm",
+            "newValue": "DREF Application is currently in view-only mode."
+        },
+        {
+            "action": "update",
+            "key": "formNotAvailableInSelectedLanguageMessage",
+            "namespace": "drefFinalReportForm",
+            "newValue": "DREF Final Report is not available in the selected language!"
+        },
+        {
+            "action": "update",
+            "key": "formNotAvailableInSelectedLanguageMessage",
+            "namespace": "drefOperationalUpdateForm",
+            "newValue": "DREF Operational Update is not available in the selected language!"
+        },
+        {
+            "action": "update",
+            "key": "languageMismatchErrorMessage",
+            "namespace": "languageMismatchMessage",
+            "newValue": "This is because form was originally created in {originalLanguage} language and edits cannot be edited in the {selectedLanguage} language."
+        },
+        {
+            "action": "update",
+            "key": "languageMismatchErrorTitle",
+            "namespace": "languageMismatchMessage",
+            "newValue": "Edit not available in {selectedLanguage} language!"
+        },
+        {
+            "action": "update",
+            "key": "languageMismatchHelpMessage",
+            "namespace": "languageMismatchMessage",
+            "newValue": "To make changes, please switch to the original language of the form."
+        }
+    ]
+}
