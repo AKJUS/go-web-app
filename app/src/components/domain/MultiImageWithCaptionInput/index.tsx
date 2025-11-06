@@ -45,7 +45,9 @@ interface Props<N> {
     label: React.ReactNode;
     icons?: React.ReactNode;
     actions?: React.ReactNode;
+    readOnly?: boolean;
     disabled?: boolean;
+    useCurrentLanguageForMutation?: boolean;
 }
 
 // FIXME: Move this to components
@@ -62,7 +64,9 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
         label,
         icons,
         actions,
+        readOnly,
         disabled,
+        useCurrentLanguageForMutation = false,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -139,7 +143,9 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                 icons={icons}
                 actions={actions}
                 withoutPreview
+                readOnly={readOnly}
                 disabled={disabled}
+                useCurrentLanguageForMutation={useCurrentLanguageForMutation}
             >
                 {label}
             </GoMultiFileInput>
@@ -168,7 +174,7 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                                     ariaLabel={strings.removeImagesButtonTitle}
                                     variant="secondary"
                                     spacing="none"
-                                    disabled={disabled}
+                                    disabled={disabled || readOnly}
                                 >
                                     <DeleteBinLineIcon />
                                 </IconButton>
@@ -187,6 +193,7 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                                     onChange={handleCaptionChange}
                                     error={imageError?.caption}
                                     placeholder={strings.enterCaptionPlaceholder}
+                                    readOnly={readOnly}
                                     disabled={disabled}
                                 />
                             </div>

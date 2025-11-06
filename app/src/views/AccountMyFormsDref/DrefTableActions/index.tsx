@@ -1,4 +1,8 @@
-import { useCallback } from 'react';
+import {
+    useCallback,
+    useMemo,
+    useState,
+} from 'react';
 import {
     AddLineIcon,
     CaseManagementIcon,
@@ -10,15 +14,25 @@ import {
 } from '@ifrc-go/icons';
 import type { ButtonProps } from '@ifrc-go/ui';
 import {
+    Button,
     Message,
     Modal,
+    RadioInput,
     TableActions,
 } from '@ifrc-go/ui';
+import { type Language } from '@ifrc-go/ui/contexts';
 import {
     useBooleanState,
     useTranslation,
 } from '@ifrc-go/ui/hooks';
-import { isDefined } from '@togglecorp/fujs';
+import {
+    resolveToString,
+    stringLabelSelector,
+} from '@ifrc-go/ui/utils';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import DrefExportModal from '#components/domain/DrefExportModal';
 import DrefShareModal from '#components/domain/DrefShareModal';
@@ -26,8 +40,11 @@ import DropdownMenuItem from '#components/DropdownMenuItem';
 import Link from '#components/Link';
 import useAlert from '#hooks/useAlert';
 import useRouting from '#hooks/useRouting';
+import { languageNameMap } from '#utils/common';
 import {
-    DREF_STATUS_IN_PROGRESS,
+    DREF_STATUS_DRAFT,
+    DREF_STATUS_FAILED,
+    DREF_STATUS_FINALIZED,
     DREF_TYPE_IMMINENT,
     DREF_TYPE_LOAN,
     type DrefStatus,
@@ -43,6 +60,15 @@ import { exportDrefAllocation } from './drefAllocationExport';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
+type SelectLanguageOption = {
+    key: Language,
+    label: string,
+}
+
+function selectLanguageKeySelector(option: SelectLanguageOption) {
+    return option.key;
+}
+
 export interface Props {
     drefId: number;
     id: number;
@@ -53,6 +79,7 @@ export interface Props {
     canCreateFinalReport: boolean;
     hasPermissionToApprove?: boolean;
     isDrefImminentV2?: boolean;
+    startingLanguage?: Language;
 
     onPublishSuccess?: () => void;
     drefType?: TypeOfDrefEnum | null | undefined;
@@ -70,13 +97,31 @@ function DrefTableActions(props: Props) {
         isDrefImminentV2,
         onPublishSuccess,
         drefType,
+        startingLanguage,
     } = props;
+
+    const [selectOpsLanguage, setSelectOpsLanguage] = useState<Language | undefined>();
+
+    const [selectFinalLanguage, setSelectFinalLanguage] = useState<Language | undefined>();
 
     const { navigate } = useRouting();
 
     const alert = useAlert();
 
     const strings = useTranslation(i18n);
+
+    const selectLanguageOptions: SelectLanguageOption[] | undefined = useMemo(() => {
+        if (isNotDefined(startingLanguage)) {
+            return undefined;
+        }
+        return [
+            {
+                key: startingLanguage,
+                label: `${languageNameMap[startingLanguage]} (${strings.drefOpsUpdateStartingLanguageLabel})`,
+            },
+            { key: 'en', label: languageNameMap.en },
+        ];
+    }, [startingLanguage, strings.drefOpsUpdateStartingLanguageLabel]);
 
     const [showExportModal, {
         setTrue: setShowExportModalTrue,
@@ -167,7 +212,7 @@ function DrefTableActions(props: Props) {
         pending: publishDrefPending,
     } = useLazyRequest({
         method: 'POST',
-        url: '/api/v2/dref/{id}/publish/',
+        url: '/api/v2/dref/{id}/approve/',
         pathVariables: { id: String(id) },
         // FIXME: typings should be fixed in the server
         body: () => ({} as never),
@@ -198,7 +243,7 @@ function DrefTableActions(props: Props) {
         pending: publishOpsUpdatePending,
     } = useLazyRequest({
         method: 'POST',
-        url: '/api/v2/dref-op-update/{id}/publish/',
+        url: '/api/v2/dref-op-update/{id}/approve/',
         pathVariables: { id: String(id) },
         // FIXME: typings should be fixed in the server
         body: () => ({} as never),
@@ -229,7 +274,7 @@ function DrefTableActions(props: Props) {
         pending: publishFinalReportPending,
     } = useLazyRequest({
         method: 'POST',
-        url: '/api/v2/dref-final-report/{id}/publish/',
+        url: '/api/v2/dref-final-report/{id}/approve/',
         pathVariables: { id: String(id) },
         // FIXME: typings should be fixed in the server
         body: () => ({} as never),
@@ -255,6 +300,96 @@ function DrefTableActions(props: Props) {
         },
     });
 
+    const {
+        trigger: finalizeDref,
+        pending: finalizeDrefPending,
+    } = useLazyRequest({
+        method: 'POST',
+        url: '/api/v2/dref/{id}/finalize/',
+        pathVariables: { id: String(id) },
+        body: () => ({} as never),
+        onSuccess: () => {
+            alert.show(
+                strings.drefFinalizeSuccessTitle,
+                { variant: 'success' },
+            );
+            if (onPublishSuccess) {
+                onPublishSuccess();
+            }
+        },
+        onFailure: ({
+            value: { messageForNotification },
+        }) => {
+            alert.show(
+                strings.drefFinalizeFailureTitle,
+                {
+                    description: messageForNotification,
+                    variant: 'danger',
+                },
+            );
+        },
+    });
+
+    const {
+        trigger: finalizeOpsUpdate,
+        pending: finalizeOpsUpdatePending,
+    } = useLazyRequest({
+        method: 'POST',
+        url: '/api/v2/dref-op-update/{id}/finalize/',
+        pathVariables: { id: String(id) },
+        body: () => ({} as never),
+        onSuccess: () => {
+            alert.show(
+                strings.drefFinalizeSuccessTitle,
+                { variant: 'success' },
+            );
+            if (onPublishSuccess) {
+                onPublishSuccess();
+            }
+        },
+        onFailure: ({
+            value: { messageForNotification },
+        }) => {
+            alert.show(
+                strings.drefFinalizeFailureTitle,
+                {
+                    description: messageForNotification,
+                    variant: 'danger',
+                },
+            );
+        },
+    });
+
+    const {
+        trigger: finalizeFinalReport,
+        pending: finalizeFinalReportPending,
+    } = useLazyRequest({
+        method: 'POST',
+        url: '/api/v2/dref-final-report/{id}/finalize/',
+        pathVariables: { id: String(id) },
+        body: () => ({} as never),
+        onSuccess: () => {
+            alert.show(
+                strings.drefFinalizeSuccessTitle,
+                { variant: 'success' },
+            );
+            if (onPublishSuccess) {
+                onPublishSuccess();
+            }
+        },
+        onFailure: ({
+            value: { messageForNotification },
+        }) => {
+            alert.show(
+                strings.drefFinalizeFailureTitle,
+                {
+                    description: messageForNotification,
+                    variant: 'danger',
+                },
+            );
+        },
+    });
+
     // FIXME: the type should be fixed on the server
     type OpsUpdateRequestBody = GoApiBody<'/api/v2/dref-op-update/', 'POST'>;
 
@@ -265,7 +400,13 @@ function DrefTableActions(props: Props) {
         method: 'POST',
         url: '/api/v2/dref-op-update/',
         // FIXME: the type should be fixed on the server
-        body: (drefId: number) => ({ dref: drefId } as OpsUpdateRequestBody),
+        body: (
+            drefId: number,
+        ) => ({
+            dref: drefId,
+            starting_language: startingLanguage === 'en' ? startingLanguage : selectOpsLanguage,
+        } as unknown as OpsUpdateRequestBody),
+        enforceLanguageForMutation: selectOpsLanguage,
         onSuccess: (response) => {
             navigate(
                 'drefOperationalUpdateForm',
@@ -294,8 +435,14 @@ function DrefTableActions(props: Props) {
     } = useLazyRequest({
         method: 'POST',
         url: '/api/v2/dref-final-report/',
+        enforceLanguageForMutation: selectFinalLanguage,
         // FIXME: the type should be fixed on the server
-        body: (drefId: number) => ({ dref: drefId } as FinalReportRequestBody),
+        body: (
+            drefId: number,
+        ) => ({
+            dref: drefId,
+            starting_language: startingLanguage === 'en' ? startingLanguage : selectFinalLanguage,
+        } as FinalReportRequestBody),
         onSuccess: (response) => {
             navigate(
                 isDrefImminentV2 ? 'drefFinalReportForm' : 'oldDrefFinalReportForm',
@@ -334,6 +481,16 @@ function DrefTableActions(props: Props) {
         setFalse: setShowShareModalFalse,
     }] = useBooleanState(false);
 
+    const [showOperationConfirmModal, {
+        setTrue: setShowOperationConfirmModalTrue,
+        setFalse: setShowOperationConfirmModalFalse,
+    }] = useBooleanState(false);
+
+    const [showFinalReportConfirmModal, {
+        setTrue: setShowFinalReportConfirmModalTrue,
+        setFalse: setShowFinalReportConfirmModalFalse,
+    }] = useBooleanState(false);
+
     const handleExportClick: NonNullable<ButtonProps<undefined>['onClick']> = useCallback(
         () => {
             setShowExportModalTrue();
@@ -368,6 +525,26 @@ function DrefTableActions(props: Props) {
         ],
     );
 
+    const handleFinalizeClick = useCallback(
+        () => {
+            if (applicationType === 'DREF') {
+                finalizeDref(null);
+            } else if (applicationType === 'OPS_UPDATE') {
+                finalizeOpsUpdate(null);
+            } else if (applicationType === 'FINAL_REPORT') {
+                finalizeFinalReport(null);
+            } else {
+                applicationType satisfies never;
+            }
+        },
+        [
+            applicationType,
+            finalizeDref,
+            finalizeOpsUpdate,
+            finalizeFinalReport,
+        ],
+    );
+
     const handleDrefAllocationExport = useCallback(
         () => {
             if (applicationType === 'DREF') {
@@ -385,13 +562,20 @@ function DrefTableActions(props: Props) {
 
     const canDownloadAllocation = (applicationType === 'DREF' || applicationType === 'OPS_UPDATE');
 
-    const canApprove = status === DREF_STATUS_IN_PROGRESS && hasPermissionToApprove;
+    const canApprove = status === DREF_STATUS_FINALIZED && hasPermissionToApprove;
+
+    const canFinalize = status === (DREF_STATUS_DRAFT
+        || DREF_STATUS_FAILED)
+        && hasPermissionToApprove;
 
     const shouldConfirmImminentAddOpsUpdate = drefType === DREF_TYPE_IMMINENT && isDrefImminentV2;
 
     const disabled = fetchingDref
         || fetchingOpsUpdate
         || publishDrefPending
+        || finalizeDrefPending
+        || finalizeOpsUpdatePending
+        || finalizeFinalReportPending
         || publishOpsUpdatePending
         || publishFinalReportPending
         || createOpsUpdatePending
@@ -402,6 +586,26 @@ function DrefTableActions(props: Props) {
             persistent
             extraActions={(
                 <>
+                    {canFinalize && (
+                        <DropdownMenuItem
+                            name={undefined}
+                            type="confirm-button"
+                            icons={<CheckLineIcon className={styles.icon} />}
+                            confirmMessage={
+                                resolveToString(
+                                    strings.drefAccountFinalizeConfirmMessage,
+                                    {
+                                        selectedLanguage: startingLanguage ? languageNameMap[startingLanguage] : '--',
+                                    },
+                                )
+                            }
+                            onConfirm={handleFinalizeClick}
+                            disabled={disabled}
+                            persist
+                        >
+                            {strings.dropdownActionFinalizeLabel}
+                        </DropdownMenuItem>
+                    )}
                     {canApprove && (
                         <DropdownMenuItem
                             name={undefined}
@@ -427,30 +631,12 @@ function DrefTableActions(props: Props) {
                             {strings.dropdownActionAllocationFormLabel}
                         </DropdownMenuItem>
                     )}
-                    {canAddOpsUpdate && shouldConfirmImminentAddOpsUpdate && (
-                        <DropdownMenuItem
-                            name={undefined}
-                            type="confirm-button"
-                            icons={<AddLineIcon className={styles.icon} />}
-                            confirmHeading={
-                                strings.dropdownActionImminentNewOpsUpdateConfirmationHeading
-                            }
-                            confirmMessage={
-                                strings.dropdownActionImminentNewOpsUpdateConfirmationMessage
-                            }
-                            onConfirm={handleAddOpsUpdate}
-                            disabled={disabled}
-                            persist
-                        >
-                            {strings.dropdownActionAddOpsUpdateLabel}
-                        </DropdownMenuItem>
-                    )}
-                    {canAddOpsUpdate && !shouldConfirmImminentAddOpsUpdate && (
+                    {canAddOpsUpdate && (
                         <DropdownMenuItem
                             name={undefined}
                             type="button"
                             icons={<AddLineIcon className={styles.icon} />}
-                            onClick={handleAddOpsUpdate}
+                            onClick={setShowOperationConfirmModalTrue}
                             disabled={disabled}
                             persist
                         >
@@ -461,7 +647,7 @@ function DrefTableActions(props: Props) {
                         <DropdownMenuItem
                             name={undefined}
                             type="button"
-                            onClick={handleAddFinalReport}
+                            onClick={setShowFinalReportConfirmModalTrue}
                             icons={<CaseManagementIcon className={styles.icon} />}
                             disabled={disabled}
                             persist
@@ -494,60 +680,146 @@ function DrefTableActions(props: Props) {
                 </>
             )}
         >
-            {status === DREF_STATUS_IN_PROGRESS && applicationType === 'DREF' && (
-                <Link
-                    to="drefApplicationForm"
-                    urlParams={{ drefId: id }}
-                    variant="secondary"
-                    icons={<PencilLineIcon className={styles.icon} />}
-                >
-                    {strings.dropdownActionEditLabel}
-                </Link>
-            )}
-            {status === DREF_STATUS_IN_PROGRESS && applicationType === 'OPS_UPDATE' && (
-                <Link
-                    to="drefOperationalUpdateForm"
-                    urlParams={{ opsUpdateId: id }}
-                    variant="secondary"
-                    icons={<PencilLineIcon className={styles.icon} />}
-                >
-                    {strings.dropdownActionEditLabel}
-                </Link>
-            )}
-            {status === DREF_STATUS_IN_PROGRESS && applicationType === 'FINAL_REPORT' && (
-                <Link
-                    to={isDrefImminentV2 ? 'drefFinalReportForm' : 'oldDrefFinalReportForm'}
-                    urlParams={{ finalReportId: id }}
-                    variant="secondary"
-                    icons={<PencilLineIcon className={styles.icon} />}
-                >
-                    {strings.dropdownActionEditLabel}
-                </Link>
-            )}
-            {showExportModal && (
-                <DrefExportModal
-                    onCancel={setShowExportModalFalse}
-                    id={id}
-                    applicationType={applicationType}
-                    drefType={drefType}
-                    isDrefImminentV2={isDrefImminentV2}
-                />
-            )}
-            {showShareModal && (
-                <DrefShareModal
-                    onCancel={setShowShareModalFalse}
-                    onSuccess={setShowShareModalFalse}
-                    drefId={drefIdFromProps}
-                />
-            )}
-            {drefApprovalPending && (
-                <Modal>
-                    <Message
-                        pending
-                        title={strings.drefApprovalInProgressTitle}
+            {
+                (status === DREF_STATUS_DRAFT || status === DREF_STATUS_FINALIZED) && applicationType === 'DREF' && (
+                    <Link
+                        to="drefApplicationForm"
+                        urlParams={{ drefId: id }}
+                        variant="secondary"
+                        icons={<PencilLineIcon className={styles.icon} />}
+                    >
+                        {strings.dropdownActionEditLabel}
+                    </Link>
+                )
+            }
+            {
+                (status === DREF_STATUS_DRAFT || status === DREF_STATUS_FINALIZED) && applicationType === 'OPS_UPDATE' && (
+                    <Link
+                        to="drefOperationalUpdateForm"
+                        urlParams={{ opsUpdateId: id }}
+                        variant="secondary"
+                        icons={<PencilLineIcon className={styles.icon} />}
+                    >
+                        {strings.dropdownActionEditLabel}
+                    </Link>
+                )
+            }
+            {
+                (status === DREF_STATUS_DRAFT || status === DREF_STATUS_FINALIZED) && applicationType === 'FINAL_REPORT' && (
+                    <Link
+                        to={isDrefImminentV2 ? 'drefFinalReportForm' : 'oldDrefFinalReportForm'}
+                        urlParams={{ finalReportId: id }}
+                        variant="secondary"
+                        icons={<PencilLineIcon className={styles.icon} />}
+                    >
+                        {strings.dropdownActionEditLabel}
+                    </Link>
+                )
+            }
+            {
+                showExportModal && (
+                    <DrefExportModal
+                        onCancel={setShowExportModalFalse}
+                        id={id}
+                        applicationType={applicationType}
+                        drefType={drefType}
+                        isDrefImminentV2={isDrefImminentV2}
                     />
-                </Modal>
-            )}
+                )
+            }
+            {
+                showShareModal && (
+                    <DrefShareModal
+                        onCancel={setShowShareModalFalse}
+                        onSuccess={setShowShareModalFalse}
+                        drefId={drefIdFromProps}
+                    />
+                )
+            }
+            {
+                showOperationConfirmModal && (
+                    <Modal
+                        heading={strings.dropdownActionImminentNewOpsUpdateConfirmationHeading}
+                        onClose={setShowOperationConfirmModalFalse}
+                        childrenContainerClassName={styles.addOpsUpdateModal}
+                        footerActions={(
+                            <Button
+                                name={undefined}
+                                onClick={handleAddOpsUpdate}
+                                disabled={(startingLanguage !== 'en' && !selectOpsLanguage)}
+                            >
+                                {strings.dropdownActionAddOpsUpdateLabel}
+                            </Button>
+                        )}
+                    >
+                        <p>{strings.dropdownActionNewOpsUpdateConfirmationMessage}</p>
+                        {shouldConfirmImminentAddOpsUpdate
+                            && strings.dropdownActionImminentNewOpsUpdateConfirmationMessage}
+                        {startingLanguage !== 'en' && (
+                            <>
+                                <p>
+                                    {strings
+                                        .dropdownActionNewOpsUpdateLanguageSelectLanguageMessage}
+                                </p>
+                                <RadioInput
+                                    name={undefined}
+                                    value={selectOpsLanguage}
+                                    options={selectLanguageOptions}
+                                    onChange={setSelectOpsLanguage}
+                                    keySelector={selectLanguageKeySelector}
+                                    labelSelector={stringLabelSelector}
+                                />
+                            </>
+                        )}
+                    </Modal>
+                )
+            }
+            {
+                showFinalReportConfirmModal && (
+                    <Modal
+                        heading={strings.dropdownActionNewFinalReportConfirmationHeading}
+                        onClose={setShowFinalReportConfirmModalFalse}
+                        childrenContainerClassName={styles.addOpsUpdateModal}
+                        footerActions={(
+                            <Button
+                                name={undefined}
+                                onClick={handleAddFinalReport}
+                                disabled={(startingLanguage !== 'en' && !selectFinalLanguage)}
+                            >
+                                {strings.dropdownActionAddFinalReportLabel}
+                            </Button>
+                        )}
+                    >
+                        <p>{strings.dropdownActionNewFinalReportConfirmationMessage}</p>
+                        {startingLanguage !== 'en' && (
+                            <>
+                                <p>
+                                    {strings
+                                        .dropdownActionNewFinalReportLanguageSelectLanguageMessage}
+                                </p>
+                                <RadioInput
+                                    name={undefined}
+                                    value={selectFinalLanguage}
+                                    options={selectLanguageOptions}
+                                    onChange={setSelectFinalLanguage}
+                                    keySelector={selectLanguageKeySelector}
+                                    labelSelector={stringLabelSelector}
+                                />
+                            </>
+                        )}
+                    </Modal>
+                )
+            }
+            {
+                drefApprovalPending && (
+                    <Modal>
+                        <Message
+                            pending
+                            title={strings.drefApprovalInProgressTitle}
+                        />
+                    </Modal>
+                )
+            }
         </TableActions>
     );
 }

@@ -36,13 +36,16 @@ import DrefExportModal from '#components/domain/DrefExportModal';
 import { type FieldReportItem as FieldReportSearchItem } from '#components/domain/FieldReportSearchSelectInput';
 import FormFailedToLoadMessage from '#components/domain/FormFailedToLoadMessage';
 import LanguageMismatchMessage from '#components/domain/LanguageMismatchMessage';
-import NonEnglishFormCreationMessage from '#components/domain/NonEnglishFormCreationMessage';
 import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
 import Page from '#components/Page';
 import useCurrentLanguage from '#hooks/domain/useCurrentLanguage';
 import useAlert from '#hooks/useAlert';
 import useRouting from '#hooks/useRouting';
+import {
+    DREF_STATUS_DRAFT,
+    DREF_STATUS_FINALIZED,
+} from '#utils/constants';
 import {
     type GoApiResponse,
     useLazyRequest,
@@ -383,6 +386,7 @@ export function Component() {
         method: 'PATCH',
         pathVariables: isDefined(drefId) ? { id: drefId } : undefined,
         body: (formFields: DrefRequestBody) => formFields,
+        useCurrentLanguageForMutation: true,
         onSuccess: (response) => {
             alert.show(
                 strings.formSaveRequestSuccessMessage,
@@ -479,6 +483,7 @@ export function Component() {
         url: '/api/v2/dref/',
         method: 'POST',
         body: (formFields: DrefRequestPostBody) => formFields,
+        useCurrentLanguageForMutation: true,
         onSuccess: (response) => {
             alert.show(
                 strings.formSaveRequestSuccessMessage,
@@ -608,14 +613,15 @@ export function Component() {
     const saveDrefPending = createDrefPending || updateDrefPending;
     const disabled = fetchingDref || saveDrefPending;
 
-    // New DREFs can only be created in English
-    const nonEnglishCreate = isNotDefined(drefId) && currentLanguage !== 'en';
     const languageMismatch = isDefined(drefId)
         && isDefined(drefResponse)
         && currentLanguage !== drefResponse?.translation_module_original_language;
-    const shouldHideForm = nonEnglishCreate
-        || languageMismatch
-        || fetchingDref
+
+    const readOnly = languageMismatch
+        && (drefResponse?.status === DREF_STATUS_FINALIZED
+        || drefResponse?.status === DREF_STATUS_DRAFT);
+
+    const shouldHideForm = fetchingDref
         || isDefined(drefResponseError);
 
     return (
@@ -661,7 +667,7 @@ export function Component() {
                         <Button
                             name={undefined}
                             onClick={handleFormSubmit}
-                            disabled={disabled}
+                            disabled={disabled || readOnly}
                         >
                             {strings.formSaveButtonLabel}
                         </Button>
@@ -728,11 +734,7 @@ export function Component() {
                     <LanguageMismatchMessage
                         title={strings.formEditNotAvailableInSelectedLanguageMessage}
                         originalLanguage={drefResponse.translation_module_original_language}
-                    />
-                )}
-                {nonEnglishCreate && (
-                    <NonEnglishFormCreationMessage
-                        title={strings.formNotAvailableInNonEnglishMessage}
+                        selectedLanguage={currentLanguage}
                     />
                 )}
                 {isDefined(drefResponseError) && (
@@ -750,6 +752,7 @@ export function Component() {
                         <TabPanel name="overview">
                             <Overview
                                 value={value}
+                                readOnly={readOnly}
                                 setFieldValue={setFieldValue}
                                 setValue={setValue}
                                 fileIdToUrlMap={fileIdToUrlMap}
@@ -765,6 +768,7 @@ export function Component() {
                         <TabPanel name="eventDetail">
                             <EventDetail
                                 value={value}
+                                readOnly={readOnly}
                                 setFieldValue={setFieldValue}
                                 fileIdToUrlMap={fileIdToUrlMap}
                                 setFileIdToUrlMap={setFileIdToUrlMap}
@@ -775,6 +779,7 @@ export function Component() {
                         <TabPanel name="actions">
                             <Actions
                                 value={value}
+                                readOnly={readOnly}
                                 setFieldValue={setFieldValue}
                                 fileIdToUrlMap={fileIdToUrlMap}
                                 setFileIdToUrlMap={setFileIdToUrlMap}
@@ -785,6 +790,7 @@ export function Component() {
                         <TabPanel name="operation">
                             <Operation
                                 value={value}
+                                readOnly={readOnly}
                                 setFieldValue={setFieldValue}
                                 setValue={setValue}
                                 fileIdToUrlMap={fileIdToUrlMap}
@@ -795,6 +801,7 @@ export function Component() {
                         </TabPanel>
                         <TabPanel name="submission">
                             <Submission
+                                readOnly={readOnly}
                                 value={value}
                                 setFieldValue={setFieldValue}
                                 error={formError}

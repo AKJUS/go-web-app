@@ -70,6 +70,7 @@ function plannedInterventionKeySelector(option: PlannedInterventionOption) {
 
 interface Props {
     value: Value;
+    readOnly: boolean;
     setFieldValue: (...entries: EntriesAsList<Value>) => void;
     setValue: (value: SetBaseValueArg<Value>, partialUpdate?: boolean) => void;
     error: Error<Value> | undefined;
@@ -86,6 +87,7 @@ function Operation(props: Props) {
 
     const {
         value,
+        readOnly,
         setFieldValue,
         error: formError,
         fileIdToUrlMap,
@@ -293,6 +295,7 @@ function Operation(props: Props) {
                     >
                         <TextArea
                             name="operation_objective"
+                            readOnly={readOnly}
                             onChange={setFieldValue}
                             value={value.operation_objective}
                             error={error?.operation_objective}
@@ -331,6 +334,7 @@ function Operation(props: Props) {
                     >
                         <TextArea
                             name="response_strategy"
+                            readOnly={readOnly}
                             onChange={setFieldValue}
                             value={value.response_strategy}
                             error={error?.response_strategy}
@@ -351,6 +355,7 @@ function Operation(props: Props) {
                     >
                         <TextArea
                             label={strings.drefFormOperationDescription}
+                            readOnly={readOnly}
                             name="people_assisted"
                             onChange={setFieldValue}
                             value={value.people_assisted}
@@ -364,6 +369,7 @@ function Operation(props: Props) {
                     >
                         <TextArea
                             label={strings.drefFormOperationDescription}
+                            readOnly={readOnly}
                             name="selection_criteria"
                             onChange={setFieldValue}
                             value={value.selection_criteria}
@@ -377,12 +383,14 @@ function Operation(props: Props) {
                             accept=".pdf, .docx, .pptx"
                             fileIdToUrlMap={fileIdToUrlMap}
                             onChange={setFieldValue}
+                            readOnly={readOnly}
                             url="/api/v2/dref-files/"
                             value={value.targeting_strategy_support_file}
                             error={error?.targeting_strategy_support_file}
                             setFileIdToUrlMap={setFileIdToUrlMap}
                             clearable
                             disabled={disabled}
+                            useCurrentLanguageForMutation
                         >
                             {strings.drefFormUploadTargetingDocumentButtonLabel}
                         </GoSingleFileInput>
@@ -414,6 +422,7 @@ function Operation(props: Props) {
                                 <NumberInput
                                     label={strings.drefFormWomen}
                                     name="women"
+                                    readOnly={readOnly}
                                     value={value.women}
                                     onChange={onPopulationChange}
                                     error={error?.women}
@@ -422,6 +431,7 @@ function Operation(props: Props) {
                                 <NumberInput
                                     label={strings.drefFormMen}
                                     name="men"
+                                    readOnly={readOnly}
                                     value={value.men}
                                     onChange={onPopulationChange}
                                     error={error?.men}
@@ -430,6 +440,7 @@ function Operation(props: Props) {
                                 <NumberInput
                                     label={strings.drefFormGirls}
                                     name="girls"
+                                    readOnly={readOnly}
                                     value={value.girls}
                                     onChange={onPopulationChange}
                                     error={error?.girls}
@@ -438,6 +449,7 @@ function Operation(props: Props) {
                                 <NumberInput
                                     label={strings.drefFormBoys}
                                     name="boys"
+                                    readOnly={readOnly}
                                     value={value.boys}
                                     onChange={onPopulationChange}
                                     error={error?.boys}
@@ -448,6 +460,7 @@ function Operation(props: Props) {
                         <NumberInput
                             label={strings.drefFormTotal}
                             name="total_targeted_population"
+                            readOnly={readOnly}
                             value={value.total_targeted_population}
                             onChange={setFieldValue}
                             error={error?.total_targeted_population}
@@ -461,6 +474,7 @@ function Operation(props: Props) {
                         <NumberInput
                             label={strings.drefFormEstimatePeopleDisability}
                             name="disability_people_per"
+                            readOnly={readOnly}
                             value={value.disability_people_per}
                             onChange={setFieldValue}
                             error={error?.disability_people_per}
@@ -474,6 +488,7 @@ function Operation(props: Props) {
                                 <NumberInput
                                     placeholder={strings.drefFormEstimatedUrban}
                                     name="people_per_urban"
+                                    readOnly={readOnly}
                                     value={value.people_per_urban}
                                     onChange={setFieldValue}
                                     error={error?.people_per_urban}
@@ -482,6 +497,7 @@ function Operation(props: Props) {
                                 <NumberInput
                                     placeholder={strings.drefFormEstimatedLocal}
                                     name="people_per_local"
+                                    readOnly={readOnly}
                                     value={value.people_per_local}
                                     onChange={setFieldValue}
                                     error={error?.people_per_local}
@@ -492,6 +508,7 @@ function Operation(props: Props) {
                         <NumberInput
                             label={strings.drefFormEstimatedDisplacedPeople}
                             name="displaced_people"
+                            readOnly={readOnly}
                             value={value.displaced_people}
                             onChange={setFieldValue}
                             error={error?.displaced_people}
@@ -509,6 +526,7 @@ function Operation(props: Props) {
                     >
                         <BooleanInput
                             name="has_anti_fraud_corruption_policy"
+                            readOnly={readOnly}
                             value={value.has_anti_fraud_corruption_policy}
                             onChange={setFieldValue}
                             error={error?.has_anti_fraud_corruption_policy}
@@ -520,6 +538,7 @@ function Operation(props: Props) {
                     >
                         <BooleanInput
                             name="has_sexual_abuse_policy"
+                            readOnly={readOnly}
                             value={value.has_sexual_abuse_policy}
                             onChange={setFieldValue}
                             error={error?.has_sexual_abuse_policy}
@@ -531,6 +550,7 @@ function Operation(props: Props) {
                     >
                         <BooleanInput
                             name="has_child_protection_policy"
+                            readOnly={readOnly}
                             value={value.has_child_protection_policy}
                             onChange={setFieldValue}
                             error={error?.has_child_protection_policy}
@@ -542,6 +562,7 @@ function Operation(props: Props) {
                     >
                         <BooleanInput
                             name="has_whistleblower_protection_policy"
+                            readOnly={readOnly}
                             value={value.has_whistleblower_protection_policy}
                             onChange={setFieldValue}
                             error={error?.has_whistleblower_protection_policy}
@@ -553,6 +574,7 @@ function Operation(props: Props) {
                     >
                         <BooleanInput
                             name="has_anti_sexual_harassment_policy"
+                            readOnly={readOnly}
                             value={value.has_anti_sexual_harassment_policy}
                             onChange={setFieldValue}
                             error={error?.has_anti_sexual_harassment_policy}
@@ -610,6 +632,7 @@ function Operation(props: Props) {
                                 onChange={onRiskSecurityChange}
                                 onRemove={onRiskSecurityRemove}
                                 error={getErrorObject(error?.risk_security)}
+                                readOnly={readOnly}
                                 disabled={disabled}
                             />
                         ))}
@@ -618,7 +641,7 @@ function Operation(props: Props) {
                                 name={undefined}
                                 onClick={handleRiskSecurityAdd}
                                 variant="secondary"
-                                disabled={disabled}
+                                disabled={disabled || readOnly}
                             >
                                 {strings.drefFormRiskSecurityAddButton}
                             </Button>
@@ -647,6 +670,7 @@ function Operation(props: Props) {
                     >
                         <TextArea
                             name="risk_security_concern"
+                            readOnly={readOnly}
                             value={value.risk_security_concern}
                             error={error?.risk_security_concern}
                             onChange={setFieldValue}
@@ -677,6 +701,7 @@ function Operation(props: Props) {
                     >
                         <BooleanInput
                             name="has_child_safeguarding_risk_analysis_assessment"
+                            readOnly={readOnly}
                             value={value.has_child_safeguarding_risk_analysis_assessment}
                             onChange={setFieldValue}
                             error={error?.has_child_safeguarding_risk_analysis_assessment}
@@ -695,11 +720,13 @@ function Operation(props: Props) {
                             name="budget_file"
                             onChange={setFieldValue}
                             url="/api/v2/dref-files/"
+                            readOnly={readOnly}
                             value={value?.budget_file}
                             fileIdToUrlMap={fileIdToUrlMap}
                             setFileIdToUrlMap={setFileIdToUrlMap}
                             error={error?.budget_file}
                             disabled={disabled}
+                            useCurrentLanguageForMutation
                             clearable
                             description={(
                                 <Link
@@ -761,6 +788,7 @@ function Operation(props: Props) {
                     >
                         <NumberInput
                             name="amount_requested"
+                            readOnly={readOnly}
                             value={value?.amount_requested}
                             onChange={setFieldValue}
                             error={error?.amount_requested}
@@ -779,6 +807,7 @@ function Operation(props: Props) {
                             <SelectInput
                                 className={styles.input}
                                 name={undefined}
+                                readOnly={readOnly}
                                 label={strings.drefFormInterventionsLabel}
                                 options={filteredInterventionOptions}
                                 keySelector={plannedInterventionKeySelector}
@@ -792,7 +821,9 @@ function Operation(props: Props) {
                                 variant="secondary"
                                 name={selectedIntervention}
                                 onClick={handleInterventionAddButtonClick}
-                                disabled={isNotDefined(selectedIntervention) || disabled}
+                                disabled={isNotDefined(selectedIntervention)
+                                    || disabled
+                                    || readOnly}
                             >
                                 {strings.drefFormResponseAddButton}
                             </Button>
@@ -808,6 +839,7 @@ function Operation(props: Props) {
                             onRemove={onInterventionRemove}
                             error={getErrorObject(error?.planned_interventions)}
                             titleMap={interventionTitleMap}
+                            readOnly={readOnly}
                             disabled={disabled}
                         />
                     ))}
@@ -839,6 +871,7 @@ function Operation(props: Props) {
                         <TextArea
                             label={strings.drefFormOperationDescription}
                             name="human_resource"
+                            readOnly={readOnly}
                             onChange={setFieldValue}
                             value={value.human_resource}
                             error={error?.human_resource}
@@ -853,6 +886,7 @@ function Operation(props: Props) {
                     >
                         <TextArea
                             name="is_volunteer_team_diverse"
+                            readOnly={readOnly}
                             label={strings.drefFormIsVolunteerTeamDiverseLabel}
                             value={value.is_volunteer_team_diverse}
                             onChange={setFieldValue}
@@ -882,6 +916,7 @@ function Operation(props: Props) {
                 >
                     <BooleanInput
                         name="is_surge_personnel_deployed"
+                        readOnly={readOnly}
                         value={value.is_surge_personnel_deployed}
                         onChange={handleSurgeDeployedChange}
                         error={error?.is_surge_personnel_deployed}
@@ -891,6 +926,7 @@ function Operation(props: Props) {
                         <TextArea
                             label={strings.drefFormOperationDescription}
                             name="surge_personnel_deployed"
+                            readOnly={readOnly}
                             onChange={setFieldValue}
                             value={value.surge_personnel_deployed}
                             error={error?.surge_personnel_deployed}
@@ -929,6 +965,7 @@ function Operation(props: Props) {
                             <TextArea
                                 label={strings.drefFormOperationDescription}
                                 name="logistic_capacity_of_ns"
+                                readOnly={readOnly}
                                 onChange={setFieldValue}
                                 value={value.logistic_capacity_of_ns}
                                 error={error?.logistic_capacity_of_ns}
@@ -960,6 +997,7 @@ function Operation(props: Props) {
                             <TextArea
                                 label={strings.drefFormOperationDescription}
                                 name="pmer"
+                                readOnly={readOnly}
                                 onChange={setFieldValue}
                                 value={value.pmer}
                                 error={error?.pmer}
@@ -991,6 +1029,7 @@ function Operation(props: Props) {
                             <TextArea
                                 label={strings.drefFormOperationDescription}
                                 name="communication"
+                                readOnly={readOnly}
                                 onChange={setFieldValue}
                                 value={value.communication}
                                 error={error?.communication}
@@ -1006,6 +1045,7 @@ function Operation(props: Props) {
                     >
                         <TextArea
                             name="addressed_humanitarian_impacts"
+                            readOnly={readOnly}
                             onChange={setFieldValue}
                             value={value.addressed_humanitarian_impacts}
                             error={error?.addressed_humanitarian_impacts}
@@ -1024,11 +1064,13 @@ function Operation(props: Props) {
                             fileIdToUrlMap={fileIdToUrlMap}
                             onChange={setFieldValue}
                             url="/api/v2/dref-files/"
+                            readOnly={readOnly}
                             value={value.contingency_plans_supporting_document}
                             error={error?.contingency_plans_supporting_document}
                             setFileIdToUrlMap={setFileIdToUrlMap}
                             clearable
                             disabled={disabled}
+                            useCurrentLanguageForMutation
                         >
                             {strings.drefFormUploadSupportingDocumentButtonLabel}
                         </GoSingleFileInput>
@@ -1047,6 +1089,8 @@ function Operation(props: Props) {
                             value={action}
                             onChange={handleProposedActionChange}
                             error={getErrorObject(error?.proposed_action)}
+                            readOnly={readOnly}
+                            disabled={disabled}
                         />
                     ))}
                     <InputSection

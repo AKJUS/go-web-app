@@ -38,7 +38,11 @@ import NonFieldError from '#components/NonFieldError';
 import Page from '#components/Page';
 import useCurrentLanguage from '#hooks/domain/useCurrentLanguage';
 import useAlert from '#hooks/useAlert';
-import { DREF_TYPE_IMMINENT } from '#utils/constants';
+import {
+    DREF_STATUS_DRAFT,
+    DREF_STATUS_FINALIZED,
+    DREF_TYPE_IMMINENT,
+} from '#utils/constants';
 import {
     type GoApiResponse,
     useLazyRequest,
@@ -355,8 +359,12 @@ export function Component() {
     const languageMismatch = isDefined(finalReportId)
         && isDefined(finalReportResponse)
         && currentLanguage !== finalReportResponse?.translation_module_original_language;
-    const shouldHideForm = languageMismatch
-        || fetchingFinalReport
+
+    const readOnly = languageMismatch
+        && (finalReportResponse?.status === DREF_STATUS_FINALIZED
+            || finalReportResponse?.status === DREF_STATUS_DRAFT);
+
+    const shouldHideForm = fetchingFinalReport
         || isDefined(finalReportResponseError);
 
     return (
@@ -455,6 +463,7 @@ export function Component() {
                     <LanguageMismatchMessage
                         title={strings.formNotAvailableInSelectedLanguageMessage}
                         originalLanguage={finalReportResponse.translation_module_original_language}
+                        selectedLanguage={currentLanguage}
                     />
                 )}
                 {isDefined(finalReportResponseError) && (
@@ -479,6 +488,7 @@ export function Component() {
                                 isPreviousImminent={isPreviousImminent}
                                 setFileIdToUrlMap={setFileIdToUrlMap}
                                 error={formError}
+                                readOnly={readOnly}
                                 disabled={disabled}
                                 districtOptions={districtOptions}
                                 setDistrictOptions={setDistrictOptions}
@@ -492,6 +502,7 @@ export function Component() {
                                 fileIdToUrlMap={fileIdToUrlMap}
                                 setFileIdToUrlMap={setFileIdToUrlMap}
                                 error={formError}
+                                readOnly={readOnly}
                                 disabled={disabled}
                             />
                         </TabPanel>
@@ -500,6 +511,7 @@ export function Component() {
                                 value={value}
                                 setFieldValue={setFieldValue}
                                 error={formError}
+                                readOnly={readOnly}
                                 disabled={disabled}
                             />
                         </TabPanel>
@@ -511,6 +523,7 @@ export function Component() {
                                 fileIdToUrlMap={fileIdToUrlMap}
                                 setFileIdToUrlMap={setFileIdToUrlMap}
                                 error={formError}
+                                readOnly={readOnly}
                                 disabled={disabled}
                             />
                         </TabPanel>
@@ -519,6 +532,7 @@ export function Component() {
                                 value={value}
                                 setFieldValue={setFieldValue}
                                 error={formError}
+                                readOnly={readOnly}
                                 disabled={disabled}
                             />
                         </TabPanel>
@@ -544,7 +558,7 @@ export function Component() {
                                     <Button
                                         name={undefined}
                                         onClick={handleFormSubmit}
-                                        disabled={disabled}
+                                        disabled={disabled || readOnly}
                                     >
                                         {strings.formSaveButtonLabel}
                                     </Button>

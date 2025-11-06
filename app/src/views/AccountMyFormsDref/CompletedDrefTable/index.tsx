@@ -201,6 +201,7 @@ function CompletedDrefTable(props: Props) {
                         dref: datum.dref,
                         glide_code: datum.glide_code,
                         date_of_publication: datum.date_of_publication,
+                        starting_language: datum.starting_language,
                     }),
                 ),
                 {
