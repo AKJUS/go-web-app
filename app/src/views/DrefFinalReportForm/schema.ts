@@ -260,6 +260,7 @@ const schema: FinalReportFormSchema = {
                 member: () => ({
                     fields: (): RiskSecurityFields => ({
                         client_id: {},
+                        id: { defaultValue: undefinedValue },
                         risk: {
                             required: true,
                             requiredValidation: requiredStringCondition,
@@ -283,6 +284,7 @@ const schema: FinalReportFormSchema = {
                 member: () => ({
                     fields: (): PlannedInterventionFields => ({
                         client_id: {},
+                        id: { defaultValue: undefinedValue },
                         budget: {
                             required: true,
                             validations: [
@@ -323,6 +325,7 @@ const schema: FinalReportFormSchema = {
                             member: () => ({
                                 fields: (): IndicatorFields => ({
                                     client_id: {},
+                                    id: { defaultValue: undefinedValue },
                                     title: {
                                         required: true,
                                         requiredValidation: requiredStringCondition,
@@ -409,6 +412,7 @@ const schema: FinalReportFormSchema = {
                         member: () => ({
                             fields: (): SourceInformationFields => ({
                                 client_id: {},
+                                id: { defaultValue: undefinedValue },
                                 source_name: {
                                     required: true,
                                     requiredValidation: requiredStringCondition,
@@ -489,6 +493,7 @@ const schema: FinalReportFormSchema = {
                             member: () => ({
                                 fields: (): NeedsIdentifiedFields => ({
                                     client_id: {},
+                                    id: { defaultValue: undefinedValue },
                                     title: {
                                         required: true,
                                         requiredValidation: requiredStringCondition,
