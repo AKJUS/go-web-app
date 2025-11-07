@@ -46,7 +46,7 @@ function Navbar(props: Props) {
     const { isAuthenticated } = useAuth();
     const strings = useTranslation(i18n);
 
-    type PrepareOptionKey = 'risk-analysis' | 'per' | 'global-3w-projects';
+    type PrepareOptionKey = 'risk-analysis' | 'per' | 'global-logistics';
     const [activePrepareOption, setActivePrepareOption] = useState<PrepareOptionKey>('risk-analysis');
 
     type RespondOptionKey = 'emergencies' | 'early-warning' | 'dref-process' | 'surge';
@@ -162,8 +162,8 @@ function Navbar(props: Props) {
                                     <Tab name="per">
                                         {strings.userMenuPERLabel}
                                     </Tab>
-                                    <Tab name="global-3w-projects">
-                                        {strings.userMenuGlobal3WProjects}
+                                    <Tab name="global-logistics">
+                                        {strings.userMenuGlobalLogistics}
                                     </Tab>
                                 </TabList>
                                 <div className={styles.optionBorder} />
@@ -235,21 +235,21 @@ function Navbar(props: Props) {
                                         </DropdownMenuItem>
                                     </ListView>
                                 </TabPanel>
-                                <TabPanel name="global-3w-projects">
+                                <TabPanel name="global-logistics">
                                     <ListView layout="block">
                                         <Description
                                             withLightText
                                             textSize="sm"
                                         >
-                                            {strings.userMenuGlobal3WProjectDescription}
+                                            {strings.userMenuGlobalLogisticsDescription}
                                         </Description>
                                         <DropdownMenuItem
                                             type="link"
-                                            to="globalThreeW"
+                                            to="globalLogistics"
                                             styleVariant="action"
                                             withoutFullWidth
                                         >
-                                            {strings.headerMenuThreeW}
+                                            {strings.userMenuSpark}
                                         </DropdownMenuItem>
                                     </ListView>
                                 </TabPanel>
