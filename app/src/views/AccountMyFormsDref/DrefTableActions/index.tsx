@@ -565,8 +565,8 @@ function DrefTableActions(props: Props) {
 
     const canApprove = status === DREF_STATUS_FINALIZED && hasPermissionToApprove;
 
-    const canFinalize = status === (DREF_STATUS_DRAFT
-        || DREF_STATUS_FAILED)
+    const canFinalize = (status === DREF_STATUS_DRAFT
+        || status === DREF_STATUS_FAILED)
         && hasPermissionToApprove;
 
     const shouldConfirmImminentAddOpsUpdate = drefType === DREF_TYPE_IMMINENT && isDrefImminentV2;
@@ -741,7 +741,7 @@ function DrefTableActions(props: Props) {
                         <Button
                             name={undefined}
                             onClick={handleAddOpsUpdate}
-                            disabled={(startingLanguage !== 'en' && !selectOpsLanguage)}
+                            disabled={(startingLanguage !== 'en' && !selectOpsLanguage) || disabled}
                         >
                             {strings.dropdownActionAddOpsUpdateLabel}
                         </Button>
@@ -778,7 +778,7 @@ function DrefTableActions(props: Props) {
                         <Button
                             name={undefined}
                             onClick={handleAddFinalReport}
-                            disabled={(startingLanguage !== 'en' && !selectFinalLanguage)}
+                            disabled={(startingLanguage !== 'en' && !selectFinalLanguage) || disabled}
                         >
                             {strings.dropdownActionAddFinalReportLabel}
                         </Button>

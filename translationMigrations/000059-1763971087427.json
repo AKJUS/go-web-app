@@ -1,0 +1,17 @@
+{
+    "parent": "000058-1762859195042.json",
+    "actions": [
+        {
+            "action": "update",
+            "key": "activeDrefTableStatusApprovedDescription",
+            "namespace": "accountMyFormsDref",
+            "newValue": "The form has been reviewed and approved."
+        },
+        {
+            "action": "update",
+            "key": "activeDrefTableStatusFinalizingDescription",
+            "namespace": "accountMyFormsDref",
+            "newValue": "The form is being finalized. The fields are being translated to English."
+        }
+    ]
+}
