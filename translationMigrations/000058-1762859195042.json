@@ -1,0 +1,53 @@
+{
+    "parent": "000057-1762854048234.json",
+    "actions": [
+        {
+            "action": "add",
+            "key": "userMenuGlobalLogistics",
+            "namespace": "common",
+            "value": "Supply Chain"
+        },
+        {
+            "action": "add",
+            "key": "userMenuGlobalLogisticsDescription",
+            "namespace": "common",
+            "value": "Supply chain Preparedness Analysis and Response Knowledge – dashboard"
+        },
+        {
+            "action": "add",
+            "key": "userMenuSpark",
+            "namespace": "common",
+            "value": "SPARK"
+        },
+        {
+            "action": "remove",
+            "key": "headerMenuThreeW",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "userMenuGlobal3WProjectDescription",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "userMenuGlobal3WProjects",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "pageDescription",
+            "namespace": "globalThreeW"
+        },
+        {
+            "action": "remove",
+            "key": "pageHeading",
+            "namespace": "globalThreeW"
+        },
+        {
+            "action": "remove",
+            "key": "pageTitle",
+            "namespace": "globalThreeW"
+        }
+    ]
+}
