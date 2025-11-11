@@ -1,0 +1,17 @@
+{
+    "parent": "000055-1762756266954.json",
+    "actions": [
+        {
+            "action": "add",
+            "key": "keywordsFilterLabel",
+            "namespace": "allSurgeAlerts",
+            "value": "Keywords"
+        },
+        {
+            "action": "add",
+            "key": "positionFilterLabel",
+            "namespace": "allSurgeAlerts",
+            "value": "Position"
+        }
+    ]
+}
