@@ -1,6 +1,8 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import LegendItem from '#components/LegendItem';
+import ListView from '#components/ListView';
 import NumberOutput from '#components/NumberOutput';
 import {
     getPercentage,
@@ -77,25 +79,19 @@ function StackedProgressBar<VALUE>(props: Props<VALUE>) {
                     />
                 ))}
             </div>
-            <div className={styles.labelList}>
+            <ListView
+                spacing="sm"
+                withSpacingOpticalCorrection
+                withWrap
+            >
                 {renderingData.map((datum) => (
-                    <div
-                        className={styles.labelContainer}
+                    <LegendItem
                         key={datum.color}
-                    >
-                        <div
-                            className={styles.colorDot}
-                            style={{ backgroundColor: datum.color }}
-                        />
-                        <div
-                            className={styles.label}
-                            title={typeof datum.label === 'string' ? datum.label : undefined}
-                        >
-                            {datum.label}
-                        </div>
-                    </div>
+                        color={datum.color}
+                        label={datum.label}
+                    />
                 ))}
-            </div>
+            </ListView>
         </div>
     );
 }

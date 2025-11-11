@@ -27,8 +27,8 @@ interface Props {
     onChange: (value: SetValueArg<RiskSecurityFormFields>, index: number) => void;
     onRemove: (index: number) => void;
     index: number;
-    readOnly: boolean;
     disabled?: boolean;
+    readOnly?: boolean;
 }
 
 function RiskSecurityInput(props: Props) {
@@ -85,7 +85,7 @@ function RiskSecurityInput(props: Props) {
                 className={styles.removeButton}
                 name={index}
                 onClick={onRemove}
-                variant="tertiary"
+                styleVariant="action"
                 disabled={disabled || readOnly}
                 title={strings.drefFormDeleteRisk}
             >

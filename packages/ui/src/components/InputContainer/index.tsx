@@ -1,34 +1,37 @@
 import { _cs } from '@togglecorp/fujs';
 
+import Description from '#components/Description';
+import InlineLayout from '#components/InlineLayout';
 import InputError from '#components/InputError';
 import InputLabel from '#components/InputLabel';
-import { type SpacingType } from '#components/types';
-import useBasicLayout from '#hooks/useBasicLayout';
+import ListView from '#components/ListView';
+import useSpacingToken from '#hooks/useSpacingToken';
+import { SpacingType } from '#utils/style';
 
 import styles from './styles.module.css';
 
 export interface Props {
-    actions?: React.ReactNode;
-    actionsContainerClassName?: string;
-    errorContainerClassName?: string;
-    hintContainerClassName?: string;
-    iconsContainerClassName?: string;
-    disabled?: boolean;
-    error?: React.ReactNode;
-    errorOnTooltip?: boolean;
-    hint?: React.ReactNode;
-    icons?: React.ReactNode;
-    input: React.ReactNode;
-    inputSectionClassName?: string;
-    label?: React.ReactNode;
-    labelClassName?: string;
-    readOnly?: boolean;
-    required?: boolean;
-    variant?: 'form' | 'general';
-    withAsterisk?: boolean;
     className?: string;
     containerRef?: React.RefObject<HTMLDivElement>;
     inputSectionRef?: React.RefObject<HTMLDivElement>;
+
+    label?: React.ReactNode;
+
+    icons?: React.ReactNode;
+    input: React.ReactNode;
+    actions?: React.ReactNode;
+
+    hint?: React.ReactNode;
+    error?: React.ReactNode;
+    errorOnTooltip?: boolean;
+
+    disabled?: boolean;
+    readOnly?: boolean;
+    required?: boolean;
+    changed?: boolean;
+
+    variant?: 'form' | 'general' | 'transparent';
+    withAsterisk?: boolean;
     spacing?: SpacingType;
 }
 
@@ -44,40 +47,27 @@ function InputContainer(props: Props) {
         hint,
         icons,
         input,
-        inputSectionClassName,
         label,
-        labelClassName,
         readOnly,
         required,
         variant = 'form',
+        changed,
         withAsterisk,
-        actionsContainerClassName,
-        errorContainerClassName,
-        hintContainerClassName,
-        iconsContainerClassName,
         spacing,
     } = props;
 
     const isRequired = withAsterisk ?? required;
-    const {
-        content: inputSectionContent,
-        containerClassName: inputSectionContainerClassName,
-    } = useBasicLayout({
-        className: _cs(styles.inputSection, inputSectionClassName),
-        icons,
-        iconsContainerClassName,
-        actions,
-        actionsContainerClassName,
-        children: input,
-        childrenContainerClassName: styles.input,
+    const paddingClassName = useSpacingToken({
         spacing,
-        withoutWrap: true,
-        variant: 'xs',
+        offset: -3,
+        // withAdditionalInlinePadding: true,
+        modes: ['padding-inline'],
     });
 
     return (
-        <div
-            ref={containerRef}
+        <ListView
+            elementRef={containerRef}
+            layout="block"
             className={_cs(
                 styles.inputContainer,
                 !!error && styles.errored,
@@ -85,39 +75,51 @@ function InputContainer(props: Props) {
                 variant === 'form' && styles.form,
                 variant === 'general' && styles.general,
                 disabled && styles.disabled,
+                changed && styles.changed,
                 className,
             )}
             title={(errorOnTooltip && !!error && typeof error === 'string')
                 ? error
                 : undefined}
+            spacing={spacing}
+            spacingOffset={-4}
         >
             <InputLabel
-                className={labelClassName}
                 disabled={disabled}
                 required={isRequired}
             >
                 {label}
             </InputLabel>
-            <div
-                ref={inputSectionRef}
-                className={inputSectionContainerClassName}
+            <InlineLayout
+                className={_cs(
+                    styles.inputSection,
+                    paddingClassName,
+                )}
+                elementRef={inputSectionRef}
+                before={icons}
+                after={actions}
+                spacingOffset={-3}
+                spacing={spacing}
             >
-                {inputSectionContent}
-            </div>
-            {hint && (
-                <div className={_cs(styles.inputHint, hintContainerClassName)}>
+                {input}
+            </InlineLayout>
+            {!error && !errorOnTooltip && hint && (
+                <Description
+                    withLightText
+                    textSize="sm"
+                >
                     {hint}
-                </div>
+                </Description>
             )}
-            {!errorOnTooltip && (
+            {error && (
                 <InputError
                     disabled={disabled}
-                    className={_cs(styles.inputError, errorContainerClassName)}
+                    floating={errorOnTooltip}
                 >
                     {error}
                 </InputError>
             )}
-        </div>
+        </ListView>
     );
 }
 

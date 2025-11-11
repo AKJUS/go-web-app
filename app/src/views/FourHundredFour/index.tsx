@@ -49,7 +49,8 @@ export function Component() {
             </div>
             <Link
                 to="home"
-                variant="primary"
+                colorVariant="primary"
+                styleVariant="filled"
             >
                 {strings.uhohBackToHome}
             </Link>

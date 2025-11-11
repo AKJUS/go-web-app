@@ -173,6 +173,7 @@ function LocalUnitBulkUploadModal(props: Props) {
         || importSummaryPending
         || importSummaryResponse?.status === BULK_UPLOAD_PENDING;
 
+    // FIXME: update styling
     return (
         <Modal
             heading={resolveToString(
@@ -181,13 +182,9 @@ function LocalUnitBulkUploadModal(props: Props) {
             )}
             withHeaderBorder
             onClose={onClose}
-            headerDescriptionContainerClassName={styles.headerDescriptionContent}
-            childrenContainerClassName={styles.bulkUploadContent}
             headerDescription={!pending
                 ? strings.modalDescription
                 : strings.modalImportPendingDescription}
-            contentViewType="vertical"
-            spacing="comfortable"
             footerActions={(
                 <Button
                     name={undefined}
@@ -225,10 +222,7 @@ function LocalUnitBulkUploadModal(props: Props) {
                     headingLevel={4}
                     heading={strings.uploadFileSectionTitle}
                     headerDescription={strings.uploadFileSectionDescription}
-                    contentViewType="vertical"
-                    footerContentClassName={styles.formatDetails}
-                    withInternalPadding
-                    footerContent={(
+                    footer={(
                         <div className={styles.fileStructureDescription}>
                             {resolveToComponent(
                                 strings.contentStructureDescription,
@@ -239,8 +233,7 @@ function LocalUnitBulkUploadModal(props: Props) {
                                             href={localUnitType === TYPE_HEALTH_CARE
                                                 ? bulkUploadHealthTemplate?.template_url
                                                 : bulkUploadDefaultTemplate?.template_url}
-                                            variant="tertiary"
-                                            iconsContainerClassName={styles.downloadLink}
+                                            styleVariant="action"
                                             withUnderline
                                         >
                                             {strings.templateLinkLabel}
@@ -260,13 +253,13 @@ function LocalUnitBulkUploadModal(props: Props) {
                             name="file"
                             accept=".csv"
                             onChange={setBulkUploadFile}
-                            variant="secondary"
+                            styleVariant="outline"
                             disabled={
                                 !hasBulkUploadPermission
                                 || !isExternallyManaged
                                 || pending
                             }
-                            icons={<DrefTwoIcon className={styles.icon} />}
+                            before={<DrefTwoIcon className={styles.icon} />}
                         >
                             {strings.selectFileButtonLabel}
                         </RawFileInput>
@@ -281,7 +274,6 @@ function LocalUnitBulkUploadModal(props: Props) {
                                 <Button
                                     name={undefined}
                                     onClick={setBulkUploadFile}
-                                    variant="secondary"
                                 >
                                     {strings.cancelUploadButtonLabel}
                                 </Button>

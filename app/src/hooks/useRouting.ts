@@ -8,13 +8,12 @@ import {
     useNavigate,
 } from 'react-router-dom';
 
+import RouteContext from '#contexts/route';
+import { type WrappedRoutes } from '#routes';
 import {
     resolvePath,
     type UrlParams,
-} from '#components/Link';
-import RouteContext from '#contexts/route';
-
-import { type WrappedRoutes } from '../App/routes';
+} from '#utils/domain/link';
 
 function useRouting() {
     const location = useLocation();

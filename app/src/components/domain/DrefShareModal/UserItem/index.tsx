@@ -1,20 +1,17 @@
 import { useMemo } from 'react';
 import { DeleteBinFillIcon } from '@ifrc-go/icons';
-import { Button } from '@ifrc-go/ui';
-import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    _cs,
-    isDefined,
-} from '@togglecorp/fujs';
+    Button,
+    ButtonLayout,
+} from '@ifrc-go/ui';
+import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import { type User } from '#components/domain/UserSearchMultiSelectInput';
 import { getUserName } from '#utils/domain/user';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 interface Props {
-    className?: string;
     userId: number;
     user: User;
     onUserRemove?: (item: number) => void;
@@ -22,7 +19,6 @@ interface Props {
 
 function UserItem(props: Props) {
     const {
-        className,
         userId,
         user,
         onUserRemove,
@@ -36,22 +32,23 @@ function UserItem(props: Props) {
     );
 
     return (
-        <div className={_cs(className, styles.user)}>
-            <div className={styles.name}>
-                {userName}
-            </div>
-            {isDefined(onUserRemove) && (
+        <ButtonLayout
+            // FIXME: use appropriate component
+            readOnly
+            after={(
                 <Button
                     name={userId}
-                    className={styles.removeButton}
                     onClick={onUserRemove}
-                    variant="tertiary"
+                    styleVariant="action"
                     title={strings.removeUser}
                 >
                     <DeleteBinFillIcon />
                 </Button>
             )}
-        </div>
+            styleVariant="translucent"
+        >
+            {userName}
+        </ButtonLayout>
     );
 }
 

@@ -16,6 +16,7 @@ import {
     Container,
     DateInput,
     InputSection,
+    ListView,
     Message,
     Modal,
     RadioInput,
@@ -27,7 +28,10 @@ import {
     useBooleanState,
     useTranslation,
 } from '@ifrc-go/ui/hooks';
-import { injectClientId } from '@ifrc-go/ui/utils';
+import {
+    injectClientId,
+    resolveToString,
+} from '@ifrc-go/ui/utils';
 import {
     isDefined,
     isFalsyString,
@@ -126,6 +130,8 @@ const deployedEruDescriptionSelector = (item: NonNullable<EruResponse['results']
     item.type_display
 );
 const titleSelector = (item: { title: string }) => item.title;
+
+// FIXME: Fix styling
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -603,7 +609,6 @@ export function Component() {
             heading={strings.threeWFormHeading}
             description={strings.threeWFormDescription}
             withBackgroundColorInMainSection
-            mainSectionClassName={styles.content}
         >
             {fetchingActivity && (
                 <Message
@@ -625,9 +630,8 @@ export function Component() {
                 />
             )}
             {!shouldHideForm && (
-                <>
+                <ListView layout="block">
                     <NonFieldError
-                        className={styles.nonFieldError}
                         error={error}
                         withFallbackError
                     />
@@ -706,7 +710,6 @@ export function Component() {
                             withAsterisk
                         />
                         <TextInput
-                            className={styles.statusDisplay}
                             label={strings.projectStatusLabel}
                             value={isDefined(value?.status)
                                 ? projectStatusOptionsMap?.[value?.status]
@@ -808,7 +811,8 @@ export function Component() {
                                 disabled={disabled}
                                 onChange={setFieldValue}
                                 options={erusResponse?.results}
-                                listContainerClassName={styles.deployedEruList}
+                                radioListLayout="grid"
+                                radioListLayoutPreferredGridColumns={3}
                                 keySelector={idSelector}
                                 labelSelector={deployedEruLabelSelector}
                                 descriptionSelector={deployedEruDescriptionSelector}
@@ -816,10 +820,11 @@ export function Component() {
                             />
                         </InputSection>
                     )}
-                    <Container
-                        heading={strings.activityReportingHeading}
-                        childrenContainerClassName={styles.sectorsContainer}
-                    >
+                </ListView>
+            )}
+            {!shouldHideForm && (
+                <Container heading={strings.activityReportingHeading}>
+                    <ListView layout="block">
                         <InputSection
                             title={strings.actionTakenTitle}
                             description={strings.actionTakenDescription}
@@ -834,145 +839,152 @@ export function Component() {
                                 name="sectors"
                                 options={optionsResponse?.sectors}
                                 onChange={handleSectorsChange}
-                                listContainerClassName={styles.sectorCheckboxes}
                                 value={value?.sectors}
                                 disabled={disabled}
                                 keySelector={idSelector}
                                 labelSelector={titleSelector}
+                                checkListLayout="grid"
                             />
                         </InputSection>
-                        <div className={styles.sectors}>
-                            {value?.sectors?.map((sector) => (
-                                <ActivitiesBySectorInput
-                                    key={sector}
-                                    sectorKey={sector}
-                                    sectorDetails={sectorOptionsMap?.[sector]}
-                                    activities={activitiesBySector?.[sector]}
-                                    setValue={setValue}
-                                    disabled={disabled}
-                                    error={formError}
-                                    setFieldValue={setFieldValue}
-                                    actions={actionItemsBySector?.[sector]}
-                                />
-                            ))}
-                        </div>
-                    </Container>
-                    <div className={styles.footer}>
+                        {value?.sectors?.map((sector) => (
+                            <ActivitiesBySectorInput
+                                key={sector}
+                                sectorKey={sector}
+                                sectorDetails={sectorOptionsMap?.[sector]}
+                                activities={activitiesBySector?.[sector]}
+                                setValue={setValue}
+                                disabled={disabled}
+                                error={formError}
+                                setFieldValue={setFieldValue}
+                                actions={actionItemsBySector?.[sector]}
+                            />
+                        ))}
+                    </ListView>
+                </Container>
+            )}
+            {!shouldHideForm && (
+                <ListView withCenteredContents>
+                    <Button
+                        name={undefined}
+                        onClick={handleSubmitClick}
+                        type="submit"
+                        disabled={disabled}
+                    >
+                        {strings.submitButton}
+                    </Button>
+                </ListView>
+            )}
+            {submitConfirmationShown && (
+                <Modal
+                    heading={strings.monitoring3wHeading}
+                    className={styles.confirmModal}
+                    onClose={hideSubmitConfirmation}
+                    footerActions={(
                         <Button
                             name={undefined}
-                            onClick={handleSubmitClick}
-                            type="submit"
-                            variant="secondary"
+                            onClick={handleFinalSubmitClick}
                             disabled={disabled}
                         >
                             {strings.submitButton}
                         </Button>
-                    </div>
-                    {submitConfirmationShown && (
-                        <Modal
-                            heading={strings.monitoring3wHeading}
-                            className={styles.confirmModal}
-                            onClose={hideSubmitConfirmation}
-                            footerClassName={styles.footer}
-                            footerContentClassName={styles.footerContent}
-                            childrenContainerClassName={styles.modalBody}
-                            footerContent={(
-                                <>
-                                    <Button
-                                        name={undefined}
-                                        onClick={handleFinalSubmitClick}
-                                        disabled={disabled}
-                                    >
-                                        {strings.submitButton}
-                                    </Button>
-                                    <div className={styles.note}>
-                                        {strings.noteHeading}
-                                        <a
-                                            href={`mailto:${selectedEventDetail?.emergency_response_contact_email ?? 'im@ifrc.org'}`}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className={styles.link}
-                                        >
-                                            {selectedEventDetail?.emergency_response_contact_email ?? 'im@ifrc.org'}
-                                        </a>
-                                    </div>
-                                </>
-                            )}
-                        >
-                            <div className={styles.message}>
-                                {strings.messageHeading}
-                                <span className={styles.eventName}>
-                                    {selectedEventDetail?.name}
-                                </span>
-                                {strings.messageEmergencyDescription}
-                                {strings.messageEmergencyDescriptionTwo}
-                            </div>
-                            <div className={styles.meta}>
-                                <TextOutput
-                                    className={styles.metaItem}
-                                    labelClassName={styles.metaLabel}
-                                    valueClassName={styles.metaValue}
-                                    label={strings.countryLabel}
-                                    value={selectedCountryDetail?.name}
-                                    strongValue
-                                />
-                                <TextOutput
-                                    className={styles.metaItem}
-                                    labelClassName={styles.metaLabel}
-                                    valueClassName={styles.metaValue}
-                                    label={strings.startDateLabel}
-                                    value={value?.start_date}
-                                    valueType="date"
-                                    strongValue
-                                />
-                                <TextOutput
-                                    className={styles.metaItem}
-                                    labelClassName={styles.metaLabel}
-                                    valueClassName={styles.metaValue}
-                                    label={strings.leadingActivityTitle}
-                                    strongValue
-                                    value={(value?.activity_lead === 'deployed_eru') ? (
-                                        selectedDeployedEruLabel
-                                    ) : (
-                                        selectedNationalSocietyDetail?.society_name
-                                    )}
-                                />
-                                <TextOutput
-                                    className={styles.metaItem}
-                                    labelClassName={styles.metaLabel}
-                                    valueClassName={styles.sectorsList}
-                                    label={strings.actionTakenLabel}
-                                    value={value?.sectors?.map((sectorId) => (
-                                        <div
-                                            className={styles.sector}
-                                            key={sectorId}
-                                        >
-                                            {sectorOptionsMap?.[sectorId!]?.title ?? '---'}
-                                            {(value?.activities?.filter(
-                                                (activity) => (
-                                                    activity.sector === sectorId
-                                                    && isDefined(activity.action)
-                                                ),
-                                            ).map((activity) => (
-                                                <TextOutput
-                                                    icon={(<LegendIcon />)}
-                                                    key={activity.client_id}
-                                                    value={(
-                                                        activity.action
-                                                            ? (actionOptionsMap?.[
-                                                                activity.action!
-                                                            ]?.title ?? '---')
-                                                            : undefined
-                                                    )}
-                                                />
-                                            )))}
-                                        </div>
-                                    ))}
-                                />
-                            </div>
-                        </Modal>
                     )}
-                </>
+                    footer={(
+                        <div>
+                            {/* FIXME: insert link inside translation */}
+                            {strings.noteHeading}
+                            {' '}
+                            <a
+                                href={`mailto:${selectedEventDetail?.emergency_response_contact_email ?? 'im@ifrc.org'}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={styles.link}
+                            >
+                                {selectedEventDetail?.emergency_response_contact_email ?? 'im@ifrc.org'}
+                            </a>
+                        </div>
+                    )}
+                    headerDescription={(
+                        <ListView
+                            withDarkBackground
+                            layout="block"
+                            withSpacingOpticalCorrection
+                            withPadding
+                        >
+                            {resolveToString(
+                                strings.confirmationDescription,
+                                { event: selectedEventDetail?.name ?? '--' },
+                            )}
+                        </ListView>
+                    )}
+                >
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                        spacing="sm"
+                    >
+                        <TextOutput
+                            className={styles.metaItem}
+                            labelClassName={styles.metaLabel}
+                            valueClassName={styles.metaValue}
+                            label={strings.countryLabel}
+                            value={selectedCountryDetail?.name}
+                            strongValue
+                        />
+                        <TextOutput
+                            className={styles.metaItem}
+                            labelClassName={styles.metaLabel}
+                            valueClassName={styles.metaValue}
+                            label={strings.startDateLabel}
+                            value={value?.start_date}
+                            valueType="date"
+                            strongValue
+                        />
+                        <TextOutput
+                            className={styles.metaItem}
+                            labelClassName={styles.metaLabel}
+                            valueClassName={styles.metaValue}
+                            label={strings.leadingActivityTitle}
+                            strongValue
+                            value={(value?.activity_lead === 'deployed_eru') ? (
+                                selectedDeployedEruLabel
+                            ) : (
+                                selectedNationalSocietyDetail?.society_name
+                            )}
+                        />
+                        <TextOutput
+                            className={styles.metaItem}
+                            labelClassName={styles.metaLabel}
+                            valueClassName={styles.sectorsList}
+                            label={strings.actionTakenLabel}
+                            value={value?.sectors?.map((sectorId) => (
+                                <div
+                                    className={styles.sector}
+                                    key={sectorId}
+                                >
+                                    {sectorOptionsMap?.[sectorId!]?.title ?? '---'}
+                                    {(value?.activities?.filter(
+                                        (activity) => (
+                                            activity.sector === sectorId
+                                            && isDefined(activity.action)
+                                        ),
+                                    ).map((activity) => (
+                                        <TextOutput
+                                            icon={(<LegendIcon />)}
+                                            key={activity.client_id}
+                                            value={(
+                                                activity.action
+                                                    ? (actionOptionsMap?.[
+                                                        activity.action!
+                                                    ]?.title ?? '---')
+                                                    : undefined
+                                            )}
+                                        />
+                                    )))}
+                                </div>
+                            ))}
+                        />
+                    </ListView>
+                </Modal>
             )}
         </Page>
     );

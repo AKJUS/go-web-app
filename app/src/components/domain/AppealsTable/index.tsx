@@ -284,7 +284,6 @@ function AppealsTable(props: Props) {
     return (
         <Container
             className={_cs(styles.appealsTable, className)}
-            childrenContainerClassName={styles.content}
             heading={heading}
             withHeaderBorder={isDefined(heading)}
             filters={(
@@ -330,16 +329,13 @@ function AppealsTable(props: Props) {
                         value={rawFilter.displacement}
                         onChange={setFilterField}
                     />
-                    <div className={styles.filterActions}>
-                        <Button
-                            name={undefined}
-                            onClick={handleClearFiltersButtonClick}
-                            variant="secondary"
-                            disabled={!filtered}
-                        >
-                            {strings.appealsTableClearFilters}
-                        </Button>
-                    </div>
+                    <Button
+                        name={undefined}
+                        onClick={handleClearFiltersButtonClick}
+                        disabled={!filtered}
+                    >
+                        {strings.appealsTableClearFilters}
+                    </Button>
                 </>
             )}
             footerActions={(
@@ -350,7 +346,6 @@ function AppealsTable(props: Props) {
                     onActivePageChange={setPage}
                 />
             )}
-            contentViewType="vertical"
         >
             <SortContext.Provider value={sortState}>
                 <Table

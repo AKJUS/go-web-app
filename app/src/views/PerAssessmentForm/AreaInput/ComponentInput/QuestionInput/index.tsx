@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import {
     Container,
+    ListView,
     RadioInput,
     TextArea,
 } from '@ifrc-go/ui';
@@ -81,33 +82,39 @@ function QuestionInput(props: Props) {
                     ? `${componentNumber}.${question.question_num}. ${question.question}`
                     : question.question
             }
-            headingLevel={5}
+            headingLevel={6}
             headerDescription={question.description}
-            contentViewType="vertical"
+            withDarkBackground
+            withPadding
         >
-            <NonFieldError error={error} />
-            <RadioInput
-                name="answer"
-                options={question.answers}
-                keySelector={answerKeySelector}
-                labelSelector={answerLabelSelector}
-                value={value?.answer}
-                error={error?.answer}
-                disabled={disabled}
-                onChange={setFieldValue}
-                clearable
-                readOnly={readOnly}
-            />
-            <TextArea
-                placeholder={strings.placeholderNotesAndVerification}
-                name="notes"
-                value={value?.notes}
-                error={error?.notes}
-                onChange={setFieldValue}
-                disabled={disabled}
-                rows={2}
-                readOnly={readOnly}
-            />
+            <ListView
+                layout="block"
+                withSpacingOpticalCorrection
+            >
+                <NonFieldError error={error} />
+                <RadioInput
+                    name="answer"
+                    options={question.answers}
+                    keySelector={answerKeySelector}
+                    labelSelector={answerLabelSelector}
+                    value={value?.answer}
+                    error={error?.answer}
+                    disabled={disabled}
+                    onChange={setFieldValue}
+                    clearable
+                    readOnly={readOnly}
+                />
+                <TextArea
+                    placeholder={strings.placeholderNotesAndVerification}
+                    name="notes"
+                    value={value?.notes}
+                    error={error?.notes}
+                    onChange={setFieldValue}
+                    disabled={disabled}
+                    rows={2}
+                    readOnly={readOnly}
+                />
+            </ListView>
         </Container>
     );
 }

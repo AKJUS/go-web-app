@@ -26,6 +26,7 @@ export interface Props<NAME> {
     value: boolean | undefined | null;
     description?: React.ReactNode;
     withBackground?: boolean;
+    withDarkBackground?: boolean;
 }
 
 function Checkbox<const NAME>(props: Props<NAME>) {
@@ -48,6 +49,7 @@ function Checkbox<const NAME>(props: Props<NAME>) {
         value,
         description,
         withBackground,
+        withDarkBackground,
         ...otherProps
     } = props;
 
@@ -69,6 +71,7 @@ function Checkbox<const NAME>(props: Props<NAME>) {
         classNameFromProps,
         !indeterminate && checked && styles.checked,
         withBackground && styles.withBackground,
+        withDarkBackground && styles.withDarkBackground,
         disabled && styles.disabledCheckbox,
         readOnly && styles.readOnly,
     );

@@ -7,6 +7,8 @@ import {
     Button,
     Checkbox,
     Container,
+    InlineLayout,
+    ListView,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -32,7 +34,6 @@ import {
 import ActivityInput from './ActivityInput';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type Options = GoApiResponse<'/api/v2/emergency-project/options/'>;
 
@@ -167,67 +168,74 @@ function ActivitiesBySectorInput(props: Props) {
 
     return (
         <Container
-            className={styles.attributesBySectorInput}
             heading={sectorDetails?.title}
-            childrenContainerClassName={styles.content}
             withHeaderBorder
-            withInternalPadding
+            withPadding
+            withBackground
         >
-            <div className={styles.actionsContainer}>
-                {actions?.map((action) => (
-                    <Checkbox
-                        key={action.id}
-                        name={action.id}
-                        value={selectedActions?.[action.id]}
-                        onChange={handleActionCheckboxChange}
-                        label={action.title}
+            <ListView layout="block">
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                >
+                    {actions?.map((action) => (
+                        <Checkbox
+                            key={action.id}
+                            name={action.id}
+                            value={selectedActions?.[action.id]}
+                            onChange={handleActionCheckboxChange}
+                            label={action.title}
+                            disabled={disabled}
+                        />
+                    ))}
+                </ListView>
+                <InlineLayout
+                    after={(
+                        <Button
+                            name={undefined}
+                            onClick={handleCustomActivityAdd}
+                            styleVariant="translucent"
+                            disabled={disabled}
+                            before={(
+                                <AddLineIcon />
+                            )}
+                            spacing="sm"
+                        >
+                            {strings.addCustomActivity}
+                        </Button>
+                    )}
+                />
+                {actionActivities?.map((activity) => (
+                    <ActivityInput
+                        clientId={activity.client_id}
+                        key={activity.client_id}
+                        value={activity}
                         disabled={disabled}
+                        onChange={setActivity}
+                        mainIndex={activity.mainIndex}
+                        sectorKey={sectorKey}
+                        handleRemoveClick={undefined}
+                        actionDetails={activity.action ? actionsMap?.[activity.action] : undefined}
+                        error={activitiesError?.[activity.client_id]}
+                        type="action"
                     />
                 ))}
-            </div>
-            <div className={styles.buttonsContainer}>
-                <Button
-                    name={undefined}
-                    onClick={handleCustomActivityAdd}
-                    variant="secondary"
-                    disabled={disabled}
-                    icons={(
-                        <AddLineIcon />
-                    )}
-                >
-                    {strings.addCustomActivity}
-                </Button>
-            </div>
-            {actionActivities?.map((activity) => (
-                <ActivityInput
-                    clientId={activity.client_id}
-                    key={activity.client_id}
-                    value={activity}
-                    disabled={disabled}
-                    onChange={setActivity}
-                    mainIndex={activity.mainIndex}
-                    sectorKey={sectorKey}
-                    handleRemoveClick={undefined}
-                    actionDetails={activity.action ? actionsMap?.[activity.action] : undefined}
-                    error={activitiesError?.[activity.client_id]}
-                    type="action"
-                />
-            ))}
-            {customActivities?.map((activity, index) => (
-                <ActivityInput
-                    clientId={activity.client_id}
-                    key={activity.client_id}
-                    mainIndex={activity.mainIndex}
-                    sectorKey={sectorKey}
-                    value={activity}
-                    disabled={disabled}
-                    onChange={setActivity}
-                    itemNumber={index + 1}
-                    handleRemoveClick={handleItemRemove}
-                    error={activitiesError?.[activity.client_id]}
-                    type="custom"
-                />
-            ))}
+                {customActivities?.map((activity, index) => (
+                    <ActivityInput
+                        clientId={activity.client_id}
+                        key={activity.client_id}
+                        mainIndex={activity.mainIndex}
+                        sectorKey={sectorKey}
+                        value={activity}
+                        disabled={disabled}
+                        onChange={setActivity}
+                        itemNumber={index + 1}
+                        handleRemoveClick={handleItemRemove}
+                        error={activitiesError?.[activity.client_id]}
+                        type="custom"
+                    />
+                ))}
+            </ListView>
         </Container>
     );
 }

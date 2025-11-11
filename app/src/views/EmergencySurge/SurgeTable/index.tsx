@@ -112,6 +112,7 @@ export default function SurgeTable(props: Props) {
 
                     return duration;
                 },
+                { columnClassName: styles.duration },
             ),
             createStringColumn<SurgeListItem, number>(
                 'start',
@@ -128,7 +129,7 @@ export default function SurgeTable(props: Props) {
                     }
                     return undefined;
                 },
-                { cellRendererClassName: styles.startColumn },
+                { columnClassName: styles.start },
             ),
             createStringColumn<SurgeListItem, number>(
                 'message',
@@ -148,6 +149,7 @@ export default function SurgeTable(props: Props) {
                     to: 'emergenciesLayout',
                     urlParams: { emergencyId: item.event?.id },
                 }),
+                { columnClassName: styles.event },
             ),
             createLinkColumn<SurgeListItem, number>(
                 'country',
@@ -159,11 +161,13 @@ export default function SurgeTable(props: Props) {
                         countryId: item.country?.id,
                     },
                 }),
+                { columnClassName: styles.country },
             ),
             createStringColumn<SurgeListItem, number>(
                 'molnix_status',
                 strings.surgeAlertStatus,
                 (item) => item.molnix_status_display,
+                { columnClassName: styles.status },
             ),
         ]),
         [
@@ -181,9 +185,10 @@ export default function SurgeTable(props: Props) {
 
     return (
         <Container
+            className={styles.surgeTable}
             heading={strings.surgeAlertHeading}
             withHeaderBorder
-            actions={(
+            headerActions={(
                 <Link
                     to="allSurgeAlerts"
                     withLinkIcon

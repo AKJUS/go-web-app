@@ -117,7 +117,7 @@ function PerTableActions(props: Props) {
                             type="link"
                             to="perOverviewForm"
                             urlParams={{ perId }}
-                            icons={<SearchLineIcon />}
+                            before={<SearchLineIcon />}
                         >
                             {resolveToString(strings.tableActionEditLabel, { phaseDisplay: phaseMap?.[PER_PHASE_OVERVIEW] ?? '--' })}
                         </DropdownMenuItem>
@@ -126,7 +126,7 @@ function PerTableActions(props: Props) {
                             type="link"
                             to="perOverviewForm"
                             urlParams={{ perId }}
-                            icons={<SearchLineIcon />}
+                            before={<SearchLineIcon />}
                         >
                             {resolveToString(strings.tableActionViewLabel, { phaseDisplay: phaseMap?.[PER_PHASE_OVERVIEW] ?? '--' })}
                         </DropdownMenuItem>

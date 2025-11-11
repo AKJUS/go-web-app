@@ -9,10 +9,9 @@ import {
 import { HtmlOutput } from '@ifrc-go/ui';
 import { isDefined } from '@togglecorp/fujs';
 
+import TabPage from '#components/TabPage';
 import RouteContext from '#contexts/route';
 import { type EmergencyOutletContext } from '#utils/outletContext';
-
-import styles from './styles.module.css';
 
 interface Props {
     infoPageId?: number;
@@ -52,17 +51,14 @@ export function Component(props: Props) {
     }
 
     return (
-        <div
-            className={styles.additionalTab}
-        >
+        <TabPage>
             {additionalTab?.snippets?.map((snippet) => (
                 <HtmlOutput
                     key={snippet.id}
                     value={snippet.snippet}
-                    className={styles.additionalContent}
                 />
             ))}
-        </div>
+        </TabPage>
     );
 }
 

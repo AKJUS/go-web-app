@@ -5,8 +5,8 @@ import {
 } from 'react';
 import {
     Button,
-    Container,
     InputSection,
+    ListView,
     NumberInput,
     SelectInput,
 } from '@ifrc-go/ui';
@@ -207,7 +207,6 @@ function ProposedActionsInput(props: Props) {
                 />
                 <Button
                     className={styles.action}
-                    variant="secondary"
                     name={undefined}
                     onClick={handleActivityAddButtonClick}
                     disabled={
@@ -219,9 +218,7 @@ function ProposedActionsInput(props: Props) {
                     {strings.drefFormAddProposedActionLabel}
                 </Button>
             </div>
-            <Container
-                contentViewType="vertical"
-            >
+            <ListView layout="block">
                 <NonFieldError error={getErrorObject(error?.activities)} />
                 {value.activities?.map((activity, i) => (
                     <ActivitiesInput
@@ -235,7 +232,7 @@ function ProposedActionsInput(props: Props) {
                         readOnly={readOnly}
                     />
                 ))}
-            </Container>
+            </ListView>
         </InputSection>
     );
 }

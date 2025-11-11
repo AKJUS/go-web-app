@@ -106,7 +106,7 @@ function CountryProvinceInput(props: Props) {
                 onClick={onRemove}
                 title={strings.flashUpdateRemove}
                 ariaLabel={strings.flashUpdateRemove}
-                variant="tertiary"
+                styleVariant="action"
                 disabled={disabled}
             >
                 <DeleteBinLineIcon />

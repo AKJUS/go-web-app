@@ -5,6 +5,7 @@ import {
 import {
     BarChart,
     Container,
+    ListView,
     TimeSeriesChart,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -14,6 +15,7 @@ import {
     resolveToString,
 } from '@ifrc-go/ui/utils';
 
+import TabPage from '#components/TabPage';
 import { useRequest } from '#utils/restRequest';
 import { type GoApiResponse } from '#utils/restRequest';
 import ActiveRapidResponseTable from '#views/ActiveSurgeDeployments/ActiveRapidResponseTable';
@@ -94,14 +96,18 @@ export function Component() {
     const pending = deploymentByNationalSocietyPending || deploymentsByMonthPending;
 
     return (
-        <div className={styles.rapidResponse}>
-            <div className={styles.charts}>
+        <TabPage>
+            <ListView
+                layout="grid"
+                minGridColumnSize="20rem"
+            >
                 <Container
                     heading={resolveToString(strings.topFiveNationalSociety, { year: '2025' })}
-                    className={styles.deploymentsByNationalSociety}
                     withHeaderBorder
-                    withInternalPadding
                     pending={pending}
+                    withPadding
+                    withBackground
+                    withShadow
                 >
                     <BarChart
                         data={deploymentsByNationalSocietyResponse ?? []}
@@ -112,10 +118,11 @@ export function Component() {
                 </Container>
                 <Container
                     heading={strings.ongoingDeployments}
-                    className={styles.deploymentsOverLastYear}
                     withHeaderBorder
-                    withInternalPadding
                     pending={pending}
+                    withPadding
+                    withBackground
+                    withShadow
                 >
                     {deploymentsByNationalSocietyResponse && (
                         <TimeSeriesChart
@@ -128,10 +135,10 @@ export function Component() {
                         />
                     )}
                 </Container>
-            </div>
+            </ListView>
             <ActiveRapidResponseTable />
             <OngoingRapidResponseDeployments />
-        </div>
+        </TabPage>
     );
 }
 

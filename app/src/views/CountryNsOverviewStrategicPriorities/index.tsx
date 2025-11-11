@@ -2,11 +2,13 @@ import { useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import {
     CheckboxFillIcon,
-    DownloadLineIcon,
+    DownloadFillIcon,
 } from '@ifrc-go/icons';
 import {
     Container,
-    KeyFigure,
+    Description,
+    KeyFigureView,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -19,7 +21,7 @@ import {
 } from '@togglecorp/fujs';
 
 import Link from '#components/Link';
-import WikiLink from '#components/WikiLink';
+import TabPage from '#components/TabPage';
 import useCountry from '#hooks/domain/useCountry';
 import usePermissions from '#hooks/domain/usePermissions';
 import useDebouncedValue from '#hooks/useDebouncedValue';
@@ -182,24 +184,20 @@ export function Component() {
     const pending = useDebouncedValue(countryPlanPending || perPending || documentResponsePending);
 
     return (
-        <Container
-            className={styles.strategicPriorities}
-            childrenContainerClassName={styles.countryNsOverviewStrategicPriorities}
-            headerDescription={strings.strategicPrioritiesDescription}
-            actions={(
-                <WikiLink
-                    href="user_guide/Country_Pages#strategic-priorities"
-                />
-            )}
-            withCenteredHeaderDescription
+        <TabPage
+            wikiLinkPathName="user_guide/Country_Pages#strategic-priorities"
             pending={pending}
-            empty={!pending && !hasCountryPlan && !perContentsDefined}
-            contentViewType="vertical"
-            spacing="loose"
+            empty={!hasCountryPlan && !perContentsDefined}
         >
+            <Description withCenteredContent>
+                {strings.strategicPrioritiesDescription}
+            </Description>
             {hasCountryPlan && isDefined(countryPlanResponse) && (
                 <Container
-                    childrenContainerClassName={styles.countryPlanContent}
+                    filtered={false}
+                    errored={false}
+                    pending={false}
+                    empty={false}
                     heading={strings.nsStrategicPrioritiesHeading}
                     footerActions={(
                         <TextOutput
@@ -209,151 +207,205 @@ export function Component() {
                         />
                     )}
                     withHeaderBorder
+                    withoutSpacingOpticalCorrection
                 >
-                    <div className={styles.downloadLinksAndKeyFigures}>
-                        <div className={styles.countryPlanDownloadLink}>
-                            {(documentResponse?.results?.length ?? 0) > 0 && (
-                                <Link
-                                    variant="secondary"
-                                    href={documentResponse?.results?.[0]?.url}
-                                    external
-                                    className={styles.downloadLink}
-                                    icons={<DownloadLineIcon className={styles.icon} />}
-                                >
-                                    {resolveToString(
-                                        strings.strategicPlan,
-                                        {
-                                            year: documentResponse?.results?.[0]?.year_text,
-                                        },
-                                    )}
-                                </Link>
-                            )}
-                            {isDefined(countryPlanResponse.public_plan_file) && (
-                                <Link
-                                    variant="secondary"
-                                    href={countryPlanResponse.public_plan_file}
-                                    external
-                                    className={styles.downloadLink}
-                                    icons={<DownloadLineIcon className={styles.icon} />}
-                                >
-                                    {strings.countryPlan}
-                                </Link>
-                            )}
-                            {isTruthyString(countryPlanResponse.internal_plan_file) && (
-                                <Link
-                                    variant="secondary"
-                                    href={countryPlanResponse.internal_plan_file}
-                                    external
-                                    className={styles.downloadLink}
-                                    icons={<DownloadLineIcon className={styles.icon} />}
-                                >
-                                    {strings.countryPlanInternal}
-                                </Link>
-                            )}
-                        </div>
-                        <div className={styles.keyFigures}>
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                value={countryPlanResponse.requested_amount}
-                                label={strings.countryPlanKeyFigureRequestedAmount}
-                                compactValue
-                            />
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                value={countryPlanResponse.people_targeted}
-                                label={strings.countryPlanPeopleTargeted}
-                                compactValue
-                            />
-                        </div>
-                    </div>
-                    <StrategicPrioritiesTable
-                        className={styles.strategicPriorityTable}
-                        priorityData={countryPlanResponse.strategic_priorities}
-                    />
+                    <ListView
+                        layout="grid"
+                        spacing="lg"
+                    >
+                        <ListView layout="block">
+                            <ListView
+                                withWrap
+                                spacing="sm"
+                            >
+                                {(documentResponse?.results?.length ?? 0) > 0 && (
+                                    <Link
+                                        href={documentResponse?.results?.[0]?.url}
+                                        external
+                                        before={<DownloadFillIcon />}
+                                        colorVariant="primary"
+                                        styleVariant="outline"
+                                    >
+                                        {resolveToString(
+                                            strings.strategicPlan,
+                                            {
+                                                year: documentResponse?.results?.[0]?.year_text,
+                                            },
+                                        )}
+                                    </Link>
+                                )}
+                                {isDefined(countryPlanResponse.public_plan_file) && (
+                                    <Link
+                                        href={countryPlanResponse.public_plan_file}
+                                        external
+                                        before={<DownloadFillIcon />}
+                                        colorVariant="primary"
+                                        styleVariant="outline"
+                                    >
+                                        {strings.countryPlan}
+                                    </Link>
+                                )}
+                                {isTruthyString(countryPlanResponse.internal_plan_file) && (
+                                    <Link
+                                        href={countryPlanResponse.internal_plan_file}
+                                        external
+                                        before={<DownloadFillIcon />}
+                                        colorVariant="primary"
+                                        styleVariant="outline"
+                                    >
+                                        {strings.countryPlanInternal}
+                                    </Link>
+                                )}
+                            </ListView>
+                            <ListView
+                                layout="grid"
+                                minGridColumnSize="6rem"
+                            >
+                                <KeyFigureView
+                                    value={countryPlanResponse.requested_amount}
+                                    label={strings.countryPlanKeyFigureRequestedAmount}
+                                    valueType="number"
+                                    valueOptions={{ compact: true }}
+                                    withShadow
+                                />
+                                <KeyFigureView
+                                    value={countryPlanResponse.people_targeted}
+                                    label={strings.countryPlanPeopleTargeted}
+                                    valueType="number"
+                                    valueOptions={{ compact: true }}
+                                    withShadow
+                                />
+                            </ListView>
+                        </ListView>
+                        <StrategicPrioritiesTable
+                            priorityData={countryPlanResponse.strategic_priorities}
+                        />
+                    </ListView>
                 </Container>
             )}
             {perContentsDefined && (
-                <div className={styles.perComponents}>
+                <ListView
+                    layout="grid"
+                    spacing="lg"
+                >
                     {hasStrengthComponents && (
                         <Container
+                            empty={false}
+                            errored={false}
+                            filtered={false}
+                            pending={false}
                             heading={strings.strengthsHeading}
                             withHeaderBorder
-                            contentViewType="grid"
-                            numPreferredGridContentColumns={5}
                         >
-                            {strengthComponents?.map(
-                                (strengthComponent) => {
-                                    if (!isPerAdmin) {
+                            <ListView layout="grid">
+                                {strengthComponents?.map(
+                                    (strengthComponent) => {
+                                        if (!isPerAdmin) {
+                                            return (
+                                                <Container
+                                                    empty={false}
+                                                    errored={false}
+                                                    filtered={false}
+                                                    pending={false}
+                                                    key={strengthComponent.component}
+                                                    className={styles.strengthComponent}
+                                                    withPadding
+                                                    withShadow
+                                                    withBackground
+                                                >
+                                                    {strengthComponent?.component_details.title}
+                                                </Container>
+                                            );
+                                        }
+
                                         return (
                                             <Container
+                                                empty={false}
+                                                errored={false}
+                                                filtered={false}
+                                                pending={false}
+                                                heading={strengthComponent
+                                                    ?.rating_details?.title}
+                                                headingLevel={5}
                                                 key={strengthComponent.component}
-                                                withInternalPadding
+                                                withHeaderBorder
+                                                headerIcons={(
+                                                    <CheckboxFillIcon className={styles.icon} />
+                                                )}
                                                 className={styles.strengthComponent}
+                                                withPadding
+                                                withShadow
+                                                withBackground
                                             >
                                                 {strengthComponent?.component_details.title}
                                             </Container>
                                         );
-                                    }
-
-                                    return (
-                                        <Container
-                                            heading={strengthComponent?.rating_details?.title}
-                                            headingLevel={5}
-                                            key={strengthComponent.component}
-                                            withHeaderBorder
-                                            withInternalPadding
-                                            icons={<CheckboxFillIcon className={styles.icon} />}
-                                            withoutWrapInHeading
-                                            className={styles.strengthComponent}
-                                        >
-                                            {strengthComponent?.component_details.title}
-                                        </Container>
-                                    );
-                                },
-                            )}
+                                    },
+                                )}
+                            </ListView>
                         </Container>
                     )}
                     {hasKeyDevelopmentComponents && (
                         <Container
+                            empty={false}
+                            errored={false}
+                            filtered={false}
+                            pending={false}
                             heading={strings.keyDevelopmentPrioritiesHeading}
                             withHeaderBorder
-                            contentViewType="grid"
-                            numPreferredGridContentColumns={5}
                         >
-                            {keyDevelopmentComponents?.map(
-                                (keyDevelopmentComponent) => {
-                                    if (!isPerAdmin) {
+                            <ListView layout="grid">
+                                {keyDevelopmentComponents?.map(
+                                    (keyDevelopmentComponent) => {
+                                        if (!isPerAdmin) {
+                                            return (
+                                                <Container
+                                                    empty={false}
+                                                    errored={false}
+                                                    filtered={false}
+                                                    pending={false}
+                                                    key={keyDevelopmentComponent.component}
+                                                    className={styles.priorityComponent}
+                                                    withPadding
+                                                    withShadow
+                                                    withBackground
+                                                >
+                                                    {keyDevelopmentComponent
+                                                        ?.component_details.title}
+                                                </Container>
+                                            );
+                                        }
                                         return (
                                             <Container
+                                                empty={false}
+                                                errored={false}
+                                                filtered={false}
+                                                pending={false}
+                                                heading={keyDevelopmentComponent
+                                                    ?.rating_details?.title}
+                                                headingLevel={5}
                                                 key={keyDevelopmentComponent.component}
-                                                withInternalPadding
+                                                withHeaderBorder
+                                                headerIcons={(
+                                                    <CheckboxFillIcon className={styles.icon} />
+                                                )}
                                                 className={styles.priorityComponent}
+                                                withPadding
+                                                withShadow
+                                                withBackground
                                             >
-                                                {keyDevelopmentComponent?.component_details.title}
+                                                {keyDevelopmentComponent
+                                                    ?.component_details.title}
                                             </Container>
                                         );
-                                    }
-                                    return (
-                                        <Container
-                                            heading={keyDevelopmentComponent?.rating_details?.title}
-                                            headingLevel={5}
-                                            key={keyDevelopmentComponent.component}
-                                            withHeaderBorder
-                                            withInternalPadding
-                                            icons={<CheckboxFillIcon className={styles.icon} />}
-                                            withoutWrapInHeading
-                                            className={styles.priorityComponent}
-                                        >
-                                            {keyDevelopmentComponent?.component_details.title}
-                                        </Container>
-                                    );
-                                },
-                            )}
+                                    },
+                                )}
+                            </ListView>
                         </Container>
                     )}
-                </div>
+                </ListView>
             )}
-        </Container>
+        </TabPage>
     );
 }
 

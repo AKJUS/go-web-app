@@ -180,7 +180,7 @@ function EventItemsTable(props: Props) {
             className={styles.recentEmergenciesTable}
             heading={heading}
             withHeaderBorder
-            actions={(
+            headerActions={(
                 <Link
                     to="allEmergencies"
                     urlSearch={`region=${regionId}`}

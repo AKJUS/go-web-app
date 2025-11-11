@@ -3,7 +3,6 @@
     "strings": {
         "countryOngoingActiveOperationsTitle":"Active Operations Map ({numAppeals})",
         "countryOngoingActivitiesEmergenciesDescription": "The following data displays the current and ongoing emergencies within the country that are reported by the National Societies and partners. The displayed data is based on reporting and may not be fully indicative of all the activities.",
-        "editCountryLink": "Edit Country",
         "appealsTableStartDate": "Start Date",
         "appealsTableType": "Appeal Type",
         "appealsTableCode": "Appeal Code",
@@ -24,7 +23,6 @@
         "operationPopoverPeopleAffected":"People Targeted",
         "operationAmountRequested":"Amount Requested (CHF)",
         "operationPopoverAmountFunded":"Amount Funded (CHF)",
-        "operationPopoverEmpty":"No Current Operations",
-        "presentationModeButton":"Presentation Mode"
+        "operationPopoverEmpty":"No Current Operations"
     }
 }

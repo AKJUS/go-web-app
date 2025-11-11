@@ -60,7 +60,6 @@ function NationalSocietyContacts(props: Props) {
     return (
         <Container
             className={_cs(className, styles.nationalSocietyContactTable)}
-            childrenContainerClassName={styles.content}
             heading={strings.nSContactsTitle}
             withHeaderBorder
         >

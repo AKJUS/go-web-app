@@ -1,0 +1,26 @@
+.color-preview {
+    --color-preview-size: 1em;
+    width: var(--color-preview-size);
+    height: var(--color-preview-size);
+    line-height: 0;
+
+    &.round-shape {
+        border-radius: 50%;
+    }
+
+    &.square-shap {
+        border-radius: initial;
+    }
+
+    &.small-size {
+        --color-preview-size: 0.5rem;
+    }
+
+    &.medium-size {
+        --color-preview-size: 0.75rem;
+    }
+
+    &.large-size {
+        --color-preview-size: 1rem;
+    }
+}

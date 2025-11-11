@@ -3,39 +3,24 @@
     --color-emergency-appeal: var(--go-ui-color-primary-red);
     min-height: 24rem;
 
-    .chart-container {
-        display: flex;
-        position: relative;
-        flex-wrap: wrap;
-        gap: var(--go-ui-spacing-md);
+    .timeline-chart {
+        width: 100%;
+        height: 22rem;
+        grid-column: span 2;
+        --path-stroke-width: 1pt;
 
-        .loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .dref {
+            color: var(--color-dref);
+            stroke: var(--color-dref);
+            stroke-width: var(--path-stroke-width);
+            fill: none;
         }
 
-        .timeline-chart {
-            flex-basis: 40rem;
-            flex-grow: 2;
-            height: 22rem;
-            --path-stroke-width: 1pt;
-
-            .dref {
-                stroke: var(--color-dref);
-                stroke-width: var(--path-stroke-width);
-                fill: none;
-                color: var(--color-dref);
-            }
-
-            .emergency-appeal {
-                stroke: var(--color-emergency-appeal);
-                stroke-width: var(--path-stroke-width);
-                fill: none;
-                color: var(--color-emergency-appeal);
-            }
+        .emergency-appeal {
+            color: var(--color-emergency-appeal);
+            stroke: var(--color-emergency-appeal);
+            stroke-width: var(--path-stroke-width);
+            fill: none;
         }
     }
 }

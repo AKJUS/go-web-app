@@ -21,6 +21,7 @@ import RawInput from '#components/RawInput';
 import useBlurEffect from '#hooks/useBlurEffect';
 import useKeyboard from '#hooks/useKeyboard';
 import useTranslation from '#hooks/useTranslation';
+import { extractInputContainerProps } from '#utils/inputs';
 
 import GenericOption, {
     ContentBaseProps,
@@ -31,49 +32,55 @@ import GenericOption, {
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-export type SelectInputContainerProps<
+interface SelectInputContainerProps<
     OPTION_KEY extends OptionKey,
     NAME,
     OPTION,
     RENDER_PROPS extends ContentBaseProps,
-    OMISSION extends string,
-> = (
-    Omit<{
-        name: NAME,
-        onOptionClick: (optionKey: OPTION_KEY, option: OPTION, name: NAME) => void;
-        dropdownShown: boolean;
-        onDropdownShownChange: (value: boolean) => void;
-        focused: boolean;
-        onFocusedChange: (value: boolean) => void;
-        focusedKey: { key: OPTION_KEY, mouse?: boolean } | undefined;
-        onFocusedKeyChange: (value: { key: OPTION_KEY, mouse?: boolean } | undefined) => void;
-        searchText: string | undefined | null;
-        onSearchTextChange: (search: string | undefined) => void;
-        optionContainerClassName?: string;
-        optionKeySelector: (datum: OPTION, index: number) => OPTION_KEY;
-        optionRenderer: (
-            props: Pick<RENDER_PROPS, Exclude<keyof RENDER_PROPS, keyof ContentBaseProps>>,
-        ) => React.ReactNode;
-        optionRendererParams: (optionKey: OPTION_KEY, option: OPTION) => RENDER_PROPS;
-        totalOptionsCount?: number;
-        options: OPTION[] | undefined | null;
-        optionsPending?: boolean;
-        optionsFiltered?: boolean;
-        optionsErrored?: boolean;
-        optionsPopupClassName?: string;
-        persistentOptionPopup?: boolean;
-        placeholder?: string;
-        valueDisplay: string;
-        autoFocus?: boolean;
-        hasValue: boolean;
-        nonClearable?: boolean;
-        onClearButtonClick: () => void;
-        onSelectAllButtonClick?: () => void;
-        onEnterWithoutOption?: () => void;
-        dropdownHidden?: boolean;
-    }, OMISSION>
-        & Omit<InputContainerProps, 'input'>
-    );
+> {
+    name: NAME,
+    onOptionClick: (optionKey: OPTION_KEY, option: OPTION, name: NAME) => void;
+    dropdownShown: boolean;
+    onDropdownShownChange: (value: boolean) => void;
+
+    focused: boolean;
+    onFocusedChange: (value: boolean) => void;
+    focusedKey: { key: OPTION_KEY, mouse?: boolean } | undefined;
+    onFocusedKeyChange: (value: { key: OPTION_KEY, mouse?: boolean } | undefined) => void;
+
+    searchText: string | undefined | null;
+    onSearchTextChange: (search: string | undefined) => void;
+
+    optionKeySelector: (datum: OPTION, index: number) => OPTION_KEY;
+    optionContainerClassName?: string;
+    optionRenderer: (
+        props: Pick<RENDER_PROPS, Exclude<keyof RENDER_PROPS, keyof ContentBaseProps>>,
+    ) => React.ReactNode;
+    optionRendererParams: (optionKey: OPTION_KEY, option: OPTION) => RENDER_PROPS;
+    totalOptionsCount?: number;
+    options: OPTION[] | undefined | null;
+    optionsPending?: boolean;
+    optionsFiltered?: boolean;
+    optionsErrored?: boolean;
+    optionsPopupClassName?: string;
+    persistentOptionPopup?: boolean;
+    placeholder?: string;
+    valueDisplay: string;
+    autoFocus?: boolean;
+    hasValue: boolean;
+    nonClearable?: boolean;
+    onClearButtonClick: () => void;
+    onSelectAllButtonClick?: () => void;
+    onEnterWithoutOption?: () => void;
+    dropdownHidden?: boolean;
+}
+
+export type Props<
+    OPTION_KEY extends OptionKey,
+    NAME,
+    OPTION,
+    RENDER_PROPS extends ContentBaseProps,
+> = SelectInputContainerProps<OPTION_KEY, NAME, OPTION, RENDER_PROPS> & Omit<InputContainerProps, 'input' | 'inputSectionRef' | 'containerRef'>
 
 const emptyList: unknown[] = [];
 
@@ -83,22 +90,21 @@ function SelectInputContainer<
     OPTION extends object,
     RENDER_PROPS extends ContentBaseProps
 >(
-    props: SelectInputContainerProps<OPTION_KEY, NAME, OPTION, RENDER_PROPS, never>,
+    props: Props<OPTION_KEY, NAME, OPTION, RENDER_PROPS>,
 ) {
     const {
         actions,
-        actionsContainerClassName,
-        className,
         disabled,
-        error,
-        errorContainerClassName,
-        hint,
-        hintContainerClassName,
-        icons,
-        iconsContainerClassName,
-        inputSectionClassName,
-        label,
-        labelClassName,
+        readOnly,
+        required,
+        ...otherProps
+    } = props;
+
+    const [inputContainerProps, selectInputContainerProps] = extractInputContainerProps(
+        otherProps,
+    );
+
+    const {
         name,
         onOptionClick,
         searchText,
@@ -110,7 +116,6 @@ function SelectInputContainer<
         options: optionsFromProps,
         optionsPopupClassName,
         persistentOptionPopup,
-        readOnly,
         placeholder,
         valueDisplay = '',
         nonClearable,
@@ -129,12 +134,8 @@ function SelectInputContainer<
         hasValue,
         autoFocus,
         onEnterWithoutOption,
-        withAsterisk,
-        required,
-        variant,
-        errorOnTooltip,
         dropdownHidden,
-    } = props;
+    } = selectInputContainerProps;
 
     const options = optionsFromProps ?? (emptyList as OPTION[]);
     const strings = useTranslation(i18n);
@@ -270,25 +271,13 @@ function SelectInputContainer<
     return (
         <>
             <InputContainer
-                actionsContainerClassName={actionsContainerClassName}
-                className={className}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...inputContainerProps}
                 containerRef={containerRef}
-                disabled={disabled}
-                errorContainerClassName={errorContainerClassName}
-                error={error}
-                errorOnTooltip={errorOnTooltip}
-                hintContainerClassName={hintContainerClassName}
-                hint={hint}
-                iconsContainerClassName={iconsContainerClassName}
-                icons={icons}
-                inputSectionClassName={inputSectionClassName}
                 inputSectionRef={inputSectionRef}
-                labelClassName={labelClassName}
-                label={label}
+                disabled={disabled}
                 readOnly={readOnly}
                 required={required}
-                variant={variant}
-                withAsterisk={withAsterisk}
                 actions={(
                     <>
                         {actions}
@@ -296,7 +285,8 @@ function SelectInputContainer<
                             <Button
                                 onClick={onSelectAllButtonClick}
                                 disabled={disabled}
-                                variant="tertiary"
+                                colorVariant="text"
+                                styleVariant="action"
                                 name={undefined}
                                 title={strings.buttonTitleSelect}
                             >
@@ -307,7 +297,8 @@ function SelectInputContainer<
                             <Button
                                 onClick={onClearButtonClick}
                                 disabled={disabled}
-                                variant="tertiary"
+                                colorVariant="text"
+                                styleVariant="action"
                                 name={undefined}
                                 title={strings.buttonTitleClear}
                             >
@@ -317,7 +308,8 @@ function SelectInputContainer<
                         {!readOnly && (
                             <Button
                                 onClick={handleToggleDropdown}
-                                variant="tertiary"
+                                colorVariant="text"
+                                styleVariant="action"
                                 name={undefined}
                                 title={dropdownShownActual
                                     ? strings.buttonTitleClose

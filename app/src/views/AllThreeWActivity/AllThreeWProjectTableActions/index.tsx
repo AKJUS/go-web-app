@@ -29,7 +29,7 @@ function AllThreeWActivityTableActions(props: Props) {
                         type="link"
                         to="threeWActivityDetail"
                         urlParams={{ activityId }}
-                        icons={<ShareBoxLineIcon />}
+                        before={<ShareBoxLineIcon />}
                     >
                         {strings.threeWActivityViewDetails}
                     </DropdownMenuItem>
@@ -37,7 +37,7 @@ function AllThreeWActivityTableActions(props: Props) {
                         type="link"
                         to="threeWActivityEdit"
                         urlParams={{ activityId }}
-                        icons={<PencilFillIcon />}
+                        before={<PencilFillIcon />}
                     >
                         {strings.threeWActivityEdit}
                     </DropdownMenuItem>
@@ -45,7 +45,7 @@ function AllThreeWActivityTableActions(props: Props) {
                         type="link"
                         to="newThreeWActivity"
                         state={{ activityId }}
-                        icons={<CopyLineIcon />}
+                        before={<CopyLineIcon />}
                     >
                         {strings.threeWActivityDuplicate}
                     </DropdownMenuItem>

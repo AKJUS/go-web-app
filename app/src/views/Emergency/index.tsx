@@ -15,7 +15,8 @@ import {
 import {
     Breadcrumbs,
     Button,
-    KeyFigure,
+    KeyFigureView,
+    ListView,
     NavigationTabList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -46,7 +47,6 @@ import {
 } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 /*
 function getRouteIdFromName(text: string) {
@@ -232,7 +232,6 @@ export function Component() {
 
     return (
         <Page
-            className={styles.emergency}
             title={pageTitle}
             breadCrumbs={(
                 <Breadcrumbs>
@@ -254,7 +253,6 @@ export function Component() {
                 <>
                     <Button
                         name={Number(emergencyId)}
-                        variant="secondary"
                         disabled={subscriptionPending}
                         onClick={isSubscribed ? triggerRemoveSubscription : triggerAddSubscription}
                     >
@@ -264,8 +262,9 @@ export function Component() {
                         <Link
                             external
                             href={resolveUrl(adminUrl, `api/event/${emergencyId}/change/`)}
-                            variant="secondary"
-                            icons={<PencilFillIcon />}
+                            colorVariant="primary"
+                            styleVariant="outline"
+                            before={<PencilFillIcon />}
                             disabled={isPending}
                         >
                             {strings.emergencyEdit}
@@ -296,38 +295,40 @@ export function Component() {
                     </Link>
                 </>
             )}
-            infoContainerClassName={styles.keyFigureList}
             info={(
-                <>
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                >
                     {isDefined(peopleTargeted) && (
-                        <KeyFigure
+                        <KeyFigureView
                             icon={<TargetedPopulationIcon />}
-                            className={styles.keyFigure}
                             value={peopleTargeted}
-                            compactValue
+                            valueType="number"
+                            valueOptions={{ compact: true }}
                             label={strings.emergencyPeopleTargetedLabel}
                         />
                     )}
                     {isDefined(fundingRequirements) && (
-                        <KeyFigure
+                        <KeyFigureView
                             icon={<FundingIcon />}
-                            className={styles.keyFigure}
                             value={fundingRequirements}
-                            compactValue
+                            valueType="number"
+                            valueOptions={{ compact: true }}
                             label={strings.emergencyFundingRequirementsLabel}
                         />
 
                     )}
                     {isDefined(funding) && (
-                        <KeyFigure
+                        <KeyFigureView
                             icon={<FundingCoverageIcon />}
-                            className={styles.keyFigure}
                             value={funding}
-                            compactValue
+                            valueType="number"
+                            valueOptions={{ compact: true }}
                             label={strings.emergencyFundingLabel}
                         />
                     )}
-                </>
+                </ListView>
             )}
             contentOriginalLanguage={emergencyResponse?.translation_module_original_language}
         >

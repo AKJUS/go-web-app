@@ -1,5 +1,8 @@
 import { useMemo } from 'react';
-import { Container } from '@ifrc-go/ui';
+import {
+    Container,
+    ListView,
+} from '@ifrc-go/ui';
 import {
     isDefined,
     isNotDefined,
@@ -7,8 +10,6 @@ import {
 
 import Link from '#components/Link';
 import { type GoApiResponse } from '#utils/restRequest';
-
-import styles from './styles.module.css';
 
 // TODO: update typing after removal of projects
 type SearchResponse = Omit<GoApiResponse<'/api/v1/search/'>, 'projects'>;
@@ -66,55 +67,59 @@ function ResultList(props: Props) {
     return (
         <Container
             heading={heading}
-            actions={actions}
+            headerActions={actions}
             withHeaderBorder
-            className={styles.resultList}
-            childrenContainerClassName={styles.content}
         >
-            {limitedData?.map(
-                (result) => {
-                    if (isDistrictProvinceResult(result, resultKey)
-                        && isNotDefined(result.country_id)
-                    ) {
-                        return null;
-                    }
+            <ListView
+                layout="grid"
+                minGridColumnSize="20rem"
+            >
+                {limitedData?.map(
+                    (result) => {
+                        if (isDistrictProvinceResult(result, resultKey)
+                            && isNotDefined(result.country_id)
+                        ) {
+                            return null;
+                        }
 
-                    return (
-                        <div
-                            className={styles.item}
-                            key={result.id}
-                        >
-                            {resultKey === 'regions' && (
-                                <Link
-                                    to="regionsLayout"
-                                    urlParams={{
-                                        regionId: result.id,
-                                    }}
-                                    withLinkIcon
-                                >
-                                    {result.name}
-                                </Link>
-                            )}
-                            {(resultKey === 'countries' || resultKey === 'district_province_response') && (
-                                <Link
-                                    to="countriesLayout"
-                                    urlParams={{
-                                        countryId: isDistrictProvinceResult(result, resultKey)
-                                            ? result.country_id
-                                            : result.id,
-                                    }}
-                                    withLinkIcon
-                                >
-                                    {isDistrictProvinceResult(result, resultKey)
-                                        ? result.country
-                                        : result.name}
-                                </Link>
-                            )}
-                            {isDistrictProvinceResult(result, resultKey) && result.name}
-                        </div>
-                    );
-                },
-            )}
+                        return (
+                            <ListView
+                                key={result.id}
+                                withCenteredContents
+                                withDarkBackground
+                            >
+                                {resultKey === 'regions' && (
+                                    <Link
+                                        to="regionsLayout"
+                                        urlParams={{
+                                            regionId: result.id,
+                                        }}
+                                        withLinkIcon
+                                    >
+                                        {result.name}
+                                    </Link>
+                                )}
+                                {(resultKey === 'countries' || resultKey === 'district_province_response') && (
+                                    <Link
+                                        to="countriesLayout"
+                                        urlParams={{
+                                            countryId: isDistrictProvinceResult(result, resultKey)
+                                                ? result.country_id
+                                                : result.id,
+                                        }}
+                                        withLinkIcon
+                                    >
+                                        {isDistrictProvinceResult(result, resultKey)
+                                            ? result.country
+                                            : result.name}
+                                    </Link>
+                                )}
+                                {isDistrictProvinceResult(result, resultKey) && result.name}
+                            </ListView>
+                        );
+                    },
+                )}
+            </ListView>
         </Container>
     );
 }

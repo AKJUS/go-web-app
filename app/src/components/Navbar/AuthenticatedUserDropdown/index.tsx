@@ -48,8 +48,10 @@ function AuthenticatedUserDropdown(props: Props) {
                     ? getUserName(userMe)
                     : userDetails?.displayName ?? strings.userDisplayNameAnonymous
             )}
-            variant="tertiary"
+            labelStyleVariant="action"
             persistent
+            labelColorVariant="text"
+            labelSpacing="sm"
         >
             <DropdownMenuItem
                 type="link"

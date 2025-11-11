@@ -15,8 +15,11 @@ export interface Props {
     caption?: React.ReactNode;
     captionClassName?: string;
     imgElementClassName?: string;
-    withCaptionHidden?: boolean;
+    withoutCaption?: boolean;
     expandable?: boolean;
+    size?: 'sm' | 'md' | 'lg' | 'auto';
+    withContainedFit?: boolean;
+    withoutBackground?: boolean;
 }
 
 function Image(props: Props) {
@@ -27,8 +30,11 @@ function Image(props: Props) {
         caption,
         imgElementClassName,
         captionClassName,
-        withCaptionHidden = false,
+        withoutCaption = false,
         expandable,
+        size = 'auto',
+        withContainedFit,
+        withoutBackground,
     } = props;
 
     const [
@@ -45,8 +51,18 @@ function Image(props: Props) {
 
     return (
         <figure
-            className={_cs(styles.image, expandable && styles.expandable, className)}
-            title={withCaptionHidden && typeof caption === 'string' ? caption : undefined}
+            className={_cs(
+                styles.image,
+                expandable && styles.expandable,
+                size === 'auto' && styles.autoSize,
+                size === 'sm' && styles.smallSize,
+                size === 'md' && styles.mediumSize,
+                size === 'lg' && styles.largeSize,
+                withContainedFit && styles.withContainedFit,
+                withoutBackground && styles.withoutBackground,
+                className,
+            )}
+            title={withoutCaption && typeof caption === 'string' ? caption : undefined}
         >
             <img
                 role="presentation"
@@ -55,7 +71,7 @@ function Image(props: Props) {
                 alt={alt}
                 className={_cs(styles.imgElement, imgElementClassName)}
             />
-            {!withCaptionHidden && isDefined(caption) && (
+            {!withoutCaption && isDefined(caption) && (
                 <figcaption className={_cs(captionClassName, styles.caption)}>
                     {caption}
                 </figcaption>
@@ -63,7 +79,6 @@ function Image(props: Props) {
             {isExpanded && (
                 <Modal
                     className={styles.expandedModal}
-                    childrenContainerClassName={styles.content}
                     size="full"
                     heading={caption}
                     headingLevel={5}

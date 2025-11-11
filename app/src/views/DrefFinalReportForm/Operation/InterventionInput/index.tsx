@@ -100,7 +100,6 @@ function InterventionInput(props: Props) {
 
     return (
         <InputSection
-            className={styles.interventionInput}
             title={interventionLabel ?? '--'}
             numPreferredColumns={1}
             description={(
@@ -160,10 +159,10 @@ function InterventionInput(props: Props) {
                 <Button
                     name={index}
                     onClick={onRemove}
-                    variant="tertiary"
+                    styleVariant="action"
                     title={strings.drefFormRemoveIntervention}
                     disabled={disabled || readOnly}
-                    icons={<DeleteBinTwoLineIcon />}
+                    before={<DeleteBinTwoLineIcon />}
                 >
                     {strings.drefFinalReportRemoveIntervention}
                 </Button>
@@ -214,7 +213,6 @@ function InterventionInput(props: Props) {
                 headingLevel={5}
                 footerIcons={(
                     <Button
-                        variant="secondary"
                         name={undefined}
                         onClick={handleIndicatorAddButtonClick}
                         disabled={disabled || readOnly}

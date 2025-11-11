@@ -10,8 +10,10 @@ import {
 
 import InputContainer, { Props as InputContainerProps } from '#components/InputContainer';
 import RawInput, { Props as RawInputProps } from '#components/RawInput';
+import { extractInputContainerProps } from '#utils/inputs';
 
-type InheritedProps<T> = (Omit<InputContainerProps, 'input'> & Omit<RawInputProps<T>, 'onChange' | 'value'>);
+type InheritedProps<T> = Omit<InputContainerProps, 'input'>
+& Omit<RawInputProps<T>, 'onChange' | 'value' | 'className' | 'elementRef'>;
 
 export interface Props<T> extends InheritedProps<T> {
   inputElementRef?: React.RefObject<HTMLInputElement>;
@@ -26,26 +28,18 @@ export interface Props<T> extends InheritedProps<T> {
 
 function NumberInput<const T>(props: Props<T>) {
     const {
-        className,
-        actions,
-        inputSectionClassName,
-        icons,
-        error,
-        hint,
-        label,
         disabled,
         readOnly,
         inputClassName,
         value: valueFromProps,
-        errorOnTooltip,
-        withAsterisk,
-        labelClassName,
         required,
-        variant,
         onChange,
-        ...otherInputProps
+        ...otherProps
     } = props;
 
+    const [inputContainerProps, rawInputProps] = extractInputContainerProps(
+        otherProps,
+    );
     const [tempValue, setTempValue] = useState<string | undefined>(String(valueFromProps ?? ''));
 
     useEffect(() => {
@@ -71,29 +65,21 @@ function NumberInput<const T>(props: Props<T>) {
 
     return (
         <InputContainer
-            actions={actions}
-            className={className}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...inputContainerProps}
             disabled={disabled}
-            error={error}
-            errorOnTooltip={errorOnTooltip}
-            hint={hint}
-            icons={icons}
-            inputSectionClassName={inputSectionClassName}
-            labelClassName={labelClassName}
-            label={label}
             readOnly={readOnly}
             required={required}
-            variant={variant}
-            withAsterisk={withAsterisk}
             input={(
                 <RawInput
-                    {...otherInputProps} /* eslint-disable-line react/jsx-props-no-spreading */
-                    readOnly={readOnly}
-                    disabled={disabled}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...rawInputProps}
                     className={inputClassName}
-                    value={tempValue}
+                    disabled={disabled}
                     onChange={handleChange}
+                    readOnly={readOnly}
                     type="number"
+                    value={tempValue}
                 />
             )}
         />

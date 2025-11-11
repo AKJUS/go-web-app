@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import {
+    Description,
     DropdownMenu,
+    ListView,
     NavigationTabList,
     PageContainer,
     Tab,
@@ -75,7 +77,7 @@ function Navbar(props: Props) {
                 </div>
                 <NavigationTabList
                     className={styles.actions}
-                    variant="tertiary"
+                    styleVariant="nav"
                 >
                     <LanguageDropdown />
                     {!isAuthenticated && (
@@ -97,6 +99,8 @@ function Navbar(props: Props) {
                     <AuthenticatedUserDropdown />
                     <DropdownMenu
                         label={strings.headerCreateAReportLabel}
+                        labelColorVariant="primary"
+                        labelSpacing="lg"
                     >
                         <DropdownMenuItem
                             type="link"
@@ -125,437 +129,517 @@ function Navbar(props: Props) {
                     </DropdownMenu>
                 </NavigationTabList>
             </PageContainer>
-            <PageContainer
-                contentClassName={styles.bottom}
-            >
-                <NavigationTabList
-                    className={styles.menuItems}
-                    variant="tertiary"
+            <PageContainer>
+                <ListView
+                    withWrap
+                    withSpaceBetweenContents
                 >
-                    <NavigationTab
-                        to="home"
-                        className={styles.menuItem}
-                    >
-                        {strings.headerMenuHome}
-                    </NavigationTab>
-                    <CountryDropdown />
-                    <DropdownMenu
-                        popupClassName={styles.dropdown}
-                        label={strings.userMenuPrepare}
-                        variant="tertiary"
-                        persistent
-                        preferredPopupWidth={56}
-                    >
-                        <Tabs
-                            value={activePrepareOption}
-                            onChange={setActivePrepareOption}
-                            variant="vertical-compact"
+                    <NavigationTabList styleVariant="nav">
+                        <NavigationTab
+                            to="home"
+                            withoutPadding
                         >
-                            <TabList
-                                className={styles.optionList}
-                                contentClassName={styles.optionListContent}
-                            >
-                                <Tab
-                                    name="risk-analysis"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuRiskAnalysisLabel}
-                                </Tab>
-                                <Tab
-                                    name="per"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuPERLabel}
-                                </Tab>
-                                <Tab
-                                    name="global-3w-projects"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuGlobal3WProjects}
-                                </Tab>
-                            </TabList>
-                            <div className={styles.optionBorder} />
-                            <TabPanel
-                                name="risk-analysis"
-                                className={styles.optionDetail}
-                            >
-                                <div className={styles.description}>
-                                    {strings.userMenuGlobalRiskDescription}
-                                </div>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="riskWatchLayout"
-                                    variant="tertiary"
-                                >
-                                    {strings.headerMenuRiskWatch}
-                                </DropdownMenuItem>
-                            </TabPanel>
-                            <TabPanel
-                                name="per"
-                                className={styles.optionDetail}
-                            >
-                                <div className={styles.description}>
-                                    {strings.userMenuPERDescription}
-                                </div>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="preparednessGlobalSummary"
-                                    variant="tertiary"
-                                >
-                                    {strings.userMenuGlobalSummary}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="preparednessGlobalPerformance"
-                                    variant="tertiary"
-                                >
-                                    {strings.userMenuGlobalPerformance}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="preparednessGlobalCatalogue"
-                                    variant="tertiary"
-                                >
-                                    {strings.userMenuCatalogueResources}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="perProcessLayout"
-                                    variant="secondary"
-                                >
-                                    {strings.userMenuStartPER}
-                                </DropdownMenuItem>
-                            </TabPanel>
-                            <TabPanel
-                                name="global-3w-projects"
-                                className={styles.optionDetail}
-                            >
-                                <div className={styles.description}>
-                                    {strings.userMenuGlobal3WProjectDescription}
-                                </div>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="globalThreeW"
-                                    variant="tertiary"
-                                >
-                                    {strings.headerMenuThreeW}
-                                </DropdownMenuItem>
-                            </TabPanel>
-                        </Tabs>
-                    </DropdownMenu>
-                    <DropdownMenu
-                        popupClassName={styles.dropdown}
-                        label={strings.userMenuRespondLabel}
-                        variant="tertiary"
-                        persistent
-                        preferredPopupWidth={56}
-                    >
-                        <Tabs
-                            value={activeRespondOption}
-                            onChange={setActiveRespondOption}
-                            variant="vertical-compact"
+                            {strings.headerMenuHome}
+                        </NavigationTab>
+                        <CountryDropdown />
+                        <DropdownMenu
+                            popupClassName={styles.dropdown}
+                            label={strings.userMenuPrepare}
+                            labelColorVariant="text"
+                            labelStyleVariant="action"
+                            persistent
+                            preferredPopupWidth={56}
                         >
-                            <TabList
-                                className={styles.optionList}
-                                contentClassName={styles.optionListContent}
+                            <Tabs
+                                value={activePrepareOption}
+                                onChange={setActivePrepareOption}
+                                styleVariant="vertical-compact"
                             >
-                                <Tab
-                                    name="emergencies"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuEmergencies}
-                                </Tab>
-                                <Tab
-                                    name="early-warning"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuEarlyWarning}
-                                </Tab>
-                                <Tab
-                                    name="dref-process"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuDrefProcess}
-                                </Tab>
-                                <Tab
-                                    name="surge"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuSurgeDeployments}
-                                </Tab>
-                            </TabList>
-                            <div className={styles.optionBorder} />
-                            <TabPanel
-                                name="emergencies"
-                                className={styles.optionDetail}
-                            >
-                                <div className={styles.description}>
-                                    {strings.userMenuEmergenciesDescription}
-                                </div>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="emergencies"
-                                    variant="tertiary"
-                                >
-                                    {strings.userMenuOngoingEmergencies}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="fieldReportFormNew"
-                                    variant="secondary"
-                                >
-                                    {strings.userMenuCreateFieldReport}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="newThreeWActivity"
-                                    variant="secondary"
-                                >
-                                    {strings.userMenuSubmit3WActivity}
-                                </DropdownMenuItem>
-                            </TabPanel>
-                            <TabPanel
-                                name="early-warning"
-                                className={styles.optionDetail}
-                            >
-                                <div className={styles.description}>
-                                    {strings.userMenuEarlyWarningDescription}
-                                </div>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="fieldReportFormNew"
-                                    variant="secondary"
-                                    state={{ earlyWarning: true }}
-                                >
-                                    {strings.userMenuCreateEarlyActionFieldReport}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="flashUpdateFormNew"
-                                    variant="secondary"
-                                >
-                                    {strings.userMenuCreateFlashUpdate}
-                                </DropdownMenuItem>
-                            </TabPanel>
-                            <TabPanel
-                                name="dref-process"
-                                className={styles.optionDetail}
-                            >
-                                <div className={styles.description}>
-                                    {strings.userMenuDrefProcessDescription}
-                                </div>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="accountMyFormsDref"
-                                    variant="tertiary"
-                                >
-                                    {strings.myDrefApplications}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="newDrefApplicationForm"
-                                    variant="secondary"
-                                >
-                                    {strings.userMenuCreateDrefApplication}
-                                </DropdownMenuItem>
-                            </TabPanel>
-                            <TabPanel
-                                name="surge"
-                                className={styles.optionDetail}
-                            >
-                                <div className={styles.description}>
-                                    {strings.userMenuSurge}
-                                </div>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="activeSurgeDeployments"
-                                    variant="tertiary"
-                                >
-                                    {strings.userMenuActiveSurgeDeployments}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="surgeOverviewLayout"
-                                    variant="tertiary"
-                                >
-                                    {strings.userMenuSurgeGlobalOverview}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="surgeOperationalToolbox"
-                                    variant="tertiary"
-                                >
-                                    {strings.userMenuOperationalToolbox}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    type="link"
-                                    to="surgeCatalogueLayout"
-                                    variant="tertiary"
-                                >
-                                    {strings.userMenuCatalogueSurgeServices}
-                                </DropdownMenuItem>
-                            </TabPanel>
-                        </Tabs>
-                    </DropdownMenu>
-                    <DropdownMenu
-                        popupClassName={styles.dropdown}
-                        label={strings.userMenuLearnLabel}
-                        variant="tertiary"
-                        persistent
-                        preferredPopupWidth={56}
-                    >
-                        <Tabs
-                            value={activeLearnOption}
-                            onChange={setActiveLearnOption}
-                            variant="vertical-compact"
-                        >
-                            <TabList
-                                className={styles.optionList}
-                                contentClassName={styles.optionListContent}
-                            >
-                                <Tab
-                                    name="operational-learning"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuOperationalLearning}
-                                </Tab>
-                                <Tab
-                                    name="tools"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuTools}
-                                </Tab>
-                                <Tab
-                                    name="resources"
-                                    className={styles.option}
-                                >
-                                    {strings.userMenuResources}
-                                </Tab>
-                                <DropdownMenuItem
-                                    external
-                                    className={styles.option}
-                                    type="link"
-                                    href="https://ifrcgoproject.medium.com/"
-                                    variant="tertiary"
-                                    withLinkIcon
-                                >
-                                    {strings.userMenuGoBlog}
-                                </DropdownMenuItem>
-                            </TabList>
-                            <div className={styles.optionBorder} />
-                            <TabPanel
-                                name="operational-learning"
-                                className={styles.optionDetail}
-                            >
-                                <div className={styles.menuItemWithDescription}>
-                                    <DropdownMenuItem
-                                        type="link"
-                                        to="operationalLearning"
-                                        variant="tertiary"
-                                    >
-                                        {strings.userMenuOperationalLearning}
-                                    </DropdownMenuItem>
-                                    <div className={styles.description}>
-                                        {strings.userMenuOperationalLearningDescription}
-                                    </div>
-                                </div>
-                            </TabPanel>
-                            <TabPanel
-                                name="tools"
-                                className={styles.optionDetail}
-                            >
-                                <div className={styles.menuItemWithDescription}>
-                                    <DropdownMenuItem
-                                        type="link"
-                                        to="surgeOperationalToolbox"
-                                        variant="tertiary"
-                                    >
-                                        {strings.userMenuOperationalToolboxItem}
-                                    </DropdownMenuItem>
-                                    <div className={styles.description}>
-                                        {strings.userMenuOperationalToolboxItemDescription}
-                                    </div>
-                                </div>
-                                {isTruthyString(sdtUrl) && (
-                                    <div className={styles.menuItemWithDescription}>
+                                <TabList className={styles.optionList}>
+                                    <Tab name="risk-analysis">
+                                        {strings.userMenuRiskAnalysisLabel}
+                                    </Tab>
+                                    <Tab name="per">
+                                        {strings.userMenuPERLabel}
+                                    </Tab>
+                                    <Tab name="global-3w-projects">
+                                        {strings.userMenuGlobal3WProjects}
+                                    </Tab>
+                                </TabList>
+                                <div className={styles.optionBorder} />
+                                <TabPanel name="risk-analysis">
+                                    <ListView layout="block">
+                                        <Description
+                                            withLightText
+                                            textSize="sm"
+                                        >
+                                            {strings.userMenuGlobalRiskDescription}
+                                        </Description>
                                         <DropdownMenuItem
                                             type="link"
-                                            external
-                                            href={sdtUrl}
-                                            variant="tertiary"
-                                            withLinkIcon
+                                            to="riskWatchLayout"
+                                            styleVariant="action"
+                                            withoutFullWidth
                                         >
-                                            {strings.userMenuSurveyDesignToolItem}
+                                            {strings.headerMenuRiskWatch}
                                         </DropdownMenuItem>
-                                        <div className={styles.description}>
-                                            {strings.userMenuSurveyDesignToolItemDescription}
-                                        </div>
-                                    </div>
-                                )}
-                            </TabPanel>
-                            <TabPanel
-                                name="resources"
-                                className={styles.optionDetail}
+                                    </ListView>
+                                </TabPanel>
+                                <TabPanel name="per">
+                                    <ListView layout="block">
+                                        <Description
+                                            className={styles.description}
+                                            withLightText
+                                            textSize="sm"
+                                        >
+                                            {strings.userMenuPERDescription}
+                                        </Description>
+                                        <ListView
+                                            layout="block"
+                                            withSpacingOpticalCorrection
+                                            spacing="sm"
+                                        >
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="preparednessGlobalSummary"
+                                                styleVariant="action"
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuGlobalSummary}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="preparednessGlobalPerformance"
+                                                styleVariant="action"
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuGlobalPerformance}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="preparednessGlobalCatalogue"
+                                                styleVariant="action"
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuCatalogueResources}
+                                            </DropdownMenuItem>
+                                        </ListView>
+                                        <DropdownMenuItem
+                                            type="link"
+                                            to="perProcessLayout"
+                                            colorVariant="secondary"
+                                            styleVariant="outline"
+                                            withoutFullWidth
+                                        >
+                                            {strings.userMenuStartPER}
+                                        </DropdownMenuItem>
+                                    </ListView>
+                                </TabPanel>
+                                <TabPanel name="global-3w-projects">
+                                    <ListView layout="block">
+                                        <Description
+                                            withLightText
+                                            textSize="sm"
+                                        >
+                                            {strings.userMenuGlobal3WProjectDescription}
+                                        </Description>
+                                        <DropdownMenuItem
+                                            type="link"
+                                            to="globalThreeW"
+                                            styleVariant="action"
+                                            withoutFullWidth
+                                        >
+                                            {strings.headerMenuThreeW}
+                                        </DropdownMenuItem>
+                                    </ListView>
+                                </TabPanel>
+                            </Tabs>
+                        </DropdownMenu>
+                        <DropdownMenu
+                            popupClassName={styles.dropdown}
+                            label={strings.userMenuRespondLabel}
+                            labelColorVariant="text"
+                            labelStyleVariant="action"
+                            persistent
+                            preferredPopupWidth={56}
+                        >
+                            <Tabs
+                                value={activeRespondOption}
+                                onChange={setActiveRespondOption}
+                                styleVariant="vertical-compact"
                             >
-                                <div className={styles.menuItemWithDescription}>
+                                <TabList className={styles.optionList}>
+                                    <Tab name="emergencies">
+                                        {strings.userMenuEmergencies}
+                                    </Tab>
+                                    <Tab name="early-warning">
+                                        {strings.userMenuEarlyWarning}
+                                    </Tab>
+                                    <Tab name="dref-process">
+                                        {strings.userMenuDrefProcess}
+                                    </Tab>
+                                    <Tab name="surge">
+                                        {strings.userMenuSurgeDeployments}
+                                    </Tab>
+                                </TabList>
+                                <div className={styles.optionBorder} />
+                                <TabPanel name="emergencies">
+                                    <ListView layout="block">
+                                        <Description
+                                            withLightText
+                                            textSize="sm"
+                                        >
+                                            {strings.userMenuEmergenciesDescription}
+                                        </Description>
+                                        <DropdownMenuItem
+                                            type="link"
+                                            to="emergencies"
+                                            styleVariant="action"
+                                            withoutFullWidth
+                                        >
+                                            {strings.userMenuOngoingEmergencies}
+                                        </DropdownMenuItem>
+                                        <ListView
+                                            layout="block"
+                                            spacing="sm"
+                                        >
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="fieldReportFormNew"
+                                                colorVariant="primary"
+                                                styleVariant="outline"
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuCreateFieldReport}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="newThreeWActivity"
+                                                colorVariant="primary"
+                                                styleVariant="outline"
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuSubmit3WActivity}
+                                            </DropdownMenuItem>
+                                        </ListView>
+                                    </ListView>
+                                </TabPanel>
+                                <TabPanel name="early-warning">
+                                    <ListView layout="block">
+                                        <Description
+                                            withLightText
+                                            textSize="sm"
+                                        >
+                                            {strings.userMenuEarlyWarningDescription}
+                                        </Description>
+                                        <ListView
+                                            layout="block"
+                                            spacing="sm"
+                                        >
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="fieldReportFormNew"
+                                                colorVariant="secondary"
+                                                styleVariant="outline"
+                                                state={{ earlyWarning: true }}
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuCreateEarlyActionFieldReport}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="flashUpdateFormNew"
+                                                colorVariant="secondary"
+                                                styleVariant="outline"
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuCreateFlashUpdate}
+                                            </DropdownMenuItem>
+                                        </ListView>
+                                    </ListView>
+                                </TabPanel>
+                                <TabPanel name="dref-process">
+                                    <ListView layout="block">
+                                        <Description
+                                            withLightText
+                                            textSize="sm"
+                                        >
+                                            {strings.userMenuDrefProcessDescription}
+                                        </Description>
+                                        <DropdownMenuItem
+                                            type="link"
+                                            to="accountMyFormsDref"
+                                            styleVariant="action"
+                                            withoutFullWidth
+                                        >
+                                            {strings.myDrefApplications}
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            type="link"
+                                            to="newDrefApplicationForm"
+                                            styleVariant="outline"
+                                            colorVariant="primary"
+                                            withoutFullWidth
+                                        >
+                                            {strings.userMenuCreateDrefApplication}
+                                        </DropdownMenuItem>
+                                    </ListView>
+                                </TabPanel>
+                                <TabPanel name="surge">
+                                    <ListView layout="block">
+                                        <Description
+                                            withLightText
+                                            textSize="sm"
+                                        >
+                                            {strings.userMenuSurge}
+                                        </Description>
+                                        <ListView
+                                            layout="block"
+                                            withSpacingOpticalCorrection
+                                            spacing="sm"
+                                        >
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="activeSurgeDeployments"
+                                                styleVariant="action"
+                                            >
+                                                {strings.userMenuActiveSurgeDeployments}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="surgeOverviewLayout"
+                                                styleVariant="action"
+                                            >
+                                                {strings.userMenuSurgeGlobalOverview}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="surgeOperationalToolbox"
+                                                styleVariant="action"
+                                            >
+                                                {strings.userMenuOperationalToolbox}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="surgeCatalogueLayout"
+                                                styleVariant="action"
+                                            >
+                                                {strings.userMenuCatalogueSurgeServices}
+                                            </DropdownMenuItem>
+                                        </ListView>
+                                    </ListView>
+                                </TabPanel>
+                            </Tabs>
+                        </DropdownMenu>
+                        <DropdownMenu
+                            popupClassName={styles.dropdown}
+                            label={strings.userMenuLearnLabel}
+                            labelColorVariant="text"
+                            labelStyleVariant="action"
+                            persistent
+                            preferredPopupWidth={56}
+                        >
+                            <Tabs
+                                value={activeLearnOption}
+                                onChange={setActiveLearnOption}
+                                styleVariant="vertical-compact"
+                            >
+                                <TabList className={styles.optionList}>
+                                    <Tab name="operational-learning">
+                                        {strings.userMenuOperationalLearning}
+                                    </Tab>
+                                    <Tab name="tools">
+                                        {strings.userMenuTools}
+                                    </Tab>
+                                    <Tab name="resources">
+                                        {strings.userMenuResources}
+                                    </Tab>
                                     <DropdownMenuItem
+                                        external
+                                        className={styles.option}
                                         type="link"
-                                        to="montandonLandingPage"
-                                        variant="tertiary"
-                                        state={{ earlyWarning: true }}
+                                        href="https://ifrcgoproject.medium.com/"
+                                        styleVariant="action"
+                                        withLinkIcon
+                                        withoutFullWidth
                                     >
-                                        {strings.userMenuMontandonItem}
+                                        {strings.userMenuGoBlog}
                                     </DropdownMenuItem>
-                                    <div className={styles.description}>
-                                        {strings.userMenuMontandonItemDescription}
-                                    </div>
-                                </div>
-                                <div className={styles.menuItemWithDescription}>
-                                    <DropdownMenuItem
-                                        type="link"
-                                        to="surgeCatalogueLayout"
-                                        variant="tertiary"
-                                        state={{ earlyWarning: true }}
+                                </TabList>
+                                <div className={styles.optionBorder} />
+                                <TabPanel name="operational-learning">
+                                    <ListView
+                                        layout="block"
+                                        withSpacingOpticalCorrection
+                                        spacing="sm"
                                     >
-                                        {strings.userMenuCatalogueSurgeServicesItem}
-                                    </DropdownMenuItem>
-                                    <div className={styles.description}>
-                                        {strings.userMenuCatalogueSurgeServicesItemDescription}
-                                    </div>
-                                </div>
-                                <div className={styles.menuItemWithDescription}>
-                                    <DropdownMenuItem
-                                        type="link"
-                                        to="preparednessGlobalCatalogue"
-                                        variant="tertiary"
-                                        state={{ earlyWarning: true }}
-                                    >
-                                        {strings.userMenuPERCatalogueItem}
-                                    </DropdownMenuItem>
-                                    <div className={styles.description}>
-                                        {strings.userMenuPERCatalogueItemDescription}
-                                    </div>
-                                </div>
-                                <div className={styles.menuItemWithDescription}>
-                                    <DropdownMenuItem
-                                        type="link"
-                                        to="resources"
-                                        variant="tertiary"
-                                        state={{ earlyWarning: true }}
-                                    >
-                                        {strings.userMenuGoResourcesItem}
-                                    </DropdownMenuItem>
-                                    <div className={styles.description}>
-                                        {strings.userMenuGoResourcesItemDescription}
-                                    </div>
-                                </div>
-                            </TabPanel>
-                        </Tabs>
-                    </DropdownMenu>
-                </NavigationTabList>
-                <div className={styles.searchContainer}>
-                    <KeywordSearchSelectInput />
-                </div>
+                                        <DropdownMenuItem
+                                            type="link"
+                                            to="operationalLearning"
+                                            styleVariant="action"
+                                            withoutFullWidth
+                                        >
+                                            {strings.userMenuOperationalLearning}
+                                        </DropdownMenuItem>
+                                        <Description
+                                            textSize="sm"
+                                            withLightText
+                                        >
+                                            {strings.userMenuOperationalLearningDescription}
+                                        </Description>
+                                    </ListView>
+                                </TabPanel>
+                                <TabPanel
+                                    name="tools"
+                                    className={styles.optionDetail}
+                                >
+                                    <ListView layout="block">
+                                        <ListView
+                                            layout="block"
+                                            withSpacingOpticalCorrection
+                                            spacing="sm"
+                                        >
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="surgeOperationalToolbox"
+                                                styleVariant="action"
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuOperationalToolboxItem}
+                                            </DropdownMenuItem>
+                                            <Description
+                                                textSize="sm"
+                                                withLightText
+                                            >
+                                                {strings.userMenuOperationalToolboxItemDescription}
+                                            </Description>
+                                        </ListView>
+                                        {isTruthyString(sdtUrl) && (
+                                            <ListView
+                                                layout="block"
+                                                withSpacingOpticalCorrection
+                                                spacing="sm"
+                                            >
+                                                <DropdownMenuItem
+                                                    type="link"
+                                                    external
+                                                    href={sdtUrl}
+                                                    styleVariant="action"
+                                                    withLinkIcon
+                                                    withoutFullWidth
+                                                >
+                                                    {strings.userMenuSurveyDesignToolItem}
+                                                </DropdownMenuItem>
+                                                <Description
+                                                    textSize="sm"
+                                                    withLightText
+                                                >
+                                                    {strings
+                                                        .userMenuSurveyDesignToolItemDescription}
+                                                </Description>
+                                            </ListView>
+                                        )}
+                                    </ListView>
+                                </TabPanel>
+                                <TabPanel
+                                    name="resources"
+                                    className={styles.optionDetail}
+                                >
+                                    <ListView layout="block">
+                                        <ListView
+                                            layout="block"
+                                            withSpacingOpticalCorrection
+                                            spacing="sm"
+                                        >
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="montandonLandingPage"
+                                                styleVariant="action"
+                                                state={{ earlyWarning: true }}
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuMontandonItem}
+                                            </DropdownMenuItem>
+                                            <Description
+                                                withLightText
+                                                textSize="sm"
+                                            >
+                                                {strings.userMenuMontandonItemDescription}
+                                            </Description>
+                                        </ListView>
+                                        <ListView
+                                            layout="block"
+                                            withSpacingOpticalCorrection
+                                            spacing="sm"
+                                        >
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="surgeCatalogueLayout"
+                                                styleVariant="action"
+                                                state={{ earlyWarning: true }}
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuCatalogueSurgeServicesItem}
+                                            </DropdownMenuItem>
+                                            <Description
+                                                withLightText
+                                                textSize="sm"
+                                            >
+                                                {strings
+                                                    .userMenuCatalogueSurgeServicesItemDescription}
+                                            </Description>
+                                        </ListView>
+                                        <ListView
+                                            layout="block"
+                                            withSpacingOpticalCorrection
+                                            spacing="sm"
+                                        >
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="preparednessGlobalCatalogue"
+                                                styleVariant="action"
+                                                state={{ earlyWarning: true }}
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuPERCatalogueItem}
+                                            </DropdownMenuItem>
+                                            <Description
+                                                withLightText
+                                                textSize="sm"
+                                            >
+                                                {strings.userMenuPERCatalogueItemDescription}
+                                            </Description>
+                                        </ListView>
+                                        <ListView
+                                            layout="block"
+                                            withSpacingOpticalCorrection
+                                            spacing="sm"
+                                        >
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="resources"
+                                                styleVariant="action"
+                                                state={{ earlyWarning: true }}
+                                                withoutFullWidth
+                                            >
+                                                {strings.userMenuGoResourcesItem}
+                                            </DropdownMenuItem>
+                                            <Description
+                                                withLightText
+                                                textSize="sm"
+                                            >
+                                                {strings.userMenuGoResourcesItemDescription}
+                                            </Description>
+                                        </ListView>
+                                    </ListView>
+                                </TabPanel>
+                            </Tabs>
+                        </DropdownMenu>
+                    </NavigationTabList>
+                    <div className={styles.searchContainer}>
+                        <KeywordSearchSelectInput />
+                    </div>
+                </ListView>
             </PageContainer>
         </nav>
     );

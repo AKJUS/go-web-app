@@ -1,16 +1,19 @@
-import React, { useCallback } from 'react';
+import {
+    useCallback,
+    useMemo,
+} from 'react';
 import { DeleteBinLineIcon } from '@ifrc-go/icons';
 import {
-    type ButtonVariant,
+    type CommonRawFileInputProps,
+    Description,
     IconButton,
     InputError,
-    type NameType,
+    ListView,
     RawFileInput,
-    type RawFileInputProps,
+    type SingleRawFileInputProps,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    _cs,
     isDefined,
     isNotDefined,
 } from '@togglecorp/fujs';
@@ -22,56 +25,54 @@ import { useLazyRequest } from '#utils/restRequest';
 import { transformObjectError } from '#utils/restRequest/error';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 export type SupportedPaths = '/api/v2/per-file/' | '/api/v2/dref-files/' | '/api/v2/flash-update-file/' | '/api/v2/per-document-upload/';
 
-type Props<T extends NameType> = Omit<RawFileInputProps<T>, 'multiple' | 'value' | 'onChange' | 'children'| 'inputRef'> & {
-    actions?: React.ReactNode;
-    children?: React.ReactNode;
-    className?: string;
+type Props<NAME> = Omit<CommonRawFileInputProps<NAME>, 'value'> & {
+    name: NAME;
     clearable?: boolean;
-    icons?: React.ReactNode;
-    onChange: (value: number | undefined, name: T) => void;
+    description?: React.ReactNode;
+    error?: React.ReactNode;
+    errorOnTooltip?: boolean;
     fileIdToUrlMap: Record<number, string>;
+    onSuccess?: () => void;
+    requestBody?: Record<string, string | number | boolean>;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     url: SupportedPaths;
     urlQuery?: Record<string, string | number | boolean>;
-    requestBody?: Record<string, string | number | boolean>;
     value: number | undefined | null;
-    variant?: ButtonVariant;
+    onChange: (value: number | undefined, name: NAME) => void;
     withoutPreview?: boolean;
-    error?: React.ReactNode;
-    description?: React.ReactNode;
-    onSuccess?: () => void;
     withoutStatus?: boolean;
     useCurrentLanguageForMutation?: boolean;
 }
 
-function GoSingleFileInput<T extends NameType>(props: Props<T>) {
+function GoSingleFileInput<const NAME>(props: Props<NAME>) {
     const {
         accept,
-        actions: actionsFromProps,
+        after: afterFromProps,
+        before,
         children,
         className,
         clearable,
+        colorVariant = 'primary',
+        description,
         disabled: disabledFromProps,
-        icons,
+        error,
+        errorOnTooltip,
+        fileIdToUrlMap,
         inputProps,
         name,
         onChange,
+        onSuccess,
         readOnly,
-        fileIdToUrlMap,
+        requestBody,
         setFileIdToUrlMap,
+        styleVariant = 'outline',
         url,
         urlQuery,
         value,
-        variant = 'secondary',
         withoutPreview,
-        error,
-        description,
-        requestBody,
-        onSuccess,
         withoutStatus,
         useCurrentLanguageForMutation = false,
     } = props;
@@ -131,7 +132,7 @@ function GoSingleFileInput<T extends NameType>(props: Props<T>) {
         },
     });
 
-    const handleChange = useCallback((file: File | undefined) => {
+    const handleChange = useCallback<SingleRawFileInputProps<NAME>['onChange']>((file) => {
         if (isNotDefined(file)) {
             return;
         }
@@ -148,45 +149,68 @@ function GoSingleFileInput<T extends NameType>(props: Props<T>) {
         triggerFileUpload({ file });
     }, [triggerFileUpload, requestBody]);
 
-    const disabled = disabledFromProps || pending || readOnly;
-    const actions = (!readOnly && !disabled ? actionsFromProps : null);
-    const selectedFileUrl = isDefined(value) ? fileIdToUrlMap?.[value] : undefined;
-
     const handleClearButtonClick = useCallback(() => {
         onChange(undefined, name);
     }, [onChange, name]);
 
-    return (
-        <div className={_cs(styles.goSingleFileInput, className)}>
-            <div className={styles.inputContainer}>
-                <RawFileInput
-                    name={name}
-                    onChange={handleChange}
-                    accept={accept}
-                    disabled={disabled}
-                    readOnly={readOnly}
-                    inputProps={inputProps}
-                    variant={variant}
-                    icons={icons}
-                    actions={actions}
-                >
-                    {children}
-                </RawFileInput>
+    const disabled = disabledFromProps || pending || readOnly;
+    const selectedFileUrl = isDefined(value) ? fileIdToUrlMap?.[value] : undefined;
+    const after = useMemo(() => {
+        if (readOnly || disabled) {
+            return null;
+        }
+
+        if (!clearable || !value) {
+            return afterFromProps;
+        }
+
+        return (
+            <ListView spacing="xs">
+                {after}
                 {clearable && value && (
                     <IconButton
-                        className={styles.removeButton}
                         name={undefined}
                         onClick={handleClearButtonClick}
                         title={strings.removeFileButtonTitle}
                         ariaLabel={strings.removeFileButtonTitle}
-                        variant="tertiary"
                         spacing="none"
                         disabled={disabled}
                     >
                         <DeleteBinLineIcon />
                     </IconButton>
                 )}
-            </div>
+            </ListView>
+        );
+    }, [
+        afterFromProps,
+        clearable,
+        disabled,
+        handleClearButtonClick,
+        readOnly,
+        strings.removeFileButtonTitle,
+        value,
+    ]);
+
+    return (
+        <ListView
+            layout="block"
+            spacing="xs"
+            className={className}
+        >
+            <RawFileInput
+                name={name}
+                onChange={handleChange}
+                accept={accept}
+                disabled={disabled}
+                readOnly={readOnly}
+                inputProps={inputProps}
+                colorVariant={colorVariant}
+                styleVariant={styleVariant}
+                before={before}
+                after={after}
+            >
+                {children}
+            </RawFileInput>
             {!withoutPreview && isDefined(selectedFileUrl) && (
                 <Link
                     href={selectedFileUrl}
@@ -196,19 +220,24 @@ function GoSingleFileInput<T extends NameType>(props: Props<T>) {
                 </Link>
             )}
             {isNotDefined(selectedFileUrl) && !withoutStatus && (
-                <div className={styles.emptyMessage}>
+                <Description withLightText>
                     {strings.noFileSelected}
-                </div>
+                </Description>
             )}
             {description && (
-                <div>
+                <Description withLightText>
                     {description}
-                </div>
+                </Description>
             )}
-            <InputError>
-                {error}
-            </InputError>
-        </div>
+            {error && (
+                <InputError
+                    disabled={disabled}
+                    floating={errorOnTooltip}
+                >
+                    {error}
+                </InputError>
+            )}
+        </ListView>
     );
 }
 

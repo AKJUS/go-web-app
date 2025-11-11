@@ -4,7 +4,8 @@ import {
 } from 'react';
 import {
     Container,
-    Grid,
+    ListView,
+    RawList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -159,7 +160,7 @@ function HighlightedOperations(props: Props) {
             className={className}
             withHeaderBorder
             heading={variant === 'country' ? strings.highlightedOperationsCountryTitle : strings.highlightedOperationsTitle}
-            actions={(
+            headerActions={(
                 <Link
                     to="allEmergencies"
                     urlSearch={urlSearch}
@@ -169,17 +170,24 @@ function HighlightedOperations(props: Props) {
                     {viewAllLabel}
                 </Link>
             )}
+            pending={featuredEmergencyPending}
+            errored={isDefined(featuredEmergencyResponseError)}
+            filtered={false}
+            empty={!featuredEmergencies?.length}
+            withoutSpacingOpticalCorrection
         >
-            <Grid
-                data={featuredEmergencies}
-                pending={featuredEmergencyPending}
-                errored={isDefined(featuredEmergencyResponseError)}
-                filtered={false}
-                keySelector={keySelector}
-                renderer={OperationCard}
-                rendererParams={rendererParams}
-                numPreferredColumns={3}
-            />
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={3}
+                minGridColumnSize="20rem"
+            >
+                <RawList
+                    data={featuredEmergencies}
+                    keySelector={keySelector}
+                    renderer={OperationCard}
+                    rendererParams={rendererParams}
+                />
+            </ListView>
         </Container>
     );
 }

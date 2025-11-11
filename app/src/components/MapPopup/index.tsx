@@ -24,8 +24,7 @@ function MapPopup(props: Props) {
         children,
         coordinates,
         onCloseButtonClick,
-        actions,
-        childrenContainerClassName,
+        headerActions,
         popupClassName,
         ...containerProps
     } = props;
@@ -52,17 +51,17 @@ function MapPopup(props: Props) {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...containerProps}
                 className={styles.container}
-                withoutWrapInHeading
-                childrenContainerClassName={_cs(styles.content, childrenContainerClassName)}
                 withHeaderBorder
-                withInternalPadding
-                actions={(
+                withoutWrapInHeader
+                withPadding
+                headerActions={(
                     <>
-                        {actions}
+                        {headerActions}
                         <Button
                             className={styles.closeButton}
                             name={undefined}
-                            variant="tertiary"
+                            styleVariant="action"
+                            colorVariant="text"
                             onClick={onCloseButtonClick}
                             title={strings.messagePopupClose}
                         >

@@ -2,6 +2,7 @@ import { type MouseEventHandler } from 'react';
 import {
     Container,
     ExpandableContainer,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -10,9 +11,9 @@ import { resolveToComponent } from '@ifrc-go/ui/utils';
 import OperationalTimelineBody from '#assets/content/operational_timeline_body.svg?react';
 import OperationalTimelineTitle from '#assets/content/operational_timeline_title.svg?react';
 import Link from '#components/Link';
+import TabPage from '#components/TabPage';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 interface OperationTimelineContent {
     id: string;
@@ -582,60 +583,62 @@ export function Component() {
     );
 
     return (
-        <Container
-            headingLevel={2}
-            heading={strings.surgeOperationalToolboxHeading}
-            className={styles.surgeOperationalToolbox}
-            headerDescription={strings.surgeOperationalToolboxHeadingDescription}
-            childrenContainerClassName={styles.content}
-            spacing="comfortable"
-        >
-            <ExpandableContainer
-                heading={strings.operationalToolboxOverviewHeading}
-                initiallyExpanded
+        <TabPage>
+            <Container
+                headingLevel={2}
+                heading={strings.surgeOperationalToolboxHeading}
+                headerDescription={strings.surgeOperationalToolboxHeadingDescription}
             >
-                <Container
-                    heading={strings.overviewNavigationHowTo}
-                    headingLevel={4}
-                    contentViewType="vertical"
-                    spacing="cozy"
-                    headerDescription={strings.overviewSectionHeader}
-                >
-                    <TextOutput
-                        value={strings.toolboxValue}
-                        label={strings.toolboxLabel}
-                        strongLabel
-                    />
-                    <TextOutput
-                        value={strings.timelineValue}
-                        label={strings.timelineLabel}
-                        strongLabel
-                    />
-                    <div>{strings.overviewSectionFooter}</div>
-                </Container>
-            </ExpandableContainer>
-            <div className={styles.svgContainer}>
-                <OperationalTimelineTitle />
-                <OperationalTimelineBody
-                    onClick={handleClick}
-                    onMouseOver={handleHover}
-                    onMouseOut={handleMouseOut}
-                />
-            </div>
-            <div className={styles.footer}>
-                <div>{fundingCoverageDescription}</div>
-                <div>{perSectionHeading}</div>
-                <ul>
-                    <li>{strings.perSectionOne}</li>
-                    <li>{strings.perSectionTwo}</li>
-                    <li>{perSectionThree}</li>
-                    <li>{strings.perSectionFour}</li>
-                    <li>{perSectionFive}</li>
-                    <li>{strings.perSectionSix}</li>
-                </ul>
-                <div>{perSectionFooter}</div>
-            </div>
-        </Container>
+                <ListView layout="block">
+                    <ExpandableContainer
+                        heading={strings.operationalToolboxOverviewHeading}
+                        initiallyExpanded
+                        withPadding
+                    >
+                        <Container
+                            heading={strings.overviewNavigationHowTo}
+                            headingLevel={4}
+                            headerDescription={strings.overviewSectionHeader}
+                        >
+                            <ListView layout="block">
+                                <TextOutput
+                                    value={strings.toolboxValue}
+                                    label={strings.toolboxLabel}
+                                    strongLabel
+                                />
+                                <TextOutput
+                                    value={strings.timelineValue}
+                                    label={strings.timelineLabel}
+                                    strongLabel
+                                />
+                                <div>{strings.overviewSectionFooter}</div>
+                            </ListView>
+                        </Container>
+                    </ExpandableContainer>
+                    <div>
+                        <OperationalTimelineTitle />
+                        <OperationalTimelineBody
+                            onClick={handleClick}
+                            onMouseOver={handleHover}
+                            onMouseOut={handleMouseOut}
+                        />
+                    </div>
+                    <div>
+                        <div>{fundingCoverageDescription}</div>
+                        <div>{perSectionHeading}</div>
+                        <ul>
+                            <li>{strings.perSectionOne}</li>
+                            <li>{strings.perSectionTwo}</li>
+                            <li>{perSectionThree}</li>
+                            <li>{strings.perSectionFour}</li>
+                            <li>{perSectionFive}</li>
+                            <li>{strings.perSectionSix}</li>
+                        </ul>
+                        <div>{perSectionFooter}</div>
+                    </div>
+                </ListView>
+            </Container>
+        </TabPage>
     );
 }
 

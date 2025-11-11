@@ -4,6 +4,7 @@ import {
     useEffect,
 } from 'react';
 import {
+    ListView,
     PageContainer,
     PageHeader,
 } from '@ifrc-go/ui';
@@ -33,13 +34,11 @@ interface Props {
     actions?: React.ReactNode;
     heading?: React.ReactNode;
     description?: React.ReactNode;
-    descriptionContainerClassName?: string;
     mainSectionContainerClassName?: string;
     breadCrumbs?: React.ReactNode;
     info?: React.ReactNode;
     children?: React.ReactNode;
     mainSectionClassName?: string;
-    infoContainerClassName?: string;
     wikiLink?: React.ReactNode;
     withBackgroundColorInMainSection?: boolean;
     elementRef?: RefObject<ElementRef<'div'>>;
@@ -55,13 +54,11 @@ function Page(props: Props) {
         actions,
         heading,
         description,
-        descriptionContainerClassName,
         breadCrumbs,
         info,
         children,
         mainSectionContainerClassName,
         mainSectionClassName,
-        infoContainerClassName,
         wikiLink,
         withBackgroundColorInMainSection,
         elementRef,
@@ -123,9 +120,7 @@ function Page(props: Props) {
                     actions={actions}
                     heading={heading}
                     description={description}
-                    descriptionContainerClassName={descriptionContainerClassName}
                     info={info}
-                    infoContainerClassName={infoContainerClassName}
                 />
             )}
             {isNotDefined(blockingContent) && (
@@ -141,7 +136,12 @@ function Page(props: Props) {
                         mainSectionClassName,
                     )}
                 >
-                    { children }
+                    <ListView
+                        layout="block"
+                        spacing="xl"
+                    >
+                        { children }
+                    </ListView>
                 </PageContainer>
             )}
         </div>

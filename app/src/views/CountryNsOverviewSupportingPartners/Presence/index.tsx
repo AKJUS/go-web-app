@@ -3,6 +3,8 @@ import { useOutletContext } from 'react-router-dom';
 import {
     Container,
     InfoPopup,
+    InlineLayout,
+    ListView,
     RawList,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -105,22 +107,26 @@ function Presence() {
         };
     }, []);
     return (
-        <Container
-            className={styles.presence}
-            contentViewType="grid"
-            numPreferredGridContentColumns={2}
-            spacing="comfortable"
+        <ListView
+            layout="grid"
         >
             <Container
+                empty={false}
+                errored={false}
+                filtered={false}
+                pending={false}
                 className={styles.presenceCard}
                 heading={strings.countryIFRCPresenceTitle}
+                withShadow
+                withPadding
+                withBackground
                 // NOTE: Hide it for now, not sure if we can publish or not
                 // footerActions={(
                 //     <TextOutput
                 //         label={strings.source}
                 //         value={(
                 //             <Link
-                //                 variant="tertiary"
+                //                 styleVariant="action"
                 //                 href="https://data.ifrc.org/fdrs/ifrc-secretariat/"
                 //                 external
                 //                 withUnderline
@@ -131,46 +137,58 @@ function Presence() {
                 //     />
                 // )}
                 withHeaderBorder
-                withInternalPadding
-                childrenContainerClassName={styles.content}
+                footer={(
+                    <ListView withWrap>
+                        <InlineLayout
+                            after={(
+                                <InfoPopup
+                                    description={strings.disclaimer}
+                                />
+                            )}
+                            spacing="2xs"
+                        >
+                            <Link
+                                href={legalStatusLink}
+                                external
+                                styleVariant="action"
+                                withUnderline
+                                withLinkIcon
+                            >
+                                {strings.countryIFRCLegalStatus}
+                            </Link>
+                        </InlineLayout>
+                        {isDefined(countryResponse?.disaster_law_url) && (
+                            <Link
+                                href={countryResponse.disaster_law_url}
+                                external
+                                styleVariant="action"
+                                withUnderline
+                                withLinkIcon
+                            >
+                                {strings.countryIFRCDisasterLaw}
+                            </Link>
+                        )}
+                    </ListView>
+                )}
             >
-                <div className={styles.delegationInformation}>
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                >
                     <RawList
                         data={countryResponse?.country_delegation}
                         keySelector={countryDelegationKeySelector}
                         renderer={DelegationInformation}
                         rendererParams={countryDelegationRendererParams}
                     />
-                </div>
-                <div className={styles.ifrcPresenceItem}>
-                    <div className={styles.ifrcDisclaimer}>
-                        <Link
-                            href={legalStatusLink}
-                            external
-                            variant="tertiary"
-                            withUnderline
-                        >
-                            {strings.countryIFRCLegalStatus}
-                        </Link>
-                        <InfoPopup
-                            description={strings.disclaimer}
-                        />
-                    </div>
-
-                    {isDefined(countryResponse?.disaster_law_url) && (
-                        <Link
-                            href={countryResponse.disaster_law_url}
-                            external
-                            variant="tertiary"
-                            withUnderline
-                        >
-                            {strings.countryIFRCDisasterLaw}
-                        </Link>
-                    )}
-                </div>
+                </ListView>
             </Container>
             {countryResponse?.icrc_presence?.icrc_presence && (
                 <Container
+                    empty={false}
+                    errored={false}
+                    filtered={false}
+                    pending={false}
                     className={styles.presenceCard}
                     heading={strings.countryICRCPresenceTitle}
                     footerActions={isDefined(countryResponse.icrc_presence.url) && (
@@ -178,7 +196,7 @@ function Presence() {
                             label={strings.source}
                             value={(
                                 <Link
-                                    variant="tertiary"
+                                    styleVariant="action"
                                     href={countryResponse.icrc_presence.url}
                                     external
                                     withUnderline
@@ -189,7 +207,9 @@ function Presence() {
                         />
                     )}
                     withHeaderBorder
-                    withInternalPadding
+                    withShadow
+                    withPadding
+                    withBackground
                 >
                     {
                         resolveToString(
@@ -203,7 +223,7 @@ function Presence() {
                                 key={countryResponse.icrc_presence.id}
                                 href={countryResponse.icrc_presence.url}
                                 external
-                                variant="tertiary"
+                                styleVariant="action"
                                 withUnderline
                             >
                                 {strings.countryICRCKeyOperations}
@@ -216,7 +236,7 @@ function Presence() {
                     )}
                 </Container>
             )}
-        </Container>
+        </ListView>
     );
 }
 

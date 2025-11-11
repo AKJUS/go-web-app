@@ -118,9 +118,9 @@ export function Component() {
     return (
         <Container
             className={styles.countryAdditionalData}
-            actions={(
+            headerActions={(
                 <WikiLink
-                    href="user_guide/Country_Pages#additional-data"
+                    pathName="user_guide/Country_Pages#additional-data"
                 />
             )}
         >

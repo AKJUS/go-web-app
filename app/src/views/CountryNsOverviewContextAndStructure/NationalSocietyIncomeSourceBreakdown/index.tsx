@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import {
     BarChart,
     Container,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -48,6 +49,7 @@ function NationalSocietyIncomeSourceBreakdown(props: Props) {
     const {
         response: countryIncomeResponse,
         pending: countryIncomeResponsePending,
+        error: countryIncomeResponseError,
     } = useRequest({
         skip: isNotDefined(countryId),
         url: '/api/v2/country-income/',
@@ -82,15 +84,16 @@ function NationalSocietyIncomeSourceBreakdown(props: Props) {
             withHeaderBorder
             footerActions={isDefined(countryResponse?.fdrs)
                 && isDefined(countryResponse.society_name) && (
-                <>
+                <ListView withSpacingOpticalCorrection>
                     <TextOutput
                         label={strings.incomeSourceBreakdownSourceLabel}
                         value={(
                             <Link
-                                variant="tertiary"
+                                styleVariant="action"
                                 href={`https://data.ifrc.org/fdrs/national-society/${countryResponse.fdrs}`}
                                 external
                                 withUnderline
+                                withLinkIcon
                             >
                                 {resolveToString(
                                     strings.incomeSourceBreakdownSource,
@@ -105,9 +108,11 @@ function NationalSocietyIncomeSourceBreakdown(props: Props) {
                         value={selectedYear}
                         strongValue
                     />
-                </>
+                </ListView>
             )}
             pending={countryIncomeResponsePending}
+            filtered={false}
+            errored={isDefined(countryIncomeResponseError)}
             empty={isNotDefined(incomeListForSelectedYear)
                 || incomeListForSelectedYear.length === 0}
             emptyMessage={strings.incomeSourceBreakdownNotAvailableMessage}

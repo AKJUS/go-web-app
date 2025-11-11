@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import RadioInput, { Props as RadioInputProps } from '#components/RadioInput';
+import RadioInput, { CommonProps as RadioInputProps } from '#components/RadioInput';
 import { Props as RadioProps } from '#components/RadioInput/Radio';
 import useTranslation from '#hooks/useTranslation';
 import {
@@ -10,13 +10,19 @@ import {
 
 import i18n from './i18n.json';
 
-export type BooleanInputProps<NAME> = RadioInputProps<
+export type BooleanInputProps<NAME> = Omit<
+RadioInputProps<
     NAME,
     { value: boolean, label: string},
     boolean,
-    RadioProps<boolean, NAME>,
-    'options' | 'keySelector' | 'labelSelector'
->;
+    RadioProps<boolean>
+>, 'options' | 'keySelector' | 'labelSelector'> & ({
+    clearable?: never;
+    onChange: (value: boolean, name: NAME) => void;
+} | {
+    clearable: true;
+    onChange: (value: boolean | undefined, name: NAME) => void;
+})
 
 function BooleanInput<const NAME>(props: BooleanInputProps<NAME>) {
     const strings = useTranslation(i18n);

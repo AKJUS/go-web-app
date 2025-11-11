@@ -312,7 +312,6 @@ function RiskBarChart(props: Props) {
                 </>
             )}
             pending={pending}
-            headingLevel={2}
         >
             {selectedHazardType === 'FI' && (
                 <FoodInsecurityChart

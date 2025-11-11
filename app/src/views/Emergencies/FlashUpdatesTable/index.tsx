@@ -144,7 +144,6 @@ function FlashUpdateTable() {
         <Container
             className={styles.flashUpdatesTable}
             heading={heading}
-            headerDescriptionContainerClassName={styles.filters}
             withHeaderBorder
             footerActions={(
                 <Pager
@@ -154,7 +153,7 @@ function FlashUpdateTable() {
                     onActivePageChange={setPage}
                 />
             )}
-            actions={(
+            headerActions={(
                 <Link
                     to="allFlashUpdates"
                     withUnderline

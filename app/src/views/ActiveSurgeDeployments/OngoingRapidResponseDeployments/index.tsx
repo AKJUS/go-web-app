@@ -6,6 +6,7 @@ import {
 import {
     Container,
     LegendItem,
+    ListView,
     Pager,
     Table,
     TableBodyContent,
@@ -175,6 +176,7 @@ function OngoingRapidResponseDeployments() {
                     onClick: handleExpandClick,
                     expanded: row.id === expandedRow?.id,
                 }),
+                { columnClassName: styles.actions },
             ),
         ]),
         [
@@ -290,7 +292,7 @@ function OngoingRapidResponseDeployments() {
                     onActivePageChange={setPage}
                 />
             )}
-            actions={(
+            headerActions={(
                 <Link
                     to="allDeployedPersonnel"
                     withLinkIcon
@@ -299,8 +301,8 @@ function OngoingRapidResponseDeployments() {
                     {strings.rapidResponseViewAll}
                 </Link>
             )}
-            footerContent={(
-                <>
+            footer={(
+                <ListView withWrap>
                     <LegendItem
                         label={strings.emergencyTimeline}
                         color={COLOR_LIGHT_GREY}
@@ -309,7 +311,7 @@ function OngoingRapidResponseDeployments() {
                         label={strings.deploymentDate}
                         color={COLOR_PRIMARY_RED}
                     />
-                </>
+                </ListView>
             )}
         >
             <SortContext.Provider value={sortState}>

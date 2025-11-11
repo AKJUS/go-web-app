@@ -3,9 +3,8 @@ import { useOutletContext } from 'react-router-dom';
 import getBbox from '@turf/bbox';
 
 import RiskImminentEvents from '#components/domain/RiskImminentEvents';
+import TabPage from '#components/TabPage';
 import { type RegionOutletContext } from '#utils/outletContext';
-
-import styles from './styles.module.css';
 
 // TODO: Add historic data chart
 /** @knipignore */
@@ -19,7 +18,7 @@ export function Component() {
     );
 
     return (
-        <div className={styles.regionImminentRiskWatch}>
+        <TabPage>
             {regionResponse && (
                 <RiskImminentEvents
                     variant="region"
@@ -28,7 +27,7 @@ export function Component() {
                     bbox={bbox}
                 />
             )}
-        </div>
+        </TabPage>
     );
 }
 

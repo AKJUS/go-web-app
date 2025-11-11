@@ -4,13 +4,15 @@ import {
 } from 'react';
 import {
     Button,
+    ButtonLayout,
     Container,
-    DateOutput,
     ExpandableContainer,
     InfoPopup,
-    List,
+    InlineLayout,
+    ListView,
     NumberOutput,
     ProgressBar,
+    RawList,
     ReducedListDisplay,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -22,13 +24,13 @@ import {
     numericIdSelector,
     resolveToString,
 } from '@ifrc-go/ui/utils';
+import { isDefined } from '@togglecorp/fujs';
 
 import { type GoApiResponse } from '#utils/restRequest';
 
 import { getPeopleReachedInActivity } from '../useEmergencyProjectStats';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type EmergencyProjectResponse = GoApiResponse<'/api/v2/emergency-project/'>;
 type EmergencyProject = NonNullable<EmergencyProjectResponse['results']>[number];
@@ -58,16 +60,16 @@ function Activity({ activity }: ActivityProps) {
     return (
         <Container
             heading={activity.action_details?.title ?? activity.custom_action}
-            headingLevel={5}
-            spacing="cozy"
-            className={styles.activity}
-            withInternalPadding
+            headingLevel={6}
+            withBackground
+            withPadding
         >
             <TextOutput
                 label={strings.peopleReached}
                 value={getPeopleReachedInActivity(activity)}
                 description={activity.details}
                 strongValue
+                textSize="sm"
             />
         </Container>
     );
@@ -113,60 +115,80 @@ function ProjectListItem(props: ProjectListItemProps) {
 
     return (
         <Container
-            className={styles.projectListItem}
             heading={nsName}
-            headingLevel={5}
-            actions={(
-                <div className={styles.status}>
+            headingLevel={6}
+            headerActions={(
+                <ButtonLayout
+                    textSize="sm"
+                    styleVariant="translucent"
+                    colorVariant="secondary"
+                    spacing="sm"
+                >
                     {project.status_display}
-                </div>
+                </ButtonLayout>
             )}
-            withoutWrapInHeading
-            spacing="condensed"
-            withInternalPadding
+            withoutWrapInHeader
             footerActions={(
                 <Button
-                    variant="tertiary"
+                    styleVariant="action"
                     name={undefined}
                     onClick={detailsShown ? hideDetails : showDetails}
+                    textSize="sm"
                 >
                     {detailsShown ? strings.showLess : strings.showMore}
                 </Button>
             )}
-            headerDescriptionContainerClassName={styles.dates}
             headerDescription={(
-                <>
-                    <DateOutput
+                <ListView
+                    spacing="xs"
+                    withSpacingOpticalCorrection
+                >
+                    <TextOutput
                         value={project.start_date}
+                        valueType="date"
+                        textSize="sm"
+                        description={isDefined(project.end_date) && '-'}
                     />
-                    <DateOutput
-                        value={project.end_date}
-                    />
-                </>
+                    {isDefined(project.end_date) && (
+                        <TextOutput
+                            value={project.end_date}
+                            valueType="date"
+                            textSize="sm"
+                        />
+                    )}
+                </ListView>
             )}
+            withBackground
+            withPadding
+            spacing="sm"
+            withoutSpacingOpticalCorrection
         >
-            {project.districts_details && (
-                <ReducedListDisplay
-                    list={project.districts_details}
-                    keySelector={numericIdSelector}
-                    renderer={DistrictNameOutput}
-                    rendererParams={districtRendererParams}
-                    title={strings.provinceOrRegion}
-                />
-            )}
-            {detailsShown && (
-                <List
-                    className={styles.activities}
-                    data={relatedActivities}
-                    renderer={Activity}
-                    rendererParams={relatedActivityRendererParams}
-                    keySelector={numericIdSelector}
-                    pending={false}
-                    errored={false}
-                    filtered={false}
-                    compact
-                />
-            )}
+            <ListView layout="block">
+                {project.districts_details && (
+                    <ReducedListDisplay
+                        list={project.districts_details}
+                        keySelector={numericIdSelector}
+                        renderer={DistrictNameOutput}
+                        rendererParams={districtRendererParams}
+                        title={strings.provinceOrRegion}
+                    />
+                )}
+                {detailsShown && (
+                    <ListView
+                        layout="block"
+                        spacing="sm"
+                        withDarkBackground
+                        withPadding
+                    >
+                        <RawList
+                            data={relatedActivities}
+                            renderer={Activity}
+                            rendererParams={relatedActivityRendererParams}
+                            keySelector={numericIdSelector}
+                        />
+                    </ListView>
+                )}
+            </ListView>
         </Container>
     );
 }
@@ -195,44 +217,51 @@ function ActivityDetail(props: Props) {
 
     return (
         <ExpandableContainer
-            className={styles.activityDetail}
             heading={sectorDetails.title}
-            headingLevel={4}
-            headerDescriptionContainerClassName={styles.headerDescriptionContainer}
-            withHeaderBorder
+            headingLevel={5}
             headerDescription={(
-                <>
+                <InlineLayout
+                    spacing="sm"
+                    after={(
+                        <ListView spacing="xs">
+                            <NumberOutput
+                                value={projectCount}
+                            />
+                            <InfoPopup
+                                description={resolveToString(
+                                    strings.completedProject,
+                                    {
+                                        totalProjects: projectCount,
+                                        completeProjectCount,
+                                    },
+                                )}
+                            />
+                        </ListView>
+                    )}
+                >
                     <ProgressBar
-                        className={styles.progressBar}
                         value={completeProjectCount}
                         totalValue={projectCount}
                     />
-                    <NumberOutput
-                        value={projectCount}
-                    />
-                    <InfoPopup
-                        description={resolveToString(
-                            strings.completedProject,
-                            {
-                                totalProjects: projectCount,
-                                completeProjectCount,
-                            },
-                        )}
-                    />
-                </>
+                </InlineLayout>
             )}
+            withPadding
+            withBackground
+            spacing="sm"
+            withContentWell
+            withoutSpacingOpticalCorrection
         >
-            <List
-                className={styles.projectListContainer}
-                errored={false}
-                pending={false}
-                filtered={false}
-                data={projects}
-                keySelector={numericIdSelector}
-                renderer={ProjectListItem}
-                rendererParams={projectListRendererParams}
-                compact
-            />
+            <ListView
+                layout="block"
+                spacing="sm"
+            >
+                <RawList
+                    data={projects}
+                    keySelector={numericIdSelector}
+                    renderer={ProjectListItem}
+                    rendererParams={projectListRendererParams}
+                />
+            </ListView>
         </ExpandableContainer>
     );
 }

@@ -5,8 +5,9 @@ import {
     EmergencyResponseUnitIcon,
 } from '@ifrc-go/icons';
 import {
-    BlockLoading,
-    KeyFigure,
+    Container,
+    KeyFigureView,
+    ListView,
     NavigationTabList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -35,41 +36,41 @@ export function Component() {
             className={styles.surge}
             title={strings.surgeTitle}
             heading={strings.surgeTitle}
-            infoContainerClassName={styles.keyFigureList}
             info={(
-                <>
-                    {surgeAggregatedResponsePending && <BlockLoading />}
-                    {aggregatedResponse && (
-                        <>
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                icon={<DeployedIcon />}
-                                value={aggregatedResponse.active_rapid_response_personnel}
-                                label={strings.activeRapidResponsePersonnel}
-                            />
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                icon={<DeployedIcon />}
-                                value={aggregatedResponse.rapid_response_deployments_this_year}
-                                label={strings.rapidResponseDeployments}
-                            />
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                icon={<EmergencyResponseUnitIcon />}
-                                value={aggregatedResponse.active_emergency_response_units}
-                                label={strings.activeErus}
-                            />
-                            <KeyFigure
-                                className={styles.keyFigure}
-                                icon={<ClinicIcon />}
-                                value={
-                                    aggregatedResponse.emergency_response_unit_deployed_this_year
-                                }
-                                label={strings.eruDeploymentsThisYear}
-                            />
-                        </>
-                    )}
-                </>
+                <Container pending={surgeAggregatedResponsePending}>
+                    <ListView layout="grid" numPreferredGridColumns={4}>
+                        <KeyFigureView
+                            icon={<DeployedIcon />}
+                            value={aggregatedResponse?.active_rapid_response_personnel}
+                            valueType="number"
+                            label={strings.activeRapidResponsePersonnel}
+                            size="lg"
+                        />
+                        <KeyFigureView
+                            icon={<DeployedIcon />}
+                            value={aggregatedResponse?.rapid_response_deployments_this_year}
+                            valueType="number"
+                            label={strings.rapidResponseDeployments}
+                            size="lg"
+                        />
+                        <KeyFigureView
+                            icon={<EmergencyResponseUnitIcon />}
+                            value={aggregatedResponse?.active_emergency_response_units}
+                            valueType="number"
+                            label={strings.activeErus}
+                            size="lg"
+                        />
+                        <KeyFigureView
+                            icon={<ClinicIcon />}
+                            value={
+                                aggregatedResponse?.emergency_response_unit_deployed_this_year
+                            }
+                            valueType="number"
+                            label={strings.eruDeploymentsThisYear}
+                            size="lg"
+                        />
+                    </ListView>
+                </Container>
             )}
         >
             <NavigationTabList>

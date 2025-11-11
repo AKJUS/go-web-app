@@ -31,7 +31,7 @@ interface Props {
     onRemove: (index: number) => void;
     index: number;
     disabled?: boolean;
-    readOnly: boolean;
+    readOnly?: boolean;
 }
 
 function SourceInformationInput(props: Props) {
@@ -111,7 +111,7 @@ function SourceInformationInput(props: Props) {
                 className={styles.removeButton}
                 name={index}
                 onClick={onRemove}
-                variant="tertiary"
+                styleVariant="action"
                 disabled={disabled || readOnly}
                 title={strings.sourceInformationDeleteButton}
             >

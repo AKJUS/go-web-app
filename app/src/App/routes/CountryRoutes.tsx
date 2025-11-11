@@ -145,19 +145,6 @@ const countryOngoingActivitiesEmergencies = customWrapRoute({
     },
 });
 
-const countryOngoingActivitiesThreeWActivities = customWrapRoute({
-    parent: countryOngoingActivitiesLayout,
-    path: 'three-w/activities',
-    component: {
-        render: () => import('#views/CountryOngoingActivitiesThreeWActivities'),
-        props: {},
-    },
-    context: {
-        title: 'Country 3W Activities',
-        visibility: 'anything',
-    },
-});
-
 const countryOngoingActivitiesThreeWProjects = customWrapRoute({
     parent: countryOngoingActivitiesLayout,
     path: 'three-w/projects',
@@ -484,7 +471,6 @@ export default {
     countryOngoingActivitiesLayout,
     countryOngoingActivitiesIndex,
     countryOngoingActivitiesEmergencies,
-    countryOngoingActivitiesThreeWActivities,
     countryOngoingActivitiesThreeWProjects,
 
     countryNsOverviewLayout,

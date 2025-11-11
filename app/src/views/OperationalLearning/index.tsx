@@ -3,20 +3,23 @@ import {
     useMemo,
     useState,
 } from 'react';
+import { SearchLineIcon } from '@ifrc-go/icons';
 import {
     Button,
+    ButtonLayout,
     Chip,
     Container,
+    Description,
     DismissableListOutput,
     DismissableMultiListOutput,
     DismissableTextOutput,
-    Header,
-    List,
+    ListView,
+    RawList,
     Tab,
     TabList,
     TabPanel,
     Tabs,
-    TextOutput,
+    TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -32,6 +35,7 @@ import {
 } from '@ifrc-go/ui/utils';
 import {
     isDefined,
+    isNotDefined,
     isTruthyString,
     sum,
 } from '@togglecorp/fujs';
@@ -67,7 +71,6 @@ import Stats from './Stats';
 import Summary, { type Props as SummaryProps } from './Summary';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type SummaryStatusEnum = components<'read'>['schemas']['OpsLearningSummaryStatusEnum'];
 const opsLearningDashboardURL = 'https://app.powerbi.com/view?r=eyJrIjoiMTM4Y2ZhZGEtNGZmMS00ODZhLWFjZjQtMTE2ZTIyYTI0ODc4IiwidCI6ImEyYjUzYmU1LTczNGUtNGU2Yy1hYjBkLWQxODRmNjBmZDkxNyIsImMiOjh9&pageName=ReportSectionfa0be9512521e929ae4a';
@@ -325,27 +328,23 @@ export function Component() {
 
     return (
         <Page
-            className={styles.operationalLearning}
-            heading={(
-                <Header
-                    headingLevel={1}
-                    heading={strings.operationalLearningHeading}
-                    actionsContainerClassName={styles.betaTag}
-                    actions={(
-                        <Chip
-                            className={styles.chip}
-                            name="betaTag"
-                            label={strings.beta}
-                            variant="tertiary"
-                        />
-                    )}
-                />
+            heading={strings.operationalLearningHeading}
+            actions={(
+                <ButtonLayout
+                    styleVariant="translucent"
+                    spacing="sm"
+                    readOnly
+                >
+                    {strings.beta}
+                </ButtonLayout>
             )}
             description={strings.operationalLearningHeadingDescription}
-            mainSectionClassName={styles.mainSection}
-            infoContainerClassName={styles.oldDashboardInfo}
             info={(
-                <div className={styles.infoText}>
+                <Description
+                    textSize="sm"
+                    withLightText
+                    withCenteredContent
+                >
                     {resolveToComponent(
                         strings.disclaimerMessage,
                         {
@@ -353,7 +352,7 @@ export function Component() {
                                 <Link
                                     href={opsLearningDashboardURL}
                                     external
-                                    variant="tertiary"
+                                    styleVariant="action"
                                     withLinkIcon
                                 >
                                     {strings.here}
@@ -361,14 +360,14 @@ export function Component() {
                             ),
                         },
                     )}
-                </div>
+                </Description>
             )}
         >
-            <Container
-                footerClassName={styles.footer}
-                footerContentClassName={styles.footerContent}
-                // withGridViewInFilter
-                filters={(
+            <ListView layout="block">
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={6}
+                >
                     <Filters
                         value={rawFilter}
                         onChange={onFilterChange}
@@ -379,131 +378,131 @@ export function Component() {
                         perLearningTypeOptions={perLearningTypeOptions}
                         organizationTypePending={opsLearningOrganizationTypePending}
                     />
+                </ListView>
+                <ListView
+                    withWrap
+                    withSpaceBetweenContents
+                >
+                    <TextInput
+                        name="appealSearchText"
+                        placeholder={strings.searchPlaceholder}
+                        value={rawFilter.appealSearchText}
+                        onChange={onFilterChange}
+                        icons={<SearchLineIcon />}
+                        // disabled={disabled}
+                    />
+                    <ListView
+                        withWrap
+                        spacing="sm"
+                    >
+                        <ExportButton
+                            onClick={handleExportClick}
+                            pendingExport={pendingExport}
+                            totalCount={opsLearningResponse?.count}
+                            disabled={(
+                                opsLearningSummaryResponse?.status !== SUMMARY_STATUS_SUCCESS
+                                || opsLearningPending
+                            )}
+                        />
+                        {rawFiltered && (
+                            <Button
+                                name={undefined}
+                                onClick={handleResetFilters}
+                            >
+                                {strings.clearFilters}
+                            </Button>
+                        )}
+                        {!filterPristine && (
+                            <Button
+                                name="apply"
+                                onClick={handleApplyFilters}
+                                disabled={filterPristine}
+                            >
+                                {strings.applyFilters}
+                            </Button>
+                        )}
+                    </ListView>
+                </ListView>
+                {isDefined(rawFilter) && hasSomeDefinedValue(rawFilter) && (
+                    <ListView
+                        withWrap
+                        spacing="xs"
+                    >
+                        <DismissableListOutput
+                            name="region"
+                            value={rawFilter.region}
+                            onDismiss={onFilterChange}
+                            options={regionList}
+                            labelSelector={stringValueSelector}
+                            keySelector={regionKeySelector}
+                        />
+                        <DismissableMultiListOutput
+                            name="countries"
+                            onDismiss={onFilterChange}
+                            value={rawFilter.countries}
+                            options={countryList}
+                            labelSelector={stringNameSelector}
+                            keySelector={numericIdSelector}
+                        />
+                        <DismissableMultiListOutput
+                            name="disasterTypes"
+                            onDismiss={onFilterChange}
+                            value={rawFilter.disasterTypes}
+                            options={disasterTypeOptions}
+                            labelSelector={disasterTypeLabelSelector}
+                            keySelector={numericIdSelector}
+                        />
+                        <DismissableMultiListOutput
+                            name="secondarySectors"
+                            onDismiss={onFilterChange}
+                            value={rawFilter.secondarySectors}
+                            options={secondarySectorOptions}
+                            labelSelector={stringLabelSelector}
+                            keySelector={numericKeySelector}
+                        />
+                        <DismissableMultiListOutput
+                            name="perComponents"
+                            onDismiss={onFilterChange}
+                            value={rawFilter.perComponents}
+                            options={perComponentsResponse?.results}
+                            labelSelector={getFormattedComponentName}
+                            keySelector={numericIdSelector}
+                        />
+                        <DismissableMultiListOutput
+                            name="organizationTypes"
+                            onDismiss={onFilterChange}
+                            value={rawFilter.organizationTypes}
+                            options={opsLearningOrganizationTypes?.results}
+                            labelSelector={stringTitleSelector}
+                            keySelector={numericIdSelector}
+                        />
+                        <DismissableMultiListOutput
+                            name="perLearningTypes"
+                            onDismiss={onFilterChange}
+                            value={rawFilter.perLearningTypes}
+                            options={perLearningTypeOptions}
+                            labelSelector={stringValueSelector}
+                            keySelector={perLearningTypeKeySelector}
+                        />
+                        <DismissableTextOutput
+                            name="appealStartDateAfter"
+                            value={rawFilter.appealStartDateAfter}
+                            onDismiss={onFilterChange}
+                        />
+                        <DismissableTextOutput
+                            name="appealStartDateBefore"
+                            value={rawFilter.appealStartDateBefore}
+                            onDismiss={onFilterChange}
+                        />
+                        <DismissableTextOutput
+                            name="appealSearchText"
+                            value={rawFilter.appealSearchText}
+                            onDismiss={onFilterChange}
+                        />
+                    </ListView>
                 )}
-                footerContent={(
-                    <>
-                        <div className={styles.filterChips}>
-                            {isDefined(rawFilter) && hasSomeDefinedValue(rawFilter) && (
-                                <TextOutput
-                                    className={styles.selectedFilters}
-                                    valueClassName={styles.options}
-                                    withoutLabelColon
-                                    strongLabel
-                                    label={strings.selectedFilters}
-                                    value={(
-                                        <>
-                                            <DismissableListOutput
-                                                name="region"
-                                                value={rawFilter.region}
-                                                onDismiss={onFilterChange}
-                                                options={regionList}
-                                                labelSelector={stringValueSelector}
-                                                keySelector={regionKeySelector}
-                                            />
-                                            <DismissableMultiListOutput
-                                                name="countries"
-                                                onDismiss={onFilterChange}
-                                                value={rawFilter.countries}
-                                                options={countryList}
-                                                labelSelector={stringNameSelector}
-                                                keySelector={numericIdSelector}
-                                            />
-                                            <DismissableMultiListOutput
-                                                name="disasterTypes"
-                                                onDismiss={onFilterChange}
-                                                value={rawFilter.disasterTypes}
-                                                options={disasterTypeOptions}
-                                                labelSelector={disasterTypeLabelSelector}
-                                                keySelector={numericIdSelector}
-                                            />
-                                            <DismissableMultiListOutput
-                                                name="secondarySectors"
-                                                onDismiss={onFilterChange}
-                                                value={rawFilter.secondarySectors}
-                                                options={secondarySectorOptions}
-                                                labelSelector={stringLabelSelector}
-                                                keySelector={numericKeySelector}
-                                            />
-                                            <DismissableMultiListOutput
-                                                name="perComponents"
-                                                onDismiss={onFilterChange}
-                                                value={rawFilter.perComponents}
-                                                options={perComponentsResponse?.results}
-                                                labelSelector={getFormattedComponentName}
-                                                keySelector={numericIdSelector}
-                                            />
-                                            <DismissableMultiListOutput
-                                                name="organizationTypes"
-                                                onDismiss={onFilterChange}
-                                                value={rawFilter.organizationTypes}
-                                                options={opsLearningOrganizationTypes?.results}
-                                                labelSelector={stringTitleSelector}
-                                                keySelector={numericIdSelector}
-                                            />
-                                            <DismissableMultiListOutput
-                                                name="perLearningTypes"
-                                                onDismiss={onFilterChange}
-                                                value={rawFilter.perLearningTypes}
-                                                options={perLearningTypeOptions}
-                                                labelSelector={stringValueSelector}
-                                                keySelector={perLearningTypeKeySelector}
-                                            />
-                                            <DismissableTextOutput
-                                                name="appealStartDateAfter"
-                                                value={rawFilter.appealStartDateAfter}
-                                                onDismiss={onFilterChange}
-                                            />
-                                            <DismissableTextOutput
-                                                name="appealStartDateBefore"
-                                                value={rawFilter.appealStartDateBefore}
-                                                onDismiss={onFilterChange}
-                                            />
-                                            <DismissableTextOutput
-                                                name="appealSearchText"
-                                                value={rawFilter.appealSearchText}
-                                                onDismiss={onFilterChange}
-                                            />
-                                        </>
-                                    )}
-                                />
-                            )}
-                        </div>
-                        <div className={styles.actionButtons}>
-                            {!filterPristine && (
-                                <Button
-                                    name="apply"
-                                    onClick={handleApplyFilters}
-                                    disabled={filterPristine}
-                                    variant="primary"
-                                >
-                                    {strings.applyFilters}
-                                </Button>
-                            )}
-                            {rawFiltered && (
-                                <Button
-                                    name={undefined}
-                                    onClick={handleResetFilters}
-                                    variant="secondary"
-                                >
-                                    {strings.clearFilters}
-                                </Button>
-                            )}
-                            <ExportButton
-                                onClick={handleExportClick}
-                                pendingExport={pendingExport}
-                                totalCount={opsLearningResponse?.count}
-                                disabled={(
-                                    opsLearningSummaryResponse?.status !== SUMMARY_STATUS_SUCCESS
-                                    || opsLearningPending
-                                )}
-                            />
-                        </div>
-                    </>
-                )}
-            />
-            <Stats
-                query={query}
-            />
+            </ListView>
+            <Stats query={query} />
             {showKeyInsights && (
                 <KeyInsights
                     opsLearningSummaryResponse={opsLearningSummaryResponse}
@@ -541,59 +540,76 @@ export function Component() {
                 <Tabs
                     onChange={setActiveTab}
                     value={activeTab}
-                    variant="tertiary"
+                    styleVariant="nav"
                 >
                     <Container
-                        heading={(
-                            <TabList>
-                                <Tab name="sector">{strings.bySectorTitle}</Tab>
-                                <Tab name="component">{strings.byComponentTitle}</Tab>
-                            </TabList>
-                        )}
-                        headingContainerClassName={styles.summaryHeading}
-                        headingDescription={extractsCount > 0 && (
-                            <Chip
-                                name="extractsCount"
-                                label={((extractsCount) > 1) ? (
-                                    resolveToString(
-                                        strings.extractsCount,
-                                        { count: extractsCount },
-                                    )
-                                ) : (
-                                    resolveToString(
-                                        strings.extractCount,
-                                        { count: extractsCount },
-                                    )
+                        headerDescription={(
+                            <ListView>
+                                <TabList>
+                                    <Tab name="sector">{strings.bySectorTitle}</Tab>
+                                    <Tab name="component">{strings.byComponentTitle}</Tab>
+                                </TabList>
+                                {extractsCount > 0 && (
+                                    <Chip
+                                        name="extractsCount"
+                                        label={((extractsCount) > 1) ? (
+                                            resolveToString(
+                                                strings.extractsCount,
+                                                { count: extractsCount },
+                                            )
+                                        ) : (
+                                            resolveToString(
+                                                strings.extractCount,
+                                                { count: extractsCount },
+                                            )
+                                        )}
+                                        variant="tertiary"
+                                    />
                                 )}
-                                variant="tertiary"
-                            />
+                            </ListView>
                         )}
                     >
                         <TabPanel name="sector">
-                            <List
-                                className={styles.summaryList}
-                                data={opsLearningSummaryResponse?.sectors}
-                                renderer={Summary}
-                                keySelector={numericIdSelector}
-                                rendererParams={sectorSummaryRendererParams}
+                            <Container
                                 emptyMessage={strings.noSummariesAvailableForSector}
                                 errored={isDefined(opsLearningSummaryError)}
                                 pending={opsLearningSummaryPending}
-                                filtered={false}
-                            />
+                                empty={isNotDefined(opsLearningSummaryResponse?.sectors)
+                                    || opsLearningSummaryResponse.sectors.length === 0}
+                            >
+                                <ListView
+                                    layout="block"
+                                    spacing="sm"
+                                >
+                                    <RawList
+                                        data={opsLearningSummaryResponse?.sectors}
+                                        renderer={Summary}
+                                        keySelector={numericIdSelector}
+                                        rendererParams={sectorSummaryRendererParams}
+                                    />
+                                </ListView>
+                            </Container>
                         </TabPanel>
                         <TabPanel name="component">
-                            <List
-                                className={styles.summaryList}
-                                data={opsLearningSummaryResponse?.components}
-                                renderer={Summary}
-                                keySelector={numericIdSelector}
-                                rendererParams={componentSummaryRendererParams}
+                            <Container
                                 emptyMessage={strings.noSummariesAvailableForComponent}
                                 errored={isDefined(opsLearningSummaryError)}
                                 pending={opsLearningSummaryPending}
-                                filtered={false}
-                            />
+                                empty={isNotDefined(opsLearningSummaryResponse?.components)
+                                    || opsLearningSummaryResponse.components.length === 0}
+                            >
+                                <ListView
+                                    layout="block"
+                                    spacing="sm"
+                                >
+                                    <RawList
+                                        data={opsLearningSummaryResponse?.components}
+                                        renderer={Summary}
+                                        keySelector={numericIdSelector}
+                                        rendererParams={componentSummaryRendererParams}
+                                    />
+                                </ListView>
+                            </Container>
                         </TabPanel>
                     </Container>
                 </Tabs>

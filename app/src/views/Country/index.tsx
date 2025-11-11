@@ -41,7 +41,6 @@ import { resolveUrl } from '#utils/resolveUrl';
 import { useRequest } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -115,7 +114,6 @@ export function Component() {
         return (
             <Page
                 title={pageTitle}
-                className={styles.country}
             >
                 <Message
                     title={strings.countryLoadingErrorMessage}
@@ -127,10 +125,7 @@ export function Component() {
 
     if (isDefined(countryResponse) && isFalsyString(countryResponse.iso3)) {
         return (
-            <Page
-                title={pageTitle}
-                className={styles.country}
-            >
+            <Page title={pageTitle}>
                 <Message
                     title={strings.countryLoadingErrorMessage}
                 />
@@ -140,7 +135,6 @@ export function Component() {
 
     return (
         <Page
-            className={styles.country}
             title={pageTitle}
             heading={country?.name ?? '--'}
             breadCrumbs={(
@@ -187,8 +181,10 @@ export function Component() {
                 <Link
                     external
                     href={resolveUrl(adminUrl, `api/country/${countryId}/change/`)}
-                    variant="secondary"
-                    icons={<PencilFillIcon />}
+                    before={<PencilFillIcon />}
+                    spacing="sm"
+                    colorVariant="primary"
+                    styleVariant="outline"
                 >
                     {strings.editCountryLink}
                 </Link>

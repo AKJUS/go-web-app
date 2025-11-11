@@ -1,16 +1,12 @@
 import React, { useCallback } from 'react';
-import {
-    _cs,
-    isFalsyString,
-} from '@togglecorp/fujs';
 
 import Checkbox, { Props as CheckboxProps } from '#components/Checkbox';
 import InputError from '#components/InputError';
 import InputHint from '#components/InputHint';
 import InputLabel from '#components/InputLabel';
+import ListView from '#components/ListView';
 import RawList, { type ListKey } from '#components/RawList';
-
-import styles from './styles.module.css';
+import { SpacingType } from '#utils/style';
 
 export interface Props<
     KEY extends ListKey,
@@ -19,23 +15,27 @@ export interface Props<
 > {
     className?: string;
     checkboxClassName?: string;
-    direction?: 'horizontal' | 'vertical';
     disabled?: boolean;
     error?: string;
-    errorContainerClassName?: string;
+    errorOnTooltip?: boolean;
     hint?: React.ReactNode;
     hintContainerClassName?: string;
     keySelector: (option: OPTION) => KEY;
     label?: React.ReactNode;
     labelContainerClassName?: string;
     labelSelector: (option: OPTION) => string;
-    listContainerClassName?: string;
     descriptionSelector?: (option: OPTION) => React.ReactNode;
     name: NAME;
     onChange: (newValue: KEY[], name: NAME) => void;
     options: OPTION[] | undefined;
     readOnly?: boolean;
     value: KEY[] | undefined | null;
+    checkListLayout?: 'inline' | 'block' | 'grid';
+    checkListLayoutPreferredGridColumns?: number;
+    spacing?: SpacingType;
+    withPadding?: boolean;
+    withBackground?: boolean;
+    withDarkBackground?: boolean;
 }
 
 function CheckList<
@@ -45,17 +45,15 @@ function CheckList<
 >(props: Props<KEY, NAME, OPTION>) {
     const {
         className,
-        direction = 'horizontal',
         disabled,
         error,
-        errorContainerClassName,
+        errorOnTooltip,
         hint,
         hintContainerClassName,
         keySelector,
         label,
         labelContainerClassName,
         labelSelector,
-        listContainerClassName,
         descriptionSelector,
         checkboxClassName,
         name,
@@ -63,6 +61,12 @@ function CheckList<
         options,
         readOnly,
         value,
+        checkListLayout = 'inline',
+        checkListLayoutPreferredGridColumns,
+        spacing,
+        withPadding,
+        withBackground,
+        withDarkBackground,
     } = props;
 
     const handleCheck = useCallback((isSelected: boolean, key: KEY) => {
@@ -92,14 +96,24 @@ function CheckList<
         checkboxClassName,
     ]);
 
+    const checkList = (
+        <RawList<OPTION, KEY, CheckboxProps<KEY>>
+            data={options}
+            keySelector={keySelector}
+            renderer={Checkbox}
+            rendererParams={optionListRendererParams}
+        />
+    );
+
     return (
-        <div
-            className={_cs(
-                styles.checklist,
-                className,
-                direction === 'horizontal' && styles.horizontal,
-                direction === 'vertical' && styles.vertical,
-            )}
+        <ListView
+            layout="block"
+            className={className}
+            withSpacingOpticalCorrection
+            spacing={spacing}
+            withBackground={withBackground}
+            withDarkBackground={withDarkBackground}
+            withPadding={withPadding}
         >
             <InputLabel
                 className={labelContainerClassName}
@@ -107,24 +121,49 @@ function CheckList<
             >
                 {label}
             </InputLabel>
-            <div className={_cs(styles.checklistContainer, listContainerClassName)}>
-                <RawList<OPTION, KEY, CheckboxProps<KEY>>
-                    data={options}
-                    keySelector={keySelector}
-                    renderer={Checkbox}
-                    rendererParams={optionListRendererParams}
-                />
-            </div>
-            <InputError className={errorContainerClassName}>
-                {error}
-            </InputError>
+            {checkListLayout === 'inline' && (
+                <ListView
+                    withWrap
+                    withSpacingOpticalCorrection
+                    spacing={spacing}
+                >
+                    {checkList}
+                </ListView>
+            )}
+            {checkListLayout === 'block' && (
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                    spacing={spacing}
+                >
+                    {checkList}
+                </ListView>
+            )}
+            {checkListLayout === 'grid' && (
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={checkListLayoutPreferredGridColumns}
+                    withSpacingOpticalCorrection
+                    spacing={spacing}
+                >
+                    {checkList}
+                </ListView>
+            )}
+            {error && (
+                <InputError
+                    disabled={disabled}
+                    floating={errorOnTooltip}
+                >
+                    {error}
+                </InputError>
+            )}
             {/* FIXME: Do we need to check for error here? */}
-            {isFalsyString(error) && hint && (
+            {!error && !errorOnTooltip && hint && (
                 <InputHint className={hintContainerClassName}>
                     {hint}
                 </InputHint>
             )}
-        </div>
+        </ListView>
     );
 }
 

@@ -8,7 +8,8 @@ import {
 } from '@ifrc-go/icons';
 import {
     InfoPopup,
-    KeyFigure,
+    KeyFigureView,
+    ListView,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { getPercentage } from '@ifrc-go/ui/utils';
@@ -18,7 +19,6 @@ import type { GoApiResponse } from '#utils/restRequest';
 import { useRequest } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type RegionResponse = GoApiResponse<'/api/v2/region/{id}/'>;
 
@@ -51,11 +51,14 @@ function RegionKeyFigures(props: Props) {
     }
 
     return (
-        <>
-            <KeyFigure
+        <ListView
+            layout="grid"
+            numPreferredGridColumns={6}
+        >
+            <KeyFigureView
                 icon={<DrefIcon />}
-                className={styles.keyFigure}
                 value={aggregatedAppealResponse.active_drefs}
+                valueType="number"
                 info={(
                     <InfoPopup
                         title={strings.regionKeyFiguresDrefTitle}
@@ -63,11 +66,12 @@ function RegionKeyFigures(props: Props) {
                     />
                 )}
                 label={strings.regionKeyFiguresActiveDrefs}
+                size="lg"
             />
-            <KeyFigure
+            <KeyFigureView
                 icon={<AppealsIcon />}
-                className={styles.keyFigure}
                 value={aggregatedAppealResponse.active_appeals}
+                valueType="number"
                 info={(
                     <InfoPopup
                         title={strings.regionKeyFiguresActiveAppealsTitle}
@@ -75,40 +79,47 @@ function RegionKeyFigures(props: Props) {
                     />
                 )}
                 label={strings.regionKeyFiguresActiveAppeals}
+                size="lg"
             />
-            <KeyFigure
+            <KeyFigureView
                 icon={<FundingIcon />}
-                className={styles.keyFigure}
                 value={aggregatedAppealResponse.amount_requested_dref_included}
-                compactValue
+                valueType="number"
+                size="lg"
+                valueOptions={{ compact: true }}
                 label={strings.regionKeyFiguresBudget}
             />
-            <KeyFigure
+            <KeyFigureView
                 icon={<FundingCoverageIcon />}
-                className={styles.keyFigure}
                 value={getPercentage(
                     aggregatedAppealResponse?.amount_funded_dref_included,
                     aggregatedAppealResponse?.amount_requested_dref_included,
                 )}
-                suffix="%"
-                compactValue
+                valueType="number"
+                valueOptions={{
+                    compact: true,
+                    suffix: '%',
+                }}
+                size="lg"
                 label={strings.regionKeyFiguresAppealsFunding}
             />
-            <KeyFigure
+            <KeyFigureView
                 icon={<TargetedPopulationIcon />}
-                className={styles.keyFigure}
                 value={aggregatedAppealResponse.target_population}
-                compactValue
+                valueType="number"
+                size="lg"
+                valueOptions={{ compact: true }}
                 label={strings.regionKeyFiguresTargetPop}
             />
-            <KeyFigure
+            <KeyFigureView
                 icon={<AppealsTwoIcon />}
-                className={styles.keyFigure}
                 value={regionResponse.country_plan_count}
-                compactValue
+                valueType="number"
+                size="lg"
+                valueOptions={{ compact: true }}
                 label={strings.regionKeyFiguresCountryPlan}
             />
-        </>
+        </ListView>
     );
 }
 

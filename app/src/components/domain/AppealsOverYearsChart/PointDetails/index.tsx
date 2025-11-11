@@ -1,5 +1,6 @@
 import {
     Container,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -36,61 +37,72 @@ function PointDetails(props: Props) {
     return (
         <Container
             className={_cs(styles.pointDetails, className)}
-            childrenContainerClassName={styles.content}
             heading={heading}
             headingLevel={4}
             withHeaderBorder
-            actions={action}
-            withInternalPadding
+            headerActions={action}
+            withPadding
+            pending={false}
+            filtered={false}
+            errored={false}
+            empty={!data}
         >
-            {data && (
-                <>
-                    <div className={styles.emergencyAppealDetails}>
-                        <TextOutput
-                            icon={<div className={styles.emergencyAppealPointIcon} />}
-                            label={strings.timelineChartEmergencyAppealLabel}
-                            value={data.emergencyAppeal?.count ?? 0}
-                            valueType="number"
-                            strongValue
-                            strongLabel
-                        />
-                        <TextOutput
-                            label={strings.timelineChartAmountFundedLabel}
-                            value={data.emergencyAppeal?.amount_funded}
-                            valueType="number"
-                            strongValue
-                        />
-                        <TextOutput
-                            label={strings.timelineChartPeopleTargetedLabel}
-                            value={data.emergencyAppeal?.beneficiaries}
-                            valueType="number"
-                            strongValue
-                        />
-                    </div>
-                    <div className={styles.drefDetails}>
-                        <TextOutput
-                            icon={<div className={styles.drefPointIcon} />}
-                            label={strings.timelineChartDrefLabel}
-                            value={data.dref?.count ?? 0}
-                            valueType="number"
-                            strongValue
-                            strongLabel
-                        />
-                        <TextOutput
-                            label={strings.timelineChartAmountFundedLabel}
-                            value={data.dref?.amount_funded}
-                            valueType="number"
-                            strongValue
-                        />
-                        <TextOutput
-                            label={strings.timelineChartPeopleTargetedLabel}
-                            value={Number(data.dref?.beneficiaries)}
-                            valueType="number"
-                            strongValue
-                        />
-                    </div>
-                </>
-            )}
+            <ListView
+                layout="block"
+            >
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                    spacing="sm"
+                >
+                    <TextOutput
+                        icon={<div className={styles.emergencyAppealPointIcon} />}
+                        label={strings.timelineChartEmergencyAppealLabel}
+                        value={data?.emergencyAppeal?.count ?? 0}
+                        valueType="number"
+                        strongValue
+                        strongLabel
+                    />
+                    <TextOutput
+                        label={strings.timelineChartAmountFundedLabel}
+                        value={data?.emergencyAppeal?.amount_funded}
+                        valueType="number"
+                        strongValue
+                    />
+                    <TextOutput
+                        label={strings.timelineChartPeopleTargetedLabel}
+                        value={data?.emergencyAppeal?.beneficiaries}
+                        valueType="number"
+                        strongValue
+                    />
+                </ListView>
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                    spacing="sm"
+                >
+                    <TextOutput
+                        icon={<div className={styles.drefPointIcon} />}
+                        label={strings.timelineChartDrefLabel}
+                        value={data?.dref?.count ?? 0}
+                        valueType="number"
+                        strongValue
+                        strongLabel
+                    />
+                    <TextOutput
+                        label={strings.timelineChartAmountFundedLabel}
+                        value={data?.dref?.amount_funded}
+                        valueType="number"
+                        strongValue
+                    />
+                    <TextOutput
+                        label={strings.timelineChartPeopleTargetedLabel}
+                        value={Number(data?.dref?.beneficiaries)}
+                        valueType="number"
+                        strongValue
+                    />
+                </ListView>
+            </ListView>
         </Container>
     );
 }

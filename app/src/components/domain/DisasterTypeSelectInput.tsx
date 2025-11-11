@@ -32,6 +32,7 @@ type Props<NAME> = SelectInputProps<
     ) => void;
     value: number | undefined | null;
     optionsFilter?: (item: DisasterTypeItem) => boolean;
+    readOnly?: boolean;
 }
 
 function DisasterTypeSelectInput<const NAME>(props: Props<NAME>) {

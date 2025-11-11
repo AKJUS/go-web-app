@@ -34,31 +34,4 @@
             height: 100%;
         }
     }
-
-    .label-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--go-ui-spacing-md);
-
-        .label-container {
-            display: flex;
-            align-items: baseline;
-            gap: var(--go-ui-spacing-2xs);
-
-            .color-dot {
-                flex-shrink: 0;
-                border-radius: 0.3rem;
-                width: 0.6rem;
-                height: 0.6rem;
-            }
-
-            .label {
-                padding: 0 var(--go-ui-spacing-xs);
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                font-size: var(--go-ui-font-size-sm);
-            }
-        }
-    }
 }

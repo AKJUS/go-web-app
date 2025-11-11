@@ -1,6 +1,7 @@
 import { DeleteBinTwoLineIcon } from '@ifrc-go/icons';
 import {
     Button,
+    InlineLayout,
     InputSection,
     TextArea,
 } from '@ifrc-go/ui';
@@ -19,7 +20,6 @@ import NonFieldError from '#components/NonFieldError';
 import { type PartialFinalReport } from '../../schema';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type NeedFormFields = NonNullable<PartialFinalReport['needs_identified']>[number];
 const defaultNeedValue: NeedFormFields = {
@@ -33,7 +33,7 @@ interface Props {
     onRemove: (index: number) => void;
     index: number;
     titleDisplayMap: Record<string, string> | undefined;
-    readOnly: boolean;
+    readOnly?: boolean;
     disabled?: boolean;
 }
 
@@ -63,32 +63,33 @@ function NeedInput(props: Props) {
 
     return (
         <InputSection
-            className={styles.needInput}
             title={needLabel}
-            contentSectionClassName={styles.content}
             withAsteriskOnTitle
         >
             <NonFieldError error={error} />
-            <TextArea
-                className={styles.descriptionInput}
-                name="description"
-                value={value.description}
-                onChange={onFieldChange}
-                error={error?.description}
-                readOnly={readOnly}
-                disabled={disabled}
-                // withAsterisk
-            />
-            <Button
-                className={styles.removeButton}
-                name={index}
-                onClick={onRemove}
-                variant="tertiary"
-                title={strings.drefFinalReportFormRemoveNeed}
-                disabled={disabled || readOnly}
+            <InlineLayout
+                after={(
+                    <Button
+                        name={index}
+                        onClick={onRemove}
+                        styleVariant="action"
+                        title={strings.drefFinalReportFormRemoveNeed}
+                        disabled={disabled || readOnly}
+                    >
+                        <DeleteBinTwoLineIcon />
+                    </Button>
+                )}
             >
-                <DeleteBinTwoLineIcon />
-            </Button>
+                <TextArea
+                    name="description"
+                    value={value.description}
+                    onChange={onFieldChange}
+                    error={error?.description}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    // withAsterisk
+                />
+            </InlineLayout>
         </InputSection>
     );
 }

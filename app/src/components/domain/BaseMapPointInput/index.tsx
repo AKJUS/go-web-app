@@ -28,6 +28,7 @@ import {
 import DiffWrapper from '#components/DiffWrapper';
 import BaseMap, { type Props as BaseMapProps } from '#components/domain/BaseMap';
 import useCountry from '#hooks/domain/useCountry';
+import { hasChanged } from '#utils/common';
 import {
     COLOR_LIGHT_GREY,
     COLOR_PRIMARY_RED,
@@ -61,8 +62,6 @@ interface Props<NAME> extends BaseMapProps {
     showChanges?: boolean;
     showPreviousValue?: boolean;
     diffWrapperClassName?: string;
-    latitudeInputSectionClassName?: string;
-    longitudeInputSectionClassName?: string;
 }
 
 function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
@@ -85,8 +84,6 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
         showChanges = false,
         showPreviousValue = false,
         diffWrapperClassName,
-        latitudeInputSectionClassName,
-        longitudeInputSectionClassName,
         ...otherProps
     } = props;
 
@@ -203,7 +200,7 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
                     className={diffWrapperClassName}
                 >
                     <NumberInput
-                        inputSectionClassName={latitudeInputSectionClassName}
+                        changed={hasChanged(value?.lat, previousValue?.lat)}
                         name="lat"
                         label={strings.latitude}
                         value={value?.lat}
@@ -221,7 +218,7 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
                     className={diffWrapperClassName}
                 >
                     <NumberInput
-                        inputSectionClassName={longitudeInputSectionClassName}
+                        changed={hasChanged(value?.lng, previousValue?.lng)}
                         name="lng"
                         label={strings.longitude}
                         value={value?.lng}

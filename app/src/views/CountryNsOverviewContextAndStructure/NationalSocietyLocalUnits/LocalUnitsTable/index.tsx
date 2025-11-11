@@ -243,7 +243,6 @@ function LocalUnitsTable(props: Props) {
                     onActivePageChange={setPage}
                 />
             )}
-            contentViewType="vertical"
         >
             <Table
                 pending={localUnitsPending}

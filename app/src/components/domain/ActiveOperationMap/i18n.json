@@ -2,7 +2,6 @@
     "namespace": "activeOperationMap",
     "strings": {
         "activeOperationsTitle": "Active Operations Map ({numAppeals})",
-        "presentationModeButton": "Presentation Mode",
         "operationMapViewAll": "View all Operations",
         "operationMapViewAllInRegion": "View all Operations in this Region",
         "operationMapViewAllInCountry": "View all Operations in this Country",
@@ -22,7 +21,6 @@
         "explanationBubbleEmergencyAppeal": "Emergency appeal",
         "explanationBubbleDref": "DREF",
         "explanationBubbleMultiple": "Multiple types",
-        "downloadMapTitle": "Ongoing operations",
         "operationMapProvinces": "Provinces",
         "operationMapClearFilters": "Clear Filters",
         "operationFilterDistrictPlaceholder": "All Provinces"

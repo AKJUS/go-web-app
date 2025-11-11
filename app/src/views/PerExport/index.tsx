@@ -464,6 +464,7 @@ export function Component() {
                             className={styles.averageRatingKeyFigure}
                             value={assessmentStats?.averageRating}
                             label={strings.perExportAverageComponentRatingLabel}
+                            valueType="number"
                         />
                     </Container>
                 </>
@@ -535,6 +536,7 @@ export function Component() {
                                 <ProgressBar
                                     value={component.rating?.value ?? 0}
                                     totalValue={5}
+                                    colorVariant="custom"
                                     color={progressBarColor}
                                     title={(
                                         isDefined(component.rating)

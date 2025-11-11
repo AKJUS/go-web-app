@@ -13,7 +13,7 @@ import {
 import {
     BlockLoading,
     Button,
-    Container,
+    Message,
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -223,8 +223,8 @@ export function Component() {
             return (
                 <Button
                     name={undefined}
-                    variant="tertiary"
-                    icons={(
+                    styleVariant="action"
+                    before={(
                         <ChevronLeftLineIcon
                             className={styles.backIcon}
                         />
@@ -265,7 +265,6 @@ export function Component() {
             className={styles.search}
             title={strings.searchPageTitle}
             heading={strings.searchPageSearchForKeyword}
-            descriptionContainerClassName={styles.pageDescription}
             description={(
                 <>
                     <div className={styles.searchInputContainer}>
@@ -278,7 +277,7 @@ export function Component() {
                             actions={searchStringTemp && (
                                 <Button
                                     name={undefined}
-                                    variant="tertiary"
+                                    styleVariant="action"
                                     onClick={handleClearSearchInput}
                                 >
                                     <CloseLineIcon className={styles.closeIcon} />
@@ -294,7 +293,6 @@ export function Component() {
                             name={trimmedSearchString}
                             onClick={setUrlSearchValueWithSideEffect}
                             disabled={trimmedSearchString.length < SEARCH_TEXT_LENGTH_MIN}
-                            spacing="comfortable"
                         >
                             {strings.searchGoButtonLabel}
                         </Button>
@@ -306,7 +304,7 @@ export function Component() {
                         <Link
                             href={feedbackLink}
                             external
-                            variant="secondary"
+                            colorVariant="primary"
                         >
                             {strings.searchPageFeedbackButton}
                         </Link>
@@ -316,12 +314,12 @@ export function Component() {
         >
             {searchPending && <BlockLoading />}
             {!searchPending && !searchResponse && (
-                <Container childrenContainerClassName={styles.emptySearchContent}>
-                    <SearchLineIcon className={styles.icon} />
-                    <div>
-                        {emptyText}
-                    </div>
-                </Container>
+                <Message
+                    icon={(
+                        <SearchLineIcon className={styles.icon} />
+                    )}
+                    description={emptyText}
+                />
             )}
             {!searchPending && searchResponse && activeView && !isListTypeResult(activeView) && (
                 <ResultTable
@@ -355,8 +353,8 @@ export function Component() {
                         const action = data.length > MAX_VIEW_PER_SECTION ? (
                             <Button
                                 name={searchResponseKey}
-                                variant="tertiary"
-                                actions={(
+                                styleVariant="action"
+                                after={(
                                     <ChevronRightLineIcon
                                         className={styles.forwardIcon}
                                     />

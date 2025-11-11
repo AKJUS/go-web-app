@@ -91,7 +91,7 @@ export function Component() {
                         <Link
                             href="https://fednet.ifrc.org/en/resources/logistics/mobilization-of-goods/"
                             external
-                            variant="tertiary"
+                            styleVariant="action"
                             withLinkIcon
                         >
                             {strings.logisticsMobilizationOfReliefItems}
@@ -101,7 +101,7 @@ export function Component() {
                         <Link
                             href="https://fednet.ifrc.org/en/resources/logistics/procurement/"
                             external
-                            variant="tertiary"
+                            styleVariant="action"
                             withLinkIcon
                         >
                             {strings.logisticsProcurement}
@@ -111,7 +111,7 @@ export function Component() {
                         <Link
                             href="https://fednet.ifrc.org/en/resources/logistics/our-global-structure/DubaiLPSCM/global-fleet-base/vehicle-rental-programme/"
                             external
-                            variant="tertiary"
+                            styleVariant="action"
                             withLinkIcon
                         >
                             {strings.logisticsFleetServices}
@@ -121,7 +121,7 @@ export function Component() {
                         <Link
                             href="https://fednet.ifrc.org/en/resources/logistics/our-global-structure/"
                             external
-                            variant="tertiary"
+                            styleVariant="action"
                             withLinkIcon
                         >
                             {strings.logisticsWarehousing}
@@ -131,7 +131,7 @@ export function Component() {
                         <Link
                             href="https://fednet.ifrc.org/en/resources/logistics/contingency-stock/"
                             external
-                            variant="tertiary"
+                            styleVariant="action"
                             withLinkIcon
                         >
                             {strings.logisticsContingency}
@@ -141,7 +141,7 @@ export function Component() {
                         <Link
                             href="https://fednet.ifrc.org/en/resources/logistics/logistics-training-and-workshop/"
                             external
-                            variant="tertiary"
+                            styleVariant="action"
                             withLinkIcon
                         >
                             {strings.logisticsSpecialized}

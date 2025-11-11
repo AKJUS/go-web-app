@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import {
     Button,
+    ListView,
     Modal,
     TextInput,
 } from '@ifrc-go/ui';
@@ -78,6 +79,7 @@ function GenerateMontandonTokenModal(props: Props) {
                             to="termsAndConditions"
                             withLinkIcon
                             withUnderline
+                            spacing="xs"
                         >
                             {strings.termsAndConditionLabel}
                         </Link>
@@ -85,16 +87,13 @@ function GenerateMontandonTokenModal(props: Props) {
                 },
             )}
             size="sm"
-            contentViewType="vertical"
-            spacing="comfortable"
             footerActions={(
-                <>
+                <ListView spacing="sm">
                     {!accepted && (
                         <>
                             <Button
                                 name={undefined}
                                 onClick={onClose}
-                                variant="secondary"
                             >
                                 {strings.cancelButtonLabel}
                             </Button>
@@ -103,6 +102,7 @@ function GenerateMontandonTokenModal(props: Props) {
                                 onClick={handleAcceptAndGenerateClick}
                                 disabled={isNotDefined(tokenTitle)
                                     || tokenTitle.trim().length < MIN_TITLE_LENGTH}
+                                styleVariant="filled"
                             >
                                 {strings.acceptButtonLabel}
                             </Button>
@@ -116,37 +116,41 @@ function GenerateMontandonTokenModal(props: Props) {
                             {strings.doneButtonLabel}
                         </Button>
                     )}
-                </>
+                </ListView>
             )}
             pending={tokenPending}
             errored={isDefined(tokenError)}
             errorMessage={tokenError?.value.messageForNotification}
+            withHeaderBorder
+            withFooterBorder
         >
-            {!accepted && (
-                <TextInput
-                    name="tokenTitle"
-                    label={strings.titleInputLabel}
-                    value={tokenTitle}
-                    onChange={setTokenTitle}
-                    hint={
-                        resolveToString(
-                            strings.titleInputHint,
-                            { minCharacters: MIN_TITLE_LENGTH },
-                        )
-                    }
-                    placeholder={strings.titleInputPlaceholder}
-                />
-            )}
-            {accepted && (
-                <>
-                    <TokenDetails
-                        data={tokenResponse}
+            <ListView layout="block">
+                {!accepted && (
+                    <TextInput
+                        name="tokenTitle"
+                        label={strings.titleInputLabel}
+                        value={tokenTitle}
+                        onChange={setTokenTitle}
+                        hint={
+                            resolveToString(
+                                strings.titleInputHint,
+                                { minCharacters: MIN_TITLE_LENGTH },
+                            )
+                        }
+                        placeholder={strings.titleInputPlaceholder}
                     />
-                    <div className={styles.note}>
-                        {strings.tokenNote}
-                    </div>
-                </>
-            )}
+                )}
+                {accepted && (
+                    <>
+                        <TokenDetails
+                            data={tokenResponse}
+                        />
+                        <div className={styles.note}>
+                            {strings.tokenNote}
+                        </div>
+                    </>
+                )}
+            </ListView>
         </Modal>
     );
 }

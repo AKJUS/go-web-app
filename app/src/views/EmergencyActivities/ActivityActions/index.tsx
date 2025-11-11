@@ -27,7 +27,7 @@ function ActivityActions(props: Props) {
     return (
         <DropdownMenu
             className={className}
-            variant="tertiary"
+            labelStyleVariant="action"
             withoutDropdownIcon
             label={<MoreFillIcon />}
             persistent
@@ -36,7 +36,7 @@ function ActivityActions(props: Props) {
                 type="link"
                 to="threeWActivityDetail"
                 urlParams={{ activityId }}
-                icons={<ShareBoxLineIcon />}
+                before={<ShareBoxLineIcon />}
             >
                 {strings.threeWViewDetails}
             </DropdownMenuItem>
@@ -44,7 +44,7 @@ function ActivityActions(props: Props) {
                 type="link"
                 to="threeWActivityEdit"
                 urlParams={{ activityId }}
-                icons={<PencilFillIcon />}
+                before={<PencilFillIcon />}
             >
                 {strings.threeWEdit}
             </DropdownMenuItem>
@@ -52,7 +52,7 @@ function ActivityActions(props: Props) {
                 type="link"
                 to="newThreeWActivity"
                 state={{ activityId }}
-                icons={<CopyLineIcon />}
+                before={<CopyLineIcon />}
             >
                 {strings.threeWDuplicate}
             </DropdownMenuItem>

@@ -11,6 +11,8 @@ import {
 } from 'react-router-dom';
 import {
     Button,
+    Container,
+    ListView,
     Message,
     Tab,
     TabList,
@@ -78,7 +80,6 @@ import RiskAnalysisFields from './RiskAnalysisFields';
 import SituationFields from './SituationFields';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 function getNextStep(
     current: TabKeys,
@@ -450,11 +451,10 @@ export function Component() {
             value={activeTab}
             // NOTE: not using handleTabChange here
             onChange={setActiveTab}
-            variant="step"
+            styleVariant="step"
         >
             <Page
                 elementRef={formContentRef}
-                className={styles.fieldReportForm}
                 title={strings.title}
                 heading={(
                     isDefined(fieldReportId)
@@ -469,7 +469,7 @@ export function Component() {
                 }
                 */
                 info={!shouldHideForm && (
-                    <TabList className={styles.tabList}>
+                    <TabList>
                         <Tab
                             name="context"
                             step={1}
@@ -528,9 +528,7 @@ export function Component() {
                         </Tab>
                     </TabList>
                 )}
-                infoContainerClassName={styles.tabListContainer}
                 withBackgroundColorInMainSection
-                mainSectionClassName={styles.content}
             >
                 {fieldReportPending && (
                     <Message
@@ -551,80 +549,13 @@ export function Component() {
                     />
                 )}
                 {!shouldHideForm && (
-                    <>
-                        <NonFieldError
-                            error={error}
-                            withFallbackError
-                        />
-                        <TabPanel name="context">
-                            <ContextFields
-                                error={error}
-                                onValueChange={setFieldValue}
-                                value={value}
-                                reportType={reportType}
-                                setDistrictOptions={setDistrictOptions}
-                                districtOptions={districtOptions}
-                                setEventOptions={setEventOptions}
-                                eventOptions={eventOptions}
-                                disabled={pending}
-                            />
-                        </TabPanel>
-                        <TabPanel name="risk-analysis">
-                            <RiskAnalysisFields
-                                error={error}
-                                onValueChange={setFieldValue}
-                                value={value}
-                                disabled={pending}
-                            />
-                        </TabPanel>
-                        <TabPanel name="situation">
-                            <SituationFields
-                                error={error}
-                                onValueChange={setFieldValue}
-                                value={value}
-                                reportType={reportType}
-                                disabled={pending}
-                            />
-                        </TabPanel>
-                        <TabPanel name="early-actions">
-                            <EarlyActionsFields
-                                reportType={reportType}
-                                error={error}
-                                onValueChange={setFieldValue}
-                                value={value}
-                                actionOptions={actionsByOrganizationType}
-                                disabled={pending}
-                            />
-                        </TabPanel>
-                        <TabPanel name="actions">
-                            <ActionsFields
-                                reportType={reportType}
-                                error={error}
-                                onValueChange={setFieldValue}
-                                value={value}
-                                actionOptions={actionsByOrganizationType}
-                                externalPartnerOptions={externalPartnersResponse?.results}
-                                supportedActivityOptions={supportedActivitiesResponse?.results}
-                                disabled={pending}
-                            />
-                        </TabPanel>
-                        <TabPanel name="response">
-                            <ResponseFields
-                                error={error}
-                                onValueChange={setFieldValue}
-                                value={value}
-                                reportType={reportType}
-                                isReviewCountry={isReviewCountry}
-                                disabled={pending}
-                            />
-                        </TabPanel>
-                        <div className={styles.actions}>
-                            <div className={styles.pageActions}>
+                    <Container
+                        footer={(
+                            <ListView withCenteredContents>
                                 <Button
                                     name={prevStep ?? activeTab}
                                     onClick={handleTabChange}
                                     disabled={isNotDefined(prevStep)}
-                                    variant="secondary"
                                 >
                                     {strings.backButtonLabel}
                                 </Button>
@@ -632,11 +563,12 @@ export function Component() {
                                     name={nextStep ?? activeTab}
                                     onClick={handleTabChange}
                                     disabled={isNotDefined(nextStep)}
-                                    variant="secondary"
                                 >
                                     {strings.continueButtonLabel}
                                 </Button>
-                            </div>
+                            </ListView>
+                        )}
+                        footerActions={(
                             <Button
                                 name={undefined}
                                 onClick={handleFormSubmit}
@@ -644,8 +576,78 @@ export function Component() {
                             >
                                 {strings.submitButtonLabel}
                             </Button>
-                        </div>
-                    </>
+                        )}
+                        spacing="xl"
+                    >
+                        <ListView layout="block">
+                            <NonFieldError
+                                error={error}
+                                withFallbackError
+                            />
+                            <TabPanel name="context">
+                                <ContextFields
+                                    error={error}
+                                    onValueChange={setFieldValue}
+                                    value={value}
+                                    reportType={reportType}
+                                    setDistrictOptions={setDistrictOptions}
+                                    districtOptions={districtOptions}
+                                    setEventOptions={setEventOptions}
+                                    eventOptions={eventOptions}
+                                    disabled={pending}
+                                />
+                            </TabPanel>
+                            <TabPanel name="risk-analysis">
+                                <RiskAnalysisFields
+                                    error={error}
+                                    onValueChange={setFieldValue}
+                                    value={value}
+                                    disabled={pending}
+                                />
+                            </TabPanel>
+                            <TabPanel name="situation">
+                                <SituationFields
+                                    error={error}
+                                    onValueChange={setFieldValue}
+                                    value={value}
+                                    reportType={reportType}
+                                    disabled={pending}
+                                />
+                            </TabPanel>
+                            <TabPanel name="early-actions">
+                                <EarlyActionsFields
+                                    reportType={reportType}
+                                    error={error}
+                                    onValueChange={setFieldValue}
+                                    value={value}
+                                    actionOptions={actionsByOrganizationType}
+                                    disabled={pending}
+                                />
+                            </TabPanel>
+                            <TabPanel name="actions">
+                                <ActionsFields
+                                    reportType={reportType}
+                                    error={error}
+                                    onValueChange={setFieldValue}
+                                    value={value}
+                                    actionOptions={actionsByOrganizationType}
+                                    externalPartnerOptions={externalPartnersResponse?.results}
+                                    supportedActivityOptions={supportedActivitiesResponse?.results}
+                                    disabled={pending}
+                                />
+                            </TabPanel>
+                            <TabPanel name="response">
+                                <ResponseFields
+                                    error={error}
+                                    onValueChange={setFieldValue}
+                                    value={value}
+                                    reportType={reportType}
+                                    isReviewCountry={isReviewCountry}
+                                    disabled={pending}
+                                />
+                            </TabPanel>
+                        </ListView>
+                    </Container>
                 )}
             </Page>
         </Tabs>

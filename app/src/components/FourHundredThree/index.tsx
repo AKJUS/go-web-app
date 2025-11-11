@@ -51,7 +51,8 @@ function FourHundredThree() {
                 </div>
                 <Link
                     to="home"
-                    variant="primary"
+                    colorVariant="primary"
+                    styleVariant="filled"
                 >
                     {strings.permissionDeniedExploreOurHomepage}
                 </Link>

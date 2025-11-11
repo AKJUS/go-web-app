@@ -6,10 +6,10 @@ import { NavigationTabList } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import NavigationTab from '#components/NavigationTab';
+import TabPage from '#components/TabPage';
 import { type CountryOutletContext } from '#utils/outletContext';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -19,21 +19,16 @@ export function Component() {
     const strings = useTranslation(i18n);
 
     return (
-        <div className={styles.countryOngoingActivities}>
-            <NavigationTabList variant="secondary">
+        <TabPage
+            wikiLinkPathName="user_guide/Country_Pages#on-going-activities"
+        >
+            <NavigationTabList styleVariant="pill">
                 <NavigationTab
                     to="countryOngoingActivitiesEmergencies"
                     urlParams={{ countryId }}
                 >
                     {strings.ongoingEmergenciesTabTitle}
                 </NavigationTab>
-                {/* Hide for now, as per the client./}
-                {/* <NavigationTab
-                    to="countryOngoingActivitiesThreeWActivities"
-                    urlParams={{ countryId }}
-                >
-                    {strings.threeWActivitiesTabTitle}
-                </NavigationTab> */}
                 <NavigationTab
                     to="countryOngoingActivitiesThreeWProjects"
                     urlParams={{ countryId }}
@@ -42,7 +37,7 @@ export function Component() {
                 </NavigationTab>
             </NavigationTabList>
             <Outlet context={outletContext} />
-        </div>
+        </TabPage>
     );
 }
 

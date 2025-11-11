@@ -38,7 +38,7 @@ function ThreeWTableActions(props: Props) {
                             type="link"
                             to="threeWActivityDetail"
                             urlParams={{ activityId }}
-                            icons={<ShareBoxLineIcon />}
+                            before={<ShareBoxLineIcon />}
                         >
                             {strings.threeWViewDetails}
                         </DropdownMenuItem>
@@ -46,7 +46,7 @@ function ThreeWTableActions(props: Props) {
                             type="link"
                             to="threeWActivityEdit"
                             urlParams={{ activityId }}
-                            icons={<PencilFillIcon />}
+                            before={<PencilFillIcon />}
                         >
                             {strings.threeWEdit}
                         </DropdownMenuItem>
@@ -54,7 +54,7 @@ function ThreeWTableActions(props: Props) {
                             type="link"
                             to="newThreeWActivity"
                             state={{ activityId }}
-                            icons={<CopyLineIcon />}
+                            before={<CopyLineIcon />}
                         >
                             {strings.threeWDuplicate}
                         </DropdownMenuItem>
@@ -72,7 +72,7 @@ function ThreeWTableActions(props: Props) {
                         type="link"
                         to="threeWProjectDetail"
                         urlParams={{ projectId }}
-                        icons={<ShareBoxLineIcon />}
+                        before={<ShareBoxLineIcon />}
                     >
                         {strings.threeWViewDetails}
                     </DropdownMenuItem>
@@ -80,7 +80,7 @@ function ThreeWTableActions(props: Props) {
                         type="link"
                         to="threeWProjectEdit"
                         urlParams={{ projectId }}
-                        icons={<PencilFillIcon />}
+                        before={<PencilFillIcon />}
                     >
                         {strings.threeWEdit}
                     </DropdownMenuItem>

@@ -1,15 +1,11 @@
-import { useMemo } from 'react';
 import { DownloadFillIcon } from '@ifrc-go/icons';
 import {
     Container,
-    Table,
+    Description,
+    ListView,
 } from '@ifrc-go/ui';
-import {
-    createDateColumn,
-    createStringColumn,
-} from '@ifrc-go/ui/utils';
 
-import { createLinkColumn } from '#utils/domain/tableHelpers';
+import Link from '#components/Link';
 import { type GoApiResponse } from '#utils/restRequest';
 
 import styles from './styles.module.css';
@@ -22,62 +18,61 @@ interface Props {
     documents: KeyDocumentItem[];
 }
 
-function documentKeySelector(document: KeyDocumentItem) {
-    return document.id;
-}
-
 function DocumentListCard(props: Props) {
     const {
         label,
         documents,
     } = props;
 
-    const columns = useMemo(
-        () => ([
-            createStringColumn<KeyDocumentItem, number>(
-                'name',
-                '',
-                (item) => item.name,
-            ),
-            createDateColumn<KeyDocumentItem, number>(
-                'date',
-                '',
-                (item) => item.year,
-                {
-                    columnClassName: styles.date,
-                },
-            ),
-            createLinkColumn<KeyDocumentItem, number>(
-                'url',
-                '',
-                () => <DownloadFillIcon />,
-                (item) => ({
-                    external: true,
-                    href: item.url,
-                }),
-            ),
-        ]),
-        [
-        ],
-    );
-
     return (
         <Container
-            className={styles.documentListCard}
+            errored={false}
+            empty={false}
+            pending={false}
+            filtered={false}
             heading={label}
             headingLevel={4}
             withHeaderBorder
-            withInternalPadding
-            childrenContainerClassName={styles.content}
+            withPadding
+            withShadow
+            withBackground
+            className={styles.documentListCard}
+            withContentOverflow
         >
-            <Table
-                data={documents}
-                pending={false}
-                filtered={false}
-                columns={columns}
-                keySelector={documentKeySelector}
-                headersHidden
-            />
+            <ListView
+                layout="block"
+                withSpacingOpticalCorrection
+            >
+                {documents.map((document) => (
+                    <Container
+                        errored={false}
+                        empty={false}
+                        pending={false}
+                        filtered={false}
+                        key={document.id}
+                        heading={document.year_text}
+                        headerActions={(
+                            <Link
+                                external
+                                href={document.url}
+                            >
+                                <DownloadFillIcon />
+                            </Link>
+                        )}
+                        headingLevel={5}
+                        withEllipsizedHeading
+                        spacing="xs"
+                        withoutWrapInHeader
+                    >
+                        <Description
+                            textSize="sm"
+                            withLightText
+                        >
+                            {document.name}
+                        </Description>
+                    </Container>
+                ))}
+            </ListView>
         </Container>
     );
 }

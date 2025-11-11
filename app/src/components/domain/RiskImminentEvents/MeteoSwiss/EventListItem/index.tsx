@@ -2,23 +2,14 @@ import {
     useEffect,
     useRef,
 } from 'react';
-import {
-    ChevronDownLineIcon,
-    ChevronUpLineIcon,
-} from '@ifrc-go/icons';
-import {
-    Button,
-    Header,
-    TextOutput,
-} from '@ifrc-go/ui';
+import { TextOutput } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { _cs } from '@togglecorp/fujs';
 
+import ImminentEventListItem from '#components/domain/ImminentEventListItem';
 import { type RiskEventListItemProps } from '#components/domain/RiskImminentEventMap';
 import { type RiskApiResponse } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type ImminentEventResponse = RiskApiResponse<'/api/v1/meteoswiss/'>;
 type EventItem = NonNullable<ImminentEventResponse['results']>[number];
@@ -64,34 +55,22 @@ function EventListItem(props: Props) {
     );
 
     return (
-        <>
-            <Header
-                elementRef={elementRef}
-                className={_cs(styles.eventListItem, className)}
-                heading={hazardName ?? '--'}
-                headingLevel={5}
-                actions={(
-                    <Button
-                        name={id}
-                        onClick={onExpandClick}
-                        variant="tertiary"
-                        title={strings.meteoSwissEventListViewDetails}
-                    >
-                        {expanded
-                            ? <ChevronUpLineIcon className={styles.icon} />
-                            : <ChevronDownLineIcon className={styles.icon} />}
-                    </Button>
-                )}
-                spacing="condensed"
-            >
+        <ImminentEventListItem
+            className={className}
+            eventId={id}
+            expanded={expanded}
+            onExpandClick={onExpandClick}
+            heading={hazardName}
+            description={(
                 <TextOutput
                     label={strings.meteoSwissEventListStartedOn}
                     value={start_date}
                     valueType="date"
                 />
-            </Header>
+            )}
+        >
             {children}
-        </>
+        </ImminentEventListItem>
     );
 }
 

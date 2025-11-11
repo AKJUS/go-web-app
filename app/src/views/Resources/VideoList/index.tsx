@@ -1,4 +1,9 @@
-import { Heading } from '@ifrc-go/ui';
+import {
+    Description,
+    Heading,
+    InlineFrame,
+    ListView,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import i18n from './i18n.json';
@@ -46,30 +51,37 @@ function VideoList() {
     ];
 
     return (
-        <div className={styles.videoList}>
-            {videoLinks.map(
-                (videoLink) => (
-                    <div
-                        key={videoLink.id}
-                        className={styles.videoItem}
-                    >
-                        <iframe
-                            className={styles.iframe}
-                            title={videoLink.heading}
-                            src={videoLink.embedId}
-                            allow=""
-                            allowFullScreen
-                        />
-                        <Heading level={4}>
-                            {videoLink.heading}
-                        </Heading>
-                        <div className={styles.description}>
-                            {videoLink.description}
-                        </div>
-                    </div>
-                ),
-            )}
-        </div>
+        <ListView
+            withPadding
+            withDarkBackground
+        >
+            <ListView className={styles.scrollView}>
+                {videoLinks.map(
+                    (videoLink) => (
+                        <ListView
+                            key={videoLink.id}
+                            layout="block"
+                            withBackground
+                            withPadding
+                            className={styles.videoItem}
+                        >
+                            <InlineFrame
+                                title={videoLink.heading}
+                                src={videoLink.embedId}
+                                allowFullScreen
+                                size="sm"
+                            />
+                            <Heading level={5}>
+                                {videoLink.heading}
+                            </Heading>
+                            <Description>
+                                {videoLink.description}
+                            </Description>
+                        </ListView>
+                    ),
+                )}
+            </ListView>
+        </ListView>
     );
 }
 

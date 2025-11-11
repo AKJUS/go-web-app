@@ -140,12 +140,10 @@ function ConfigureLocalUnitsModal(props: Props) {
             )}
             onClose={onClose}
             withHeaderBorder
-            contentViewType="vertical"
             footerActions={(
                 <Button
                     name={undefined}
                     onClick={onClose}
-                    variant="secondary"
                 >
                     {strings.closeButtonLabel}
                 </Button>

@@ -131,7 +131,6 @@ function ConfirmationModal(props: Props) {
                     <Button
                         name={undefined}
                         onClick={onClose}
-                        variant="secondary"
                     >
                         {strings.cancelButtonLabel}
                     </Button>

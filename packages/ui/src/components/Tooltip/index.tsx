@@ -9,6 +9,7 @@ import {
 } from '@togglecorp/fujs';
 
 import Container from '#components/Container';
+import ListView from '#components/ListView';
 import Popup from '#components/Popup';
 
 import styles from './styles.module.css';
@@ -88,10 +89,15 @@ function Tooltip(props: Props) {
                 >
                     <Container
                         heading={title}
-                        withInternalPadding
-                        contentViewType="vertical"
+                        withPadding
                     >
-                        {description}
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                            spacing="sm"
+                        >
+                            {description}
+                        </ListView>
                     </Container>
                 </Popup>
             )}

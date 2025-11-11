@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import {
     Button,
+    ListView,
     Message,
     Modal,
     MultiSelectInput,
@@ -21,7 +22,6 @@ import {
 } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type ShareRequestBody = GoApiBody<'/api/v2/share-flash-update/', 'POST'>;
 
@@ -105,39 +105,34 @@ function FlashUpdateShareModal(props: Props) {
                     {strings.flashUpdateShareButtonLabel}
                 </Button>
             )}
-            contentViewType="vertical"
-            className={styles.flashUpdateShareModal}
+            pending={pending}
         >
-            {pending && (
-                <Message pending />
-            )}
-            {!pending && (
-                <>
-                    {isDefined(shareError) && (
-                        <div className={styles.error}>
-                            {shareError.value.messageForNotification}
-                        </div>
-                    )}
-                    <MultiSelectInput
-                        label={strings.flashUpdateSelectDonors}
-                        value={donors}
-                        onChange={setDonors}
-                        options={donorResponse?.results}
-                        keySelector={numericIdSelector}
-                        labelSelector={(donor) => donor.organization_name ?? '--'}
-                        name={undefined}
+            <ListView layout="block">
+                {isDefined(shareError) && (
+                    <Message
+                        errored
+                        erroredDescription={shareError.value.messageForNotification}
                     />
-                    <MultiSelectInput
-                        label={strings.flashUpdateSelectDonorsGroup}
-                        value={donorGroups}
-                        onChange={setDonorGroups}
-                        options={donorGroupResponse?.results}
-                        keySelector={numericIdSelector}
-                        labelSelector={stringNameSelector}
-                        name={undefined}
-                    />
-                </>
-            )}
+                )}
+                <MultiSelectInput
+                    label={strings.flashUpdateSelectDonors}
+                    value={donors}
+                    onChange={setDonors}
+                    options={donorResponse?.results}
+                    keySelector={numericIdSelector}
+                    labelSelector={(donor) => donor.organization_name ?? '--'}
+                    name={undefined}
+                />
+                <MultiSelectInput
+                    label={strings.flashUpdateSelectDonorsGroup}
+                    value={donorGroups}
+                    onChange={setDonorGroups}
+                    options={donorGroupResponse?.results}
+                    keySelector={numericIdSelector}
+                    labelSelector={stringNameSelector}
+                    name={undefined}
+                />
+            </ListView>
         </Modal>
     );
 }

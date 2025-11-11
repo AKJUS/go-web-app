@@ -1,23 +1,16 @@
-import { Container } from '@ifrc-go/ui';
-
+import TabPage from '#components/TabPage';
 import OngoingEruDeployments from '#views/ActiveSurgeDeployments/OngoingEruDeployments';
 
 import EmergencyResponseUnitReadiness from './EmergencyResponseUnitReadiness';
-
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     return (
-        <Container
-            className={styles.emergencyResponseUnit}
-            contentViewType="vertical"
-            childrenContainerClassName={styles.content}
-        >
+        <TabPage>
             <EmergencyResponseUnitReadiness />
             <OngoingEruDeployments />
-        </Container>
+        </TabPage>
     );
 }
 

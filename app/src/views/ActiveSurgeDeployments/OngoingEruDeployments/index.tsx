@@ -6,6 +6,7 @@ import {
 import {
     Container,
     LegendItem,
+    ListView,
     Pager,
     SelectInput,
     Table,
@@ -137,6 +138,7 @@ function OngoingEruDeployments() {
                         emergencyId: String(item.id),
                     },
                 }),
+                { columnClassName: styles.name },
             ),
             createStringColumn<EruByEvent, number>(
                 'organisation',
@@ -181,6 +183,7 @@ function OngoingEruDeployments() {
                     onClick: handleExpandClick,
                     expanded: row.id === expandedRow?.id,
                 }),
+                { columnClassName: styles.actions },
             ),
         ]),
         [
@@ -278,7 +281,7 @@ function OngoingEruDeployments() {
                     onActivePageChange={setPage}
                 />
             )}
-            actions={(
+            headerActions={(
                 <Link
                     to="allDeployedEmergencyResponseUnits"
                     withLinkIcon
@@ -298,8 +301,8 @@ function OngoingEruDeployments() {
                     options={eruTypes}
                 />
             )}
-            footerContent={(
-                <>
+            footer={(
+                <ListView withWrap>
                     <LegendItem
                         label={strings.eruEmergencyTimeline}
                         color={COLOR_LIGHT_GREY}
@@ -308,7 +311,7 @@ function OngoingEruDeployments() {
                         label={strings.eruDeploymentTimeline}
                         color={COLOR_PRIMARY_RED}
                     />
-                </>
+                </ListView>
             )}
         >
             <SortContext.Provider value={sortState}>

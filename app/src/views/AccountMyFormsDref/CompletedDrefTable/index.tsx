@@ -232,7 +232,7 @@ function CompletedDrefTable(props: Props) {
         <Container
             className={_cs(styles.completedDrefTable, className)}
             heading={strings.completedDrefTitle}
-            actions={actions}
+            headerActions={actions}
             footerActions={(
                 <Pager
                     activePage={page}

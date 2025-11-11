@@ -71,8 +71,10 @@ export function Component() {
             <SurgeContentContainer
                 heading={strings.designedFor}
             >
-                <li>{strings.certOneDesignedForListItemOne}</li>
-                <li>{strings.certOneDesignedForListItemTwo}</li>
+                <ul>
+                    <li>{strings.certOneDesignedForListItemOne}</li>
+                    <li>{strings.certOneDesignedForListItemTwo}</li>
+                </ul>
             </SurgeContentContainer>
             <SurgeContentContainer
                 heading={strings.personnel}

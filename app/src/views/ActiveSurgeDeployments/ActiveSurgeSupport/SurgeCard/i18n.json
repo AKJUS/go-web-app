@@ -4,6 +4,6 @@
         "surgeEmergencyResponseUnit": "Emergency Response Unit",
         "surgeRapidResponsePersonnel": "Rapid Response Personnel",
         "surgeDeployingOrganizations": "Deploying Organisation",
-        "operationTimeline": "Operation start date: {startDate} ({duration})"
+        "operationStartDateLabel": "Operation start date"
     }
 }

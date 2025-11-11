@@ -1,25 +1,29 @@
 .readiness-icon {
     display: flex;
     align-items: center;
-    gap: var(--go-ui-spacing-sm);
+    gap: var(--go-ui-spacing-xs);
+
+    .icon {
+        flex-shrink: 0;
+    }
 
     .green-icon {
         color: var(--go-ui-color-green);
-        font-size: var(--go-ui-height-compact-status-icon);
+        font-size: var(--go-ui-font-size-2xl);
     }
 
     .yellow-icon {
         color: var(--go-ui-color-semantic-yellow);
-        font-size: var(--go-ui-height-compact-status-icon);
+        font-size: var(--go-ui-font-size-2xl);
     }
 
     .red-icon {
         color: var(--go-ui-color-primary-red);
-        font-size: var(--go-ui-height-compact-status-icon);
+        font-size: var(--go-ui-font-size-2xl);
     }
 
     .gray-icon {
         color: var(--go-ui-color-primary-gray);
-        font-size: var(--go-ui-height-compact-status-icon);
+        font-size: var(--go-ui-font-size-2xl);
     }
 }

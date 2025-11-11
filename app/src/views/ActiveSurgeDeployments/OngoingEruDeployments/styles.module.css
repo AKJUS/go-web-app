@@ -1,16 +1,26 @@
 .ongoing-eru-deployments {
     .table {
         min-height: 5rem;
+
+        .name {
+            width: 0%;
+            min-width: 12rem;
+        }
+
         .organisation {
-            min-width: 10rem;
+            width: 11rem;
         }
 
         .country {
-            min-width: 10rem;
+            width: 10rem;
         }
 
         .timeline {
-            min-width: 24rem;
+            width: 22rem;
+        }
+
+        .actions {
+            width: 3rem;
         }
 
         .sub-cell {

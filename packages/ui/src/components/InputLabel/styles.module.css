@@ -1,8 +1,8 @@
 .input-label {
     display: flex;
-    padding: 0 var(--go-ui-spacing-2xs);
-    color: var(--go-ui-color-gray-70);
     gap: var(--go-ui-spacing-xs);
+    color: var(--go-ui-color-text-light);
+    font-weight: var(--go-ui-font-weight-medium);
 
     &.disabled {
         color: var(--go-ui-color-gray-40);

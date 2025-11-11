@@ -26,7 +26,16 @@
             object-fit: contain;
             object-position: center center;
         }
+
+        &.with-color-inverted-icon {
+            > * {
+                transform: scale(1.2);
+                color: #000;
+                filter: invert(1);
+            }
+        }
     }
+
 
     .label {
         font-size: 1em;

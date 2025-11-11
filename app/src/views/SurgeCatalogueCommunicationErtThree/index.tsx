@@ -80,11 +80,13 @@ export function Component() {
             <SurgeContentContainer
                 heading={strings.designedFor}
             >
-                <li>{strings.certThreeDesignedForListItemOne}</li>
-                <li>{strings.certThreeDesignedForListItemTwo}</li>
-                <li>{strings.certThreeDesignedForListItemThree}</li>
-                <li>{strings.certThreeDesignedForListItemFour}</li>
-                <li>{strings.certThreeDesignedForListItemFive}</li>
+                <ul>
+                    <li>{strings.certThreeDesignedForListItemOne}</li>
+                    <li>{strings.certThreeDesignedForListItemTwo}</li>
+                    <li>{strings.certThreeDesignedForListItemThree}</li>
+                    <li>{strings.certThreeDesignedForListItemFour}</li>
+                    <li>{strings.certThreeDesignedForListItemFive}</li>
+                </ul>
             </SurgeContentContainer>
             <SurgeContentContainer
                 heading={strings.personnel}

@@ -1,6 +1,7 @@
 import {
     Button,
     Container,
+    ListView,
     Modal,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -8,14 +9,12 @@ import {
     useBooleanState,
     useTranslation,
 } from '@ifrc-go/ui/hooks';
-import { _cs } from '@togglecorp/fujs';
 
 import { type GoApiResponse } from '#utils/restRequest';
 
 import ReadinessIcon from '../ReadinessIcon';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type GetEruReadinessResponse = GoApiResponse<'/api/v2/eru-readiness-type/'>;
 
@@ -59,15 +58,16 @@ function EmergencyResponseUnitTypeCard(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.emergencyResponseTypeCard, className)}
-            withInternalPadding
+            className={className}
             withHeaderBorder
             heading={typeDisplay}
+            headingLevel={4}
             headerDescription={(
                 <TextOutput
                     label={strings.emergencyResponseUnitOwnerCardLastUpdated}
                     value={updatedAt}
                     valueType="date"
+                    textSize="sm"
                 />
             )}
             withFooterBorder
@@ -75,74 +75,85 @@ function EmergencyResponseUnitTypeCard(props: Props) {
                 <Button
                     name={undefined}
                     onClick={setShowReadinessInfoTrue}
-                    variant="tertiary"
+                    styleVariant="action"
                     title={strings.eruSeeReadinessInfoButton}
                 >
                     {strings.eruSeeReadinessInfoButton}
                 </Button>
             )}
-            childrenContainerClassName={styles.content}
+            withPadding
+            withBackground
+            withShadow
         >
-            <TextOutput
-                className={styles.eruOwners}
-                label={strings.emergencyResponseUnitNationalSociety}
-                value={nationalSocieties}
-                strongValue
-            />
-            <div className={styles.separator} />
-            <ReadinessIcon
-                readinessType={equipmentReadiness}
-                label={strings.eruEquipmentReadiness}
-            />
-            <div className={styles.verticalSeparator} />
-            <ReadinessIcon
-                readinessType={peopleReadiness}
-                label={strings.eruPeopleReadiness}
-            />
-            <div className={styles.verticalSeparator} />
-            <ReadinessIcon
-                readinessType={fundingReadiness}
-                label={strings.eruFundingReadiness}
-            />
+            <ListView layout="block">
+                <TextOutput
+                    label={strings.emergencyResponseUnitNationalSociety}
+                    value={nationalSocieties}
+                    strongValue
+                />
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                    minGridColumnSize="6rem"
+                >
+                    <ReadinessIcon
+                        readinessType={equipmentReadiness}
+                        label={strings.eruEquipmentReadiness}
+                    />
+                    <ReadinessIcon
+                        readinessType={peopleReadiness}
+                        label={strings.eruPeopleReadiness}
+                    />
+                    <ReadinessIcon
+                        readinessType={fundingReadiness}
+                        label={strings.eruFundingReadiness}
+                    />
+                </ListView>
+            </ListView>
             {showReadinessInfo && (
                 <Modal
-                    className={styles.modal}
                     heading={typeDisplay}
                     headerDescription={strings.eruReadinessInformationHeading}
                     onClose={setShowReadinessInfoFalse}
-                    withHeaderBorder
                     size="md"
-                    contentViewType="vertical"
-                    spacing="comfortable"
+                    withContentWell
+                    withoutSpacingOpticalCorrection
                 >
-                    {readinessList?.map((readiness) => (
-                        <Container
-                            key={readiness.id}
-                            heading={
-                                readiness.eruOwner.national_society_country_details.society_name
-                            }
-                            headingLevel={5}
-                            withHeaderBorder
-                            childrenContainerClassName={styles.readinessContainer}
-                            spacing="compact"
-                        >
-                            <ReadinessIcon
-                                readinessType={readiness.equipment_readiness}
-                                label={strings.eruEquipmentReadiness}
-                            />
-                            <div className={styles.verticalSeparator} />
-                            <ReadinessIcon
-                                readinessType={readiness.people_readiness}
-                                label={strings.eruPeopleReadiness}
-                            />
-                            <div className={styles.verticalSeparator} />
-                            <ReadinessIcon
-                                readinessType={readiness.funding_readiness}
-                                label={strings.eruFundingReadiness}
-                            />
-                            <div className={styles.separator} />
-                        </Container>
-                    ))}
+                    <ListView
+                        layout="block"
+                        spacing="sm"
+                    >
+                        {readinessList?.map((readiness) => (
+                            <Container
+                                key={readiness.id}
+                                heading={
+                                    readiness.eruOwner.national_society_country_details.society_name
+                                }
+                                headingLevel={5}
+                                withBackground
+                                withPadding
+                            >
+                                <ListView
+                                    layout="grid"
+                                    numPreferredGridColumns={3}
+                                    minGridColumnSize="6rem"
+                                >
+                                    <ReadinessIcon
+                                        readinessType={readiness.equipment_readiness}
+                                        label={strings.eruEquipmentReadiness}
+                                    />
+                                    <ReadinessIcon
+                                        readinessType={readiness.people_readiness}
+                                        label={strings.eruPeopleReadiness}
+                                    />
+                                    <ReadinessIcon
+                                        readinessType={readiness.funding_readiness}
+                                        label={strings.eruFundingReadiness}
+                                    />
+                                </ListView>
+                            </Container>
+                        ))}
+                    </ListView>
                 </Modal>
             )}
         </Container>

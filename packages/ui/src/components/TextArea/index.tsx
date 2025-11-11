@@ -1,13 +1,17 @@
 import React from 'react';
 import { isNotDefined } from '@togglecorp/fujs';
 
+import { extractInputContainerProps } from '#utils/inputs';
+
 import InputContainer, { Props as InputContainerProps } from '../InputContainer';
 import RawTextArea, { Props as RawTextAreaProps } from '../RawTextArea';
 
 const BULLET = '•';
 const KEY_ENTER = 'Enter';
 
-type InheritedProps<N> = (Omit<InputContainerProps, 'input'> & Omit<RawTextAreaProps<N>, 'type'>);
+type InheritedProps<NAME> = Omit<InputContainerProps, 'input'>
+& Omit<RawTextAreaProps<NAME>, 'type' | 'className' | 'elementRef'>;
+
 export interface Props<T> extends InheritedProps<T> {
   inputElementRef?: React.RefObject<HTMLInputElement>;
   autoBullets?: boolean;
@@ -16,27 +20,21 @@ export interface Props<T> extends InheritedProps<T> {
 
 function TextArea<const N>(props: Props<N>) {
     const {
-        actions,
-        className,
         disabled,
-        error,
-        errorOnTooltip,
-        hint,
-        icons,
         inputClassName,
-        label,
-        labelClassName,
         readOnly,
         required,
-        variant,
-        inputSectionClassName,
-        withAsterisk,
         onChange,
         name,
+
         autoBullets = false,
         rows = 5,
-        ...otherInputProps
+        ...otherProps
     } = props;
+
+    const [inputContainerProps, rawInputProps] = extractInputContainerProps(
+        otherProps,
+    );
 
     const handleInputFocus = React.useCallback((e: React.FocusEvent<HTMLTextAreaElement>) => {
         if (isNotDefined(onChange)) {
@@ -60,27 +58,19 @@ function TextArea<const N>(props: Props<N>) {
 
     return (
         <InputContainer
-            actions={actions}
-            className={className}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...inputContainerProps}
             disabled={disabled}
-            error={error}
-            errorOnTooltip={errorOnTooltip}
-            hint={hint}
-            icons={icons}
-            inputSectionClassName={inputSectionClassName}
-            labelClassName={labelClassName}
-            label={label}
             readOnly={readOnly}
             required={required}
-            variant={variant}
-            withAsterisk={withAsterisk}
             input={(
                 <RawTextArea
                     // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...otherInputProps}
-                    readOnly={readOnly}
-                    disabled={disabled}
+                    {...rawInputProps}
                     className={inputClassName}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    required={required}
                     onChange={onChange}
                     name={name}
                     onFocus={autoBullets ? handleInputFocus : undefined}

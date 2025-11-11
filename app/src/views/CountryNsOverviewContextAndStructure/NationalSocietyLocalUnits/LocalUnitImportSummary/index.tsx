@@ -5,6 +5,7 @@ import {
 } from '@ifrc-go/icons';
 import {
     Container,
+    ListView,
     NumberOutput,
     ProgressBar,
     TextOutput,
@@ -50,81 +51,85 @@ function LocalUnitImportSummary(props: Props) {
 
     return (
         <Container
-            className={_cs(
-                styles.bulkUploadStatus,
-                withBackground && styles.withBackground,
-            )}
+            className={styles.bulkUploadStatus}
             pending={value?.status === BULK_UPLOAD_PENDING}
-            contentViewType="vertical"
-            withInternalPadding={withPadding}
+            withPadding={withPadding}
+            withBackground={withBackground}
         >
-            {isDefined(totalCount) && (
-                <ProgressBar
-                    value={value?.success_count}
-                    totalValue={totalCount}
-                    title={resolveToComponent(
-                        strings.rowsSuccessLabel,
-                        {
-                            numRows: (
-                                <NumberOutput
-                                    value={value?.success_count}
-                                />
-                            ),
-                            total: (
-                                <NumberOutput
-                                    value={totalCount}
-                                />
-                            ),
-                        },
-                    )}
-                    description={isDefined(value?.failed_count) && resolveToComponent(
-                        strings.rowsFailedLabel,
-                        {
-                            numRows: value?.failed_count,
-                        },
-                    )}
-                />
-            )}
-            <div />
-            <div className={styles.content}>
-                <TextOutput
-                    label={strings.statusLabel}
-                    value={value?.status_details}
-                    strongValue
-                    description={value?.status === BULK_UPLOAD_SUCCESS
-                        ? (
-                            <CheckboxCircleLineIcon
-                                className={_cs(styles.icon, styles.successIcon)}
-                            />
-                        ) : (
-                            <CloseCircleLineIcon className={_cs(styles.icon, styles.failureIcon)} />
+            <ListView layout="block">
+                {isDefined(totalCount) && (
+                    <ProgressBar
+                        value={value?.success_count}
+                        totalValue={totalCount}
+                        title={resolveToComponent(
+                            strings.rowsSuccessLabel,
+                            {
+                                numRows: (
+                                    <NumberOutput
+                                        value={value?.success_count}
+                                    />
+                                ),
+                                total: (
+                                    <NumberOutput
+                                        value={totalCount}
+                                    />
+                                ),
+                            },
                         )}
-                />
-                {isDefined(value?.error_file) && (
-                    <Link
-                        external
-                        href={value?.error_file}
-                        variant="tertiary"
-                        className={styles.downloadLink}
-                        icons={<DownloadTwoFillIcon className={styles.icon} />}
-                        withUnderline
-                    >
-                        {strings.downloadErrorDetailFileLabel}
-                    </Link>
+                        description={isDefined(value?.failed_count) && resolveToComponent(
+                            strings.rowsFailedLabel,
+                            {
+                                numRows: value?.failed_count,
+                            },
+                        )}
+                    />
                 )}
-                {isDefined(value?.file) && (
-                    <Link
-                        external
-                        href={value?.file}
-                        variant="tertiary"
-                        className={styles.downloadLink}
-                        withUnderline
-                        icons={<DownloadTwoFillIcon className={styles.icon} />}
-                    >
-                        {strings.downloadAttachedFileLabel}
-                    </Link>
-                )}
-            </div>
+                <div />
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                >
+                    <TextOutput
+                        label={strings.statusLabel}
+                        value={value?.status_details}
+                        strongValue
+                        description={value?.status === BULK_UPLOAD_SUCCESS
+                            ? (
+                                <CheckboxCircleLineIcon
+                                    className={_cs(styles.icon, styles.successIcon)}
+                                />
+                            ) : (
+                                <CloseCircleLineIcon
+                                    className={_cs(styles.icon, styles.failureIcon)}
+                                />
+                            )}
+                    />
+                    {isDefined(value?.error_file) && (
+                        <Link
+                            external
+                            href={value?.error_file}
+                            styleVariant="action"
+                            className={styles.downloadLink}
+                            before={<DownloadTwoFillIcon className={styles.icon} />}
+                            withUnderline
+                        >
+                            {strings.downloadErrorDetailFileLabel}
+                        </Link>
+                    )}
+                    {isDefined(value?.file) && (
+                        <Link
+                            external
+                            href={value?.file}
+                            styleVariant="action"
+                            className={styles.downloadLink}
+                            withUnderline
+                            before={<DownloadTwoFillIcon className={styles.icon} />}
+                        >
+                            {strings.downloadAttachedFileLabel}
+                        </Link>
+                    )}
+                </ListView>
+            </ListView>
         </Container>
     );
 }

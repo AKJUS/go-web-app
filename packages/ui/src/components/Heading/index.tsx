@@ -5,8 +5,6 @@ import {
 } from 'react';
 import { _cs } from '@togglecorp/fujs';
 
-import useSizeTracking from '#hooks/useSizeTracking';
-
 import styles from './styles.module.css';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -25,6 +23,7 @@ export interface Props {
     level?: HeadingLevel;
     children: ReactNode;
     ellipsize?: boolean;
+    centerAligned?: boolean;
 }
 
 function Heading(props: Props) {
@@ -33,12 +32,11 @@ function Heading(props: Props) {
         level = 3,
         children,
         ellipsize,
+        centerAligned,
     } = props;
 
     const HeadingTag = `h${level}` as ElementType;
     const headingElementRef = useRef<HTMLHeadingElement>(null);
-
-    const size = useSizeTracking(headingElementRef);
 
     if (!children) {
         return null;
@@ -50,22 +48,12 @@ function Heading(props: Props) {
                 styles.heading,
                 ellipsize && styles.ellipsized,
                 levelToClassName[level],
+                centerAligned && styles.centerAligned,
                 className,
             )}
             ref={headingElementRef}
         >
-            {ellipsize && (
-                <div
-                    className={styles.ellipsizedText}
-                    style={{
-                        width: `${size.width}px`,
-                    }}
-                    title={typeof children === 'string' ? children : undefined}
-                >
-                    {children}
-                </div>
-            )}
-            {!ellipsize && children}
+            {children}
         </HeadingTag>
     );
 }

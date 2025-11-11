@@ -305,7 +305,6 @@ function Actions(props: Props) {
                         />
                         <div className={styles.addButtonContainer}>
                             <Button
-                                variant="secondary"
                                 name={selectedNeed}
                                 onClick={handleNeedAddButtonClick}
                                 disabled={isNotDefined(selectedNeed) || disabled || readOnly}

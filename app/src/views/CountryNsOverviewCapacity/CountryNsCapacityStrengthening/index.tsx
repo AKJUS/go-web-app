@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import {
     Container,
     KeyFigure,
+    ListView,
     RawList,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -19,7 +20,6 @@ import { type CountryOutletContext } from '#utils/outletContext';
 import OCACListItem from './OCACListItem';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type CapacityItem = NonNullable<NonNullable<CountryOutletContext['countryResponse']>['capacity']>[number];
 type AssessmentTypeEnum = components<'read'>['schemas']['AssessmentTypeEnum'];
@@ -64,21 +64,19 @@ function CountryNsCapacityStrengthening() {
 
     return (
         <Container
-            childrenContainerClassName={styles.countryNsCapacityStrengthening}
             heading={strings.countryNsCapacityStrengtheningHeading}
             headerDescription={strings.countryNsCapacityStrengtheningDescription}
-            contentViewType="grid"
-            numPreferredGridContentColumns={3}
             withHeaderBorder
             footerActions={!isEmpty && (
                 <TextOutput
                     label={strings.moreDetailsLabel}
                     value={(
                         <Link
-                            variant="tertiary"
+                            styleVariant="action"
                             href="https://data.ifrc.org/en/ocac"
                             external
                             withUnderline
+                            withLinkIcon
                         >
                             {strings.globalOCAC}
                         </Link>
@@ -87,28 +85,40 @@ function CountryNsCapacityStrengthening() {
             )}
             pending={countryResponsePending}
             empty={isEmpty}
+            errored={false}
+            filtered={false}
         >
-            <RawList
-                data={ocacAssessments}
-                keySelector={capacityKeySelector}
-                renderer={OCACListItem}
-                rendererParams={ocacRendererParams}
-            />
-            {hasBocaAssessments && (
-                <Container
-                    className={styles.capacityItem}
-                    heading={strings.bocaAssessment}
-                    headingLevel={4}
-                    withInternalPadding
-                >
-                    <KeyFigure
-                        className={styles.figure}
-                        value={uniqueLocalUnits.length}
-                        label={strings.localUnits}
-                        compactValue
-                    />
-                </Container>
-            )}
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={3}
+            >
+                <RawList
+                    data={ocacAssessments}
+                    keySelector={capacityKeySelector}
+                    renderer={OCACListItem}
+                    rendererParams={ocacRendererParams}
+                />
+                {hasBocaAssessments && (
+                    <Container
+                        empty={false}
+                        errored={false}
+                        filtered={false}
+                        pending={false}
+                        heading={strings.bocaAssessment}
+                        headingLevel={4}
+                        withShadow
+                        withBackground
+                        withPadding
+                    >
+                        <KeyFigure
+                            value={uniqueLocalUnits.length}
+                            label={strings.localUnits}
+                            valueType="number"
+                            valueOptions={{ compact: true }}
+                        />
+                    </Container>
+                )}
+            </ListView>
         </Container>
     );
 }

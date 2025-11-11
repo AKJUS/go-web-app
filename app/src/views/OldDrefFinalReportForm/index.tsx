@@ -372,7 +372,7 @@ export function Component() {
             value={activeTab}
             // NOTE: not using handleTabChange here
             onChange={setActiveTab}
-            variant="step"
+            styleVariant="step"
         >
             <Page
                 elementRef={formContentRef}
@@ -382,7 +382,7 @@ export function Component() {
                 description={(
                     <Link
                         href="https://forms.office.com/e/wFQsu0V7Zb"
-                        variant="tertiary"
+                        styleVariant="action"
                         external
                         withLinkIcon
                         withUnderline
@@ -396,8 +396,8 @@ export function Component() {
                             <Button
                                 name={undefined}
                                 onClick={setShowExportModalTrue}
-                                icons={<DownloadTwoLineIcon />}
-                                variant="secondary"
+                                before={<DownloadTwoLineIcon />}
+                                colorVariant="primary"
                             >
                                 {strings.formExportLabel}
                             </Button>
@@ -542,7 +542,7 @@ export function Component() {
                                     name={prevStep ?? activeTab}
                                     onClick={handleTabChange}
                                     disabled={isNotDefined(prevStep)}
-                                    variant="secondary"
+                                    colorVariant="primary"
                                 >
                                     {strings.formBackButtonLabel}
                                 </Button>
@@ -550,7 +550,7 @@ export function Component() {
                                     <Button
                                         name={nextStep ?? activeTab}
                                         onClick={handleTabChange}
-                                        variant="secondary"
+                                        colorVariant="primary"
                                     >
                                         {strings.formContinueButtonLabel}
                                     </Button>

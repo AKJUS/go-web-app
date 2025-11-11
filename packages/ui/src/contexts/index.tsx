@@ -5,5 +5,5 @@ export type { DropdownMenuContextProps } from './dropdown-menu';
 export { default as DropdownMenuContext } from './dropdown-menu';
 export type { Language, LanguageContextProps, LanguageNamespaceStatus } from './language';
 export { default as LanguageContext } from './language';
-export type { NavigationTabContextProps, NavigationTabVariant } from './navigation-tab';
+export type { NavigationTabContextProps } from './navigation-tab';
 export { default as NavigationTabContext } from './navigation-tab';

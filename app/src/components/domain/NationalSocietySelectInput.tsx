@@ -25,6 +25,7 @@ type Props<NAME> = SelectInputProps<
     value: number | undefined | null;
     regions?: number[];
     countries?: number[];
+    readOnly?: boolean;
 }
 
 function NationalSocietySelectInput<const NAME>(props: Props<NAME>) {

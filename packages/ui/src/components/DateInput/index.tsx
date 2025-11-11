@@ -1,7 +1,10 @@
 import InputContainer, { Props as InputContainerProps } from '#components/InputContainer';
 import RawInput, { Props as RawInputProps } from '#components/RawInput';
+import { extractInputContainerProps } from '#utils/inputs';
 
-type InheritedProps<T> = (Omit<InputContainerProps, 'input'> & RawInputProps<T>);
+type InheritedProps<NAME> = Omit<InputContainerProps, 'input'>
+& Omit<RawInputProps<NAME>, 'type' | 'className' | 'elementRef'>;
+
 export interface Props<T> extends InheritedProps<T> {
     inputElementRef?: React.RefObject<HTMLInputElement>;
     inputClassName?: string;
@@ -9,43 +12,28 @@ export interface Props<T> extends InheritedProps<T> {
 
 function DateInput<const T>(props: Props<T>) {
     const {
-        className,
-        actions,
-        icons,
-        error,
-        hint,
-        label,
         disabled,
-        readOnly,
-        errorOnTooltip,
         inputClassName,
-        withAsterisk,
-        inputSectionClassName,
-        labelClassName,
+        readOnly,
         required,
-        variant,
-        ...otherInputProps
+        ...otherProps
     } = props;
+
+    const [inputContainerProps, rawInputProps] = extractInputContainerProps(
+        otherProps,
+    );
 
     return (
         <InputContainer
-            actions={actions}
-            className={className}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...inputContainerProps}
             disabled={disabled}
-            error={error}
-            errorOnTooltip={errorOnTooltip}
-            hint={hint}
-            icons={icons}
-            inputSectionClassName={inputSectionClassName}
-            labelClassName={labelClassName}
-            label={label}
             readOnly={readOnly}
             required={required}
-            variant={variant}
-            withAsterisk={withAsterisk}
             input={(
                 <RawInput
-                    {...otherInputProps} /* eslint-disable-line react/jsx-props-no-spreading */
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...rawInputProps}
                     readOnly={readOnly}
                     disabled={disabled}
                     className={inputClassName}

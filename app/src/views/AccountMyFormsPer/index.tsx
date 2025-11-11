@@ -222,16 +222,17 @@ export function Component() {
             className={styles.accountPerForms}
             heading={strings.processStatusTitle}
             withHeaderBorder
-            actions={(
+            headerActions={(
                 <>
                     <Link
                         to="newPerOverviewForm"
-                        variant="primary"
+                        colorVariant="primary"
+                        styleVariant="filled"
                     >
                         {strings.newProcessButtonLabel}
                     </Link>
                     <WikiLink
-                        href="user_guide/Preparedness#register-or-update-a-per-process"
+                        pathName="user_guide/Preparedness#register-or-update-a-per-process"
                     />
                 </>
             )}

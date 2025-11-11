@@ -1,0 +1,61 @@
+.inline-layout {
+    display: grid;
+    align-items: center;
+
+    &.with-inline-display {
+        display: inline-grid;
+    }
+
+    &.start-aligned-content {
+        align-items: start;
+    }
+
+    &.end-aligned-content {
+        align-items: end;
+    }
+
+    .before-content:empty {
+        display: none;
+    }
+
+    .after-content:empty {
+        display: none;
+    }
+
+    &:has(> .after-content:not(:empty)):not(:has(> .before-content)) {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    &:has(> .before-content:not(:empty)):not(:has(> .after-content)) {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    &:has(> .before-content:not(:empty)):has(> .after-content:not(:empty)) {
+        grid-template-columns: auto 1fr auto;
+    }
+
+    &:has(> .before-content:empty):has(> .after-content:empty) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    &:has(> .after-content:not(:empty)):has(> .before-content:empty) {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    &:has(> .before-content:not(:empty)):has(> .after-content:empty) {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .children {
+        min-width: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        &.ellipsized {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}

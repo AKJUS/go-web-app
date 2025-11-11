@@ -35,9 +35,7 @@
         "actionTakenDescription":"Select the actions that are being across all of the locations tagged above",
         "submitButton": "Submit",
         "monitoring3wHeading": "3W Monitoring Form",
-        "noteHeading": "If you have any questions, contact the IM team &nbsp;",
-        "messageHeading": "You are about to submit your entry for 3W for &nbsp;",
-        "messageEmergencyDescription": "&nbsp;emergency.",
-        "messageEmergencyDescriptionTwo": "&nbsp;Please review your selections below before submission."
+        "noteHeading": "If you have any questions, contact the IM team",
+        "confirmationDescription": "You are about to submit your entry for 3W for {event} emergency. Please review your selections below before submission."
     }
 }

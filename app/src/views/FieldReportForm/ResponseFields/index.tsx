@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import {
     Container,
     InputSection,
+    ListView,
     NumberInput,
     RadioInput,
 } from '@ifrc-go/ui';
@@ -38,7 +39,6 @@ import { type PartialFormValue } from '../common';
 import ContactInput, { type ContactValue } from './ContactInput';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 interface Props {
     error: Error<PartialFormValue> | undefined;
@@ -186,224 +186,231 @@ function ResponseFields(props: Props) {
     const contactsError = getErrorObject(error?.contacts);
 
     return (
-        <div className={styles.responseFields}>
+        <ListView
+            layout="block"
+            spacing="xl"
+        >
             {reportType !== 'COVID' && (
                 <Container
                     heading={strings.fieldReportFormResponseTitle}
                     headerDescription={strings.fieldReportFormResponseLabel}
-                    childrenContainerClassName={styles.content}
                 >
-                    <InputSection
-                        title={strings.fieldsStep4PlannedResponseRowsDREFEVTEPILabel}
-                        numPreferredColumns={2}
-                        withAsteriskOnTitle={isDefined(value.dref_amount) || isDefined(value.dref)}
-                    >
-                        <RadioInput
-                            error={error?.dref}
-                            name="dref"
-                            onChange={onValueChange}
-                            options={requestOptions}
-                            // FIXME: do not use inline functions
-                            keySelector={(item) => item.key}
-                            labelSelector={(item) => item.value}
-                            value={value.dref}
-                            disabled={disabled}
-                            clearable
-                        // withAsterisk={isDefined(value.dref_amount) || isDefined(value.dref)}
-                        />
-                        <NumberInput
-                            label={strings.fieldsStep4PlannedResponseRowsDREFValueFieldLabel}
-                            name="dref_amount"
-                            value={value.dref_amount}
-                            onChange={onValueChange}
-                            disabled={disabled}
-                            error={error?.dref_amount}
-                            withAsterisk={isDefined(value.dref_amount) || isDefined(value.dref)}
-                        />
-                    </InputSection>
-                    <InputSection
-                        title={strings.fieldsStep4PlannedResponseRowsEmergencyAppealEVTEPIEWLabel}
-                        numPreferredColumns={2}
-                        // eslint-disable-next-line max-len
-                        withAsteriskOnTitle={isDefined(value.appeal_amount) || isDefined(value.appeal)}
-                    >
-                        <RadioInput
-                            error={error?.appeal}
-                            name="appeal"
-                            onChange={onValueChange}
-                            options={requestOptions}
-                            // FIXME: do not use inline functions
-                            keySelector={(item) => item.key}
-                            labelSelector={(item) => item.value}
-                            value={value.appeal}
-                            clearable
-                            disabled={disabled}
-
-                        // withAsterisk={isDefined(value.appeal_amount) || isDefined(value.appeal)}
-                        />
-                        <NumberInput
-                            // eslint-disable-next-line max-len
-                            label={strings.fieldsStep4PlannedResponseRowsEmergencyAppealValueFieldLabel}
-                            name="appeal_amount"
-                            value={value.appeal_amount}
-                            onChange={onValueChange}
-                            error={error?.appeal_amount}
-                            disabled={disabled}
-                            withAsterisk={isDefined(value.appeal_amount) || isDefined(value.appeal)}
-                        />
-                    </InputSection>
-                    <InputSection
-                        title={strings.fieldsStep4PlannedResponseRowsFactEVTEPIEWLabel}
-                        numPreferredColumns={2}
-                        withAsteriskOnTitle={isDefined(value.num_fact) || isDefined(value.fact)}
-                    >
-                        <RadioInput
-                            error={error?.fact}
-                            name="fact"
-                            onChange={onValueChange}
-                            options={requestOptions}
-                            // FIXME: do not use inline functions
-                            keySelector={(item) => item.key}
-                            labelSelector={(item) => item.value}
-                            value={value.fact}
-                            clearable
-                            disabled={disabled}
-                        // withAsterisk={isDefined(value.num_fact) || isDefined(value.fact)}
-                        />
-                        <NumberInput
-                            label={strings.fieldsStep4PlannedResponseRowsFactValueFieldLabel}
-                            name="num_fact"
-                            value={value.num_fact}
-                            onChange={onValueChange}
-                            error={error?.num_fact}
-                            disabled={disabled}
-                            withAsterisk={isDefined(value.num_fact) || isDefined(value.fact)}
-                        />
-                    </InputSection>
-                    <InputSection
-                        title={strings.fieldsStep4PlannedResponseRowsERUEVTEPIEWLabel}
-                        numPreferredColumns={2}
-                        // eslint-disable-next-line max-len
-                        withAsteriskOnTitle={isDefined(value.num_emergency_response_unit) || isDefined(value.emergency_response_unit)}
-                    >
-                        <RadioInput
-                            error={error?.emergency_response_unit}
-                            name="emergency_response_unit"
-                            onChange={onValueChange}
-                            options={requestOptions}
-                            // FIXME: do not use inline functions
-                            keySelector={(item) => item.key}
-                            labelSelector={(item) => item.value}
-                            value={value.emergency_response_unit}
-                            clearable
-                            disabled={disabled}
-                        />
-                        <NumberInput
-                            label={strings.fieldsStep4PlannedResponseRowsERUValueFieldLabel}
-                            name="num_emergency_response_unit"
-                            value={value.num_emergency_response_unit}
-                            onChange={onValueChange}
-                            error={error?.num_emergency_response_unit}
-                            disabled={disabled}
-                            // eslint-disable-next-line max-len
-                            withAsterisk={isDefined(value.num_emergency_response_unit) || isDefined(value.emergency_response_unit)}
-                        />
-                    </InputSection>
-                    {reportType === 'EW' && (
+                    <ListView layout="block">
                         <InputSection
-                            title={strings.fieldsStep4PlannedResponseRowsForecastBasedActionEWLabel}
+                            title={strings.fieldsStep4PlannedResponseRowsDREFEVTEPILabel}
                             numPreferredColumns={2}
-                            // eslint-disable-next-line max-len
-                            withAsteriskOnTitle={isDefined(value.forecast_based_action) || isDefined(value.forecast_based_action_amount)}
+                            withAsteriskOnTitle={isDefined(value.dref_amount)
+                                || isDefined(value.dref)}
                         >
                             <RadioInput
-                                error={error?.forecast_based_action}
-                                name="forecast_based_action"
+                                error={error?.dref}
+                                name="dref"
                                 onChange={onValueChange}
                                 options={requestOptions}
                                 // FIXME: do not use inline functions
                                 keySelector={(item) => item.key}
                                 labelSelector={(item) => item.value}
-                                value={value.forecast_based_action}
+                                value={value.dref}
+                                disabled={disabled}
+                                clearable
+                                // withAsterisk={isDefined(value.dref_amount)
+                                // || isDefined(value.dref)}
+                            />
+                            <NumberInput
+                                label={strings.fieldsStep4PlannedResponseRowsDREFValueFieldLabel}
+                                name="dref_amount"
+                                value={value.dref_amount}
+                                onChange={onValueChange}
+                                disabled={disabled}
+                                error={error?.dref_amount}
+                                withAsterisk={isDefined(value.dref_amount) || isDefined(value.dref)}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings
+                                .fieldsStep4PlannedResponseRowsEmergencyAppealEVTEPIEWLabel}
+                            numPreferredColumns={2}
+                            // eslint-disable-next-line max-len
+                            withAsteriskOnTitle={isDefined(value.appeal_amount) || isDefined(value.appeal)}
+                        >
+                            <RadioInput
+                                error={error?.appeal}
+                                name="appeal"
+                                onChange={onValueChange}
+                                options={requestOptions}
+                                // FIXME: do not use inline functions
+                                keySelector={(item) => item.key}
+                                labelSelector={(item) => item.value}
+                                value={value.appeal}
                                 clearable
                                 disabled={disabled}
-                            // eslint-disable-next-line max-len
-                            // withAsterisk={isDefined(value.forecast_based_action) || isDefined(value.forecast_based_action_amount)}
+                                // withAsterisk={isDefined(value.appeal_amount)
+                                // || isDefined(value.appeal)}
                             />
                             <NumberInput
                                 // eslint-disable-next-line max-len
-                                label={strings.fieldsStep4PlannedResponseRowsForecastBasedActionValueFieldLabel}
-                                name="forecast_based_action_amount"
-                                value={value.forecast_based_action_amount}
+                                label={strings.fieldsStep4PlannedResponseRowsEmergencyAppealValueFieldLabel}
+                                name="appeal_amount"
+                                value={value.appeal_amount}
                                 onChange={onValueChange}
-                                error={error?.forecast_based_action_amount}
+                                error={error?.appeal_amount}
+                                disabled={disabled}
+                                withAsterisk={isDefined(value.appeal_amount)
+                                    || isDefined(value.appeal)}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.fieldsStep4PlannedResponseRowsFactEVTEPIEWLabel}
+                            numPreferredColumns={2}
+                            withAsteriskOnTitle={isDefined(value.num_fact) || isDefined(value.fact)}
+                        >
+                            <RadioInput
+                                error={error?.fact}
+                                name="fact"
+                                onChange={onValueChange}
+                                options={requestOptions}
+                                // FIXME: do not use inline functions
+                                keySelector={(item) => item.key}
+                                labelSelector={(item) => item.value}
+                                value={value.fact}
+                                clearable
+                                disabled={disabled}
+                            // withAsterisk={isDefined(value.num_fact) || isDefined(value.fact)}
+                            />
+                            <NumberInput
+                                label={strings.fieldsStep4PlannedResponseRowsFactValueFieldLabel}
+                                name="num_fact"
+                                value={value.num_fact}
+                                onChange={onValueChange}
+                                error={error?.num_fact}
+                                disabled={disabled}
+                                withAsterisk={isDefined(value.num_fact) || isDefined(value.fact)}
+                            />
+                        </InputSection>
+                        <InputSection
+                            title={strings.fieldsStep4PlannedResponseRowsERUEVTEPIEWLabel}
+                            numPreferredColumns={2}
+                            // eslint-disable-next-line max-len
+                            withAsteriskOnTitle={isDefined(value.num_emergency_response_unit) || isDefined(value.emergency_response_unit)}
+                        >
+                            <RadioInput
+                                error={error?.emergency_response_unit}
+                                name="emergency_response_unit"
+                                onChange={onValueChange}
+                                options={requestOptions}
+                                // FIXME: do not use inline functions
+                                keySelector={(item) => item.key}
+                                labelSelector={(item) => item.value}
+                                value={value.emergency_response_unit}
+                                clearable
+                                disabled={disabled}
+                            />
+                            <NumberInput
+                                label={strings.fieldsStep4PlannedResponseRowsERUValueFieldLabel}
+                                name="num_emergency_response_unit"
+                                value={value.num_emergency_response_unit}
+                                onChange={onValueChange}
+                                error={error?.num_emergency_response_unit}
                                 disabled={disabled}
                                 // eslint-disable-next-line max-len
-                                withAsterisk={isDefined(value.forecast_based_action) || isDefined(value.forecast_based_action_amount)}
+                                withAsterisk={isDefined(value.num_emergency_response_unit) || isDefined(value.emergency_response_unit)}
                             />
                         </InputSection>
-                    )}
+                        {reportType === 'EW' && (
+                            <InputSection
+                                title={strings
+                                    .fieldsStep4PlannedResponseRowsForecastBasedActionEWLabel}
+                                numPreferredColumns={2}
+                                // eslint-disable-next-line max-len
+                                withAsteriskOnTitle={isDefined(value.forecast_based_action) || isDefined(value.forecast_based_action_amount)}
+                            >
+                                <RadioInput
+                                    error={error?.forecast_based_action}
+                                    name="forecast_based_action"
+                                    onChange={onValueChange}
+                                    options={requestOptions}
+                                    // FIXME: do not use inline functions
+                                    keySelector={(item) => item.key}
+                                    labelSelector={(item) => item.value}
+                                    value={value.forecast_based_action}
+                                    clearable
+                                    disabled={disabled}
+                                // eslint-disable-next-line max-len
+                                // withAsterisk={isDefined(value.forecast_based_action) || isDefined(value.forecast_based_action_amount)}
+                                />
+                                <NumberInput
+                                    // eslint-disable-next-line max-len
+                                    label={strings.fieldsStep4PlannedResponseRowsForecastBasedActionValueFieldLabel}
+                                    name="forecast_based_action_amount"
+                                    value={value.forecast_based_action_amount}
+                                    onChange={onValueChange}
+                                    error={error?.forecast_based_action_amount}
+                                    disabled={disabled}
+                                    // eslint-disable-next-line max-len
+                                    withAsterisk={isDefined(value.forecast_based_action) || isDefined(value.forecast_based_action_amount)}
+                                />
+                            </InputSection>
+                        )}
+                    </ListView>
                 </Container>
             )}
-            <Container
-                heading={strings.fieldReportFormContactsTitle}
-                className={styles.contactsSection}
-                childrenContainerClassName={styles.content}
-            >
-                <NonFieldError error={getErrorObject(error?.contacts)} />
-                {contacts.map((contact) => {
-                    const index = contactsIndexMapping?.[contact.key];
-                    return (
-                        <InputSection
-                            key={contact.key}
-                            title={contact.title}
-                            description={contact.description}
-                            numPreferredColumns={2}
-                        >
-                            <ContactInput
-                                name={index}
-                                contactType={contact.key}
-                                value={isDefined(index) ? value?.contacts?.[index] : undefined}
-                                error={isDefined(index) ? contactsError?.[contact.key] : undefined}
-                                onChange={setContactValue}
-                                disabled={disabled}
-                            />
-                        </InputSection>
-                    );
-                })}
-                <InputSection
-                    title={strings.fieldReportFormVisibilityLabel}
-                    description={(
-                        visibilityOptions?.map((option) => (
-                            <p
-                                key={option.key}
+            <Container heading={strings.fieldReportFormContactsTitle}>
+                <ListView layout="block">
+                    <NonFieldError error={getErrorObject(error?.contacts)} />
+                    {contacts.map((contact) => {
+                        const index = contactsIndexMapping?.[contact.key];
+                        return (
+                            <InputSection
+                                key={contact.key}
+                                title={contact.title}
+                                description={contact.description}
+                                numPreferredColumns={2}
                             >
-                                {resolveToString(
-                                    strings.fieldReportFormVisibility,
-                                    {
-                                        visibilityValue: option.value,
-                                        visibility: visibilityDescriptionMapping[option.key],
-                                    },
-                                )}
-                            </p>
-                        ))
-                    )}
-                    withAsteriskOnTitle
-                >
-                    <RadioInput
-                        error={error?.visibility}
-                        name="visibility"
-                        onChange={onValueChange}
-                        options={visibilityOptions}
-                        // FIXME: do not use inline functions
-                        keySelector={(item) => item.key}
-                        labelSelector={(item) => item.value}
-                        value={value.visibility}
-                        disabled={disabled}
-                    />
-                </InputSection>
+                                <ContactInput
+                                    name={index}
+                                    contactType={contact.key}
+                                    value={isDefined(index) ? value?.contacts?.[index] : undefined}
+                                    error={contactsError?.[contact.key]}
+                                    onChange={setContactValue}
+                                    disabled={disabled}
+                                />
+                            </InputSection>
+                        );
+                    })}
+                    <InputSection
+                        title={strings.fieldReportFormVisibilityLabel}
+                        description={(
+                            visibilityOptions?.map((option) => (
+                                <p
+                                    key={option.key}
+                                >
+                                    {resolveToString(
+                                        strings.fieldReportFormVisibility,
+                                        {
+                                            visibilityValue: option.value,
+                                            visibility: visibilityDescriptionMapping[option.key],
+                                        },
+                                    )}
+                                </p>
+                            ))
+                        )}
+                        withAsteriskOnTitle
+                    >
+                        <RadioInput
+                            error={error?.visibility}
+                            name="visibility"
+                            onChange={onValueChange}
+                            options={visibilityOptions}
+                            // FIXME: do not use inline functions
+                            keySelector={(item) => item.key}
+                            labelSelector={(item) => item.value}
+                            value={value.visibility}
+                            disabled={disabled}
+                        />
+                    </InputSection>
+                </ListView>
             </Container>
-        </div>
+        </ListView>
     );
 }
 

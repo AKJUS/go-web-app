@@ -6,6 +6,7 @@ import { useOutletContext } from 'react-router-dom';
 import {
     BarChart,
     Container,
+    ListView,
     SelectInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -18,7 +19,7 @@ import {
 } from '@togglecorp/fujs';
 
 import AppealsTable from '#components/domain/AppealsTable';
-import WikiLink from '#components/WikiLink';
+import TabPage from '#components/TabPage';
 import { type CountryOutletContext } from '#utils/outletContext';
 import {
     type GoApiResponse,
@@ -30,7 +31,6 @@ import EmergenciesOverMonth from './EmergenciesOverMonth';
 import PastEventsChart from './PastEventsChart';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type TimePeriodKey = 'this-year' | 'past-year' | 'last-two-years' | 'last-five-years' | 'last-ten-years';
 type DisasterCountItem = GoApiResponse<'/api/v2/country/{id}/disaster-count/'>[number];
@@ -146,20 +146,10 @@ export function Component() {
     }
     // FIXME: properly handle low data and empty conditions in charts
     return (
-        <Container
-            className={styles.countryProfilePreviousEvents}
-            contentViewType="vertical"
-            spacing="loose"
-            actions={(
-                <WikiLink
-                    href="user_guide/Country_Pages#previous-events"
-                />
-            )}
+        <TabPage
+            wikiLinkPathName="user_guide/Country_Pages#previous-events"
         >
             <Container
-                contentViewType="grid"
-                numPreferredGridContentColumns={2}
-                spacing="relaxed"
                 filters={(
                     <SelectInput
                         name="timePeriod"
@@ -175,34 +165,43 @@ export function Component() {
                 errored={isDefined(disasterCountError)}
                 errorMessage={disasterCountError?.value.messageForNotification}
             >
-                {isDefined(figureResponse) && (
-                    <CountryHistoricalKeyFigures
-                        className={styles.keyFigures}
-                        data={figureResponse}
-                    />
-                )}
-                <Container
-                    heading={strings.emergenciesByDisasterTypeHeading}
-                    withHeaderBorder
+                <ListView
+                    layout="block"
+                    spacing="lg"
                 >
-                    <BarChart
-                        data={disasterCountResponse}
-                        keySelector={disasterIdSelector}
-                        labelSelector={disasterNameSelector}
-                        valueSelector={disasterCountSelector}
-                        maxRows={8}
-                    />
-                </Container>
-                <Container
-                    heading={strings.emergenciesOverMonthHeading}
-                    withHeaderBorder
-                >
-                    <EmergenciesOverMonth
-                        countryId={countryId}
-                        startDate={encodeDate(selectedTimePeriod.startDate)}
-                        endDate={encodeDate(selectedTimePeriod.endDate)}
-                    />
-                </Container>
+                    {isDefined(figureResponse) && (
+                        <CountryHistoricalKeyFigures
+                            data={figureResponse}
+                        />
+                    )}
+                    <ListView
+                        layout="grid"
+                        minGridColumnSize="20rem"
+                    >
+                        <Container
+                            heading={strings.emergenciesByDisasterTypeHeading}
+                            withHeaderBorder
+                        >
+                            <BarChart
+                                data={disasterCountResponse}
+                                keySelector={disasterIdSelector}
+                                labelSelector={disasterNameSelector}
+                                valueSelector={disasterCountSelector}
+                                maxRows={8}
+                            />
+                        </Container>
+                        <Container
+                            heading={strings.emergenciesOverMonthHeading}
+                            withHeaderBorder
+                        >
+                            <EmergenciesOverMonth
+                                countryId={countryId}
+                                startDate={encodeDate(selectedTimePeriod.startDate)}
+                                endDate={encodeDate(selectedTimePeriod.endDate)}
+                            />
+                        </Container>
+                    </ListView>
+                </ListView>
             </Container>
             <PastEventsChart
                 countryId={countryId}
@@ -215,7 +214,7 @@ export function Component() {
                     withPastOperations
                 />
             )}
-        </Container>
+        </TabPage>
     );
 }
 

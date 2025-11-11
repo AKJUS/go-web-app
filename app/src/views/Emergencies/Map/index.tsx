@@ -5,7 +5,9 @@ import {
 } from 'react';
 import {
     Container,
+    Description,
     LegendItem,
+    ListView,
     RadioInput,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -15,7 +17,6 @@ import {
     sumSafe,
 } from '@ifrc-go/ui/utils';
 import {
-    _cs,
     isDefined,
     isNotDefined,
     isTruthyString,
@@ -29,8 +30,8 @@ import {
 } from '@togglecorp/re-map';
 
 import GlobalMap, { type AdminZeroFeatureProperties } from '#components/domain/GlobalMap';
+import GoMapContainer from '#components/GoMapContainer';
 import Link from '#components/Link';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
 import useCountryRaw from '#hooks/domain/useCountryRaw';
 import useInputState from '#hooks/useInputState';
@@ -53,7 +54,6 @@ import {
 } from './utils';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const sourceOptions: mapboxgl.GeoJSONSourceRaw = {
     type: 'geojson',
@@ -242,10 +242,10 @@ function EmergenciesMap(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.emergenciesMap, className)}
+            className={className}
             heading={heading}
             withHeaderBorder
-            actions={(
+            headerActions={(
                 <Link
                     to="allEmergencies"
                     withUnderline
@@ -258,37 +258,44 @@ function EmergenciesMap(props: Props) {
             <GlobalMap
                 onAdminZeroFillClick={handleCountryClick}
             >
-                <MapContainerWithDisclaimer
-                    className={styles.mapContainer}
+                <GoMapContainer
                     title={strings.emergenciesDownloadMapTitle}
                     footer={(
-                        <div className={styles.footer}>
-                            <div className={styles.left}>
-                                <RadioInput
-                                    label={strings.emergenciesScaleByLabel}
-                                    name={undefined}
-                                    options={scaleOptions}
-                                    keySelector={optionKeySelector}
-                                    labelSelector={optionLabelSelector}
-                                    value={scaleBy}
-                                    onChange={setScaleBy}
-                                />
-                            </div>
-                            <div className={styles.legend}>
-                                {strings.emergenciesKey}
-                                {legendOptions.map((legendItem) => (
-                                    <LegendItem
-                                        className={styles.legendItem}
-                                        key={legendItem.value}
-                                        label={legendItem.label}
-                                        color={legendItem.color}
-                                    />
-                                ))}
-                            </div>
-                            <div>
-                                {strings.emergenciesMapDescription}
-                            </div>
-                        </div>
+                        <>
+                            <RadioInput
+                                label={strings.emergenciesScaleByLabel}
+                                name={undefined}
+                                options={scaleOptions}
+                                keySelector={optionKeySelector}
+                                labelSelector={optionLabelSelector}
+                                value={scaleBy}
+                                onChange={setScaleBy}
+                            />
+                            <ListView
+                                layout="block"
+                                withSpacingOpticalCorrection
+                                spacing="sm"
+                            >
+                                <ListView
+                                    withWrap
+                                    withSpacingOpticalCorrection
+                                    spacing="sm"
+                                >
+                                    {legendOptions.map((legendItem) => (
+                                        <LegendItem
+                                            key={legendItem.value}
+                                            label={legendItem.label}
+                                            color={legendItem.color}
+                                        />
+                                    ))}
+                                </ListView>
+                                <Description
+                                    textSize="sm"
+                                >
+                                    {strings.emergenciesMapDescription}
+                                </Description>
+                            </ListView>
+                        </>
                     )}
                 />
                 <MapSource
@@ -324,14 +331,13 @@ function EmergenciesMap(props: Props) {
                                 {clickedPointProperties.properties.name}
                             </Link>
                         )}
-                        childrenContainerClassName={styles.popupContent}
+                        empty={isNotDefined(popupDetails) || popupDetails.length === 0}
+                        emptyMessage={strings.emergenciesMapPopoverEmpty}
                     >
                         {popupDetails?.map(
                             (event) => (
                                 <Container
                                     key={event.details.id}
-                                    className={styles.popupAppeal}
-                                    childrenContainerClassName={styles.popupAppealDetail}
                                     heading={event.details.name}
                                     headingLevel={5}
                                 >
@@ -342,11 +348,6 @@ function EmergenciesMap(props: Props) {
                                     />
                                 </Container>
                             ),
-                        )}
-                        {(isNotDefined(popupDetails) || popupDetails.length === 0) && (
-                            <div className={styles.empty}>
-                                {strings.emergenciesMapPopoverEmpty}
-                            </div>
                         )}
                     </MapPopup>
                 )}

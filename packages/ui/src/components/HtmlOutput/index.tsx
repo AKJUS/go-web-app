@@ -41,7 +41,7 @@ function useSanitizedHtml(rawHtml: string | null | undefined) {
                     div: ['style'],
                     img: ['style', 'src', 'width', 'height', 'alt'],
                     iframe: ['style', 'src', 'width', 'height', 'frameborder'],
-                    a: ['style', 'href'],
+                    a: ['style', 'href', 'target', 'rel'],
                 },
                 allowedSchemes: ['http', 'https', 'data'],
                 allowedStyles: {
@@ -55,6 +55,16 @@ function useSanitizedHtml(rawHtml: string | null | undefined) {
                         height: [/^\d+px$/],
                         border: [/.+/],
                     },
+                },
+                transformTags: {
+                    a: (tagName, attribs) => ({
+                        tagName,
+                        attribs: {
+                            ...attribs,
+                            target: '_blank',
+                            rel: 'noopener noreferrer',
+                        },
+                    }),
                 },
             },
         );

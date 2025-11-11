@@ -1,170 +1,78 @@
-import {
-    useCallback,
-    useMemo,
-} from 'react';
-import {
-    _cs,
-    isNotDefined,
-} from '@togglecorp/fujs';
-
+import ButtonLayout, { Props as ButtonLayoutProps } from '#components/ButtonLayout';
 import RawButton, { Props as RawButtonProps } from '#components/RawButton';
-import { SpacingType } from '#components/types';
-import useBasicLayout from '#hooks/useBasicLayout';
 
 import styles from './styles.module.css';
 
-// NOTE: Adding a 'tertiary-on-dark' to use 'tertiary' button on darker backgrounds
-export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'tertiary-on-dark' | 'dropdown-item';
+type PickedButtonLayoutProps =
+    | 'colorVariant'
+    | 'styleVariant'
+    | 'spacing'
+    | 'spacingOffset'
+    | 'withoutPadding'
+    | 'withFullWidth'
+    | 'children'
+    | 'before'
+    | 'textSize'
+    | 'after'
 
-const buttonVariantToClassNameMap: Record<ButtonVariant, string> = {
-    primary: styles.primary,
-    secondary: styles.secondary,
-    tertiary: styles.tertiary,
-    'tertiary-on-dark': styles.tertiaryOnDark,
-    'dropdown-item': styles.dropdownItem,
+export type Props<NAME> = Omit<RawButtonProps<NAME>, 'elementRef' | 'children'>
+& Pick<ButtonLayoutProps, PickedButtonLayoutProps>
+& {
+    layoutElementRef?: ButtonLayoutProps['elementRef'];
 };
 
-const spacingTypeToClassNameMap: Record<SpacingType, string> = {
-    none: styles.noSpacing,
-    condensed: styles.condensedSpacing,
-    compact: styles.compactSpacing,
-    cozy: styles.cozySpacing,
-    default: styles.defaultSpacing,
-    comfortable: styles.comfortableSpacing,
-    relaxed: styles.relaxedSpacing,
-    loose: styles.looseSpacing,
-};
-
-export interface ButtonFeatureProps {
-    className?: string;
-    children?: React.ReactNode;
-    variant?: ButtonVariant;
-    actions?: React.ReactNode;
-    actionsContainerClassName?: string;
-    childrenContainerClassName?: string;
-    disabled?: boolean;
-    icons?: React.ReactNode;
-    iconsContainerClassName?: string;
-    spacing?: SpacingType;
-    ellipsize?: boolean;
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useButtonFeatures(props: ButtonFeatureProps) {
+function Button<const NAME>(props: Props<NAME>) {
     const {
-        actions,
-        actionsContainerClassName: actionsClassName,
-        children: childrenFromProps,
-        childrenContainerClassName: childrenClassName,
-        className,
-        disabled,
-        icons,
-        iconsContainerClassName: iconsClassName,
-        variant = 'primary',
-        spacing = 'default',
-        ellipsize,
-    } = props;
-
-    const buttonClassName = _cs(
-        styles.button,
-        buttonVariantToClassNameMap[variant],
-        spacingTypeToClassNameMap[spacing],
-        disabled && styles.disabled,
-        ellipsize && styles.ellipsized,
-        className,
-    );
-
-    const children = useMemo(
-        () => {
-            if (!ellipsize) {
-                return childrenFromProps;
-            }
-
-            return (
-                <div className={styles.overflowWrapper}>
-                    {childrenFromProps}
-                </div>
-            );
-        },
-        [ellipsize, childrenFromProps],
-    );
-
-    const {
-        content,
-        containerClassName,
-    } = useBasicLayout({
-        className: buttonClassName,
-        icons,
-        children,
-        actions,
-        iconsContainerClassName: iconsClassName,
-        childrenContainerClassName: _cs(styles.children, childrenClassName),
-        actionsContainerClassName: actionsClassName,
+        colorVariant = 'primary',
+        styleVariant = 'outline',
         spacing,
-        withoutWrap: true,
-        variant: 'xs',
-    });
+        spacingOffset = -3,
+        withoutPadding,
+        withFullWidth,
+        before,
+        after,
+        textSize,
 
-    return {
-        className: containerClassName,
-        children: content,
-        disabled,
-    };
-}
+        layoutElementRef,
 
-export interface Props<N> extends ButtonFeatureProps, RawButtonProps<N> {
-    name: N;
-    onClick?: (name: N, e: React.MouseEvent<HTMLButtonElement>) => void;
-}
-
-function Button<const N>(props: Props<N>) {
-    const {
-        actions,
-        actionsContainerClassName: actionsClassName,
-        children,
-        childrenContainerClassName: childrenClassName,
-        className,
-        disabled,
-        icons,
-        iconsContainerClassName: iconsClassName,
         name,
         onClick,
-        variant,
-        type = 'button',
-        spacing,
-        ...otherProps
-    } = props;
-
-    const handleButtonClick = useCallback((n: N, e: React.MouseEvent<HTMLButtonElement>) => {
-        if (onClick) {
-            onClick(n, e);
-        }
-    }, [onClick]);
-
-    const buttonProps = useButtonFeatures({
-        variant,
-        className,
-        actionsContainerClassName: actionsClassName,
-        iconsContainerClassName: iconsClassName,
-        childrenContainerClassName: childrenClassName,
         children,
-        icons,
-        actions,
-        spacing,
-        // NOTE: disabling a button if there is on onClick handler
-        disabled: disabled || (type !== 'submit' && isNotDefined(onClick)),
-    });
+        disabled,
+
+        className,
+        type = 'button',
+
+        ...rawButtonProps
+    } = props;
 
     return (
         <RawButton
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...rawButtonProps}
+            className={styles.button}
             name={name}
+            onClick={onClick}
             type={type}
-            onClick={handleButtonClick}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...otherProps}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...buttonProps}
-        />
+            disabled={disabled}
+        >
+            <ButtonLayout
+                className={className}
+                elementRef={layoutElementRef}
+                colorVariant={colorVariant}
+                styleVariant={styleVariant}
+                spacing={spacing}
+                spacingOffset={spacingOffset}
+                withoutPadding={withoutPadding}
+                withFullWidth={withFullWidth}
+                before={before}
+                after={after}
+                textSize={textSize}
+                disabled={disabled}
+            >
+                {children}
+            </ButtonLayout>
+        </RawButton>
     );
 }
 

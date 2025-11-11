@@ -76,13 +76,11 @@ function EruInputItem(props: Props) {
     return (
         <InputSection
             title={title}
-            className={styles.eruInputItem}
-            contentSectionClassName={styles.content}
+            numPreferredColumns={4}
+            withFullWidthContent
         >
             <RadioInput
                 label={strings.eruEquipmentReadiness}
-                className={styles.readinessInput}
-                listContainerClassName={styles.radioList}
                 name="equipment_readiness"
                 value={value.equipment_readiness}
                 onChange={onFieldChange}
@@ -90,11 +88,10 @@ function EruInputItem(props: Props) {
                 keySelector={readinessKeySelector}
                 labelSelector={readinessLabelSelector}
                 error={error?.equipment_readiness}
+                radioListLayout="block"
             />
             <RadioInput
                 label={strings.eruPeopleReadiness}
-                className={styles.readinessInput}
-                listContainerClassName={styles.radioList}
                 name="people_readiness"
                 value={value.people_readiness}
                 onChange={onFieldChange}
@@ -102,11 +99,10 @@ function EruInputItem(props: Props) {
                 keySelector={readinessKeySelector}
                 labelSelector={readinessLabelSelector}
                 error={error?.people_readiness}
+                radioListLayout="block"
             />
             <RadioInput
                 label={strings.eruFundingReadiness}
-                className={styles.readinessInput}
-                listContainerClassName={styles.radioList}
                 name="funding_readiness"
                 value={value.funding_readiness}
                 onChange={onFieldChange}
@@ -114,6 +110,7 @@ function EruInputItem(props: Props) {
                 keySelector={readinessKeySelector}
                 labelSelector={readinessLabelSelector}
                 error={error?.funding_readiness}
+                radioListLayout="block"
             />
             <TextArea
                 className={styles.commentInput}

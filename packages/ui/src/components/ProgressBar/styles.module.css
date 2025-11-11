@@ -1,12 +1,9 @@
 .progress-wrapper {
+    --variant-color: var(--go-ui-color-primary-blue);
+
     display: flex;
     flex-direction: column;
     gap: var(--go-ui-spacing-2xs);
-    color: var(--go-ui-color-primary-red);
-
-    .title {
-        color: var(--go-ui-color-text);
-    }
 
     .total {
         display: flex;
@@ -18,6 +15,31 @@
         .progress {
             transition: var(--go-ui-duration-transition-medium) width ease-in-out;
             border-radius: var(--go-ui-border-radius-md);
+            background-color: var(--variant-color);
         }
+    }
+
+    &.color-variant-text {
+        --variant-color: var(--go-ui-color-text);
+    }
+
+    &.color-variant-text-on-dark {
+        --variant-color: var(--go-ui-color-text-on-dark);
+    }
+
+    &.color-variant-primary {
+        --variant-color: var(--go-ui-color-primary-red);
+    }
+
+    &.color-variant-secondary {
+        --variant-color: var(--go-ui-color-primary-blue);
+    }
+
+    &.color-variant-success {
+        --variant-color: var(--go-ui-color-positive);
+    }
+
+    &.color-variant-danger {
+        --variant-color: var(--go-ui-color-negative);
     }
 }

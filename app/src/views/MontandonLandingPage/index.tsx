@@ -5,8 +5,10 @@ import {
 } from '@ifrc-go/icons';
 import {
     Container,
+    Description,
     DropdownMenu,
-    TextInput,
+    Label,
+    ListView,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -23,8 +25,6 @@ const linkToMontandon = 'https://radiantearth.github.io/stac-browser/#/external/
 const emailBody = encodeURIComponent(`Sharing with you a link to Montandon API: ${linkToMontandon}`);
 const mailtoLink = `mailto:?subject=${emailSubject}&body=${emailBody}`;
 
-const noOp = () => {};
-
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
@@ -32,7 +32,6 @@ export function Component() {
 
     return (
         <Page
-            className={styles.montandonLandingPage}
             title={strings.montandonPageTitle}
             heading={strings.montandonHeading}
             description={strings.montandonHeadingDescription}
@@ -41,18 +40,22 @@ export function Component() {
                 <>
                     <DropdownMenu
                         label={strings.sourcePopupTitle}
-                        icons={<DrefTwoIcon className={styles.icon} />}
+                        labelBefore={<DrefTwoIcon />}
+                        labelColorVariant="primary"
                         preferredPopupWidth={30}
-                        withoutDropdownIcon
                         persistent
                     >
                         <Container
                             heading={strings.sourcePopupTitle}
                             withHeaderBorder
-                            withInternalPadding
-                            contentViewType="vertical"
+                            headingLevel={5}
+                            withPadding
                         >
-                            <div className={styles.stacDescription}>
+                            <ListView
+                                layout="block"
+                                withSpacingOpticalCorrection
+                                spacing="sm"
+                            >
                                 <TextOutput
                                     strongLabel
                                     label={strings.stacIdLabel}
@@ -69,45 +72,55 @@ export function Component() {
                                     value={strings.validValue}
                                 />
                                 <div className={styles.separator} />
-                                {strings.stacLocationText}
-                                <TextInput
-                                    name="link"
-                                    value="https://montandon-eoapi-stage.ifrc.org/stac/"
-                                    onChange={noOp}
-                                    readOnly
-                                />
-                            </div>
+                                <Label>
+                                    {strings.stacLocationText}
+                                </Label>
+                                <Link
+                                    external
+                                    href="https://montandon-eoapi-stage.ifrc.org/stac/"
+                                    withLinkIcon
+                                    withFullWidth
+                                    styleVariant="translucent"
+                                >
+                                    https://montandon-eoapi-stage.ifrc.org/stac/
+                                </Link>
+                            </ListView>
                         </Container>
                     </DropdownMenu>
                     <DropdownMenu
-                        icons={<ShareLineIcon className={styles.icon} />}
                         label={strings.sharePopupTitle}
-                        withoutDropdownIcon
+                        labelBefore={<ShareLineIcon className={styles.icon} />}
+                        labelColorVariant="primary"
                         preferredPopupWidth={30}
                         persistent
                     >
                         <Container
                             heading={strings.sharePopupTitle}
                             withHeaderBorder
-                            withInternalPadding
                             withFooterBorder
-                            contentViewType="vertical"
-                            footerContent={(
+                            withPadding
+                            headingLevel={5}
+                            footerActions={(
                                 <Link
                                     href={mailtoLink}
-                                    icons={<MailIcon className={styles.icon} />}
-                                    variant="secondary"
+                                    before={<MailIcon className={styles.icon} />}
+                                    colorVariant="primary"
+                                    styleVariant="outline"
                                     external
+                                    spacing="sm"
                                 >
                                     {strings.emailLabel}
                                 </Link>
                             )}
                         >
-                            {strings.shareUrlLabel}
+                            <Label>
+                                {strings.shareUrlLabel}
+                            </Label>
                             <Link
                                 href="https://radiantearth.github.io/stac-browser/#/external/montandon-eoapi-stage.ifrc.org/stac/"
-                                variant="tertiary"
                                 external
+                                withEllipsizedContent
+                                withLinkIcon
                             >
                                 https://radiantearth.github.io/stac-browser/#/external/montandon-eoapi-stage.ifrc.org/stac/
                             </Link>
@@ -115,7 +128,6 @@ export function Component() {
                     </DropdownMenu>
                 </>
             )}
-            infoContainerClassName={styles.iframeEmbed}
             info={(
                 <iframe
                     className={styles.iframe}
@@ -127,15 +139,15 @@ export function Component() {
             )}
         >
             <Container
-                className={styles.resources}
-                contentViewType="grid"
-                numPreferredGridContentColumns={3}
-                spacing="comfortable"
                 footerActions={(
-                    <>
+                    <ListView
+                        withWrap
+                        spacing="sm"
+                    >
                         <Link
                             href="https://montandon-eoapi-stage.ifrc.org/stac/api.html"
-                            variant="secondary"
+                            colorVariant="primary"
+                            styleVariant="outline"
                             external
                             withLinkIcon
                         >
@@ -143,95 +155,117 @@ export function Component() {
                         </Link>
                         <Link
                             href="https://radiantearth.github.io/stac-browser/#/external/montandon-eoapi-stage.ifrc.org/stac/"
-                            variant="secondary"
+                            colorVariant="primary"
+                            styleVariant="outline"
                             external
                             withLinkIcon
                         >
                             {strings.exploreRadiantEarthLabel}
                         </Link>
-                    </>
+                    </ListView>
                 )}
+                spacing="xl"
             >
-                <Container
-                    className={styles.guideCard}
-                    heading={strings.resources}
-                    contentViewType="vertical"
-                    withHeaderBorder
-                    withInternalPadding
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                    minGridColumnSize="20rem"
                 >
-                    <Link
-                        href="https://github.com/IFRCGo/monty-stac-extension/blob/main/README.md"
-                        external
-                        withLinkIcon
+                    <Container
+                        className={styles.guideCard}
+                        heading={strings.resources}
+                        withHeaderBorder
+                        withPadding
+                        withBackground
+                        withShadow
                     >
-                        {strings.visitGithub}
-                    </Link>
-                    <Link
-                        href="https://go-wiki.ifrc.org/en/home"
-                        external
-                        withLinkIcon
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                        >
+                            <Link
+                                href="https://github.com/IFRCGo/monty-stac-extension/blob/main/README.md"
+                                external
+                                withLinkIcon
+                            >
+                                {strings.visitGithub}
+                            </Link>
+                            <Link
+                                href="https://go-wiki.ifrc.org/en/home"
+                                external
+                                withLinkIcon
+                            >
+                                {strings.goWiki}
+                            </Link>
+                            <Link
+                                href="https://montandon-eoapi-stage.ifrc.org/stac/api"
+                                external
+                                withLinkIcon
+                            >
+                                {strings.apiDescription}
+                            </Link>
+                            <Link
+                                href="https://montandon-eoapi-stage.ifrc.org/stac/api.html"
+                                external
+                                withLinkIcon
+                            >
+                                {strings.apiDocumentation}
+                            </Link>
+                        </ListView>
+                    </Container>
+                    <Container
+                        heading={strings.blogPosts}
+                        withPadding
+                        withBackground
+                        withShadow
+                        withHeaderBorder
                     >
-                        {strings.goWiki}
-                    </Link>
-                    <Link
-                        href="https://montandon-eoapi-stage.ifrc.org/stac/api"
-                        external
-                        withLinkIcon
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                        >
+                            <Link
+                                href="https://ifrcgoproject.medium.com/toward-a-more-comprehensive-understanding-of-disasters-fc422d65377"
+                                external
+                                withLinkIcon
+                            >
+                                {strings.leveragingDataBlogPostTitle}
+                            </Link>
+                            <Link
+                                href="https://ifrcgoproject.medium.com/scaled-up-ambitions-require-scaled-up-systems-4a92456fab59"
+                                external
+                                withLinkIcon
+                            >
+                                {strings.scaledUpSystemsBlogPostTitle}
+                            </Link>
+                        </ListView>
+                    </Container>
+                    <Container
+                        heading={strings.contact}
+                        withPadding
+                        withBackground
+                        withShadow
+                        withHeaderBorder
                     >
-                        {strings.apiDescription}
-                    </Link>
-                    <Link
-                        href="https://montandon-eoapi-stage.ifrc.org/stac/api.html"
-                        external
-                        withLinkIcon
-                    >
-                        {strings.apiDocumentation}
-                    </Link>
-                </Container>
-
-                <Container
-                    className={styles.guideCard}
-                    heading={strings.blogPosts}
-                    contentViewType="vertical"
-                    withHeaderBorder
-                    withInternalPadding
-                >
-                    <Link
-                        href="https://ifrcgoproject.medium.com/toward-a-more-comprehensive-understanding-of-disasters-fc422d65377"
-                        external
-                        withLinkIcon
-                    >
-                        {strings.leveragingDataBlogPostTitle}
-                    </Link>
-
-                    <Link
-                        href="https://ifrcgoproject.medium.com/scaled-up-ambitions-require-scaled-up-systems-4a92456fab59"
-                        external
-                        withLinkIcon
-                    >
-                        {strings.scaledUpSystemsBlogPostTitle}
-                    </Link>
-                </Container>
-
-                <Container
-                    className={styles.guideCard}
-                    heading={strings.contact}
-                    contentViewType="vertical"
-                    withHeaderBorder
-                    withInternalPadding
-                >
-                    <Link
-                        href="mailto:im@ifrc.org"
-                        variant="primary"
-                        external
-                    >
-                        im@ifrc.org
-                    </Link>
-                    <div>
-                        {strings.contactText}
-                    </div>
-                </Container>
-
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                        >
+                            <Link
+                                href="mailto:im@ifrc.org"
+                                colorVariant="primary"
+                                styleVariant="filled"
+                                external
+                                spacing="sm"
+                            >
+                                im@ifrc.org
+                            </Link>
+                            <Description>
+                                {strings.contactText}
+                            </Description>
+                        </ListView>
+                    </Container>
+                </ListView>
             </Container>
         </Page>
     );

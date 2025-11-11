@@ -7,6 +7,7 @@ import {
     Button,
     Container,
     InputSection,
+    ListView,
     MultiSelectInput,
     SelectInput,
 } from '@ifrc-go/ui';
@@ -327,7 +328,7 @@ export function Component() {
                         <Link
                             href="mailto:im@ifrc.org"
                             external
-                            variant="tertiary"
+                            styleVariant="action"
                         >
                             {strings.imContact}
                         </Link>
@@ -336,7 +337,7 @@ export function Component() {
                         <Link
                             href="mailto:surge@ifrc.org"
                             external
-                            variant="tertiary"
+                            styleVariant="action"
                         >
                             {strings.surgeContact}
                         </Link>
@@ -350,14 +351,13 @@ export function Component() {
                     <Button
                         name={undefined}
                         onClick={handleCancel}
-                        variant="secondary"
                     >
                         {strings.eruCancelButton}
                     </Button>
                     <Button
                         name={undefined}
                         onClick={handleFormSubmit}
-                        variant="primary"
+                        styleVariant="filled"
                         disabled={pending || isNotDefined(value.eru_owner)}
                     >
                         {strings.eruSaveAndCloseButton}
@@ -369,56 +369,58 @@ export function Component() {
                 error={formError}
                 withFallbackError
             />
-            <Container
-                withFooterBorder
-                contentViewType="vertical"
-            >
-                <InputSection
-                    title={strings.eruSelectNationalSociety}
-                    withAsteriskOnTitle
-                >
-                    <SelectInput
-                        name="eru_owner"
-                        options={permittedEruOwners}
-                        onChange={handleEruOwnerChange}
-                        value={value.eru_owner}
-                        keySelector={eruOwnerKeySelector}
-                        labelSelector={eruOwnerLabelSelector}
-                        error={error?.eru_owner}
-                        required
-                        disabled={pending}
-                    />
-                </InputSection>
-                <InputSection
-                    title={strings.eruSelectErus}
-                >
-                    <MultiSelectInput
-                        name="eru_types"
-                        options={eruTypeOptions}
-                        value={eruTypes}
-                        keySelector={eruTypeKeySelector}
-                        labelSelector={stringValueSelector}
-                        onChange={handleSelectEru}
-                        required
-                        disabled={pending || isNotDefined(value.eru_owner)}
-                        error={getErrorString(error?.eru_types)}
-                    />
-                </InputSection>
+            <Container withFooterBorder>
+                <ListView layout="block">
+                    <InputSection
+                        title={strings.eruSelectNationalSociety}
+                        withAsteriskOnTitle
+                    >
+                        <SelectInput
+                            name="eru_owner"
+                            options={permittedEruOwners}
+                            onChange={handleEruOwnerChange}
+                            value={value.eru_owner}
+                            keySelector={eruOwnerKeySelector}
+                            labelSelector={eruOwnerLabelSelector}
+                            error={error?.eru_owner}
+                            required
+                            disabled={pending}
+                        />
+                    </InputSection>
+                    <InputSection
+                        title={strings.eruSelectErus}
+                    >
+                        <MultiSelectInput
+                            name="eru_types"
+                            options={eruTypeOptions}
+                            value={eruTypes}
+                            keySelector={eruTypeKeySelector}
+                            labelSelector={stringValueSelector}
+                            onChange={handleSelectEru}
+                            required
+                            disabled={pending || isNotDefined(value.eru_owner)}
+                            error={getErrorString(error?.eru_types)}
+                        />
+                    </InputSection>
+                </ListView>
             </Container>
             <Container
-                contentViewType="vertical"
                 pending={fetchEruReadinessDataPending}
+                headerDescription={(
+                    <NonFieldError error={getErrorObject(error?.eru_types)} />
+                )}
             >
-                <NonFieldError error={getErrorObject(error?.eru_types)} />
-                {value.eru_types?.map((eru, index) => (
-                    <EruInputItem
-                        key={eru.client_id}
-                        index={index}
-                        value={eru}
-                        onChange={onEruChange}
-                        error={getErrorObject(error?.eru_types)}
-                    />
-                ))}
+                <ListView layout="block">
+                    {value.eru_types?.map((eru, index) => (
+                        <EruInputItem
+                            key={eru.client_id}
+                            index={index}
+                            value={eru}
+                            onChange={onEruChange}
+                            error={getErrorObject(error?.eru_types)}
+                        />
+                    ))}
+                </ListView>
             </Container>
         </Page>
     );

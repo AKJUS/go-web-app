@@ -5,21 +5,18 @@ import {
     useState,
 } from 'react';
 import {
-    BlockLoading,
     Container,
+    InlineLayout,
     LegendItem,
-    Message,
+    ListView,
     TextOutput,
-    Tooltip,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    formatNumber,
     maxSafe,
     sumSafe,
 } from '@ifrc-go/ui/utils';
 import {
-    _cs,
     compareNumber,
     isDefined,
     isFalsyString,
@@ -37,16 +34,14 @@ import {
 } from 'mapbox-gl';
 
 import GlobalMap, { type AdminZeroFeatureProperties } from '#components/domain/GlobalMap';
+import GoMapContainer from '#components/GoMapContainer';
+import GradientBar from '#components/GradientBar';
 import Link from '#components/Link';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
 import WikiLink from '#components/WikiLink';
 import useCountry from '#hooks/domain/useCountry';
 import useInputState from '#hooks/useInputState';
 import {
-    CATEGORY_RISK_HIGH,
-    CATEGORY_RISK_LOW,
-    CATEGORY_RISK_MEDIUM,
     CATEGORY_RISK_VERY_HIGH,
     CATEGORY_RISK_VERY_LOW,
     COLOR_DARK_GREY,
@@ -74,7 +69,9 @@ import {
 } from '#utils/domain/risk';
 import { useRiskRequest } from '#utils/restRequest';
 
+import CountryListItem from './CountryListItem';
 import Filters, { type FilterValue } from './Filters';
+import TooltipContent from './TooltipContent';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
@@ -87,84 +84,6 @@ const defaultFilterValue: FilterValue = {
     normalizeByPopulation: false,
     includeCopingCapacity: false,
 };
-
-interface TooltipContentProps {
-    selectedRiskMetric: RiskMetric,
-    valueListByHazard: {
-        value: number;
-        riskCategory: number;
-        hazard_type: HazardType;
-        hazard_type_display: string | undefined;
-    }[];
-}
-
-function TooltipContent(props: TooltipContentProps) {
-    const {
-        selectedRiskMetric,
-        valueListByHazard,
-    } = props;
-
-    const strings = useTranslation(i18n);
-    const riskCategoryToLabelMap: Record<number, string> = useMemo(
-        () => ({
-            [CATEGORY_RISK_VERY_LOW]: strings.riskCategoryVeryLow,
-            [CATEGORY_RISK_LOW]: strings.riskCategoryLow,
-            [CATEGORY_RISK_MEDIUM]: strings.riskCategoryMedium,
-            [CATEGORY_RISK_HIGH]: strings.riskCategoryHigh,
-            [CATEGORY_RISK_VERY_HIGH]: strings.riskCategoryVeryHigh,
-        }),
-        [
-            strings.riskCategoryVeryLow,
-            strings.riskCategoryLow,
-            strings.riskCategoryMedium,
-            strings.riskCategoryHigh,
-            strings.riskCategoryVeryHigh,
-        ],
-    );
-
-    const riskMetricLabelMap: Record<RiskMetric, string> = {
-        riskScore: strings.riskScoreOptionLabel,
-        displacement: strings.peopleAtRiskOptionLabel,
-        exposure: strings.peopleExposedOptionLabel,
-    };
-
-    return valueListByHazard.map(
-        ({
-            hazard_type_display,
-            hazard_type,
-            riskCategory,
-            value,
-        }) => (
-            <Container
-                key={hazard_type}
-                heading={hazard_type_display}
-                headingLevel={5}
-                spacing="condensed"
-                icons={(
-                    <div className={styles.tooltipHazardIndicator}>
-                        <div
-                            className={styles.color}
-                            style={{ backgroundColor: hazardTypeToColorMap[hazard_type] }}
-                        />
-                    </div>
-                )}
-            >
-                <TextOutput
-                    label={strings.riskScoreOptionLabel}
-                    strongValue
-                    value={riskCategoryToLabelMap[riskCategory]}
-                />
-                {selectedRiskMetric !== 'riskScore' && (
-                    <TextOutput
-                        label={riskMetricLabelMap[selectedRiskMetric]}
-                        strongValue
-                        value={formatNumber(Math.ceil(value), { maximumFractionDigits: 0 })}
-                    />
-                )}
-            </Container>
-        ),
-    );
-}
 
 const RISK_LOW_COLOR = '#c7d3e0';
 const RISK_HIGH_COLOR = '#f5333f';
@@ -797,8 +716,6 @@ function RiskSeasonalMap(props: Props) {
         [data, filters, mappings],
     );
 
-    const MAX_RISK_SCORE = CATEGORY_RISK_VERY_HIGH;
-
     // NOTE: we need to generate the layerOptions because we cannot use MapState
     // The id in the vector tile does not match the id in GO
     // We also cannot use promoteId as it is a non-managed mapbox source
@@ -868,7 +785,7 @@ function RiskSeasonalMap(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.riskSeasonalMapContainer, className)}
+            className={className}
             heading={strings.riskSeasonalMapHeading}
             filters={(
                 <Filters
@@ -879,179 +796,157 @@ function RiskSeasonalMap(props: Props) {
                     riskMetricOptions={riskMetricOptions}
                 />
             )}
-            headerDescriptionContainerClassName={styles.headerDescription}
             headerDescription={(
-                <>
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                >
                     <div>
                         {strings.seasonalEventsDescriptionOne}
                     </div>
                     <div>
                         {strings.seasonalEventsDescriptionTwo}
                     </div>
-                </>
+                </ListView>
             )}
-            actions={(
+            headerActions={(
                 <WikiLink
-                    href="user_guide/risk_module#seasonal-risk"
+                    pathName="user_guide/risk_module#seasonal-risk"
                 />
             )}
-            childrenContainerClassName={styles.mainContent}
             withHeaderBorder
-            footerClassName={styles.footer}
-            footerContent={(
-                <div className={styles.severityLegend}>
-                    <div className={styles.legendLabel}>{strings.severityLegendLabel}</div>
-                    <div className={styles.legendContent}>
-                        <div
-                            className={styles.severityGradient}
-                            style={{ background: `linear-gradient(90deg, ${RISK_LOW_COLOR}, ${RISK_HIGH_COLOR})` }}
-                        />
-                        <div className={styles.labelList}>
-                            <div>
-                                {strings.severityLowLabel}
-                            </div>
-                            <div>
-                                {strings.severityHighLabel}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-            footerActionsContainerClassName={styles.footerActions}
-            footerActions={(
-                <div className={styles.typeOfHazardLegend}>
-                    <div className={styles.legendLabel}>
-                        {strings.hazardsTypeLegendLabel}
-                    </div>
-                    <div className={styles.legendContent}>
-                        {hazardTypeOptions.map((hazard) => (
-                            <LegendItem
-                                key={hazard.hazard_type}
-                                label={hazard.hazard_type_display}
-                                color={hazardTypeToColorMap[hazard.hazard_type]}
-                            />
-                        ))}
-                    </div>
-                </div>
+            footer={(
+                <ListView
+                    withDarkBackground
+                    withPadding
+                    withWrap
+                    withSpaceBetweenContents
+                >
+                    <TextOutput
+                        label={strings.severityLegendLabel}
+                        value={(
+                            <ListView
+                                layout="block"
+                                spacing="none"
+                            >
+                                <GradientBar
+                                    startColor={RISK_LOW_COLOR}
+                                    endColor={RISK_HIGH_COLOR}
+                                />
+                                <InlineLayout
+                                    before={strings.severityLowLabel}
+                                    after={strings.severityHighLabel}
+                                />
+                            </ListView>
+                        )}
+                    />
+                    <TextOutput
+                        label={strings.hazardsTypeLegendLabel}
+                        value={(
+                            <ListView
+                                withWrap
+                                spacing="sm"
+                                withSpacingOpticalCorrection
+                            >
+                                {hazardTypeOptions.map((hazard) => (
+                                    <LegendItem
+                                        key={hazard.hazard_type}
+                                        label={hazard.hazard_type_display}
+                                        color={hazardTypeToColorMap[hazard.hazard_type]}
+                                    />
+                                ))}
+                            </ListView>
+                        )}
+                    />
+                </ListView>
             )}
         >
-            <GlobalMap
-                onAdminZeroFillClick={handleCountryClick}
-                adminZeroFillPaint={paintOptions}
+            <ListView
+                layout="grid"
+                withSidebar
             >
-                <MapContainerWithDisclaimer
-                    className={styles.mapContainer}
-                />
-                <MapBounds
-                    duration={DURATION_MAP_ZOOM}
-                    bounds={bbox}
-                    padding={DEFAULT_MAP_PADDING}
-                />
-                {clickedPointProperties?.lngLat && riskPopupValue && (
-                    <MapPopup
-                        coordinates={clickedPointProperties.lngLat}
-                        onCloseButtonClick={handlePointClose}
-                        heading={(
-                            <Link
-                                to="countriesLayout"
-                                urlParams={{
-                                    countryId: clickedPointProperties.properties.country_id,
-                                }}
-                                withUnderline
-                            >
-                                {clickedPointProperties.properties.name}
-                            </Link>
-                        )}
-                        contentViewType="vertical"
-                        childrenContainerClassName={styles.popupContent}
-                    >
-                        <TooltipContent
-                            selectedRiskMetric={filters.riskMetric}
-                            valueListByHazard={riskPopupValue.valueListByHazard}
-                        />
-                    </MapPopup>
-                )}
-            </GlobalMap>
-            <Container
-                className={styles.countryList}
-                childrenContainerClassName={styles.content}
-                withInternalPadding
-                heading={strings.riskSeasonalCountriesByRiskHeading}
-                headingLevel={4}
-                withHeaderBorder
-                contentViewType="vertical"
-            >
-                {dataPending && <BlockLoading />}
-                {!dataPending && (isNotDefined(filteredData) || filteredData?.length === 0) && (
-                    <Message
-                        title={strings.riskDataNotAvailable}
+                <GlobalMap
+                    onAdminZeroFillClick={handleCountryClick}
+                    adminZeroFillPaint={paintOptions}
+                >
+                    <GoMapContainer
+                        // FIXME: use strings
+                        title="Seasonal Risk Map"
                     />
-                )}
-                {/* FIXME: use List */}
-                {!dataPending && filteredData?.map(
-                    (dataItem) => {
-                        const totalValuePercentage = 100 * dataItem.normalizedValue;
-                        if (totalValuePercentage < 1) {
-                            return null;
-                        }
-
-                        const countryId = countryIso3ToIdMap[dataItem.country_details.iso3];
-
-                        return (
-                            <div
-                                key={dataItem.iso3}
-                                className={styles.country}
-                            >
+                    <MapBounds
+                        duration={DURATION_MAP_ZOOM}
+                        bounds={bbox}
+                        padding={DEFAULT_MAP_PADDING}
+                    />
+                    {clickedPointProperties?.lngLat && riskPopupValue && (
+                        <MapPopup
+                            coordinates={clickedPointProperties.lngLat}
+                            onCloseButtonClick={handlePointClose}
+                            heading={(
                                 <Link
-                                    className={styles.name}
-                                    to="countryProfileSeasonalRisks"
-                                    urlParams={{ countryId }}
+                                    to="countriesLayout"
+                                    urlParams={{
+                                        countryId: clickedPointProperties.properties.country_id,
+                                    }}
+                                    withUnderline
                                 >
-                                    {dataItem.country_details.name}
+                                    {clickedPointProperties.properties.name}
                                 </Link>
-                                <div className={styles.track}>
-                                    {dataItem.valueListByHazard.map(
-                                        ({
-                                            hazard_type,
-                                            riskCategory,
-                                        }) => {
-                                            // eslint-disable-next-line max-len
-                                            const percentage = (100 * riskCategory) / (MAX_RISK_SCORE * filters.hazardTypes.length);
-
-                                            if (percentage < 1) {
-                                                return null;
-                                            }
-
-                                            return (
-                                                <div
-                                                    className={styles.bar}
-                                                    key={hazard_type}
-                                                    style={{
-                                                        width: `${percentage}%`,
-                                                        backgroundColor: hazardTypeToColorMap[
-                                                            hazard_type
-                                                        ],
-                                                    }}
-                                                />
-                                            );
-                                        },
-                                    )}
-                                </div>
-                                <Tooltip
-                                    title={dataItem.country_details.name}
-                                    className={styles.barChartTooltip}
-                                    description={(
-                                        <TooltipContent
-                                            selectedRiskMetric={filters.riskMetric}
-                                            valueListByHazard={dataItem.valueListByHazard}
-                                        />
-                                    )}
+                            )}
+                        >
+                            <ListView
+                                layout="block"
+                                spacing="sm"
+                            >
+                                <TooltipContent
+                                    selectedRiskMetric={filters.riskMetric}
+                                    valueListByHazard={riskPopupValue.valueListByHazard}
                                 />
-                            </div>
-                        );
-                    },
-                )}
-            </Container>
+                            </ListView>
+                        </MapPopup>
+                    )}
+                </GlobalMap>
+                <Container
+                    className={styles.countryList}
+                    heading={strings.riskSeasonalCountriesByRiskHeading}
+                    headingLevel={4}
+                    pending={dataPending}
+                    empty={isNotDefined(filteredData) || filteredData?.length === 0}
+                    withPadding
+                    withBackground
+                    withContentOverflow
+                    withShadow
+                    withContentWell
+                    withoutSpacingOpticalCorrection
+                    spacing="sm"
+                >
+                    <ListView
+                        layout="block"
+                        spacing="sm"
+                    >
+                        {filteredData?.map(
+                            (dataItem) => {
+                                const totalValuePercentage = 100 * dataItem.normalizedValue;
+                                if (totalValuePercentage < 1) {
+                                    return null;
+                                }
+
+                                const countryId = countryIso3ToIdMap[dataItem.country_details.iso3];
+
+                                return (
+                                    <CountryListItem
+                                        countryId={countryId}
+                                        hazardList={dataItem.valueListByHazard}
+                                        countryName={dataItem.country_details.name}
+                                        numHazardTypes={filters.hazardTypes.length}
+                                        riskMetric={filters.riskMetric}
+                                    />
+                                );
+                            },
+                        )}
+                    </ListView>
+                </Container>
+            </ListView>
         </Container>
     );
 }

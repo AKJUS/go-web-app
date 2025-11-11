@@ -3,8 +3,9 @@ import {
     useMemo,
 } from 'react';
 import {
-    BlockLoading,
     Button,
+    Container,
+    ListView,
     PasswordInput,
     TextInput,
 } from '@ifrc-go/ui';
@@ -28,7 +29,6 @@ import { useLazyRequest } from '#utils/restRequest';
 import { transformObjectError } from '#utils/restRequest/error';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 interface ResponseFields {
     expires: string;
@@ -145,73 +145,80 @@ export function Component() {
 
     return (
         <Page
-            className={styles.login}
             title={strings.loginTitle}
             heading={strings.loginHeader}
             description={strings.loginSubHeader}
-            mainSectionClassName={styles.mainSection}
         >
-            {loginPending && <BlockLoading />}
-            {!loginPending && (
+            <Container
+                pending={loginPending}
+                spacing="lg"
+            >
                 <form
-                    className={styles.form}
                     onSubmit={handleFormSubmit}
                 >
-                    <NonFieldError
-                        error={formError}
-                        withFallbackError
-                    />
-                    <div className={styles.fields}>
-                        <TextInput
-                            name="username"
-                            label={strings.loginEmailUsername}
-                            value={formValue.username}
-                            onChange={setFieldValue}
-                            error={fieldError?.username}
-                            withAsterisk
-                            disabled={loginPending}
-                            autoFocus
+                    <ListView layout="block">
+                        <NonFieldError
+                            error={formError}
+                            withFallbackError
                         />
-                        <PasswordInput
-                            name="password"
-                            label={strings.loginPassword}
-                            value={formValue.password}
-                            onChange={setFieldValue}
-                            error={fieldError?.password}
-                            withAsterisk
-                            disabled={loginPending}
-                        />
-                    </div>
-                    <div className={styles.utilityLinks}>
-                        <Link
-                            to="recoverAccount"
-                            title={strings.loginRecoverTitle}
-                            withUnderline
+                        <ListView
+                            layout="block"
+                            spacing="lg"
                         >
-                            {strings.loginForgotUserPass}
-                        </Link>
-                        <Link
-                            to="resendValidationEmail"
-                            title={strings.loginResendValidationTitle}
-                            withUnderline
+                            <TextInput
+                                name="username"
+                                label={strings.loginEmailUsername}
+                                value={formValue.username}
+                                onChange={setFieldValue}
+                                error={fieldError?.username}
+                                withAsterisk
+                                disabled={loginPending}
+                                autoFocus
+                            />
+                            <PasswordInput
+                                name="password"
+                                label={strings.loginPassword}
+                                value={formValue.password}
+                                onChange={setFieldValue}
+                                error={fieldError?.password}
+                                withAsterisk
+                                disabled={loginPending}
+                            />
+                        </ListView>
+                        <ListView layout="block">
+                            <Link
+                                to="recoverAccount"
+                                title={strings.loginRecoverTitle}
+                                withUnderline
+                            >
+                                {strings.loginForgotUserPass}
+                            </Link>
+                            <Link
+                                to="resendValidationEmail"
+                                title={strings.loginResendValidationTitle}
+                                withUnderline
+                            >
+                                {strings.loginResendValidation}
+                            </Link>
+                        </ListView>
+                        <ListView
+                            layout="block"
+                            withCenteredContents
                         >
-                            {strings.loginResendValidation}
-                        </Link>
-                    </div>
-                    <div className={styles.actions}>
-                        <Button
-                            name={undefined}
-                            type="submit"
-                            disabled={loginPending}
-                        >
-                            {strings.loginButton}
-                        </Button>
-                        <div className={styles.signUp}>
-                            {signupInfo}
-                        </div>
-                    </div>
+                            <Button
+                                name={undefined}
+                                type="submit"
+                                disabled={loginPending}
+                            >
+                                {strings.loginButton}
+                            </Button>
+                            <div>
+                                {signupInfo}
+                            </div>
+                        </ListView>
+                    </ListView>
                 </form>
-            )}
+            </Container>
         </Page>
     );
 }

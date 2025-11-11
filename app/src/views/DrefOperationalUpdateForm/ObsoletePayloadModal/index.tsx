@@ -50,7 +50,7 @@ function ObsoletePayloadResolutionModal(props: Props) {
                 <>
                     <Button
                         name={false}
-                        variant="secondary"
+                        styleVariant="outline"
                         onClick={onCancelButtonClick}
                     >
                         {strings.drefChangesCancelButton}

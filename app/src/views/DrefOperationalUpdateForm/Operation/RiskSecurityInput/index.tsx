@@ -85,7 +85,7 @@ function RiskSecurityInput(props: Props) {
                 className={styles.removeButton}
                 name={index}
                 onClick={onRemove}
-                variant="tertiary"
+                styleVariant="action"
                 disabled={disabled || readOnly}
                 title={strings.drefOperationalUpdateFormDeleteRisk}
             >

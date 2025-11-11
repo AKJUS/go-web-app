@@ -9,6 +9,7 @@ import {
     Checkbox,
     Checklist,
     Container,
+    ListView,
     MultiSelectInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -49,7 +50,6 @@ import {
 } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type RegionOption = components<'read'>['schemas']['ApiRegionNameEnum'];
 
@@ -214,128 +214,135 @@ function SubscriptionPreferences() {
 
     return (
         <Container
-            className={styles.subscriptionPreferences}
             heading={strings.subscriptionPreferencesHeading}
-            childrenContainerClassName={styles.content}
             withHeaderBorder
             footerActions={(
                 <Button
                     name={value}
                     onClick={handleUpdateButtonClick}
+                    colorVariant="primary"
                 >
                     {strings.subscriptionUpdateButtonLabel}
                 </Button>
             )}
         >
-            <Container
-                heading={strings.subscriptionNotificationTypesHeading}
-                headerDescription={strings.subscriptionNotificationTypesDescription}
-                childrenContainerClassName={styles.notificationTypeInputListContent}
-                headingLevel={5}
+            <ListView
+                layout="block"
+                spacing="xl"
             >
-                <Checkbox
-                    name="weeklyDigest"
-                    label={strings.subscriptionWeeklyDigestHeading}
-                    description={strings.subscriptionWeeklyDigestDescription}
-                    value={value.weeklyDigest}
-                    onChange={handleChange}
-                />
-                <Checkbox
-                    name="newEmergencies"
-                    label={strings.subscriptionNewEmergenciesHeading}
-                    description={strings.subscriptionNewEmergenciesDescription}
-                    value={value.newEmergencies}
-                    onChange={handleChange}
-                />
-                <Checkbox
-                    name="newOperations"
-                    label={strings.subscriptionNewOperationsHeading}
-                    description={strings.subscriptionNewOperationsDescription}
-                    value={value.newOperations}
-                    onChange={handleChange}
-                />
-                <Checkbox
-                    name="general"
-                    label={strings.subscriptionGeneralAnnouncementsHeading}
-                    value={value.general}
-                    onChange={handleChange}
-                />
-            </Container>
-            <Container
-                heading={strings.subscriptionRegionalNotificationsHeading}
-                headerDescription={strings.subscriptionRegionalNotificationsDescription}
-                headingLevel={5}
-            >
-                <Checklist
-                    listContainerClassName={styles.regionOptionListContent}
-                    name="region"
-                    options={regionOptions}
-                    keySelector={regionKeySelector}
-                    labelSelector={stringValueSelector}
-                    value={value.region}
-                    onChange={handleChange}
-                />
-            </Container>
-            <Container
-                heading={strings.subscriptionCountryLevelNotificationsHeading}
-                headerDescription={strings.subscriptionCountryLevelNotificationsDescription}
-                headingLevel={5}
-            >
-                <MultiSelectInput
-                    name="country"
-                    placeholder={strings.subscriptionCountryInputPlaceholder}
-                    options={countryOptions}
-                    keySelector={numericIdSelector}
-                    labelSelector={stringNameSelector}
-                    value={value.country}
-                    onChange={handleChange}
-                />
-            </Container>
-            <Container
-                heading={strings.subscriptionDisasterTypesHeading}
-                headerDescription={strings.subscriptionDisasterTypesDescription}
-                headingLevel={5}
-            >
-                <Checklist
-                    listContainerClassName={styles.disasterTypeOptionListContent}
-                    name="disasterType"
-                    options={disasterTypeOptions}
-                    keySelector={numericIdSelector}
-                    labelSelector={stringNameSelector}
-                    value={value.disasterType}
-                    onChange={handleChange}
-                />
-            </Container>
-            <Container
-                heading={strings.subscriptionSurgeNotificationsHeading}
-                childrenContainerClassName={styles.surgeNotificationsListContent}
-                headingLevel={5}
-            >
-                <Checkbox
-                    name="surge"
-                    label={strings.subscriptionSurgeAlertCheckboxLabel}
-                    value={value.surge}
-                    onChange={handleChange}
-                />
-                <Checkbox
-                    name="surgeDM"
-                    label={strings.subscriptionSurgeDeploymentMessagesCheckboxLabel}
-                    value={value.surgeDM}
-                    onChange={handleChange}
-                />
-            </Container>
-            <Container
-                heading={strings.subscriptionOtherNotificationsHeading}
-                childrenContainerClassName={styles.otherNotificationsListContent}
-                headingLevel={5}
-            >
-                <Checkbox
-                    name="perDueDate"
-                    label={strings.subscriptionPerDueDateCheckboxLabel}
-                    value={value.perDueDate}
-                    onChange={handleChange}
-                />
-            </Container>
+                <Container
+                    heading={strings.subscriptionNotificationTypesHeading}
+                    headerDescription={strings.subscriptionNotificationTypesDescription}
+                    headingLevel={5}
+                >
+                    <ListView layout="block">
+                        <Checkbox
+                            name="weeklyDigest"
+                            label={strings.subscriptionWeeklyDigestHeading}
+                            description={strings.subscriptionWeeklyDigestDescription}
+                            value={value.weeklyDigest}
+                            onChange={handleChange}
+                        />
+                        <Checkbox
+                            name="newEmergencies"
+                            label={strings.subscriptionNewEmergenciesHeading}
+                            description={strings.subscriptionNewEmergenciesDescription}
+                            value={value.newEmergencies}
+                            onChange={handleChange}
+                        />
+                        <Checkbox
+                            name="newOperations"
+                            label={strings.subscriptionNewOperationsHeading}
+                            description={strings.subscriptionNewOperationsDescription}
+                            value={value.newOperations}
+                            onChange={handleChange}
+                        />
+                        <Checkbox
+                            name="general"
+                            label={strings.subscriptionGeneralAnnouncementsHeading}
+                            value={value.general}
+                            onChange={handleChange}
+                        />
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.subscriptionRegionalNotificationsHeading}
+                    headerDescription={strings.subscriptionRegionalNotificationsDescription}
+                    headingLevel={5}
+                >
+                    <Checklist
+                        checkListLayout="grid"
+                        checkListLayoutPreferredGridColumns={5}
+                        name="region"
+                        options={regionOptions}
+                        keySelector={regionKeySelector}
+                        labelSelector={stringValueSelector}
+                        value={value.region}
+                        onChange={handleChange}
+                    />
+                </Container>
+                <Container
+                    heading={strings.subscriptionCountryLevelNotificationsHeading}
+                    headerDescription={strings.subscriptionCountryLevelNotificationsDescription}
+                    headingLevel={5}
+                >
+                    <MultiSelectInput
+                        name="country"
+                        placeholder={strings.subscriptionCountryInputPlaceholder}
+                        options={countryOptions}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
+                        value={value.country}
+                        onChange={handleChange}
+                    />
+                </Container>
+                <Container
+                    heading={strings.subscriptionDisasterTypesHeading}
+                    headerDescription={strings.subscriptionDisasterTypesDescription}
+                    headingLevel={5}
+                >
+                    <Checklist
+                        name="disasterType"
+                        options={disasterTypeOptions}
+                        keySelector={numericIdSelector}
+                        labelSelector={stringNameSelector}
+                        value={value.disasterType}
+                        onChange={handleChange}
+                        checkListLayout="grid"
+                        checkListLayoutPreferredGridColumns={4}
+                    />
+                </Container>
+                <Container
+                    heading={strings.subscriptionSurgeNotificationsHeading}
+                    headingLevel={5}
+                >
+                    <ListView layout="block">
+                        <Checkbox
+                            name="surge"
+                            label={strings.subscriptionSurgeAlertCheckboxLabel}
+                            value={value.surge}
+                            onChange={handleChange}
+                        />
+                        <Checkbox
+                            name="surgeDM"
+                            label={strings.subscriptionSurgeDeploymentMessagesCheckboxLabel}
+                            value={value.surgeDM}
+                            onChange={handleChange}
+                        />
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.subscriptionOtherNotificationsHeading}
+                    headingLevel={5}
+                >
+                    <Checkbox
+                        name="perDueDate"
+                        label={strings.subscriptionPerDueDateCheckboxLabel}
+                        value={value.perDueDate}
+                        onChange={handleChange}
+                    />
+                </Container>
+            </ListView>
         </Container>
     );
 }

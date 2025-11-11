@@ -3,9 +3,13 @@ import {
     DeployedIcon,
     EmergencyResponseUnitIcon,
 } from '@ifrc-go/icons';
-import { KeyFigure } from '@ifrc-go/ui';
+import {
+    KeyFigureView,
+    ListView,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
+import TabPage from '#components/TabPage';
 import { useRequest } from '#utils/restRequest';
 
 import DeployedErusTable from './DeployedErusTable';
@@ -33,33 +37,34 @@ export function Component() {
     });
 
     return (
-        <div className={styles.emergencySurge}>
-            <div className={styles.keyFigureList}>
-                <KeyFigure
+        <TabPage>
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={4}
+            >
+                <KeyFigureView
                     icon={<DeployedIcon />}
                     className={styles.keyFigure}
                     value={deploymentResponse?.active_rapid_response_personnel}
-                    compactValue
+                    valueType="number"
+                    valueOptions={{ compact: true }}
                     label={strings.emergencyActiveDeployments}
+                    withShadow
                 />
-                <KeyFigure
+                <KeyFigureView
                     icon={<EmergencyResponseUnitIcon />}
                     className={styles.keyFigure}
                     value={deploymentResponse?.active_emergency_response_units}
-                    compactValue
+                    valueType="number"
+                    valueOptions={{ compact: true }}
                     label={strings.emergencyActiveErus}
+                    withShadow
                 />
-            </div>
-            <SurgeTable
-                emergencyId={emergencyId}
-            />
-            <RapidResponsePersonnelTable
-                emergencyId={emergencyId}
-            />
-            <DeployedErusTable
-                emergencyId={emergencyId}
-            />
-        </div>
+            </ListView>
+            <SurgeTable emergencyId={emergencyId} />
+            <RapidResponsePersonnelTable emergencyId={emergencyId} />
+            <DeployedErusTable emergencyId={emergencyId} />
+        </TabPage>
     );
 }
 

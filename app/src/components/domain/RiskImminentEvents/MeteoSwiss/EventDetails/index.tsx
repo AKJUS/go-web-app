@@ -3,9 +3,10 @@ import {
     useMemo,
 } from 'react';
 import {
-    BlockLoading,
     Container,
     DateOutput,
+    Description,
+    ListView,
     NumberOutput,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -24,7 +25,6 @@ import Link from '#components/Link';
 import { type RiskApiResponse } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type MeteoSwissResponse = RiskApiResponse<'/api/v1/meteoswiss/'>;
 type MeteoSwissItem = NonNullable<MeteoSwissResponse['results']>[number];
@@ -167,107 +167,99 @@ function EventDetails(props: Props) {
     // TODO: add exposure details
     return (
         <Container
-            className={styles.eventDetails}
-            childrenContainerClassName={styles.content}
-            contentViewType="vertical"
+            pending={pending}
         >
-            {pending && <BlockLoading />}
-            {!pending && (
-                <>
-                    <Container
-                        heading={strings.meteoSwissimpactHeading}
-                        spacing="compact"
-                        contentViewType="vertical"
-                        headingLevel={5}
-                        withHeaderBorder
-                    >
-                        {impactList.map((impact) => (
-                            <TextOutput
-                                key={impact.key}
-                                label={resolveToComponent(
-                                    strings.impactLabel,
-                                    {
-                                        label: impact.label,
-                                        beta: <span className={styles.beta}>{strings.beta}</span>,
-                                    },
-                                )}
-                                valueClassName={styles.impactValue}
-                                value={resolveToComponent(
-                                    strings.meteoSwissImpactValue,
-                                    {
-                                        value: (
-                                            <NumberOutput
-                                                value={impact.value}
-                                                compact
-                                                maximumFractionDigits={2}
-                                            />
-                                        ),
-                                        fivePercent: (
-                                            <NumberOutput
-                                                value={impact.fivePercentValue}
-                                                compact
-                                                maximumFractionDigits={2}
-                                            />
-                                        ),
-                                        ninetyFivePercent: (
-                                            <NumberOutput
-                                                value={impact.ninetyFivePercentValue}
-                                                compact
-                                                maximumFractionDigits={2}
-                                            />
-                                        ),
-                                        unit: impact.unit,
-                                    },
-                                )}
-                                strongValue
+            <Container
+                heading={strings.meteoSwissimpactHeading}
+                headingLevel={5}
+                withHeaderBorder
+            >
+                <ListView layout="block">
+                    {impactList.map((impact) => (
+                        <TextOutput
+                            key={impact.key}
+                            label={resolveToComponent(
+                                strings.impactLabel,
+                                {
+                                    label: impact.label,
+                                    beta: <span>{strings.beta}</span>,
+                                },
+                            )}
+                            value={resolveToComponent(
+                                strings.meteoSwissImpactValue,
+                                {
+                                    value: (
+                                        <NumberOutput
+                                            value={impact.value}
+                                            compact
+                                            maximumFractionDigits={2}
+                                        />
+                                    ),
+                                    fivePercent: (
+                                        <NumberOutput
+                                            value={impact.fivePercentValue}
+                                            compact
+                                            maximumFractionDigits={2}
+                                        />
+                                    ),
+                                    ninetyFivePercent: (
+                                        <NumberOutput
+                                            value={impact.ninetyFivePercentValue}
+                                            compact
+                                            maximumFractionDigits={2}
+                                        />
+                                    ),
+                                    unit: impact.unit,
+                                },
+                            )}
+                            strongValue
+                        />
+                    ))}
+                    <Description>
+                        {strings.meteoSwissEstimatesNote}
+                    </Description>
+                </ListView>
+            </Container>
+            <div>
+                {resolveToComponent(
+                    strings.meteoSwissEventDescription,
+                    {
+                        model: model_name ?? '--',
+                        updatedAt: (
+                            <DateOutput
+                                value={updated_at}
+                                format={UPDATED_AT_FORMAT}
                             />
-                        ))}
-                        <div className={styles.estimationNote}>
-                            {strings.meteoSwissEstimatesNote}
-                        </div>
-                    </Container>
-                    <div>
-                        {resolveToComponent(
-                            strings.meteoSwissEventDescription,
-                            {
-                                model: model_name ?? '--',
-                                updatedAt: (
-                                    <DateOutput
-                                        value={updated_at}
-                                        format={UPDATED_AT_FORMAT}
-                                    />
-                                ),
-                                eventName: hazard_name,
-                                countryName: country_details?.name ?? '--',
-                                eventDate: <DateOutput value={start_date} />,
-                            },
-                        )}
-                    </div>
-                    <div>
-                        {resolveToComponent(
-                            strings.meteoSwissAuthoritativeMessage,
-                            {
-                                link: (
-                                    <Link
-                                        href="https://severeweather.wmo.int"
-                                        external
-                                    >
-                                        {strings.meteoSwissAuthoritativeLinkLabel}
-                                    </Link>
-                                ),
-                                classificationLink: (
-                                    <Link
-                                        href="https://community.wmo.int/en/classification-tropical-cyclones"
-                                        external
-                                    >
-                                        {strings.meteoSwissTropicalStorm}
-                                    </Link>
-                                ),
-                            },
-                        )}
-                    </div>
-                </>
-            )}
+                        ),
+                        eventName: hazard_name,
+                        countryName: country_details?.name ?? '--',
+                        eventDate: <DateOutput value={start_date} />,
+                    },
+                )}
+            </div>
+            <div>
+                {resolveToComponent(
+                    strings.meteoSwissAuthoritativeMessage,
+                    {
+                        link: (
+                            <Link
+                                href="https://severeweather.wmo.int"
+                                external
+                            >
+                                {strings.meteoSwissAuthoritativeLinkLabel}
+                            </Link>
+                        ),
+                        classificationLink: (
+                            <Link
+                                href="https://community.wmo.int/en/classification-tropical-cyclones"
+                                external
+                            >
+                                {strings.meteoSwissTropicalStorm}
+                            </Link>
+                        ),
+                    },
+                )}
+            </div>
         </Container>
     );
 }

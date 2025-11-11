@@ -5,7 +5,8 @@ import {
 } from 'react';
 import {
     Container,
-    Grid,
+    ListView,
+    RawList,
     SelectInput,
     Tab,
     TabList,
@@ -23,6 +24,7 @@ import {
 import {
     compareString,
     isDefined,
+    isNotDefined,
     listToGroupList,
     mapToList,
     unique,
@@ -177,7 +179,7 @@ function EmergencyResponseUnitReadiness() {
         <Tabs
             onChange={setActiveTab}
             value={activeTab}
-            variant="tertiary"
+            styleVariant="nav"
         >
             <Container
                 heading={resolveToString(
@@ -189,27 +191,29 @@ function EmergencyResponseUnitReadiness() {
                     },
                 )}
                 withHeaderBorder
-                actions={(
+                headerActions={(
                     <>
                         <Link
                             href={resolveUrl(api, 'api/v2/export-eru-readiness')}
-                            variant="secondary"
+                            colorVariant="primary"
+                            styleVariant="outline"
+                            withLinkIcon
                             external
                         >
                             {strings.exportEruReadiness}
                         </Link>
                         <Link
                             to="eruReadinessForm"
-                            variant="primary"
+                            colorVariant="primary"
+                            styleVariant="outline"
+                            withLinkIcon
                         >
                             {strings.eruReadinessUpdateButton}
                         </Link>
                     </>
                 )}
-                contentViewType="vertical"
                 filters={(
                     <>
-
                         <SelectInput
                             placeholder={strings.eruNationalSociety}
                             name="selectEruOwner"
@@ -218,7 +222,7 @@ function EmergencyResponseUnitReadiness() {
                             value={rawFilter.selectEruOwner}
                             keySelector={eruOwnerKeySelector}
                             labelSelector={eruOwnerLabelSelector}
-                            error={isDefined(eruOwnersError)}
+                            optionsErrored={isDefined(eruOwnersError)}
                             disabled={eruOwnersPending}
                         />
                         <SelectInput
@@ -232,7 +236,7 @@ function EmergencyResponseUnitReadiness() {
                         />
                     </>
                 )}
-                filterActions={(
+                headerDescription={(
                     <TabList>
                         <Tab name="eruType">{strings.eruType}</Tab>
                         <Tab name="nationalSociety">{strings.eruNationalSociety}</Tab>
@@ -240,28 +244,46 @@ function EmergencyResponseUnitReadiness() {
                 )}
             >
                 <TabPanel name="eruType">
-                    <Grid
-                        numPreferredColumns={3}
-                        data={groupedByEruType}
+                    <Container
                         pending={eruReadinessTypePending}
                         errored={isDefined(eruReadinessTypeError)}
                         filtered={filtered}
-                        keySelector={stringKeySelector}
-                        renderer={EmergencyResponseUnitCard}
-                        rendererParams={eruRendererParams}
-                    />
+                    >
+                        <ListView
+                            layout="grid"
+                            numPreferredGridColumns={3}
+                            minGridColumnSize="20rem"
+                        >
+                            <RawList
+                                data={groupedByEruType}
+                                keySelector={stringKeySelector}
+                                renderer={EmergencyResponseUnitCard}
+                                rendererParams={eruRendererParams}
+                            />
+                        </ListView>
+                    </Container>
                 </TabPanel>
                 <TabPanel name="nationalSociety">
-                    <Grid
-                        numPreferredColumns={3}
-                        data={eruReadinessResponse?.results}
+                    <Container
                         pending={eruReadinessPending}
                         errored={isDefined(eruReadinessError)}
                         filtered={filtered}
-                        keySelector={numericIdSelector}
-                        renderer={NationalSocietyCard}
-                        rendererParams={nsRendererParams}
-                    />
+                        empty={isNotDefined(eruReadinessResponse?.results)
+                            || eruReadinessResponse.results.length === 0}
+                    >
+                        <ListView
+                            layout="grid"
+                            numPreferredGridColumns={3}
+                            minGridColumnSize="20rem"
+                        >
+                            <RawList
+                                data={eruReadinessResponse?.results}
+                                keySelector={numericIdSelector}
+                                renderer={NationalSocietyCard}
+                                rendererParams={nsRendererParams}
+                            />
+                        </ListView>
+                    </Container>
                 </TabPanel>
             </Container>
         </Tabs>

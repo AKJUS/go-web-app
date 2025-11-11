@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import {
     Container,
     LegendItem,
+    ListView,
     Message,
     TextOutput,
     Tooltip,
@@ -23,7 +24,7 @@ import {
 } from '@togglecorp/fujs';
 
 import Link from '#components/Link';
-import WikiLink from '#components/WikiLink';
+import TabPage from '#components/TabPage';
 import { type CountryOutletContext } from '#utils/outletContext';
 import {
     type GoApiResponse,
@@ -221,54 +222,48 @@ export function Component() {
     );
 
     return (
-        <Container
-            className={styles.countryProfileOverview}
-            contentViewType="vertical"
-            spacing="loose"
+        <TabPage
             pending={databankResponsePending}
             errored={isDefined(databankResponseError)}
             errorMessage={databankResponseError?.value?.messageForNotification}
-            actions={(
-                <WikiLink
-                    href="user_guide/Country_Pages#country-profile"
-                />
-            )}
+            wikiLinkPathName="user_guide/Country_Pages#country-profile"
         >
             {isDefined(databankResponse) && (
                 <Container
                     className={styles.countryIndicators}
                     heading={strings.countryIndicatorsHeading}
                     withHeaderBorder
-                    contentViewType="grid"
-                    numPreferredGridContentColumns={3}
                     footerActions={(
                         <TextOutput
                             label={strings.sources}
                             value={joinList([
                                 <Link
                                     key="link-databank"
-                                    variant="tertiary"
+                                    styleVariant="action"
                                     href="https://data.worldbank.org"
                                     external
                                     withUnderline
+                                    withLinkIcon
                                 >
                                     {strings.dataBank}
                                 </Link>,
                                 <Link
                                     key="link-unicef"
-                                    variant="tertiary"
+                                    styleVariant="action"
                                     href="https://sdmx.data.unicef.org/overview.html"
                                     external
                                     withUnderline
+                                    withLinkIcon
                                 >
                                     {strings.unicef}
                                 </Link>,
                                 <Link
                                     key="link-hdr"
-                                    variant="tertiary"
+                                    styleVariant="action"
                                     href="https://hdr.undp.org/data-center"
                                     external
                                     withUnderline
+                                    withLinkIcon
                                 >
                                     {strings.hdr}
                                 </Link>,
@@ -276,77 +271,83 @@ export function Component() {
                         />
                     )}
                 >
-                    <TextOutput
-                        label={strings.countryIndicatorsPopulationLabel}
-                        value={databankResponse?.world_bank_population}
-                        valueType="number"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.countryIndicatorsPopulationUnder18Label}
-                        suffix=" %"
-                        maximumFractionDigits={2}
-                        value={populationUnder18Percent}
-                        valueType="number"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.countryIndicatorsUrbanPopulationLabel}
-                        suffix=" %"
-                        value={databankResponse?.world_bank_urban_population_percentage}
-                        valueType="number"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.countryIndicatorsGDPLabel}
-                        prefix="$"
-                        maximumFractionDigits={0}
-                        value={databankResponse?.world_bank_gdp}
-                        valueType="number"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.countryIndicatorsCapitaLabel}
-                        prefix="$"
-                        maximumFractionDigits={0}
-                        value={databankResponse?.world_bank_gni_capita}
-                        valueType="number"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.countryIndicatorsPovertyLabel}
-                        suffix=" %"
-                        maximumFractionDigits={2}
-                        value={databankResponse?.world_bank_poverty_rate}
-                        valueType="number"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.countryIndicatorsLifeExpectancyLabel}
-                        value={databankResponse?.world_bank_life_expectancy}
-                        valueType="number"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.countryIndicatorsLiteracyLabel}
-                        suffix=" %"
-                        maximumFractionDigits={2}
-                        value={databankResponse?.world_bank_literacy_rate}
-                        valueType="number"
-                        strongValue
-                    />
-                    <TextOutput
-                        label={strings.countryIndicatorsGenderInequalityIndexLabel}
-                        value={databankResponse?.hdr_gii}
-                        valueType="number"
-                        strongValue
-                    />
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={3}
+                        withSpacingOpticalCorrection
+                    >
+                        <TextOutput
+                            label={strings.countryIndicatorsPopulationLabel}
+                            value={databankResponse?.world_bank_population}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.countryIndicatorsPopulationUnder18Label}
+                            suffix=" %"
+                            maximumFractionDigits={2}
+                            value={populationUnder18Percent}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.countryIndicatorsUrbanPopulationLabel}
+                            suffix=" %"
+                            value={databankResponse?.world_bank_urban_population_percentage}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.countryIndicatorsGDPLabel}
+                            prefix="$"
+                            maximumFractionDigits={0}
+                            value={databankResponse?.world_bank_gdp}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.countryIndicatorsCapitaLabel}
+                            prefix="$"
+                            maximumFractionDigits={0}
+                            value={databankResponse?.world_bank_gni_capita}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.countryIndicatorsPovertyLabel}
+                            suffix=" %"
+                            maximumFractionDigits={2}
+                            value={databankResponse?.world_bank_poverty_rate}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.countryIndicatorsLifeExpectancyLabel}
+                            value={databankResponse?.world_bank_life_expectancy}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.countryIndicatorsLiteracyLabel}
+                            suffix=" %"
+                            maximumFractionDigits={2}
+                            value={databankResponse?.world_bank_literacy_rate}
+                            valueType="number"
+                            strongValue
+                        />
+                        <TextOutput
+                            label={strings.countryIndicatorsGenderInequalityIndexLabel}
+                            value={databankResponse?.hdr_gii}
+                            valueType="number"
+                            strongValue
+                        />
+                    </ListView>
                 </Container>
             )}
-            <Container
-                contentViewType="grid"
-                numPreferredGridContentColumns={2}
-                spacing="relaxed"
+            <ListView
+                layout="grid"
+                spacing="lg"
+                minGridColumnSize="20rem"
             >
                 {isDefined(databankResponse) && (
                     <PopulationMap
@@ -358,72 +359,83 @@ export function Component() {
                         data={databankResponse.key_climate}
                     />
                 )}
-            </Container>
+            </ListView>
             {isDefined(databankResponse) && isDefined(databankResponse.acaps) && (
                 <Container
                     heading={strings.seasonalCalendarHeading}
-                    childrenContainerClassName={styles.seasonalCalendarContent}
-                    footerContentClassName={styles.legendContainer}
                     footerActions={(
                         <TextOutput
                             label={strings.source}
                             value={(
                                 <Link
-                                    variant="tertiary"
+                                    styleVariant="action"
                                     href="https://www.acaps.org/en/thematics/all-topics/seasonal-calendar"
                                     external
                                     withUnderline
+                                    withLinkIcon
                                 >
                                     {strings.acaps}
                                 </Link>
                             )}
                         />
                     )}
-                    footerContent={colorList.map(
-                        ({ label, color }) => (
-                            <LegendItem
-                                key={label}
-                                color={color}
-                                label={label}
-                            />
-                        ),
+                    footer={(
+                        <ListView
+                            withWrap
+                            withSpacingOpticalCorrection
+                            spacing="sm"
+                        >
+                            {colorList.map(
+                                ({ label, color }) => (
+                                    <LegendItem
+                                        key={label}
+                                        color={color}
+                                        label={label}
+                                    />
+                                ),
+                            )}
+                        </ListView>
                     )}
                 >
-                    <div className={styles.eventList}>
-                        {monthsWithOrder.map(
-                            ({ month, order }) => (
+                    <div className={styles.seasonalCalendarContent}>
+                        <div className={styles.eventList}>
+                            {monthsWithOrder.map(
+                                ({ month, order }) => (
+                                    <div
+                                        key={order}
+                                        className={styles.monthName}
+                                    >
+                                        {month.substring(0, 3)}
+                                    </div>
+                                ),
+                            )}
+                        </div>
+                        {(isNotDefined(eventTypeGroupedData)
+                            || eventTypeGroupedData.length === 0
+                        ) && (
+                            <Message
+                                title={strings.seasonalCalenderDataNotAvailable}
+                            />
+                        )}
+                        {eventTypeGroupedData?.map(
+                            ({ event_type, events }) => (
                                 <div
-                                    key={order}
-                                    className={styles.monthName}
+                                    key={event_type}
+                                    className={styles.eventList}
                                 >
-                                    {month.substring(0, 3)}
+                                    {events.map((event) => (
+                                        <SeasonalCalendarEvent
+                                            key={event.id}
+                                            data={event}
+                                        />
+                                    ))}
                                 </div>
                             ),
                         )}
                     </div>
-                    {(isNotDefined(eventTypeGroupedData) || eventTypeGroupedData.length === 0) && (
-                        <Message
-                            title={strings.seasonalCalenderDataNotAvailable}
-                        />
-                    )}
-                    {eventTypeGroupedData?.map(
-                        ({ event_type, events }) => (
-                            <div
-                                key={event_type}
-                                className={styles.eventList}
-                            >
-                                {events.map((event) => (
-                                    <SeasonalCalendarEvent
-                                        key={event.id}
-                                        data={event}
-                                    />
-                                ))}
-                            </div>
-                        ),
-                    )}
                 </Container>
             )}
-        </Container>
+        </TabPage>
     );
 }
 

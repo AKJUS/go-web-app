@@ -4,6 +4,7 @@ import {
     Button,
     Container,
     Image,
+    ListView,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { isDefined } from '@togglecorp/fujs';
@@ -13,7 +14,6 @@ import useRouting from '#hooks/useRouting';
 import { type WrappedRoutes } from '../../../App/routes';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 interface ImageListItem {
     src: string;
@@ -49,35 +49,43 @@ function SurgeCatalogueContainer(props: Props) {
     return (
         <Container
             headingLevel={2}
-            className={styles.surgeCatalogueContainer}
-            childrenContainerClassName={styles.content}
             heading={heading}
-            headerDescription={description}
-            headerDescriptionContainerClassName={styles.description}
+            headerDescription={(
+                <ListView layout="block">
+                    {description}
+                </ListView>
+            )}
             filters={imageList?.map(
                 (image) => (
                     <Image
                         key={image.src}
                         src={image.src}
                         caption={image.caption}
-                        imgElementClassName={styles.image}
-                        withCaptionHidden
+                        withoutCaption
                         expandable
+                        size="md"
                     />
                 ),
             )}
-            icons={isDefined(goBackFallbackLink) && (
+            headerIcons={isDefined(goBackFallbackLink) && (
                 <Button
                     name={undefined}
                     onClick={handleBackButtonClick}
-                    variant="tertiary"
+                    styleVariant="action"
                     title={strings.surgeGoBack}
+                    textSize="lg"
                 >
-                    <ArrowLeftLineIcon className={styles.backIcon} />
+                    <ArrowLeftLineIcon />
                 </Button>
             )}
+            spacing="lg"
         >
-            {children}
+            <ListView
+                layout="block"
+                spacing="lg"
+            >
+                {children}
+            </ListView>
         </Container>
     );
 }

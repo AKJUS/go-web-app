@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import {
     Button,
+    Description,
+    ListView,
     SelectInput,
     TextArea,
     TextInput,
@@ -45,7 +47,6 @@ import {
 import { transformObjectError } from '#utils/restRequest/error';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type RegisterRequestBody = GoApiBody<'/register', 'POST'>;
 type WhiteListResponse = GoApiResponse<'/api/v2/domainwhitelist/'>;
@@ -281,44 +282,42 @@ export function Component() {
 
     return (
         <Page
-            className={styles.register}
             title={strings.registerTitle}
             heading={strings.registerHeader}
             description={strings.registerSubHeader}
-            mainSectionClassName={styles.mainSection}
             actions={(
                 <WikiLink
-                    href="user_guide/account"
+                    pathName="user_guide/account"
                 />
             )}
         >
-            <div className={styles.form}>
+            <ListView layout="block">
                 <NonFieldError
-                    className={styles.nonFieldError}
                     error={formError}
                     withFallbackError
                 />
+                <ListView layout="grid">
+                    <TextInput
+                        name="first_name"
+                        label={strings.registerFirstName}
+                        value={formValue.first_name}
+                        onChange={setFieldValue}
+                        error={fieldError?.first_name}
+                        disabled={pending}
+                        withAsterisk
+                        autoFocus
+                    />
+                    <TextInput
+                        name="last_name"
+                        label={strings.registerLastName}
+                        value={formValue.last_name}
+                        onChange={setFieldValue}
+                        error={fieldError?.last_name}
+                        disabled={pending}
+                        withAsterisk
+                    />
+                </ListView>
                 <TextInput
-                    name="first_name"
-                    label={strings.registerFirstName}
-                    value={formValue.first_name}
-                    onChange={setFieldValue}
-                    error={fieldError?.first_name}
-                    disabled={pending}
-                    withAsterisk
-                    autoFocus
-                />
-                <TextInput
-                    name="last_name"
-                    label={strings.registerLastName}
-                    value={formValue.last_name}
-                    onChange={setFieldValue}
-                    error={fieldError?.last_name}
-                    disabled={pending}
-                    withAsterisk
-                />
-                <TextInput
-                    className={styles.fullSizeInput}
                     name="email"
                     label={strings.registerEmail}
                     value={formValue.email}
@@ -327,114 +326,116 @@ export function Component() {
                     disabled={pending}
                     withAsterisk
                 />
-                <TextInput
-                    name="password"
-                    type="password"
-                    label={strings.registerPassword}
-                    value={formValue.password}
-                    onChange={setFieldValue}
-                    error={fieldError?.password}
-                    disabled={pending}
-                    withAsterisk
-                />
-                <TextInput
-                    name="confirm_password"
-                    type="password"
-                    label={strings.registerConfirmPassword}
-                    value={formValue.confirm_password}
-                    onChange={setFieldValue}
-                    error={fieldError?.confirm_password}
-                    disabled={pending}
-                    withAsterisk
-                />
-                <div className={styles.formBorder} />
-                <CountrySelectInput
-                    label={strings.registerCountry}
-                    name="country"
-                    value={formValue?.country}
-                    onChange={setFieldValue}
-                    error={fieldError?.country}
-                    disabled={pending}
-                    withAsterisk
-                />
-                <TextInput
-                    name="city"
-                    label={strings.registerCity}
-                    value={formValue.city}
-                    onChange={setFieldValue}
-                    error={fieldError?.city}
-                    disabled={pending}
-                    withAsterisk
-                />
-                <SelectInput
-                    label={strings.registerOrganizationType}
-                    name="organization_type"
-                    value={formValue.organization_type}
-                    onChange={handleOrganizationTypeChange}
-                    keySelector={keySelector}
-                    labelSelector={labelSelector}
-                    options={organizationTypes}
-                    error={fieldError?.organization_type}
-                    disabled={pending}
-                    withAsterisk
-                />
-                {isNationalSociety ? (
-                    <SelectInput
-                        label={strings.registerOrganizationName}
-                        name="organization"
-                        options={nationalSocietyOptions}
-                        keySelector={nsLabelSelector}
-                        labelSelector={nsLabelSelector}
-                        value={formValue.organization}
-                        onChange={setFieldValue}
-                        error={fieldError?.organization}
-                        disabled={pending}
-                        withAsterisk
-                    />
-                ) : (
+                <ListView layout="grid">
                     <TextInput
-                        name="organization"
-                        label={strings.registerOrganizationName}
-                        value={formValue.organization}
+                        name="password"
+                        type="password"
+                        label={strings.registerPassword}
+                        value={formValue.password}
                         onChange={setFieldValue}
-                        error={fieldError?.organization}
+                        error={fieldError?.password}
                         disabled={pending}
                         withAsterisk
                     />
-                )}
-                <TextInput
-                    name="department"
-                    label={strings.registerDepartment}
-                    value={formValue.department}
-                    onChange={setFieldValue}
-                    error={fieldError?.department}
-                    disabled={pending}
-                />
-                <TextInput
-                    name="position"
-                    label={strings.registerPosition}
-                    value={formValue.position}
-                    onChange={setFieldValue}
-                    error={fieldError?.position}
-                    disabled={pending}
-                />
-                <TextInput
-                    name="phone_number"
-                    label={strings.registerPhoneNumber}
-                    value={formValue.phone_number}
-                    onChange={setFieldValue}
-                    error={fieldError?.phone_number}
-                    disabled={pending}
-                />
+                    <TextInput
+                        name="confirm_password"
+                        type="password"
+                        label={strings.registerConfirmPassword}
+                        value={formValue.confirm_password}
+                        onChange={setFieldValue}
+                        error={fieldError?.confirm_password}
+                        disabled={pending}
+                        withAsterisk
+                    />
+                </ListView>
+                <div />
+                <ListView layout="grid">
+                    <CountrySelectInput
+                        label={strings.registerCountry}
+                        name="country"
+                        value={formValue?.country}
+                        onChange={setFieldValue}
+                        error={fieldError?.country}
+                        disabled={pending}
+                        withAsterisk
+                    />
+                    <TextInput
+                        name="city"
+                        label={strings.registerCity}
+                        value={formValue.city}
+                        onChange={setFieldValue}
+                        error={fieldError?.city}
+                        disabled={pending}
+                        withAsterisk
+                    />
+                    <SelectInput
+                        label={strings.registerOrganizationType}
+                        name="organization_type"
+                        value={formValue.organization_type}
+                        onChange={handleOrganizationTypeChange}
+                        keySelector={keySelector}
+                        labelSelector={labelSelector}
+                        options={organizationTypes}
+                        error={fieldError?.organization_type}
+                        disabled={pending}
+                        withAsterisk
+                    />
+                    {isNationalSociety ? (
+                        <SelectInput
+                            label={strings.registerOrganizationName}
+                            name="organization"
+                            options={nationalSocietyOptions}
+                            keySelector={nsLabelSelector}
+                            labelSelector={nsLabelSelector}
+                            value={formValue.organization}
+                            onChange={setFieldValue}
+                            error={fieldError?.organization}
+                            disabled={pending}
+                            withAsterisk
+                        />
+                    ) : (
+                        <TextInput
+                            name="organization"
+                            label={strings.registerOrganizationName}
+                            value={formValue.organization}
+                            onChange={setFieldValue}
+                            error={fieldError?.organization}
+                            disabled={pending}
+                            withAsterisk
+                        />
+                    )}
+                    <TextInput
+                        name="department"
+                        label={strings.registerDepartment}
+                        value={formValue.department}
+                        onChange={setFieldValue}
+                        error={fieldError?.department}
+                        disabled={pending}
+                    />
+                    <TextInput
+                        name="position"
+                        label={strings.registerPosition}
+                        value={formValue.position}
+                        onChange={setFieldValue}
+                        error={fieldError?.position}
+                        disabled={pending}
+                    />
+                    <TextInput
+                        name="phone_number"
+                        label={strings.registerPhoneNumber}
+                        value={formValue.phone_number}
+                        onChange={setFieldValue}
+                        error={fieldError?.phone_number}
+                        disabled={pending}
+                    />
+                </ListView>
                 {justificationNeeded && (
                     <>
-                        <div className={styles.justifyNote}>
+                        <Description withLightText>
                             {strings.registerJustify}
-                        </div>
+                        </Description>
                         <TextArea
-                            className={styles.fullSizeInput}
                             name="justification"
-                            labelClassName={styles.textLabel}
                             label={strings.registerJustification}
                             value={formValue.justification}
                             error={fieldError?.justification}
@@ -445,8 +446,11 @@ export function Component() {
                         />
                     </>
                 )}
-            </div>
-            <div className={styles.actions}>
+            </ListView>
+            <ListView
+                layout="block"
+                withCenteredContents
+            >
                 <Button
                     name={undefined}
                     onClick={handleFormSubmit}
@@ -456,10 +460,10 @@ export function Component() {
                         ? strings.requestAccess
                         : strings.registerSubmit}
                 </Button>
-                <div className={styles.login}>
+                <div>
                     {loginInfo}
                 </div>
-            </div>
+            </ListView>
         </Page>
     );
 }

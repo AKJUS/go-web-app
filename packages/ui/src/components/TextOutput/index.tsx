@@ -3,7 +3,13 @@ import { _cs } from '@togglecorp/fujs';
 import BooleanOutput, { Props as BooleanOutputProps } from '#components/BooleanOutput';
 import DateOutput, { Props as DateOutputProps } from '#components/DateOutput';
 import NumberOutput, { Props as NumberOutputProps } from '#components/NumberOutput';
+import useSpacingToken from '#hooks/useSpacingToken';
 import { DEFAULT_INVALID_TEXT } from '#utils/constants';
+import {
+    fullSpacings,
+    gapSpacings,
+    SpacingType,
+} from '#utils/style';
 
 import styles from './styles.module.css';
 
@@ -21,6 +27,12 @@ interface BaseProps {
     withoutLabelColon?: boolean;
     invalidText?: React.ReactNode;
     withBackground?: boolean;
+    withLightBackground?: boolean;
+    textSize?: 'sm' | 'md' | 'lg';
+    withBlockLayout?: boolean;
+    spacing?: SpacingType;
+    withUppercaseLetters?: boolean;
+    withLightText?: boolean;
 }
 
 interface BooleanProps extends BooleanOutputProps {
@@ -63,9 +75,23 @@ function TextOutput(props: Props) {
         strongDescription,
         withoutLabelColon,
         withBackground,
+        withLightBackground,
         invalidText = DEFAULT_INVALID_TEXT,
+        textSize,
+        withBlockLayout,
+        spacing,
+        withUppercaseLetters,
+        withLightText,
         ...otherProps
     } = props;
+
+    const spacingClassName = useSpacingToken({
+        spacing,
+        offset: -2,
+        modes: (withBackground || withLightBackground)
+            ? fullSpacings
+            : gapSpacings,
+    });
 
     const { value: propValue } = props;
     let valueComponent: React.ReactNode = invalidText;
@@ -103,6 +129,14 @@ function TextOutput(props: Props) {
             className={_cs(
                 styles.textOutput,
                 withBackground && styles.withBackground,
+                withLightBackground && styles.withLightBackground,
+                textSize === 'sm' && styles.textSizeSmall,
+                textSize === 'md' && styles.textSizeMedium,
+                textSize === 'lg' && styles.textSizeLarge,
+                withBlockLayout && styles.withBlockLayout,
+                withUppercaseLetters && styles.withUppercaseLetters,
+                withLightText && styles.withLightText,
+                spacingClassName,
                 className,
             )}
         >

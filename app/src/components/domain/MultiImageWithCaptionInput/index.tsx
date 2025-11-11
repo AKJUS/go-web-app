@@ -5,11 +5,12 @@ import {
 import { DeleteBinLineIcon } from '@ifrc-go/icons';
 import {
     IconButton,
+    Image,
+    ListView,
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    _cs,
     isDefined,
     isNotDefined,
     randomString,
@@ -25,7 +26,6 @@ import GoMultiFileInput, { type SupportedPaths } from '#components/domain/GoMult
 import NonFieldError from '#components/NonFieldError';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type Value = {
     client_id: string;
@@ -43,9 +43,9 @@ interface Props<N> {
     fileIdToUrlMap: Record<number, string>;
     setFileIdToUrlMap?: React.Dispatch<React.SetStateAction<Record<number, string>>>;
     label: React.ReactNode;
-    icons?: React.ReactNode;
-    actions?: React.ReactNode;
     readOnly?: boolean;
+    before?: React.ReactNode;
+    after?: React.ReactNode;
     disabled?: boolean;
     useCurrentLanguageForMutation?: boolean;
 }
@@ -62,9 +62,9 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
         onChange,
         error: formError,
         label,
-        icons,
-        actions,
         readOnly,
+        before,
+        after,
         disabled,
         useCurrentLanguageForMutation = false,
     } = props;
@@ -130,7 +130,11 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
     ), [value]);
 
     return (
-        <div className={_cs(styles.multiImageWithCaptionInput, className)}>
+        <ListView
+            layout="block"
+            className={className}
+            withSpacingOpticalCorrection
+        >
             <NonFieldError error={error} />
             <GoMultiFileInput
                 name={undefined}
@@ -140,8 +144,8 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                 url={url}
                 fileIdToUrlMap={fileIdToUrlMap}
                 setFileIdToUrlMap={setFileIdToUrlMap}
-                icons={icons}
-                actions={actions}
+                before={before}
+                after={after}
                 withoutPreview
                 readOnly={readOnly}
                 disabled={disabled}
@@ -150,7 +154,7 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                 {label}
             </GoMultiFileInput>
             {value && value.length > 0 && (
-                <div className={styles.fileList}>
+                <ListView withWrap>
                     {value?.map((fileValue, index) => {
                         // NOTE: Not sure why this is here, need to
                         // TODO: talk with @frozenhelium
@@ -161,13 +165,13 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                         const imageError = getErrorObject(error?.[fileValue.client_id]);
 
                         return (
-                            <div
-                                // FIXME: create a component for preview
-                                className={styles.previewAndCaption}
+                            <ListView
                                 key={fileValue.id}
+                                layout="block"
+                                spacing="xs"
+                                withSpacingOpticalCorrection
                             >
                                 <IconButton
-                                    className={styles.removeButton}
                                     name={index}
                                     onClick={removeValue}
                                     title={strings.removeImagesButtonTitle}
@@ -181,13 +185,11 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                                 <NonFieldError
                                     error={imageError}
                                 />
-                                <img
-                                    className={styles.preview}
+                                <Image
                                     alt={strings.imagePreviewAlt}
                                     src={fileIdToUrlMap[fileValue.id]}
                                 />
                                 <TextInput
-                                    className={styles.captionInput}
                                     name={index}
                                     value={fileValue?.caption}
                                     onChange={handleCaptionChange}
@@ -196,12 +198,12 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                                     readOnly={readOnly}
                                     disabled={disabled}
                                 />
-                            </div>
+                            </ListView>
                         );
                     })}
-                </div>
+                </ListView>
             )}
-        </div>
+        </ListView>
     );
 }
 

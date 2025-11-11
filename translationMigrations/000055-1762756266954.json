@@ -1,0 +1,398 @@
+{
+    "parent": "000054-1762426529619.json",
+    "actions": [
+        {
+            "action": "remove",
+            "key": "downloadMapTitle",
+            "namespace": "activeOperationMap"
+        },
+        {
+            "action": "remove",
+            "key": "presentationModeButton",
+            "namespace": "activeOperationMap"
+        },
+        {
+            "action": "add",
+            "key": "operationStartDateLabel",
+            "namespace": "activeSurgeDeployments",
+            "value": "Operation start date"
+        },
+        {
+            "action": "remove",
+            "key": "operationTimeline",
+            "namespace": "activeSurgeDeployments"
+        },
+        {
+            "action": "add",
+            "key": "exitPresentationModeButtonTitle",
+            "namespace": "common",
+            "value": "Exit presentation mode"
+        },
+        {
+            "action": "add",
+            "key": "exitPrintModeButtonTitle",
+            "namespace": "common",
+            "value": "Exit print mode"
+        },
+        {
+            "action": "add",
+            "key": "presentationModeButtonLabel",
+            "namespace": "common",
+            "value": "Presentation Mode"
+        },
+        {
+            "action": "remove",
+            "key": "buttonTitleTab",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "gridEmptyMessage",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "gridFailedToFetch",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "gridFilteredMessage",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "gridPendingMessage",
+            "namespace": "common"
+        },
+        {
+            "action": "remove",
+            "key": "mapContainerIconButton",
+            "namespace": "common"
+        },
+        {
+            "action": "update",
+            "key": "footerIFRC",
+            "namespace": "common",
+            "newValue": "© IFRC {year} {appVersion}"
+        },
+        {
+            "action": "update",
+            "key": "storageSecurityQuestionsAboutDataHeading",
+            "namespace": "cookiePolicy",
+            "newValue": "D) Storage, security, questions about your data"
+        },
+        {
+            "action": "remove",
+            "key": "closePresentationLabel",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "localUnitsMapPresentationModeButton",
+            "namespace": "countryNsOverviewContextAndStructure"
+        },
+        {
+            "action": "remove",
+            "key": "editCountryLink",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "presentationModeButton",
+            "namespace": "countryOngoingActivitiesEmergencies"
+        },
+        {
+            "action": "remove",
+            "key": "activitiesBySector",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "addThreeWActivity",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "chartDescription",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryResponseActivitiesNumberOfProjects",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryResponseActivitiesSeverityHigh",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryResponseActivitiesSeverityLow",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryResponseActivitiesSeverityMedium",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryResponseActivitiesSeveritySevere",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryThreeWActivityFilterDistrict",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryThreeWActivityFilterEru",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryThreeWActivityFilterReportingNs",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryThreeWActivityFilterSector",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "countryThreeWActivityFilterStatus",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "dataNotAvailable",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyProjectCountry",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyProjectDistrict",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyProjectNationalSociety",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyProjectPeopleReached",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyProjectStartDate",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyProjectStatus",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "emergencyProjectTitle",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "failedToCreateExport",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "peopleInNeedReached",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "peopleReachedTooltip",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "responseActivities",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "threeWActivityDescription",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "threeWViewAllActivityLabel",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "totalActivities",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "uniqueEruAndNationalSocietyCount",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "remove",
+            "key": "uniqueSectorCount",
+            "namespace": "countryOngoingActivitiesThreeWActivities"
+        },
+        {
+            "action": "update",
+            "key": "goBackButtonTitle",
+            "namespace": "countryPreparedness",
+            "newValue": "Back to Capacity"
+        },
+        {
+            "action": "update",
+            "key": "publicGoBackButtonTitle",
+            "namespace": "countryPreparedness",
+            "newValue": "Back to Capacity"
+        },
+        {
+            "action": "remove",
+            "key": "emergenciesKey",
+            "namespace": "emergencies"
+        },
+        {
+            "action": "update",
+            "key": "emergenciesMapWithoutIFRC",
+            "namespace": "emergencies",
+            "newValue": "Without IFRC response"
+        },
+        {
+            "action": "update",
+            "key": "showLess",
+            "namespace": "emergencyActivities",
+            "newValue": "See less"
+        },
+        {
+            "action": "update",
+            "key": "showMore",
+            "namespace": "emergencyActivities",
+            "newValue": "See more"
+        },
+        {
+            "action": "remove",
+            "key": "covidSectionTitle",
+            "namespace": "fieldReportForm"
+        },
+        {
+            "action": "update",
+            "key": "operationCardFundingCoverage",
+            "namespace": "highlightedOperations",
+            "newValue": "Funding coverage"
+        },
+        {
+            "action": "remove",
+            "key": "homeIconButtonLabel",
+            "namespace": "home"
+        },
+        {
+            "action": "remove",
+            "key": "filterOpsLearningSearchPlaceholder",
+            "namespace": "operationalLearning"
+        },
+        {
+            "action": "remove",
+            "key": "selectedFilters",
+            "namespace": "operationalLearning"
+        },
+        {
+            "action": "update",
+            "key": "filterOpsLearningSearchLabel",
+            "newKey": "searchPlaceholder",
+            "namespace": "operationalLearning"
+        },
+        {
+            "action": "remove",
+            "key": "regionCloseButton",
+            "namespace": "regionOperations"
+        },
+        {
+            "action": "remove",
+            "key": "eventListViewDetails",
+            "namespace": "riskImminentEvents"
+        },
+        {
+            "action": "remove",
+            "key": "gdacsEventViewDetails",
+            "namespace": "riskImminentEvents"
+        },
+        {
+            "action": "remove",
+            "key": "meteoSwissEventListViewDetails",
+            "namespace": "riskImminentEvents"
+        },
+        {
+            "action": "remove",
+            "key": "wfpEventListViewDetails",
+            "namespace": "riskImminentEvents"
+        },
+        {
+            "action": "add",
+            "key": "peopleAtRiskLabel",
+            "namespace": "riskSeasonalMap",
+            "value": "People at Risk of Displacement"
+        },
+        {
+            "action": "add",
+            "key": "peopleExposedLabel",
+            "namespace": "riskSeasonalMap",
+            "value": "People Exposed"
+        },
+        {
+            "action": "add",
+            "key": "riskScoreLabel",
+            "namespace": "riskSeasonalMap",
+            "value": "Risk Score"
+        },
+        {
+            "action": "remove",
+            "key": "riskDataNotAvailable",
+            "namespace": "riskSeasonalMap"
+        },
+        {
+            "action": "add",
+            "key": "confirmationDescription",
+            "namespace": "threeWActivityForm",
+            "value": "You are about to submit your entry for 3W for {event} emergency. Please review your selections below before submission."
+        },
+        {
+            "action": "remove",
+            "key": "messageEmergencyDescription",
+            "namespace": "threeWActivityForm"
+        },
+        {
+            "action": "remove",
+            "key": "messageEmergencyDescriptionTwo",
+            "namespace": "threeWActivityForm"
+        },
+        {
+            "action": "remove",
+            "key": "messageHeading",
+            "namespace": "threeWActivityForm"
+        },
+        {
+            "action": "update",
+            "key": "noteHeading",
+            "namespace": "threeWActivityForm",
+            "newValue": "If you have any questions, contact the IM team"
+        }
+    ]
+}

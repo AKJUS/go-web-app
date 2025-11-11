@@ -1,69 +1,74 @@
 import { _cs } from '@togglecorp/fujs';
 
-import Button, { Props as ButtonProps } from '#components/Button';
-import RadioInput, { Props as RadioInputProps } from '#components/RadioInput';
+import ButtonLayout, { Props as ButtonLayoutProps } from '#components/ButtonLayout';
+import RadioInput, { CommonProps as RadioInputProps } from '#components/RadioInput';
 import { Props as RadioProps } from '#components/RadioInput/Radio';
+import RawButton from '#components/RawButton';
 
 import styles from './styles.module.css';
 
 // Note: more props can be picked as per requirement
-type ExtraSegmentProps<N> = Pick<ButtonProps<N>, 'icons' | 'iconsContainerClassName' | 'actions' | 'actionsContainerClassName'>;
-export interface SegmentProps<N, IN> extends RadioProps<N, IN>, ExtraSegmentProps<N> {
-  variant?: 'primary' | 'secondary',
+export interface SegmentProps<NAME> extends RadioProps<NAME | 'children'>, Omit<ButtonLayoutProps, 'styleVariant' | 'colorVariant'> {
+    name: NAME;
+    children?: React.ReactNode;
 }
 
-function Segment<N, IN>(props: SegmentProps<N, IN>) {
+function Segment<NAME>(props: SegmentProps<NAME>) {
     const {
-        label,
         name,
         onClick,
         value,
         className,
-        variant = 'primary',
         inputName, // eslint-disable-line @typescript-eslint/no-unused-vars
+        children,
         ...otherProps
     } = props;
 
     return (
-        <Button
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...otherProps}
-            className={_cs(
-                styles.segment,
-                value && styles.active,
-                variant === 'secondary' && styles.secondaryVariant,
-                className,
-            )}
+        <RawButton
+            className={styles.rawButton}
             name={name}
             onClick={onClick}
-            variant="tertiary"
         >
-            {label}
-        </Button>
+            <ButtonLayout
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...otherProps}
+                className={_cs(
+                    styles.segment,
+                    value && styles.active,
+                    className,
+                )}
+                styleVariant={value ? 'filled' : 'transparent'}
+                colorVariant={value ? 'primary' : 'text'}
+            >
+                {children}
+            </ButtonLayout>
+        </RawButton>
     );
 }
 
 export type Props<
-    N,
-    O,
-    V,
-    RRP extends RadioProps<V, N>,
-> = RadioInputProps<N, O, V, RRP, 'rendererParams' | 'renderer' | 'listContainerClassName' | 'keySelector' | 'labelSelector'> & {
-    rendererParams?: RadioInputProps<N, O, V, RRP, never>['rendererParams'];
-    listContainerClassName?: RadioInputProps<N, O, V, RRP, never>['listContainerClassName'];
-    keySelector: RadioInputProps<N, O, V, RRP, never>['keySelector'];
-    labelSelector: RadioInputProps<N, O, V, RRP, never>['labelSelector'];
+    NAME,
+    OPTION,
+    VALUE,
+> = Omit<
+    RadioInputProps<NAME, OPTION, VALUE, SegmentProps<VALUE>>,
+    'radioListLayout' | 'radioListLayoutPreferredGridColumns' | 'withDarkBackground'
+> & {
+    value: VALUE | undefined | null;
+    onChange: (value: VALUE, name: NAME) => void;
+    rendererParams?: RadioInputProps<NAME, OPTION, VALUE, SegmentProps<VALUE>>['rendererParams'];
+    keySelector: RadioInputProps<NAME, OPTION, VALUE, SegmentProps<VALUE>>['keySelector'];
+    labelSelector: RadioInputProps<NAME, OPTION, VALUE, SegmentProps<VALUE>>['labelSelector'];
 }
 
 function SegmentInput<
-    const N,
-    O extends object,
-    V extends string | number | boolean,
-    RRP extends RadioProps<V, N>,
->(props: Props<N, O, V, RRP>) {
+    const NAME,
+    OPTION extends object,
+    VALUE extends string | number | boolean,
+>(props: Props<NAME, OPTION, VALUE>) {
     const {
         rendererParams,
-        listContainerClassName,
         keySelector,
         labelSelector,
         className,
@@ -77,9 +82,10 @@ function SegmentInput<
             {...otherProps}
             renderer={Segment}
             rendererParams={rendererParams}
-            listContainerClassName={_cs(listContainerClassName, styles.segmentList)}
             keySelector={keySelector}
             labelSelector={labelSelector}
+            withDarkBackground
+            spacing="none"
         />
     );
 }

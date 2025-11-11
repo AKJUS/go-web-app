@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import {
     Container,
     InputSection,
+    ListView,
     NumberInput,
     RadioInput,
     TextArea,
@@ -30,7 +31,6 @@ import { type PartialFormValue } from '../common';
 import ActionInput, { type ActionValue } from './ActionInput';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type Value = PartialFormValue;
 interface Props {
@@ -113,12 +113,8 @@ function EarlyActionFields(props: Props) {
     );
 
     return (
-        <Container
-            heading={strings.fieldReportFormActionTakenTitle}
-            className={styles.earlyActionFields}
-            childrenContainerClassName={styles.content}
-        >
-            <div className={styles.numericSection}>
+        <Container heading={strings.fieldReportFormActionTakenTitle}>
+            <ListView layout="grid">
                 <NumberInput
                     label={strings.fieldsStep3Section1FieldsAssistedGovEWLabel}
                     name="gov_num_assisted"
@@ -135,8 +131,8 @@ function EarlyActionFields(props: Props) {
                     error={error?.num_assisted}
                     disabled={disabled}
                 />
-            </div>
-            <div className={styles.otherSection}>
+            </ListView>
+            <ListView layout="block">
                 <NonFieldError error={getErrorObject(error?.actions_taken)} />
                 {organizations.map((organization) => {
                     const index = mapping?.[organization.key];
@@ -189,7 +185,7 @@ function EarlyActionFields(props: Props) {
                         disabled={disabled}
                     />
                 </InputSection>
-            </div>
+            </ListView>
         </Container>
     );
 }

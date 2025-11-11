@@ -1,13 +1,11 @@
 import { useCallback } from 'react';
 import {
     Container,
-    List,
+    ListView,
+    RawList,
 } from '@ifrc-go/ui';
-import { _cs } from '@togglecorp/fujs';
 
 import Link, { type Props as LinkProps } from '#components/Link';
-
-import styles from './styles.module.css';
 
 export type LinkData = LinkProps & {
     title: string;
@@ -19,7 +17,6 @@ interface Props {
     title: string;
     data: LinkData[];
     description?: string;
-    descriptionClassName?: string;
 }
 
 function CatalogueInfoCard(props: Props) {
@@ -28,7 +25,6 @@ function CatalogueInfoCard(props: Props) {
         title,
         data,
         description,
-        descriptionClassName,
     } = props;
 
     const rendererParams = useCallback(
@@ -56,26 +52,27 @@ function CatalogueInfoCard(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.catalogueInfoCard, className)}
+            className={className}
             heading={title}
             headingLevel={4}
             withHeaderBorder
-            withInternalPadding
-            headerDescriptionContainerClassName={descriptionClassName}
             headerDescription={description}
-            spacing="comfortable"
+            withPadding
+            withBackground
+            withShadow
         >
-            <List
-                className={styles.list}
-                data={data}
-                keySelector={catalogueInfoKeySelector}
-                renderer={Link}
-                errored={false}
-                pending={false}
-                filtered={false}
-                rendererParams={rendererParams}
-                compact
-            />
+            <ListView
+                layout="block"
+                spacing="sm"
+                withSpacingOpticalCorrection
+            >
+                <RawList
+                    data={data}
+                    keySelector={catalogueInfoKeySelector}
+                    renderer={Link}
+                    rendererParams={rendererParams}
+                />
+            </ListView>
         </Container>
     );
 }

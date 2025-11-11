@@ -12,7 +12,6 @@ import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import type { GoApiResponse } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type GlobalEnumsResponse = GoApiResponse<'/api/v2/global-enums/'>;
 type AppealTypeOption = NonNullable<GlobalEnumsResponse['api_appeal_type']>[number];
@@ -81,17 +80,13 @@ function Filters(props: Props) {
                 value={value.displacement}
                 onChange={onChange}
             />
-            <div className={styles.clearFilter}>
-                <Button
-                    name={undefined}
-                    className={styles.clearFilter}
-                    onClick={handleClearFiltersButtonClick}
-                    variant="secondary"
-                    disabled={!filtered}
-                >
-                    {strings.operationMapClearFilters}
-                </Button>
-            </div>
+            <Button
+                name={undefined}
+                onClick={handleClearFiltersButtonClick}
+                disabled={!filtered}
+            >
+                {strings.operationMapClearFilters}
+            </Button>
         </>
     );
 }

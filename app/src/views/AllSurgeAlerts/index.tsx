@@ -338,7 +338,7 @@ export function Component() {
                         maxItemsPerPage={limit}
                     />
                 )}
-                actions={(
+                headerActions={(
                     <ExportButton
                         onClick={handleExportClick}
                         progress={progress}

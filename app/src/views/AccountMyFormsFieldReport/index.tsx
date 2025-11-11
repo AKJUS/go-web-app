@@ -142,9 +142,8 @@ export function Component() {
         <Container
             className={styles.accountMyFormsFieldReport}
             heading={heading}
-            headerDescriptionContainerClassName={styles.filters}
             withHeaderBorder
-            actions={(
+            headerActions={(
                 <Link
                     to="allFieldReports"
                     withLinkIcon

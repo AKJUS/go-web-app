@@ -7,7 +7,28 @@ import NumberOutput from '#components/NumberOutput';
 
 import styles from './styles.module.css';
 
-export interface Props {
+type ProgressColorVariant = 'text' | 'text-on-dark' | 'primary' | 'secondary' | 'success' | 'danger';
+
+const colorVariantToClassName: Record<ProgressColorVariant, string> = {
+    text: styles.colorVariantText,
+    primary: styles.colorVariantPrimary,
+    secondary: styles.colorVariantSecondary,
+    success: styles.colorVariantSuccess,
+    danger: styles.colorVariantDanger,
+    'text-on-dark': styles.colorVariantTextOnDark,
+};
+
+type PreDefinedColorVariantProps = {
+    colorVariant?: ProgressColorVariant;
+    color?: never;
+}
+
+type CustomColorVariantProps = {
+    colorVariant: 'custom';
+    color: string;
+}
+
+interface BaseProps {
     className?: string;
     title?: React.ReactNode;
     description?: React.ReactNode;
@@ -15,8 +36,11 @@ export interface Props {
     totalValue?: number | null | undefined;
     showPercentageInTitle?: boolean;
     children?: React.ReactNode;
-    color?: string;
 }
+
+export type Props = BaseProps & (
+    PreDefinedColorVariantProps | CustomColorVariantProps
+);
 
 function ProgressBar(props: Props) {
     const {
@@ -27,7 +51,8 @@ function ProgressBar(props: Props) {
         value: valueUnsafe,
         showPercentageInTitle,
         children,
-        color = 'var(--go-ui-color-primary-red)',
+        colorVariant = 'secondary',
+        color,
     } = props;
 
     const value = isDefined(valueUnsafe)
@@ -45,7 +70,14 @@ function ProgressBar(props: Props) {
     }
 
     return (
-        <div className={_cs(styles.progressWrapper, className)}>
+        <div
+            className={_cs(
+                styles.progressWrapper,
+                colorVariant !== 'custom'
+                    && colorVariantToClassName[colorVariant],
+                className,
+            )}
+        >
             {(title || showPercentageInTitle) && (
                 <div className={styles.title}>
                     {title}
@@ -62,7 +94,7 @@ function ProgressBar(props: Props) {
                     className={styles.progress}
                     style={{
                         width: `${percentage}%`,
-                        backgroundColor: color,
+                        backgroundColor: colorVariant === 'custom' ? color : undefined,
                     }}
                 />
             </div>

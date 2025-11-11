@@ -147,7 +147,6 @@ function FieldReportsTable() {
         <Container
             className={styles.fieldReportsTable}
             heading={heading}
-            headerDescriptionContainerClassName={styles.filters}
             withHeaderBorder
             filters={(
                 <>
@@ -165,7 +164,7 @@ function FieldReportsTable() {
                     />
                 </>
             )}
-            actions={(
+            headerActions={(
                 <Link
                     to="allFieldReports"
                     withLinkIcon

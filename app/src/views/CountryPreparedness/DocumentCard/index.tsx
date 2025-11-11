@@ -83,7 +83,7 @@ function DocumentCard(props: Props) {
             <div className={styles.actions}>
                 <Link
                     external
-                    variant="tertiary"
+                    styleVariant="action"
                     download
                     title={strings.download}
                     href={document.file}
@@ -95,7 +95,7 @@ function DocumentCard(props: Props) {
                     onClick={handleFileDelete}
                     title={strings.removeFileButtonTitle}
                     ariaLabel={strings.removeFileButtonTitle}
-                    variant="tertiary"
+                    styleVariant="action"
                     spacing="none"
                     disabled={perDocumentDeletePending}
                 >

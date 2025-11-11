@@ -2,6 +2,7 @@ import React from 'react';
 import {
     Checklist,
     Container,
+    ListView,
     TextArea,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -14,6 +15,7 @@ import {
 } from '@togglecorp/toggle-form';
 
 import NonFieldError from '#components/NonFieldError';
+import TabPage from '#components/TabPage';
 import {
     type CategoryType,
     type OrganizationType,
@@ -23,7 +25,6 @@ import {
 import { type PartialFormValue } from '../../common';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 export type ActionValue = NonNullable<PartialFormValue['actions_taken']>[number];
 
@@ -80,7 +81,7 @@ function ActionInput(props: ActionInputProps) {
 
     // FIXME: add non-field errors
     return (
-        <div className={styles.actionInput}>
+        <TabPage>
             <NonFieldError error={error} />
             {reportType === 'COVID' && organizationType === 'NTLS' && (
                 <>
@@ -88,61 +89,61 @@ function ActionInput(props: ActionInputProps) {
                         // FIXME: Use label from ENUM
                         heading="Health"
                         headingLevel={4}
-                        childrenContainerClassName={styles.actionContent}
-                        spacing="compact"
                     >
-                        <Checklist
-                            name="actions"
-                            onChange={setFieldValue}
-                            options={actionOptionsForHealth}
-                            // FIXME: do not use inline functions
-                            labelSelector={(item) => item.name ?? '?'}
-                            keySelector={(item) => item.id}
-                            value={value?.actions}
-                            error={listErrorToString(error?.actions)}
-                            disabled={disabled}
-                        />
-                        {healthNotes}
+                        <ListView layout="block">
+                            <Checklist
+                                name="actions"
+                                onChange={setFieldValue}
+                                options={actionOptionsForHealth}
+                                // FIXME: do not use inline functions
+                                labelSelector={(item) => item.name ?? '?'}
+                                keySelector={(item) => item.id}
+                                value={value?.actions}
+                                error={listErrorToString(error?.actions)}
+                                disabled={disabled}
+                            />
+                            {healthNotes}
+                        </ListView>
                     </Container>
                     <Container
                         // FIXME: Use label from ENUM
                         heading="NS Institutional Strengthening"
                         headingLevel={4}
-                        childrenContainerClassName={styles.actionContent}
-                        spacing="compact"
                     >
-                        <Checklist
-                            name="actions"
-                            onChange={setFieldValue}
-                            options={actionOptionsForNs}
-                            // FIXME: do not use inline functions
-                            labelSelector={(item) => item.name ?? '?'}
-                            keySelector={(item) => item.id}
-                            value={value?.actions}
-                            error={listErrorToString(error?.actions)}
-                            disabled={disabled}
-                        />
-                        {nsNotes}
+                        <ListView layout="block">
+                            <Checklist
+                                name="actions"
+                                onChange={setFieldValue}
+                                options={actionOptionsForNs}
+                                // FIXME: do not use inline functions
+                                labelSelector={(item) => item.name ?? '?'}
+                                keySelector={(item) => item.id}
+                                value={value?.actions}
+                                error={listErrorToString(error?.actions)}
+                                disabled={disabled}
+                            />
+                            {nsNotes}
+                        </ListView>
                     </Container>
                     <Container
                         // FIXME: Use label from ENUM
                         heading="Socioeconomic Interventions"
                         headingLevel={4}
-                        childrenContainerClassName={styles.actionContent}
-                        spacing="compact"
                     >
-                        <Checklist
-                            name="actions"
-                            onChange={setFieldValue}
-                            options={actionOptionsForSocioeco}
-                            // FIXME: do not use inline functions
-                            labelSelector={(item) => item.name ?? '?'}
-                            keySelector={(item) => item.id}
-                            value={value?.actions}
-                            error={listErrorToString(error?.actions)}
-                            disabled={disabled}
-                        />
-                        {socioecoNotes}
+                        <ListView layout="block">
+                            <Checklist
+                                name="actions"
+                                onChange={setFieldValue}
+                                options={actionOptionsForSocioeco}
+                                // FIXME: do not use inline functions
+                                labelSelector={(item) => item.name ?? '?'}
+                                keySelector={(item) => item.id}
+                                value={value?.actions}
+                                error={listErrorToString(error?.actions)}
+                                disabled={disabled}
+                            />
+                            {socioecoNotes}
+                        </ListView>
                     </Container>
                 </>
             )}
@@ -169,7 +170,7 @@ function ActionInput(props: ActionInputProps) {
                 placeholder={strings.fieldsStep3CheckboxSectionsFederationActionsEVTEPIEWPlaceholder}
                 disabled={disabled}
             />
-        </div>
+        </TabPage>
     );
 }
 

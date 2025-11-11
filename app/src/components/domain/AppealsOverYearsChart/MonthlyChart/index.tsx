@@ -4,9 +4,9 @@ import {
     useState,
 } from 'react';
 import {
-    BlockLoading,
     Button,
     Container,
+    ListView,
     TimeSeriesChart,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -17,6 +17,7 @@ import {
 } from '@ifrc-go/ui/utils';
 import {
     encodeDate,
+    isDefined,
     isNotDefined,
     listToMap,
 } from '@togglecorp/fujs';
@@ -98,6 +99,7 @@ function MonthlyChart(props: Props) {
     const {
         pending: monthlyEmergencyAppealPending,
         response: monthlyEmergencyAppealResponse,
+        error: monthlyEmergencyAppealError,
     } = useRequest({
         url: '/api/v1/aggregate/',
         query: {
@@ -110,6 +112,7 @@ function MonthlyChart(props: Props) {
     const {
         response: monthlyDrefResponse,
         pending: monthlyDrefPending,
+        error: monthlyDrefError,
     } = useRequest({
         url: '/api/v1/aggregate/',
         query: {
@@ -180,38 +183,40 @@ function MonthlyChart(props: Props) {
     return (
         <Container
             className={styles.monthlyChart}
-            childrenContainerClassName={styles.chartContainer}
             heading={heading}
             withHeaderBorder
+            pending={pending}
+            filtered={false}
+            empty={false}
+            errored={isDefined(monthlyEmergencyAppealError) || isDefined(monthlyDrefError)}
         >
-            {pending && <BlockLoading className={styles.loading} />}
-            {!pending && (
-                <>
-                    <TimeSeriesChart
-                        className={styles.timelineChart}
-                        timePoints={dateList}
-                        dataKeys={dataKeys}
-                        valueSelector={chartValueSelector}
-                        classNameSelector={classNameSelector}
-                        activePointKey={activePointKey}
-                        onTimePointClick={setActivePointKey}
-                        xAxisFormatter={xAxisFormatter}
-                    />
-                    <PointDetails
-                        heading={dateFormatter.format(activePointData?.date) ?? '--'}
-                        data={activePointData}
-                        action={activePointData && (
-                            <Button
-                                variant="secondary"
-                                name={undefined}
-                                onClick={onBackButtonClick}
-                            >
-                                {strings.homeMonthlyChartBackButtonLabel}
-                            </Button>
-                        )}
-                    />
-                </>
-            )}
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={3}
+            >
+                <TimeSeriesChart
+                    className={styles.timelineChart}
+                    timePoints={dateList}
+                    dataKeys={dataKeys}
+                    valueSelector={chartValueSelector}
+                    classNameSelector={classNameSelector}
+                    activePointKey={activePointKey}
+                    onTimePointClick={setActivePointKey}
+                    xAxisFormatter={xAxisFormatter}
+                />
+                <PointDetails
+                    heading={dateFormatter.format(activePointData?.date) ?? '--'}
+                    data={activePointData}
+                    action={activePointData && (
+                        <Button
+                            name={undefined}
+                            onClick={onBackButtonClick}
+                        >
+                            {strings.homeMonthlyChartBackButtonLabel}
+                        </Button>
+                    )}
+                />
+            </ListView>
         </Container>
     );
 }

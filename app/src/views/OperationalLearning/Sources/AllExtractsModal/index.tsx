@@ -1,8 +1,9 @@
 import {
     Chip,
-    List,
+    ListView,
     Modal,
     Pager,
+    RawList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -21,7 +22,6 @@ import {
 import Extract from './Extract';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type OpsLearningResponse = GoApiResponse<'/api/v2/ops-learning/'>;
 type OpsLearning = NonNullable<OpsLearningResponse['results']>[number];
@@ -84,30 +84,30 @@ function AllExtractsModal(props: Props) {
 
     return (
         <Modal
-            className={styles.modal}
             heading={strings.allExtractsModalHeading}
             onClose={onCancel}
             pending={opsLearningPending}
             size="xl"
-            headerDescriptionContainerClassName={styles.headerDescription}
             headerDescription={(
-                <Chip
-                    name="extractsCount"
-                    label={(opsLearningCount > 1) ? (
-                        resolveToString(
-                            strings.allExtractsModalExtractsCount,
-                            { count: opsLearningCount },
-                        )
-                    ) : (
-                        resolveToString(
-                            strings.allExtractsModalExtractCount,
-                            { count: opsLearningCount },
-                        )
-                    )}
-                    variant="tertiary"
-                />
+                <ListView>
+                    <Chip
+                        name="extractsCount"
+                        label={(opsLearningCount > 1) ? (
+                            resolveToString(
+                                strings.allExtractsModalExtractsCount,
+                                { count: opsLearningCount },
+                            )
+                        ) : (
+                            resolveToString(
+                                strings.allExtractsModalExtractCount,
+                                { count: opsLearningCount },
+                            )
+                        )}
+                        variant="tertiary"
+                    />
+                </ListView>
             )}
-            footerContent={(
+            footerActions={(
                 <Pager
                     activePage={opsLearningActivePage}
                     onActivePageChange={setOpsLearningActivePage}
@@ -115,20 +115,23 @@ function AllExtractsModal(props: Props) {
                     maxItemsPerPage={opsLearningLimit}
                 />
             )}
-            childrenContainerClassName={styles.extractListContainer}
+            // FIXME: use strings
+            emptyMessage="No extracts"
+            errored={isDefined(opsLearningError)}
+            withContentOverflow
+            overlayPending
         >
-            <List
-                className={styles.extractList}
-                data={opsLearningResponse?.results}
-                renderer={Extract}
-                keySelector={numericIdSelector}
-                rendererParams={extractsRendererParams}
-                emptyMessage="No extracts"
-                errored={isDefined(opsLearningError)}
-                pending={false}
-                filtered={false}
-                compact
-            />
+            <ListView
+                layout="block"
+                spacing="sm"
+            >
+                <RawList
+                    data={opsLearningResponse?.results}
+                    renderer={Extract}
+                    keySelector={numericIdSelector}
+                    rendererParams={extractsRendererParams}
+                />
+            </ListView>
         </Modal>
     );
 }

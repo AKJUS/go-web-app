@@ -1,12 +1,12 @@
 import { useOutletContext } from 'react-router-dom';
 import {
     Container,
-    List,
+    ListView,
+    RawList,
     TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    _cs,
     isDefined,
     isTruthyString,
 } from '@togglecorp/fujs';
@@ -28,7 +28,7 @@ function NsDirectory(props: NsDirectoryProps) {
     const { directory } = props;
 
     return (
-        <div className={styles.directory}>
+        <div className={styles.nsDirectory}>
             <div className={styles.fullName}>
                 {[directory?.first_name, directory?.last_name].filter(isTruthyString).join(' ')}
             </div>
@@ -48,12 +48,11 @@ function NationalSocietyDirectory(props: Props) {
     const strings = useTranslation(i18n);
 
     const { countryResponse } = useOutletContext<CountryOutletContext>();
-    const directoryList = countryResponse?.directory;
+    const directoryList = countryResponse?.directory ?? [];
 
     return (
         <Container
-            className={_cs(className, styles.nationalSocietyDirectory)}
-            childrenContainerClassName={styles.content}
+            className={className}
             heading={strings.countryNSDirectoryTitle}
             withHeaderBorder
             footerActions={isDefined(directoryList)
@@ -64,27 +63,34 @@ function NationalSocietyDirectory(props: Props) {
                     label={strings.countryNSDirectorySource}
                     value={(
                         <Link
-                            variant="tertiary"
+                            styleVariant="action"
                             href={countryResponse.url_ifrc}
                             external
                             withUnderline
+                            withLinkIcon
                         >
                             {countryResponse.society_name}
                         </Link>
                     )}
                 />
             )}
+            pending={false}
+            errored={false}
+            filtered={false}
+            empty={directoryList.length === 0}
+            withContentOverflow
         >
-            <List
-                className={styles.directoryList}
-                pending={false}
-                errored={false}
-                filtered={false}
-                data={directoryList}
-                keySelector={({ id }) => id}
-                renderer={NsDirectory}
-                rendererParams={(_, datum) => ({ directory: datum })}
-            />
+            <ListView
+                layout="block"
+                withSpacingOpticalCorrection
+            >
+                <RawList
+                    data={directoryList}
+                    keySelector={({ id }) => id}
+                    renderer={NsDirectory}
+                    rendererParams={(_, datum) => ({ directory: datum })}
+                />
+            </ListView>
         </Container>
     );
 }

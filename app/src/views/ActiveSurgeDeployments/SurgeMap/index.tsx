@@ -7,6 +7,7 @@ import {
     Button,
     Container,
     LegendItem,
+    ListView,
     RadioInput,
     ReducedListDisplay,
     SelectInput,
@@ -35,8 +36,8 @@ import {
 import DisplayName from '#components/DisplayName';
 import DisasterTypeSelectInput from '#components/domain/DisasterTypeSelectInput';
 import GlobalMap, { type AdminZeroFeatureProperties } from '#components/domain/GlobalMap';
+import GoMapContainer from '#components/GoMapContainer';
 import Link from '#components/Link';
-import MapContainerWithDisclaimer from '#components/MapContainerWithDisclaimer';
 import MapPopup from '#components/MapPopup';
 import useCountryRaw from '#hooks/domain/useCountryRaw';
 import useInputState from '#hooks/useInputState';
@@ -80,9 +81,7 @@ interface Props {
 }
 
 function SurgeMap(props: Props) {
-    const {
-        className,
-    } = props;
+    const { className } = props;
 
     const [
         disasterFilter,
@@ -351,7 +350,6 @@ function SurgeMap(props: Props) {
                         <Button
                             name={undefined}
                             onClick={handleClearFiltersButtonClick}
-                            variant="secondary"
                             disabled={isNotDefined(disasterFilter)
                                 && isNotDefined(surgeMechanismFilter)}
                         >
@@ -364,23 +362,20 @@ function SurgeMap(props: Props) {
             <GlobalMap
                 onAdminZeroFillClick={handleCountryClick}
             >
-                <MapContainerWithDisclaimer
-                    className={styles.mapContainer}
+                <GoMapContainer
                     title={strings.surgeDownloadMapTitle}
                     footer={(
-                        <div className={styles.footer}>
-                            <div className={styles.left}>
-                                <RadioInput
-                                    label={strings.explanationScalePoints}
-                                    name={undefined}
-                                    options={scaleOptions}
-                                    keySelector={optionKeySelector}
-                                    labelSelector={optionLabelSelector}
-                                    value={scaleBy}
-                                    onChange={setScaleBy}
-                                />
-                            </div>
-                            <div className={styles.legend}>
+                        <>
+                            <RadioInput
+                                label={strings.explanationScalePoints}
+                                name={undefined}
+                                options={scaleOptions}
+                                keySelector={optionKeySelector}
+                                labelSelector={optionLabelSelector}
+                                value={scaleBy}
+                                onChange={setScaleBy}
+                            />
+                            <ListView withWrap>
                                 {legendOptions.map((legendItem) => (
                                     <LegendItem
                                         className={styles.legendItem}
@@ -389,8 +384,8 @@ function SurgeMap(props: Props) {
                                         color={legendItem.color}
                                     />
                                 ))}
-                            </div>
-                        </div>
+                            </ListView>
+                        </>
                     )}
                 />
                 <MapSource
@@ -426,12 +421,10 @@ function SurgeMap(props: Props) {
                                 {clickedPointProperties.properties.name}
                             </Link>
                         )}
-                        childrenContainerClassName={styles.popupContent}
                     >
                         {popupDetails?.eruDeployedEvents?.map(
                             (event) => (
                                 <Container
-                                    spacing="compact"
                                     key={event.id}
                                     heading={event?.name}
                                     headingLevel={5}
@@ -476,7 +469,6 @@ function SurgeMap(props: Props) {
                         {popupDetails?.personnelDeployedEvents?.map(
                             (event) => (
                                 <Container
-                                    spacing="compact"
                                     key={event.id}
                                     heading={event?.name}
                                     headingLevel={5}

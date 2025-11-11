@@ -1,8 +1,4 @@
-import {
-    Footer,
-    Header,
-    PageContainerProps,
-} from '@ifrc-go/ui';
+import { PageContainerProps } from '@ifrc-go/ui';
 import type {
     Meta,
     StoryObj,
@@ -67,42 +63,5 @@ export const WithNavigation: Story = {
         ),
         contentAs: 'nav',
         containerAs: 'div',
-    },
-};
-
-export const WithHeader: Story = {
-    args: {
-        children: (
-            <Header
-                heading="Overview of the International Federation of Red Cross and Red Crescent Societies (IFRC)"
-            />
-        ),
-        contentAs: 'header',
-        containerAs: 'header',
-    },
-};
-
-export const WithFooter: Story = {
-    args: {
-        children: (
-            <Footer>
-                <div className="footer-items">
-                    <a href="/" className="footer-text">
-                        Home
-                    </a>
-                    <a href="/" className="footer-text">
-                        About
-                    </a>
-                    <a href="/" className="footer-text">
-                        Services
-                    </a>
-                    <a href="/" className="footer-text">
-                        Contact
-                    </a>
-                </div>
-            </Footer>
-        ),
-        contentAs: 'footer',
-        containerAs: 'footer',
     },
 };

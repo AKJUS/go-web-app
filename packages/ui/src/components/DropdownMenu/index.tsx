@@ -15,42 +15,57 @@ import Button, { Props as ButtonProps } from '#components/Button';
 import Popup from '#components/Popup';
 import DropdownMenuContext, { type DropdownMenuContextProps } from '#contexts/dropdown-menu';
 import useBlurEffect from '#hooks/useBlurEffect';
+import { SpacingType } from '#utils/style';
 
 import styles from './styles.module.css';
 
 export interface Props {
     className?: string;
+    activeClassName?: string;
+
     popupClassName?: string;
     preferredPopupWidth?: number;
-    children?: React.ReactNode;
+
     label?: React.ReactNode;
-    activeClassName?: string;
-    icons?: React.ReactNode;
-    variant?: ButtonProps<undefined>['variant'];
-    actions?: React.ReactNode;
+    labelBefore?: React.ReactNode;
+    labelAfter?: React.ReactNode;
+    labelSpacing?: SpacingType;
+    labelColorVariant?: ButtonProps<undefined>['colorVariant'];
+    labelStyleVariant?: ButtonProps<undefined>['styleVariant'];
+    labelWithoutPadding?: boolean;
+
+    children?: React.ReactNode;
+
     withoutDropdownIcon?: boolean;
     componentRef?: React.MutableRefObject<{
         setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
     } | null>;
-    elementRef?: React.RefObject<HTMLButtonElement>;
+    elementRef?: React.RefObject<HTMLDivElement>;
     persistent?: boolean;
 }
 
 function DropdownMenu(props: Props) {
-    const newButtonRef = useRef<HTMLButtonElement>(null);
+    const newButtonRef = useRef<HTMLDivElement>(null);
     const {
         className,
-        popupClassName,
-        children,
-        label,
         activeClassName,
-        icons,
-        variant = 'secondary',
-        actions,
+
+        children,
+
+        label,
+        labelBefore,
+        labelAfter,
+        labelSpacing,
+        labelColorVariant,
+        labelStyleVariant,
+        labelWithoutPadding,
+
         withoutDropdownIcon,
         componentRef,
         elementRef: buttonRef = newButtonRef,
         persistent,
+
+        popupClassName,
         preferredPopupWidth,
     } = props;
 
@@ -102,33 +117,32 @@ function DropdownMenu(props: Props) {
         [setShowDropdown],
     );
 
-    const hasActions = !!actions || !withoutDropdownIcon;
+    const hasAfterContent = !!labelAfter || !withoutDropdownIcon;
 
     return (
         <DropdownMenuContext.Provider value={contextValue}>
             <Button
                 name={undefined}
                 className={_cs(
-                    styles.dropdownMenu,
                     showDropdown && activeClassName,
                     className,
                 )}
-                elementRef={buttonRef}
+                layoutElementRef={buttonRef}
                 onClick={handleMenuClick}
-                variant={variant}
-                actionsContainerClassName={styles.actions}
-                iconsContainerClassName={styles.icons}
-                childrenContainerClassName={styles.content}
-                actions={hasActions ? (
+                styleVariant={labelStyleVariant}
+                colorVariant={labelColorVariant}
+                withoutPadding={labelWithoutPadding}
+                spacing={labelSpacing}
+                after={hasAfterContent ? (
                     <>
-                        {actions}
+                        {labelAfter}
                         {!withoutDropdownIcon && (showDropdown
                             ? <ArrowUpSmallFillIcon className={styles.dropdownIcon} />
                             : <ArrowDownSmallFillIcon className={styles.dropdownIcon} />
                         )}
                     </>
                 ) : undefined}
-                icons={icons}
+                before={labelBefore}
             >
                 {label}
             </Button>

@@ -4,10 +4,9 @@ import {
     useState,
 } from 'react';
 import {
-    BlockLoading,
     Button,
     Container,
-    Message,
+    ListView,
     TimeSeriesChart,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -97,6 +96,7 @@ function YearlyChart(props: Props) {
     const {
         response: monthlyDrefResponse,
         pending: monthlyDrefPending,
+        error: monthlyDrefError,
     } = useRequest({
         url: '/api/v1/aggregate/',
         query: {
@@ -152,48 +152,45 @@ function YearlyChart(props: Props) {
         [combinedData],
     );
 
-    const shouldHideChart = pending && isDefined(appealResponseError);
-
     return (
         <Container
             className={styles.yearlyChart}
-            childrenContainerClassName={styles.chartContainer}
             heading={strings.yearlyAppealChartTitle}
             withHeaderBorder
+            pending={pending}
+            filtered={false}
+            empty={false}
+            errored={isDefined(appealResponseError) || isDefined(monthlyDrefError)}
+            errorMessage={strings.yearlyAppealChartNotAvailableMessage}
         >
-            {pending && <BlockLoading className={styles.loading} />}
-            {isDefined(appealResponseError) && (
-                <Message
-                    title={strings.yearlyAppealChartNotAvailableMessage}
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={3}
+                minGridColumnSize="18rem"
+            >
+                <TimeSeriesChart
+                    className={styles.timelineChart}
+                    timePoints={dateList}
+                    dataKeys={dataKeys}
+                    valueSelector={chartValueSelector}
+                    classNameSelector={classNameSelector}
+                    activePointKey={activePointKey}
+                    onTimePointClick={setActivePointKey}
+                    xAxisFormatter={xAxisFormatter}
                 />
-            )}
-            {!shouldHideChart && !appealResponseError && (
-                <>
-                    <TimeSeriesChart
-                        className={styles.timelineChart}
-                        timePoints={dateList}
-                        dataKeys={dataKeys}
-                        valueSelector={chartValueSelector}
-                        classNameSelector={classNameSelector}
-                        activePointKey={activePointKey}
-                        onTimePointClick={setActivePointKey}
-                        xAxisFormatter={xAxisFormatter}
-                    />
-                    <PointDetails
-                        heading={activePointData?.date.getFullYear() ?? '--'}
-                        data={activePointData}
-                        action={activePointData && (
-                            <Button
-                                name={activePointData.date.getFullYear()}
-                                onClick={onYearClick}
-                                variant="secondary"
-                            >
-                                {strings.yearlyAppealChartViewMonthlyLabel}
-                            </Button>
-                        )}
-                    />
-                </>
-            )}
+                <PointDetails
+                    heading={activePointData?.date.getFullYear() ?? '--'}
+                    data={activePointData}
+                    action={activePointData && (
+                        <Button
+                            name={activePointData.date.getFullYear()}
+                            onClick={onYearClick}
+                        >
+                            {strings.yearlyAppealChartViewMonthlyLabel}
+                        </Button>
+                    )}
+                />
+            </ListView>
         </Container>
     );
 }

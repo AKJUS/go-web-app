@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import {
-    Container,
     Legend,
+    ListView,
     Switch,
 } from '@ifrc-go/ui';
 
@@ -14,8 +14,6 @@ import {
 } from '#utils/constants';
 
 import { type RiskLayerSeverity } from '../utils';
-
-import styles from './styles.module.css';
 
 export interface LayerOptionsValue {
     showStormPosition: boolean;
@@ -83,10 +81,9 @@ function LayerOptions(props: Props) {
     ]), []);
 
     return (
-        <Container
-            className={styles.layerOptions}
-            contentViewType="vertical"
-            spacing="compact"
+        <ListView
+            layout="block"
+            spacing="sm"
         >
             <Switch
                 // FIXME: use strings
@@ -98,7 +95,12 @@ function LayerOptions(props: Props) {
                 withInvertedView
             />
             {!exposureAreaControlHidden && (
-                <div className={styles.exposedAreaInputWrapper}>
+                <ListView
+                    layout="block"
+                    spacing="sm"
+                    withBackground
+                    withPadding
+                >
                     <Switch
                         // FIXME: use strings
                         label="Exposed area to tropical storm or cyclone strength wind"
@@ -109,17 +111,15 @@ function LayerOptions(props: Props) {
                     />
                     {value.showExposedArea && (
                         <Legend
-                            className={styles.exposedAreaLegend}
                             // FIXME: use strings
                             label="Severity:"
                             items={severityLegendItems}
                             keySelector={severitySelector}
                             labelSelector={labelSelector}
                             colorSelector={colorSelector}
-                            labelClassName={styles.legendLabel}
                         />
                     )}
-                </div>
+                </ListView>
             )}
             <Switch
                 // FIXME: use strings
@@ -139,7 +139,7 @@ function LayerOptions(props: Props) {
                 withBackground
                 withInvertedView
             />
-        </Container>
+        </ListView>
     );
 }
 

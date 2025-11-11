@@ -8,11 +8,10 @@ import { useTranslation } from '@ifrc-go/ui/hooks';
 import { isFalsyString } from '@togglecorp/fujs';
 
 import NavigationTab from '#components/NavigationTab';
-import WikiLink from '#components/WikiLink';
+import TabPage from '#components/TabPage';
 import { type RegionOutletContext } from '#utils/outletContext';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -29,12 +28,10 @@ export function Component() {
     const numericRegionId = Number(regionId);
 
     return (
-        <div className={styles.regionRiskWatch}>
-            <WikiLink
-                className={styles.wikiLink}
-                href="user_guide/risk_module"
-            />
-            <NavigationTabList variant="secondary">
+        <TabPage
+            wikiLinkPathName="user_guide/risk_module"
+        >
+            <NavigationTabList styleVariant="pill">
                 <NavigationTab
                     to="regionImminentRiskWatch"
                     urlParams={{
@@ -53,7 +50,7 @@ export function Component() {
                 </NavigationTab>
             </NavigationTabList>
             <Outlet context={regionOutletContext} />
-        </div>
+        </TabPage>
     );
 }
 

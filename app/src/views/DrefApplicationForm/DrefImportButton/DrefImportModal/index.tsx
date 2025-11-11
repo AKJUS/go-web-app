@@ -4,6 +4,7 @@ import {
 } from 'react';
 import { DrefTwoIcon } from '@ifrc-go/icons';
 import {
+    ListView,
     Modal,
     RawFileInput,
 } from '@ifrc-go/ui';
@@ -190,24 +191,23 @@ function DrefImportModal(props: Props) {
         <Modal
             heading={strings.drefImportApplication}
             onClose={onClose}
-            contentViewType="vertical"
             className={styles.importDrefApplicationModal}
-            childrenContainerClassName={styles.content}
-            spacing="comfortable"
         >
-            <DrefTwoIcon className={styles.icon} />
-            <RawFileInput
-                name={undefined}
-                accept=".xlsx"
-                onChange={handleChange}
-                variant="secondary"
-                disabled={isNotDefined(drefFormSchema) || importPending}
-            >
-                {strings.drefImportSelectFile}
-            </RawFileInput>
-            <div>
-                {strings.drefImportTemplate}
-            </div>
+            <ListView layout="block">
+                <DrefTwoIcon className={styles.icon} />
+                <RawFileInput
+                    name={undefined}
+                    accept=".xlsx"
+                    onChange={handleChange}
+                    styleVariant="outline"
+                    disabled={isNotDefined(drefFormSchema) || importPending}
+                >
+                    {strings.drefImportSelectFile}
+                </RawFileInput>
+                <div>
+                    {strings.drefImportTemplate}
+                </div>
+            </ListView>
         </Modal>
     );
 }

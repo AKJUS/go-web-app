@@ -14,3 +14,8 @@
     width: 0%;
     min-width: 7rem;
 }
+
+.expand-column {
+    width: 0%;
+    min-width: 3rem;
+}

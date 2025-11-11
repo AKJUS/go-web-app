@@ -54,7 +54,7 @@ function CountryRiskSourcesOutput() {
                             {
                                 link: (
                                     <Link
-                                        variant="tertiary"
+                                        styleVariant="action"
                                         href={source.link}
                                         external
                                         withUnderline

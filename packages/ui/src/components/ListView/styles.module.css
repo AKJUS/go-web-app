@@ -1,0 +1,102 @@
+.list-view {
+    --border-radius: initial;
+    border-radius: var(--border-radius);
+
+    &.grid-layout {
+        container-type: inline-size;
+        /* stylelint-disable-next-line csstools/value-no-unknown-custom-properties */
+        --num-columns: var(--num-preferred-grid-columns);
+        /* stylelint-disable-next-line csstools/value-no-unknown-custom-properties */
+        --min-item-size: var(--min-grid-column-size);
+
+        .grid-content {
+            display: grid;
+
+            &:not(.with-sidebar) {
+                /* stylelint-disable-next-line csstools/value-no-unknown-custom-properties */
+                grid-template-columns: repeat(
+                    auto-fill,
+                    minmax(
+                        max(
+                            var(--min-item-size),
+                            calc((100cqi - var(--reserved-space)) / var(--num-columns))
+                        ),
+                        1fr
+                    )
+                );
+            }
+
+            &.with-sidebar {
+                grid-template-columns: 1fr calc(14vw + 16rem);
+
+                &.sidebar-position-start {
+                    grid-template-columns: calc(10vw + 14rem) 1fr;
+                }
+            }
+        }
+    }
+
+    &.inline-layout {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+
+        &.with-wrap {
+            align-content: start;
+            flex-wrap: wrap;
+        }
+
+        &.with-space-between-contents {
+            justify-content: space-between;
+        }
+
+        &.with-centered-contents {
+            justify-content: center;
+        }
+    }
+
+    &.block-layout {
+        display: flex;
+        flex-direction: column;
+
+        &.with-centered-contents {
+           align-items: center;
+        }
+    }
+
+    &.with-full-width {
+        width: 100%;
+    }
+
+    &.with-background {
+        --border-radius: var(--go-ui-border-radius-md);
+        background-color: var(--go-ui-color-foreground);
+    }
+
+    &.with-dark-background {
+        --border-radius: var(--go-ui-border-radius-md);
+        background-color: var(--go-ui-color-background);
+    }
+
+    &:empty {
+        display: none;
+    }
+
+    @container (max-width: 40rem) {
+        &.grid-layout {
+            >.grid-content {
+                &.with-sidebar {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+    }
+
+    @container (max-width: 18rem) {
+        &.grid-layout {
+            >.grid-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}

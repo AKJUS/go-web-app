@@ -48,6 +48,6 @@ export const WithCaptionHidden: Story = {
         ...Default.args,
         alt: 'Desert landscape with sand dunes',
         caption: "Golden waves of sand stretch endlessly under the scorching sun, painting a timeless portrait of nature's serene beauty.",
-        withCaptionHidden: true,
+        withoutCaption: true,
     },
 };

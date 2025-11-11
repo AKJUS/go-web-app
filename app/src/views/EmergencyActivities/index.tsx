@@ -5,11 +5,11 @@ import {
 import { useOutletContext } from 'react-router-dom';
 import { InformationLineIcon } from '@ifrc-go/icons';
 import {
-    BlockLoading,
     Container,
     InfoPopup,
+    InlineLayout,
     KeyFigure,
-    Message,
+    ListView,
     Pager,
     PieChart,
     Table,
@@ -37,6 +37,7 @@ import Papa from 'papaparse';
 
 import ExportButton from '#components/domain/ExportButton';
 import Link from '#components/Link';
+import TabPage from '#components/TabPage';
 import useAlert from '#hooks/useAlert';
 import useFilterState from '#hooks/useFilterState';
 import useRecursiveCsvExport from '#hooks/useRecursiveCsvRequest';
@@ -202,6 +203,7 @@ export function Component() {
                 'title',
                 strings.emergencyProjectTitle,
                 (item) => item.title,
+                { columnClassName: styles.title },
             ),
             createDateColumn<EmergencyProject, number>(
                 'start_date',
@@ -235,8 +237,9 @@ export function Component() {
             ),
             createNumberColumn<EmergencyProject, number>(
                 'people_reached',
-                strings.emergencyProjectPeopleReached,
+                'Beneficiaries',
                 (item) => getPeopleReached(item),
+                { headerInfoDescription: strings.emergencyProjectPeopleReached },
             ),
             createElementColumn<EmergencyProject, number, ActivityActionsProps>(
                 'actions',
@@ -244,8 +247,8 @@ export function Component() {
                 ActivityActions,
                 (_, item) => ({
                     activityId: item.id,
-                    className: styles.activityActions,
                 }),
+                { columnClassName: styles.actions },
             ),
         ]),
         [
@@ -326,54 +329,82 @@ export function Component() {
     ]);
 
     return (
-        <div className={styles.emergencyActivities}>
+        <TabPage>
             <Container
                 withHeaderBorder
-                footerContent={(
-                    <div className={styles.chartDescription}>
-                        <InformationLineIcon className={styles.icon} />
+                footer={(
+                    <InlineLayout
+                        before={(
+                            <InformationLineIcon />
+                        )}
+                        spacing="xs"
+                    >
                         {strings.chartDescription}
-                    </div>
+                    </InlineLayout>
                 )}
-                actions={(
+                headerActions={(
                     <Link
-                        variant="secondary"
+                        colorVariant="primary"
+                        styleVariant="outline"
                         title={strings.addThreeWActivity}
                         to="newThreeWActivity"
                     >
                         {strings.addThreeWActivity}
                     </Link>
                 )}
+                pending={emergencyProjectListResponsePending}
             >
-                {emergencyProjectListResponsePending && <BlockLoading />}
-                {!emergencyProjectListResponsePending && (
-                    <div className={styles.keyFigureCardList}>
-                        <div className={styles.keyFigureCard}>
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                >
+                    <Container
+                        withShadow
+                        withPadding
+                        withBackground
+                    >
+                        <ListView
+                            layout="grid"
+                            minGridColumnSize="6rem"
+                        >
                             <KeyFigure
-                                className={styles.keyFigure}
                                 value={(uniqueNsCount + uniqueEruCount)}
                                 label={strings.uniqueEruAndNationalSocietyCount}
+                                valueType="number"
                             />
                             <KeyFigure
-                                className={styles.keyFigure}
                                 value={peopleReached}
-                                label={strings.peopleInNeedReached}
-                                info={(
-                                    <InfoPopup
-                                        description={strings.peopleReachedTooltip}
-                                    />
+                                valueType="number"
+                                valueOptions={{ compact: true }}
+                                label={(
+                                    <InlineLayout
+                                        after={(
+                                            <InfoPopup
+                                                description={strings.peopleReachedTooltip}
+                                            />
+                                        )}
+                                    >
+                                        {strings.peopleInNeedReached}
+                                    </InlineLayout>
                                 )}
-                                compactValue
                             />
-                        </div>
-                        <div className={styles.keyFigureCard}>
+                        </ListView>
+                    </Container>
+                    <Container
+                        withShadow
+                        withPadding
+                        withBackground
+                    >
+                        <ListView
+                            layout="grid"
+                            minGridColumnSize="6rem"
+                        >
                             <KeyFigure
-                                className={styles.keyFigure}
                                 value={uniqueSectorCount}
+                                valueType="number"
                                 label={strings.uniqueSectorCount}
                             />
                             <PieChart
-                                className={styles.pieChart}
                                 data={aggregatedProjectCountListBySector}
                                 valueSelector={numericCountSelector}
                                 labelSelector={stringTitleSelector}
@@ -382,15 +413,23 @@ export function Component() {
                                 pieRadius={40}
                                 chartPadding={10}
                             />
-                        </div>
-                        <div className={styles.keyFigureCard}>
+                        </ListView>
+                    </Container>
+                    <Container
+                        withShadow
+                        withPadding
+                        withBackground
+                    >
+                        <ListView
+                            layout="grid"
+                            minGridColumnSize="6rem"
+                        >
                             <KeyFigure
-                                className={styles.keyFigure}
                                 value={emergencyProjectListResponse?.count}
                                 label={strings.totalActivities}
+                                valueType="number"
                             />
                             <PieChart
-                                className={styles.pieChart}
                                 data={aggregatedProjectCountListByStatus}
                                 valueSelector={numericCountSelector}
                                 labelSelector={stringTitleSelector}
@@ -399,13 +438,11 @@ export function Component() {
                                 pieRadius={40}
                                 chartPadding={10}
                             />
-                        </div>
-                    </div>
-                )}
+                        </ListView>
+                    </Container>
+                </ListView>
             </Container>
             <Container
-                className={styles.responseActivities}
-                childrenContainerClassName={styles.content}
                 heading={strings.responseActivities}
                 withHeaderBorder
                 filters={(
@@ -429,28 +466,32 @@ export function Component() {
                         <Container
                             className={styles.sidebar}
                             heading={strings.activitiesBySector}
-                            withInternalPadding
-                            childrenContainerClassName={styles.sidebarContent}
+                            empty={noActivitiesBySector}
+                            emptyMessage={strings.dataNotAvailable}
+                            headingLevel={4}
+                            withContentOverflow
+                            withDarkBackground
+                            withPadding
+                            withoutSpacingOpticalCorrection
                         >
-                            {noActivitiesBySector && (
-                                <Message
-                                    title={strings.dataNotAvailable}
-                                    compact
-                                />
-                            )}
-                            {/* FIXME: use List, add pending, filtered state */}
-                            {sectorGroupedEmergencyProjectList.map((sectorGroupedProject) => (
-                                <ActivityDetail
-                                    key={sectorGroupedProject.sector}
-                                    sectorDetails={sectorGroupedProject.sectorDetails}
-                                    projects={sectorGroupedProject.projects}
-                                />
-                            ))}
+                            <ListView
+                                spacing="xs"
+                                layout="block"
+                            >
+                                {/* FIXME: use List, add pending, filtered state */}
+                                {sectorGroupedEmergencyProjectList.map((sectorGroupedProject) => (
+                                    <ActivityDetail
+                                        key={sectorGroupedProject.sector}
+                                        sectorDetails={sectorGroupedProject.sectorDetails}
+                                        projects={sectorGroupedProject.projects}
+                                    />
+                                ))}
+                            </ListView>
                         </Container>
                     )}
                 />
                 <Container
-                    actions={(
+                    headerActions={(
                         <ExportButton
                             onClick={handleExportClick}
                             progress={progress}
@@ -460,6 +501,7 @@ export function Component() {
                     )}
                 >
                     <Table
+                        className={styles.activityTable}
                         filtered={isFiltered}
                         pending={emergencyProjectListResponsePending}
                         data={paginatedEmergencyProjectList}
@@ -468,7 +510,7 @@ export function Component() {
                     />
                 </Container>
             </Container>
-        </div>
+        </TabPage>
     );
 }
 

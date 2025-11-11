@@ -1,12 +1,11 @@
-// @ts-expect-error: @eslint/eslintrc has no types
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import json from "@eslint/json";
 import tseslint from "typescript-eslint";
 import process from 'process';
+import { Linter } from 'eslint';
 
 import i18nUsage from './scripts/eslint/i18n-usage';
-import { Linter } from 'eslint';
 
 const dirname = process.cwd();
 
@@ -166,7 +165,7 @@ const jsonConfig: Linter.Config = {
 //     },
 // };
 
-const config: Linter.Config[] = [
+const config = tseslint.config(
     {
         plugins: {
             json,
@@ -178,6 +177,6 @@ const config: Linter.Config[] = [
     jsonConfig,
     // i18nJsonConfig,
     ...tseslint.configs.recommended
-];
+);
 
 export default config;

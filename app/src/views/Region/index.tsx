@@ -4,7 +4,7 @@ import {
     useParams,
 } from 'react-router-dom';
 import {
-    BlockLoading,
+    Container,
     NavigationTabList,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -22,7 +22,6 @@ import { type RegionOutletContext } from '#utils/outletContext';
 import { useRequest } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -75,25 +74,15 @@ export function Component() {
 
     return (
         <Page
-            className={styles.region}
             title={strings.regionTitle}
             heading={region?.region_name ?? '--'}
-            infoContainerClassName={styles.keyFigureList}
-            info={(
-                <>
-                    {pending && <BlockLoading />}
-                    {isDefined(regionId) && (
-                        <RegionKeyFigures
-                            regionResponse={regionResponse}
-                            regionId={regionId}
-                        />
-                    )}
-                    {/* {strings.wikiJsLink?.length > 0 && (
-                            <WikiLink
-                                href=''
-                            />
-                    )} */}
-                </>
+            info={isDefined(regionId) && (
+                <Container pending={pending}>
+                    <RegionKeyFigures
+                        regionResponse={regionResponse}
+                        regionId={regionId}
+                    />
+                </Container>
             )}
         >
             <NavigationTabList>

@@ -189,7 +189,7 @@ function ActiveRapidResponseAlertsTable() {
                     onActivePageChange={setPage}
                 />
             )}
-            actions={(
+            headerActions={(
                 <Link
                     to="allSurgeAlerts"
                     withLinkIcon

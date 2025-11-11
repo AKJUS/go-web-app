@@ -4,80 +4,113 @@ import {
     useMemo,
 } from 'react';
 import {
+    Link as RouterLink,
+    type LinkProps as RouterLinkProps,
     matchPath,
-    NavLink,
     useLocation,
 } from 'react-router-dom';
-import { CheckFillIcon } from '@ifrc-go/icons';
+import {
+    ChevronRightLineIcon,
+    ExternalLinkLineIcon,
+} from '@ifrc-go/icons';
+import {
+    TabLayout,
+    type TabLayoutProps,
+} from '@ifrc-go/ui';
 import { NavigationTabContext } from '@ifrc-go/ui/contexts';
 import {
-    _cs,
     isFalsyString,
     isNotDefined,
     isTruthyString,
 } from '@togglecorp/fujs';
 
-import {
-    type UrlParams,
-    useLink,
-} from '#components/Link';
 import RouteContext from '#contexts/route';
+import useLink from '#hooks/domain/useLink';
+import { type UrlParams } from '#utils/domain/link';
 
 import { type WrappedRoutes } from '../../App/routes';
 
 import styles from './styles.module.css';
 
-interface Props {
-    className?: string;
-    children?: React.ReactNode;
+type CommonLinkProps = Omit<TabLayoutProps, 'styleVariant' | 'colorVariant'> & {
+    withEllipsizedContent?: boolean;
+    withLinkIcon?: boolean;
+    withUnderline?: boolean;
     stepCompleted?: boolean;
-    title?: string;
-    disabled?: boolean;
+};
 
-    parentRoute?: boolean;
-    matchParam?: string;
-
+interface InternalLinkProps extends Omit<RouterLinkProps, 'to'> {
+    external?: false | never;
     to: keyof WrappedRoutes | undefined | null;
-
+    href?: never;
     urlParams?: UrlParams;
     urlSearch?: string;
     urlHash?: string;
+
+    matchParam?: string;
+    parentRoute?: boolean;
 }
+
+// TODO: add support for AnchorElement props
+interface ExternalLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
+    external: true;
+    to?: never;
+    href: string | undefined | null;
+    urlParams?: never;
+    urlSearch?: never;
+    urlHash?: never;
+
+    matchParam?: never;
+    parentRoute?: never;
+}
+
+type Props = CommonLinkProps & (InternalLinkProps | ExternalLinkProps);
 
 function NavigationTab(props: Props) {
     const {
+        className,
+        spacing,
+        spacingOffset,
+        withoutPadding,
         children,
+        before,
+        after,
+        disabled: disabledFromProps,
+        stepCompleted,
+
+        external,
         to,
+        href,
         urlParams,
         urlSearch,
         urlHash,
-        className,
-        title,
-        stepCompleted,
-        disabled: disabledFromProps,
-        parentRoute = false,
         matchParam,
+        parentRoute,
+
+        withLinkIcon,
+
+        ...linkProps
     } = props;
 
     const {
-        variant,
-        className: classNameFromContext,
+        colorVariant,
+        styleVariant,
     } = useContext(NavigationTabContext);
 
     const location = useLocation();
-
     const routes = useContext(RouteContext);
 
     const {
         disabled: disabledLink,
         to: toLink,
-    } = useLink({
-        to,
-        external: false,
-        urlParams,
-    });
+    } = useLink(
+        external
+            ? { href, external: true }
+            : { to, external: false, urlParams },
+    );
 
-    const disabled = disabledLink || disabledFromProps;
+    const disabled = disabledFromProps || disabledLink;
+    const nonLink = isFalsyString(toLink);
 
     const handleClick = useCallback((
         event: React.MouseEvent<HTMLAnchorElement> | undefined,
@@ -106,7 +139,6 @@ function NavigationTab(props: Props) {
                 : absolutePath;
             const match = matchPath(
                 {
-
                     path: testPath,
                     end: !parentRoute,
                 },
@@ -141,74 +173,73 @@ function NavigationTab(props: Props) {
         ],
     );
 
-    const linkClassName = useMemo(
-        () => {
-            const defaultClassName = _cs(
-                styles.navigationTab,
-                variant === 'primary' && styles.primary,
-                variant === 'secondary' && styles.secondary,
-                variant === 'tertiary' && styles.tertiary,
-                variant === 'step' && styles.step,
-                variant === 'vertical' && styles.vertical,
-                stepCompleted && styles.completed,
-                classNameFromContext,
-                className,
-                disabled && styles.disabled,
-            );
-
-            if (!isActive) {
-                return defaultClassName;
-            }
-
-            return _cs(
-                styles.active,
-                defaultClassName,
-            );
-        },
-        [
-            className,
-            classNameFromContext,
-            stepCompleted,
-            variant,
-            isActive,
-            disabled,
-        ],
+    const content = (
+        <TabLayout
+            // elementRef={layoutElementRef}
+            className={className}
+            active={isActive}
+            colorVariant={colorVariant}
+            styleVariant={styleVariant}
+            spacing={spacing}
+            spacingOffset={spacingOffset}
+            withoutPadding={withoutPadding}
+            disabled={disabled}
+            before={before}
+            after={(
+                <>
+                    {after}
+                    {withLinkIcon && external && (
+                        <ExternalLinkLineIcon />
+                    )}
+                    {withLinkIcon && !external && (
+                        <ChevronRightLineIcon />
+                    )}
+                </>
+            )}
+            stepCompleted={stepCompleted}
+        >
+            {children}
+        </TabLayout>
     );
 
+    if (nonLink) {
+        return (
+            <div className={styles.navigationTab}>
+                {content}
+            </div>
+        );
+    }
+
+    if (external) {
+        return (
+            <a
+                className={styles.navigationTab}
+                target="_blank"
+                rel="noopener noreferrer"
+                href={toLink}
+                onClick={handleClick}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...linkProps}
+            >
+                {content}
+            </a>
+        );
+    }
+
     return (
-        <NavLink
+        <RouterLink
+            className={styles.navigationTab}
+            onClick={handleClick}
             to={{
                 pathname: toLink,
                 search: urlSearch,
                 hash: urlHash,
             }}
-            className={linkClassName}
-            onClick={handleClick}
-            title={title}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...linkProps}
         >
-            {variant === 'step' && (
-                <div className={styles.visualElements}>
-                    <div className={styles.progressBarStart} />
-                    <div className={styles.stepCircle}>
-                        <div className={styles.innerCircle}>
-                            {stepCompleted && (
-                                <CheckFillIcon className={styles.icon} />
-                            )}
-                        </div>
-                    </div>
-                    <div className={styles.progressBarEnd} />
-                </div>
-            )}
-            {variant === 'primary' && (
-                <div className={styles.dummy} />
-            )}
-            <div className={styles.childrenWrapper}>
-                {children}
-            </div>
-            {variant === 'primary' && (
-                <div className={styles.dummy} />
-            )}
-        </NavLink>
+            {content}
+        </RouterLink>
     );
 }
 

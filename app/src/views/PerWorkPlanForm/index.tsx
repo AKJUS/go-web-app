@@ -10,7 +10,8 @@ import {
     Button,
     ConfirmButton,
     Container,
-    Message,
+    InlineLayout,
+    ListView,
     Portal,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -31,6 +32,7 @@ import {
 import FormFailedToLoadMessage from '#components/domain/FormFailedToLoadMessage';
 import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
+import TabPage from '#components/TabPage';
 import useAlert from '#hooks/useAlert';
 import useRouting from '#hooks/useRouting';
 import { PER_PHASE_WORKPLAN } from '#utils/domain/per';
@@ -54,7 +56,6 @@ import {
 } from './schema';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const defaultValue: PartialWorkPlan = {};
 
@@ -318,15 +319,7 @@ export function Component() {
 
     const disabled = dataPending || savePerWorkPlanPending;
 
-    if (dataPending) {
-        return (
-            <Message
-                pending
-            />
-        );
-    }
-
-    if (isNotDefined(workplanId)) {
+    if (!dataPending && isNotDefined(workplanId)) {
         return (
             <FormFailedToLoadMessage
                 description={strings.perWorkPlanResource}
@@ -334,39 +327,18 @@ export function Component() {
         );
     }
 
-    if (isDefined(workPlanResponseError)) {
-        return (
-            <FormFailedToLoadMessage
-                description={workPlanResponseError.value.messageForNotification}
-            />
-        );
-    }
-
     return (
-        <Container
-            headerElementRef={formContentRef}
-            className={styles.perWorkPlanForm}
-            childrenContainerClassName={styles.content}
-            footerActions={value.is_draft !== false && (
-                <ConfirmButton
-                    name={undefined}
-                    variant="secondary"
-                    onConfirm={handleSave}
-                    disabled={savePerWorkPlanPending || readOnlyMode}
-                    confirmHeading={strings.confirmHeading}
-                    confirmMessage={strings.confirmMessage}
-                >
-                    {strings.saveAndFinalizeWorkPlan}
-                </ConfirmButton>
-            )}
-            spacing="relaxed"
+        <TabPage
+            pending={dataPending}
+            errored={isDefined(workPlanResponseError)}
+            errorMessage={workPlanResponseError?.value.messageForNotification}
+            elementRef={formContentRef}
         >
             {actionDivRef?.current && (
                 <Portal container={actionDivRef.current}>
                     <Button
                         name={undefined}
                         onClick={handleFinalizeWorkplan}
-                        variant="secondary"
                         disabled={savePerWorkPlanPending || readOnlyMode}
                     >
                         {strings.saveButtonLabel}
@@ -377,13 +349,19 @@ export function Component() {
                 error={formError}
                 withFallbackError
             />
-            <div className={styles.overview}>
+            <ListView
+                layout="block"
+                withBackground
+                spacing="lg"
+                withPadding
+                withSpacingOpticalCorrection
+            >
                 <TextOutput
                     label={strings.workPlanDate}
                     value={workPlanResponse?.overview_details?.workplan_development_date}
                     strongValue
                 />
-                <div className={styles.responsible}>
+                <ListView>
                     <TextOutput
                         label={strings.perResponsibleLabel}
                         value={workPlanResponse?.overview_details?.ns_focal_point_name}
@@ -394,79 +372,98 @@ export function Component() {
                         <Link
                             to="perOverviewForm"
                             urlParams={{ perId: id }}
-                            variant="secondary"
+                            colorVariant="primary"
+                            styleVariant="outline"
+                            spacing="sm"
                         >
                             {strings.editResponsibleButtonLabel}
                         </Link>
                     )}
-                </div>
-            </div>
+                </ListView>
+            </ListView>
             <Container
-                className={styles.prioritizedComponents}
                 heading={strings.prioritizedComponentsHeading}
-                childrenContainerClassName={styles.componentList}
                 withHeaderBorder
-                withInternalPadding
-                spacing="comfortable"
+                headerDescription={(
+                    <NonFieldError error={componentResponseError} />
+                )}
             >
-                <NonFieldError error={componentResponseError} />
-                {prioritizationResponse?.prioritized_action_responses?.map((componentResponse) => (
-                    <PrioritizedActionInput
-                        key={componentResponse.component}
-                        index={componentResponseMapping[componentResponse.component]!.index}
-                        value={componentResponseMapping[componentResponse.component]!.value}
-                        onChange={setComponentValue}
-                        component={componentResponse.component_details}
-                        error={componentResponseError?.[componentResponse.component]}
-                        readOnly={readOnlyMode}
-                        disabled={disabled}
-                    />
-                ))}
+                <ListView
+                    layout="block"
+                    spacing="sm"
+                >
+                    {prioritizationResponse?.prioritized_action_responses?.map(
+                        (componentResponse) => (
+                            <PrioritizedActionInput
+                                key={componentResponse.component}
+                                index={componentResponseMapping[componentResponse.component]?.index}
+                                value={componentResponseMapping[componentResponse.component]?.value}
+                                onChange={setComponentValue}
+                                component={componentResponse.component_details}
+                                error={componentResponseError?.[componentResponse.component]}
+                                readOnly={readOnlyMode}
+                                disabled={disabled}
+                            />
+                        ),
+                    )}
+                </ListView>
             </Container>
             <Container
-                className={styles.actions}
-                childrenContainerClassName={styles.actionList}
                 heading={strings.actionsHeading}
                 withHeaderBorder
-                withInternalPadding
-                spacing="comfortable"
-                actions={(
+                headerActions={(
                     <Button
                         name={undefined}
-                        variant="secondary"
                         onClick={handleAddCustomActivity}
-                        icons={<AddLineIcon />}
+                        before={<AddLineIcon />}
                         disabled={readOnlyMode}
                     >
                         {strings.addActionButtonLabel}
                     </Button>
                 )}
-            >
-                <NonFieldError error={customComponentError} />
-                {value?.additional_action_responses?.map((customComponent, i) => (
-                    <AdditionalActionInput
-                        key={customComponent.client_id}
-                        actionNumber={i + 1}
-                        index={
-                            customComponentResponseMapping[customComponent.client_id]!.index
-                        }
-                        value={
-                            customComponentResponseMapping[customComponent.client_id]!.value
-                        }
-                        onChange={setCustomComponentValue}
-                        onRemove={removeCustomComponentValue}
-                        error={customComponentError?.[customComponent.client_id]}
-                        readOnly={readOnlyMode}
-                        disabled={disabled}
-                    />
-                ))}
-                {(value?.additional_action_responses?.length ?? 0) === 0 && (
-                    <div>
-                        {strings.noActionsLabel}
-                    </div>
+                headerDescription={(
+                    <NonFieldError error={customComponentError} />
                 )}
+                empty={(value?.additional_action_responses?.length ?? 0) === 0}
+                emptyMessage={strings.noActionsLabel}
+            >
+                <ListView
+                    layout="block"
+                    spacing="sm"
+                >
+                    {value?.additional_action_responses?.map((customComponent, i) => (
+                        <AdditionalActionInput
+                            key={customComponent.client_id}
+                            actionNumber={i + 1}
+                            index={
+                                customComponentResponseMapping[customComponent.client_id]?.index
+                            }
+                            value={
+                                customComponentResponseMapping[customComponent.client_id]?.value
+                            }
+                            onChange={setCustomComponentValue}
+                            onRemove={removeCustomComponentValue}
+                            error={customComponentError?.[customComponent.client_id]}
+                            readOnly={readOnlyMode}
+                            disabled={disabled}
+                        />
+                    ))}
+                </ListView>
             </Container>
-        </Container>
+            <InlineLayout
+                after={value.is_draft !== false && (
+                    <ConfirmButton
+                        name={undefined}
+                        onConfirm={handleSave}
+                        disabled={savePerWorkPlanPending || readOnlyMode}
+                        confirmHeading={strings.confirmHeading}
+                        confirmMessage={strings.confirmMessage}
+                    >
+                        {strings.saveAndFinalizeWorkPlan}
+                    </ConfirmButton>
+                )}
+            />
+        </TabPage>
     );
 }
 

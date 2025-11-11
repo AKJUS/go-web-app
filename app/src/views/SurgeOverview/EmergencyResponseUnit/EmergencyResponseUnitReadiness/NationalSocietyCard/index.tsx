@@ -1,6 +1,7 @@
 import {
     Button,
     Container,
+    ListView,
     Modal,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -8,7 +9,6 @@ import {
     useBooleanState,
     useTranslation,
 } from '@ifrc-go/ui/hooks';
-import { _cs } from '@togglecorp/fujs';
 
 import { joinStrings } from '#utils/common';
 import { type GoApiResponse } from '#utils/restRequest';
@@ -16,7 +16,6 @@ import { type GoApiResponse } from '#utils/restRequest';
 import ReadinessIcon from '../ReadinessIcon';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type GetEruReadinessResponse = GoApiResponse<'/api/v2/eru-readiness/'>;
 type EruReadinessListItem = NonNullable<GetEruReadinessResponse['results']>[number];
@@ -46,8 +45,7 @@ function NationalSocietyTypeCard(props: Props) {
 
     return (
         <Container
-            className={_cs(styles.nationalSocietyTypeCard, className)}
-            withInternalPadding
+            className={className}
             withHeaderBorder
             withFooterBorder
             heading={eruData?.eru_owner_details?.national_society_country_details?.society_name ?? '??'}
@@ -56,18 +54,22 @@ function NationalSocietyTypeCard(props: Props) {
                     label={strings.emergencyResponseUnitOwnerNSCardLastUpdated}
                     value={eruData.updated_at}
                     valueType="date"
+                    textSize="sm"
                 />
             )}
             footerActions={(
                 <Button
                     name={undefined}
                     onClick={setShowReadinessInfoTrue}
-                    variant="tertiary"
+                    styleVariant="action"
                     title={strings.eruNSSeeReadinessInfoButton}
                 >
                     {strings.eruNSSeeReadinessInfoButton}
                 </Button>
             )}
+            withPadding
+            withShadow
+            withBackground
         >
             <TextOutput
                 label={strings.eruTypesLabel}
@@ -76,43 +78,45 @@ function NationalSocietyTypeCard(props: Props) {
             />
             {showReadinessInfo && (
                 <Modal
-                    className={styles.modal}
                     heading={
                         eruData.eru_owner_details.national_society_country_details.society_name
                     }
                     headerDescription={strings.eruNSReadinessInformationHeading}
                     onClose={setShowReadinessInfoFalse}
-                    withHeaderBorder
                     size="md"
-                    contentViewType="vertical"
-                    spacing="comfortable"
+                    withContentWell
+                    withoutSpacingOpticalCorrection
                 >
-                    {eruData.eru_types.map((eruType) => (
-                        <Container
-                            key={eruType.id}
-                            heading={eruType.type_display}
-                            headingLevel={5}
-                            withHeaderBorder
-                            childrenContainerClassName={styles.readinessContainer}
-                            spacing="compact"
-                        >
-                            <ReadinessIcon
-                                readinessType={eruType.equipment_readiness}
-                                label={strings.eruNSEquipmentReadiness}
-                            />
-                            <div className={styles.verticalSeparator} />
-                            <ReadinessIcon
-                                readinessType={eruType.people_readiness}
-                                label={strings.eruNSPeopleReadiness}
-                            />
-                            <div className={styles.separatorLeft} />
-                            <ReadinessIcon
-                                readinessType={eruType.funding_readiness}
-                                label={strings.eruNSFundingReadiness}
-                            />
-                            <div className={styles.separator} />
-                        </Container>
-                    ))}
+                    <ListView layout="block">
+                        {eruData.eru_types.map((eruType) => (
+                            <Container
+                                key={eruType.id}
+                                heading={eruType.type_display}
+                                headingLevel={5}
+                                withBackground
+                                withPadding
+                            >
+                                <ListView
+                                    layout="grid"
+                                    minGridColumnSize="10rem"
+                                    numPreferredGridColumns={3}
+                                >
+                                    <ReadinessIcon
+                                        readinessType={eruType.equipment_readiness}
+                                        label={strings.eruNSEquipmentReadiness}
+                                    />
+                                    <ReadinessIcon
+                                        readinessType={eruType.people_readiness}
+                                        label={strings.eruNSPeopleReadiness}
+                                    />
+                                    <ReadinessIcon
+                                        readinessType={eruType.funding_readiness}
+                                        label={strings.eruNSFundingReadiness}
+                                    />
+                                </ListView>
+                            </Container>
+                        ))}
+                    </ListView>
                 </Modal>
             )}
         </Container>

@@ -1,0 +1,89 @@
+import {
+    DefaultMessage,
+    ListView,
+} from '@ifrc-go/ui';
+import { isDefined } from '@togglecorp/fujs';
+
+import WikiLink from '#components/WikiLink';
+
+import styles from './styles.module.css';
+
+interface Props {
+    elementRef?: React.RefObject<HTMLDivElement>;
+    children?: React.ReactNode;
+    wikiLinkPathName?: string;
+
+    pending?: boolean;
+    overlayPending?: boolean;
+    empty?: boolean;
+    filtered?: boolean;
+    errored?: boolean;
+    emptyMessage?: React.ReactNode;
+    filteredEmptyMessage?: React.ReactNode;
+    errorMessage?: React.ReactNode;
+    pendingMessage?: React.ReactNode;
+    withoutMessageIcon?: boolean;
+    withCompactMessage?: boolean;
+}
+
+function TabPage(props: Props) {
+    const {
+        elementRef,
+        children,
+        wikiLinkPathName,
+
+        empty = false,
+        filtered = false,
+        pending = false,
+        overlayPending,
+        errored = false,
+        emptyMessage,
+        filteredEmptyMessage,
+        pendingMessage,
+        errorMessage,
+        withoutMessageIcon,
+        withCompactMessage,
+    } = props;
+
+    const mainContent = (children || empty || pending || errored || filtered) && (
+        <>
+            <DefaultMessage
+                className={styles.message}
+                pending={pending}
+                filtered={filtered}
+                errored={errored}
+                empty={empty}
+                overlayPending={overlayPending}
+                emptyMessage={emptyMessage}
+                filteredEmptyMessage={filteredEmptyMessage}
+                pendingMessage={pendingMessage}
+                errorMessage={errorMessage}
+                withoutIcon={withoutMessageIcon}
+                compact={withCompactMessage}
+            />
+            {!empty && !errored && (!pending || overlayPending) && children}
+        </>
+    );
+
+    return (
+        <div
+            ref={elementRef}
+            className={styles.tabPage}
+        >
+            {isDefined(wikiLinkPathName) && (
+                <WikiLink
+                    className={styles.wikiLink}
+                    pathName={wikiLinkPathName}
+                />
+            )}
+            <ListView
+                layout="block"
+                spacing="xl"
+            >
+                {mainContent}
+            </ListView>
+        </div>
+    );
+}
+
+export default TabPage;

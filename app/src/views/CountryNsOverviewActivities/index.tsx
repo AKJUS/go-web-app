@@ -1,6 +1,4 @@
-import { Container } from '@ifrc-go/ui';
-
-import WikiLink from '#components/WikiLink';
+import TabPage from '#components/TabPage';
 
 import NationalSocietyDevelopmentInitiatives from './NationalSocietyDevelopmentInitiatives';
 
@@ -8,18 +6,11 @@ import NationalSocietyDevelopmentInitiatives from './NationalSocietyDevelopmentI
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     return (
-        <Container
-            actions={(
-                <WikiLink
-                    href="user_guide/Country_Pages#national-society-overview"
-                />
-            )}
-            withCenteredHeaderDescription
-            contentViewType="vertical"
-            spacing="loose"
+        <TabPage
+            wikiLinkPathName="user_guide/Country_Pages#ns-activities"
         >
             <NationalSocietyDevelopmentInitiatives />
-        </Container>
+        </TabPage>
     );
 }
 

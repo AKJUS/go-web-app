@@ -8,7 +8,11 @@ import {
     Breadcrumbs,
     Container,
     DateOutput,
+    Description,
     HtmlOutput,
+    InlineLayout,
+    Label,
+    ListView,
     Message,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -46,7 +50,6 @@ import EpidemicNumericDetails from './EpidemicNumericDetails';
 import EventNumericDetails from './EventNumericDetails';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -219,7 +222,6 @@ export function Component() {
     return (
         <Page
             title={strings.fieldReportTitle}
-            className={styles.fieldReportDetails}
             heading={shouldHideDetails ? strings.fieldReportDefaultHeading : summary}
             breadCrumbs={(
                 <Breadcrumbs>
@@ -243,28 +245,32 @@ export function Component() {
             )}
             actions={(
                 <Link
-                    className={styles.editLink}
                     to="fieldReportFormEdit"
                     urlParams={{ fieldReportId }}
-                    variant="secondary"
+                    colorVariant="primary"
+                    styleVariant="outline"
                     disabled={shouldHideDetails}
                 >
                     {strings.editReportButtonLabel}
                 </Link>
             )}
-            descriptionContainerClassName={styles.description}
             description={!shouldHideDetails && (
-                <>
-                    <div className={styles.basicInfo}>
+                <ListView layout="block">
+                    <ListView
+                        withWrap
+                        withSpacingOpticalCorrection
+                        spacing="sm"
+                    >
                         <span>
                             {disasterType}
                         </span>
-                        <span className={styles.separator} />
+                        <span>
+                            /
+                        </span>
                         <span>
                             {countries?.map((country, i) => (
                                 <Fragment key={country.id}>
                                     <Link
-                                        className={styles.titleLink}
                                         to="countriesLayout"
                                         urlParams={{ countryId: country.id }}
                                     >
@@ -276,9 +282,10 @@ export function Component() {
                         </span>
                         {eventDetails && (
                             <>
-                                <span className={styles.separator} />
+                                <span>
+                                    /
+                                </span>
                                 <Link
-                                    className={styles.titleLink}
                                     to="emergenciesLayout"
                                     urlParams={{ emergencyId: eventDetails.id }}
                                 >
@@ -286,8 +293,8 @@ export function Component() {
                                 </Link>
                             </>
                         )}
-                    </div>
-                    <div className={styles.latestUpdatedDetail}>
+                    </ListView>
+                    <Description withLightText>
                         {resolveToComponent(strings.lastUpdatedByLabel, {
                             user: user || '--',
                             date: (
@@ -307,10 +314,9 @@ export function Component() {
                                 ?.map((district) => district.name)
                                 .join(', ') || '--',
                         })}
-                    </div>
-                </>
+                    </Description>
+                </ListView>
             )}
-            mainSectionClassName={styles.content}
             contentOriginalLanguage={fieldReportResponse?.translation_module_original_language}
         >
             {fetchingFieldReport && (
@@ -325,7 +331,10 @@ export function Component() {
             )}
             {!shouldHideDetails && (
                 <>
-                    <div className={styles.basicDetails}>
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={3}
+                    >
                         <TextOutput
                             label={strings.visibilityLabel}
                             value={visibility}
@@ -360,13 +369,15 @@ export function Component() {
                                 strongValue
                             />
                         )}
-                    </div>
+                    </ListView>
                     <Container
-                        childrenContainerClassName={styles.numericDetails}
                         heading={strings.numericDetailsTitle}
                         withHeaderBorder
                         headerDescription={(
-                            <>
+                            <ListView
+                                layout="grid"
+                                numPreferredGridColumns={3}
+                            >
                                 {(reportType === 'EPI' || reportType === 'COVID') && isTruthyString(sitFieldsDate) && (
                                     <TextOutput
                                         label={strings.dateOfData}
@@ -382,36 +393,40 @@ export function Component() {
                                 )}
                                 {/* FIXME: We need to add more content here */}
                                 <div />
-                            </>
+                            </ListView>
                         )}
                     >
-                        {reportType === 'COVID' && (
-                            <CovidNumericDetails
-                                value={fieldReportResponse}
-                            />
-                        )}
-                        {reportType === 'EPI' && (
-                            <EpidemicNumericDetails
-                                value={fieldReportResponse}
-                            />
-                        )}
-                        {reportType === 'EVT' && (
-                            <EventNumericDetails
-                                value={fieldReportResponse}
-                            />
-                        )}
-                        {reportType === 'EW' && (
-                            <EarlyWarningNumericDetails
-                                value={fieldReportResponse}
-                            />
-                        )}
+                        <ListView
+                            layout="grid"
+                            numPreferredGridColumns={4}
+                        >
+                            {reportType === 'COVID' && (
+                                <CovidNumericDetails
+                                    value={fieldReportResponse}
+                                />
+                            )}
+                            {reportType === 'EPI' && (
+                                <EpidemicNumericDetails
+                                    value={fieldReportResponse}
+                                />
+                            )}
+                            {reportType === 'EVT' && (
+                                <EventNumericDetails
+                                    value={fieldReportResponse}
+                                />
+                            )}
+                            {reportType === 'EW' && (
+                                <EarlyWarningNumericDetails
+                                    value={fieldReportResponse}
+                                />
+                            )}
+                        </ListView>
                     </Container>
                     {/* NOTE: there was no condition in old details */}
                     {(reportType === 'EPI' || reportType === 'COVID') && isTruthyString(epiNotesSinceLastFr) && (
                         <Container
                             heading={strings.notesLabel}
                             withHeaderBorder
-                            childrenContainerClassName={styles.requestForAssistanceContent}
                         >
                             <HtmlOutput
                                 value={epiNotesSinceLastFr}
@@ -422,7 +437,6 @@ export function Component() {
                         <Container
                             heading={strings.sourcesForDataMarkedLabel}
                             withHeaderBorder
-                            childrenContainerClassName={styles.requestForAssistanceContent}
                         >
                             <HtmlOutput
                                 value={otherSources}
@@ -444,22 +458,26 @@ export function Component() {
                     <Container
                         heading={strings.requestForAssistanceHeading}
                         withHeaderBorder
-                        childrenContainerClassName={styles.requestForAssistanceContent}
                     >
-                        <TextOutput
-                            label={strings.governmentAssistanceLabel}
-                            value={requestAssistance}
-                            valueType="boolean"
-                            strongValue
-                        />
-                        <TextOutput
-                            label={strings.nsAssistanceLabel}
-                            value={nsRequestAssistance}
-                            valueType="boolean"
-                            strongValue
-                        />
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                            spacing="sm"
+                        >
+                            <TextOutput
+                                label={strings.governmentAssistanceLabel}
+                                value={requestAssistance}
+                                valueType="boolean"
+                                strongValue
+                            />
+                            <TextOutput
+                                label={strings.nsAssistanceLabel}
+                                value={nsRequestAssistance}
+                                valueType="boolean"
+                                strongValue
+                            />
+                        </ListView>
                     </Container>
-
                     {isDefined(bulletin) && reportType !== 'COVID' && (
                         <Container
                             heading={strings.informationBulletinPublishedLabel}
@@ -497,50 +515,58 @@ export function Component() {
                                     { organization: organizationMap?.[actionTaken.organization] },
                                 )}
                                 withHeaderBorder
-                                className={styles.actionsTaken}
                             >
-                                {categoryItems?.map((value) => (
-                                    <Container
-                                        key={value.category}
-                                        heading={value.category}
-                                        headingLevel={5}
-                                        spacing="compact"
-                                    >
-                                        {value.actions.map((action) => (
-                                            <div
-                                                key={action.id}
-                                                className={styles.actionCategory}
+                                <ListView
+                                    layout="block"
+                                    withSpacingOpticalCorrection
+                                >
+                                    {categoryItems?.map((value) => (
+                                        <Container
+                                            key={value.category}
+                                            heading={value.category}
+                                            headingLevel={5}
+                                        >
+                                            <ListView
+                                                layout="block"
+                                                withSpacingOpticalCorrection
+                                                spacing="sm"
                                             >
-                                                <CheckboxCircleLineIcon className={styles.icon} />
-                                                <div className={styles.label}>
-                                                    {action.name}
-                                                </div>
-                                            </div>
-                                        ))}
-                                        {reportType === 'COVID' && value.category === 'Health' && (
-                                            <TextOutput
-                                                label={strings.fieldReportDetailsNotes}
-                                                value={notesHealth}
-                                            />
-                                        )}
-                                        {reportType === 'COVID' && value.category === 'NS Institutional Strengthening' && (
-                                            <TextOutput
-                                                label={strings.fieldReportDetailsNotes}
-                                                value={notesNs}
-                                            />
-                                        )}
-                                        {reportType === 'COVID' && value.category === 'Socioeconomic Interventions' && (
-                                            <TextOutput
-                                                label={strings.fieldReportDetailsNotes}
-                                                value={notesSocioeco}
-                                            />
-                                        )}
-                                    </Container>
-                                ))}
-                                <TextOutput
-                                    label={strings.fieldReportDetailsSummary}
-                                    value={actionTaken.summary}
-                                />
+                                                {value.actions.map((action) => (
+                                                    <InlineLayout
+                                                        key={action.id}
+                                                        before={<CheckboxCircleLineIcon />}
+                                                        spacing="sm"
+                                                    >
+                                                        {action.name}
+                                                    </InlineLayout>
+                                                ))}
+                                                {reportType === 'COVID' && value.category === 'Health' && (
+                                                    <TextOutput
+                                                        label={strings.fieldReportDetailsNotes}
+                                                        value={notesHealth}
+                                                    />
+                                                )}
+                                                {reportType === 'COVID' && value.category === 'NS Institutional Strengthening' && (
+                                                    <TextOutput
+                                                        label={strings.fieldReportDetailsNotes}
+                                                        value={notesNs}
+                                                    />
+                                                )}
+                                                {reportType === 'COVID' && value.category === 'Socioeconomic Interventions' && (
+                                                    <TextOutput
+                                                        label={strings.fieldReportDetailsNotes}
+                                                        value={notesSocioeco}
+                                                    />
+                                                )}
+                                            </ListView>
+                                        </Container>
+                                    ))}
+                                    <TextOutput
+                                        strongLabel
+                                        label={strings.fieldReportDetailsSummary}
+                                        value={actionTaken.summary}
+                                    />
+                                </ListView>
                             </Container>
                         );
                     })}
@@ -618,46 +644,52 @@ export function Component() {
                         <Container
                             heading={strings.contactTitle}
                             withHeaderBorder
-                            childrenContainerClassName={styles.contactList}
                         >
-                            {contacts?.map((contact) => (
-                                <div
-                                    key={contact.id}
-                                    className={styles.contact}
-                                >
-                                    <div className={styles.type}>
-                                        {contact.ctype}
-                                    </div>
-                                    <div className={styles.information}>
-                                        {joinList([
-                                            isTruthyString(contact.name)
-                                                ? contact.name
-                                                : undefined,
-                                            isTruthyString(contact.title)
-                                                ? contact.title
-                                                : undefined,
-                                            isTruthyString(contact.email) ? (
-                                                <Link
-                                                    key={contact.email}
-                                                    href={`mailto:${contact.email}`}
-                                                    external
-                                                >
-                                                    {contact.email}
-                                                </Link>
-                                            ) : undefined,
-                                            isTruthyString(contact.phone) ? (
-                                                <Link
-                                                    key={contact.phone}
-                                                    href={`tel:${contact.phone}`}
-                                                    external
-                                                >
-                                                    {contact.phone}
-                                                </Link>
-                                            ) : undefined,
-                                        ].filter(isDefined), ', ')}
-                                    </div>
-                                </div>
-                            ))}
+                            <ListView
+                                layout="block"
+                                withSpacingOpticalCorrection
+                            >
+                                {contacts?.map((contact) => (
+                                    <ListView
+                                        layout="block"
+                                        key={contact.id}
+                                        withSpacingOpticalCorrection
+                                        spacing="sm"
+                                    >
+                                        <Label strong>
+                                            {contact.ctype}
+                                        </Label>
+                                        <div>
+                                            {joinList([
+                                                isTruthyString(contact.name)
+                                                    ? contact.name
+                                                    : undefined,
+                                                isTruthyString(contact.title)
+                                                    ? contact.title
+                                                    : undefined,
+                                                isTruthyString(contact.email) ? (
+                                                    <Link
+                                                        key={contact.email}
+                                                        href={`mailto:${contact.email}`}
+                                                        external
+                                                    >
+                                                        {contact.email}
+                                                    </Link>
+                                                ) : undefined,
+                                                isTruthyString(contact.phone) ? (
+                                                    <Link
+                                                        key={contact.phone}
+                                                        href={`tel:${contact.phone}`}
+                                                        external
+                                                    >
+                                                        {contact.phone}
+                                                    </Link>
+                                                ) : undefined,
+                                            ].filter(isDefined), ', ')}
+                                        </div>
+                                    </ListView>
+                                ))}
+                            </ListView>
                         </Container>
                     )}
                 </>

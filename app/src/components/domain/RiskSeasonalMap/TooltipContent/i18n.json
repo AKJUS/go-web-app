@@ -1,0 +1,13 @@
+{
+    "namespace": "riskSeasonalMap",
+    "strings": {
+        "peopleExposedLabel": "People Exposed",
+        "peopleAtRiskLabel": "People at Risk of Displacement",
+        "riskScoreLabel": "Risk Score",
+        "riskCategoryVeryLow": "Very Low",
+        "riskCategoryLow": "Low",
+        "riskCategoryMedium": "Medium",
+        "riskCategoryHigh": "High",
+        "riskCategoryVeryHigh": "Very High"
+    }
+}

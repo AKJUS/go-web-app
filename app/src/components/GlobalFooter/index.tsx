@@ -4,7 +4,8 @@ import {
     SocialYoutubeIcon,
 } from '@ifrc-go/icons';
 import {
-    Heading,
+    Container,
+    ListView,
     PageContainer,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
@@ -48,8 +49,10 @@ function GlobalFooter(props: Props) {
                     href={versionUrl}
                     title={appCommitHash}
                     external
+                    colorVariant="text-on-dark"
+                    withLinkIcon
                 >
-                    {appVersion}
+                    {`v${appVersion}`}
                 </Link>
             ),
         },
@@ -61,124 +64,164 @@ function GlobalFooter(props: Props) {
             contentClassName={styles.content}
             containerAs="footer"
         >
-            <div className={styles.section}>
-                <Heading>
-                    {strings.footerAboutGo}
-                </Heading>
-                <div className={styles.description}>
-                    {strings.footerAboutGoDesc}
-                </div>
-                <div className={styles.copyright}>
-                    {copyrightText}
-                </div>
-            </div>
-            <div className={styles.section}>
-                <Heading>
-                    {strings.globalFindOut}
-                </Heading>
-                <div className={styles.subSection}>
-                    <Link
-                        href="https://ifrc.org"
-                        external
-                    >
-                        ifrc.org
-                    </Link>
-                    <Link
-                        href="https://rcrcsims.org"
-                        external
-                    >
-                        rcrcsims.org
-                    </Link>
-                    <Link
-                        href="https://data.ifrc.org"
-                        external
-                    >
-                        data.ifrc.org
-                    </Link>
-                </div>
-            </div>
-            <div className={styles.section}>
-                <Heading>
-                    {strings.policies}
-                </Heading>
-                <div className={styles.subSection}>
-                    <Link
-                        to="cookiePolicy"
-                    >
-                        {strings.cookiePolicy}
-                    </Link>
-                    <Link
-                        to="termsAndConditions"
-                    >
-                        {strings.termsAndConditions}
-                    </Link>
-                </div>
-            </div>
-            <div className={styles.section}>
-                <Heading>
-                    {strings.globalHelpfulLinks}
-                </Heading>
-                <div className={styles.subSection}>
-                    <Link
-                        href="https://github.com/ifrcgo/go-web-app"
-                        external
-                    >
-                        {strings.footerOpenSourceCode}
-                    </Link>
-                    <Link
-                        href={resolveUrl(api, 'docs')}
-                        external
-                    >
-                        {strings.footerApiDocumentation}
-                    </Link>
-                    <Link
-                        to="resources"
-                    >
-                        {strings.footerOtherResources}
-                    </Link>
-                    <Link
-                        href="https://go-wiki.ifrc.org"
-                        external
-                    >
-                        {strings.footerGoWiki}
-                    </Link>
-                </div>
-            </div>
-            <div className={styles.section}>
-                <Heading>
-                    {strings.footerContactUs}
-                </Heading>
-                <Link
-                    href="mailto:im@ifrc.org"
-                    variant="primary"
-                    external
+            <ListView
+                layout="grid"
+                numPreferredGridColumns={5}
+                spacing="xl"
+                minGridColumnSize="20rem"
+            >
+                <Container
+                    heading={strings.footerAboutGo}
+                    spacing="lg"
                 >
-                    im@ifrc.org
-                </Link>
-                <div className={styles.socialIcons}>
-                    <Link
-                        className={styles.socialIcon}
-                        href="https://ifrcgoproject.medium.com"
-                        external
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
                     >
-                        <SocialMediumIcon />
-                    </Link>
-                    <Link
-                        className={styles.socialIcon}
-                        href="https://www.facebook.com/IFRC"
-                        external
+                        <div className={styles.description}>
+                            {strings.footerAboutGoDesc}
+                        </div>
+                        <div className={styles.copyright}>
+                            {copyrightText}
+                        </div>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.globalFindOut}
+                    spacing="lg"
+                >
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
                     >
-                        <SocialFacebookIcon />
-                    </Link>
-                    <Link
-                        className={styles.socialIcon}
-                        href="https://www.youtube.com/watch?v=dwPsQzla9A4"
-                        external
+                        <Link
+                            href="https://ifrc.org"
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            ifrc.org
+                        </Link>
+                        <Link
+                            href="https://rcrcsims.org"
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            rcrcsims.org
+                        </Link>
+                        <Link
+                            href="https://data.ifrc.org"
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            data.ifrc.org
+                        </Link>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.policies}
+                    spacing="lg"
+                >
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
                     >
-                        <SocialYoutubeIcon />
-                    </Link>
-                </div>
-            </div>
+                        <Link
+                            colorVariant="text-on-dark"
+                            to="cookiePolicy"
+                        >
+                            {strings.cookiePolicy}
+                        </Link>
+                        <Link
+                            colorVariant="text-on-dark"
+                            to="termsAndConditions"
+                        >
+                            {strings.termsAndConditions}
+                        </Link>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.globalHelpfulLinks}
+                    spacing="lg"
+                >
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                    >
+                        <Link
+                            href="https://github.com/ifrcgo/go-web-app"
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            {strings.footerOpenSourceCode}
+                        </Link>
+                        <Link
+                            href={resolveUrl(api, 'docs')}
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            {strings.footerApiDocumentation}
+                        </Link>
+                        <Link
+                            to="resources"
+                            colorVariant="text-on-dark"
+                        >
+                            {strings.footerOtherResources}
+                        </Link>
+                        <Link
+                            href="https://go-wiki.ifrc.org"
+                            external
+                            colorVariant="text-on-dark"
+                        >
+                            {strings.footerGoWiki}
+                        </Link>
+                    </ListView>
+                </Container>
+                <Container
+                    heading={strings.footerContactUs}
+                    spacing="lg"
+                >
+                    <ListView
+                        layout="block"
+                        withSpacingOpticalCorrection
+                    >
+                        <Link
+                            href="mailto:im@ifrc.org"
+                            colorVariant="primary"
+                            styleVariant="filled"
+                            external
+                            withLinkIcon
+                        >
+                            im@ifrc.org
+                        </Link>
+                        <ListView spacing="sm">
+                            <Link
+                                className={styles.socialIcon}
+                                href="https://ifrcgoproject.medium.com"
+                                external
+                                colorVariant="text-on-dark"
+                            >
+                                <SocialMediumIcon />
+                            </Link>
+                            <Link
+                                className={styles.socialIcon}
+                                href="https://www.facebook.com/IFRC"
+                                external
+                                colorVariant="text-on-dark"
+                            >
+                                <SocialFacebookIcon />
+                            </Link>
+                            <Link
+                                className={styles.socialIcon}
+                                href="https://www.youtube.com/watch?v=dwPsQzla9A4"
+                                external
+                                colorVariant="text-on-dark"
+                            >
+                                <SocialYoutubeIcon />
+                            </Link>
+                        </ListView>
+                    </ListView>
+                </Container>
+            </ListView>
         </PageContainer>
     );
 }

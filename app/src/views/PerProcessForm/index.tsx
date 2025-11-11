@@ -30,7 +30,6 @@ import { type PerProcessOutletContext } from '#utils/outletContext';
 import { useRequest } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -82,8 +81,6 @@ export function Component() {
 
     return (
         <Page
-            className={styles.perProcessForm}
-            mainSectionClassName={styles.mainSection}
             title={strings.perFormTitle}
             heading={strings.perFormHeading}
             description={strings.perFormProcessDescription}
@@ -92,7 +89,8 @@ export function Component() {
                 <>
                     <Link
                         to="accountMyFormsPer"
-                        variant="secondary"
+                        colorVariant="primary"
+                        styleVariant="outline"
                     >
                         {strings.perProcessBackButtonLabel}
                     </Link>
@@ -102,8 +100,7 @@ export function Component() {
             withBackgroundColorInMainSection
             info={!shouldHideForm && (
                 <NavigationTabList
-                    className={styles.tabList}
-                    variant="step"
+                    styleVariant="step"
                 >
                     <NavigationTab
                         stepCompleted={currentStep > PER_PHASE_OVERVIEW}

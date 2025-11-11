@@ -10,10 +10,6 @@
     .region-list {
         flex-basis: 10rem;
         flex-shrink: 0;
-
-        .region {
-            padding: 0;
-        }
     }
 
     .region-border {
@@ -23,24 +19,11 @@
     }
 
     .region-detail {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        overflow: auto;
+        display: contents;
 
         .region-detail-content {
+            flex-grow: 1;
             overflow: auto;
-
-            .country-list {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-                grid-gap: var(--go-ui-spacing-sm);
-                overflow: auto;
-
-                .country-link {
-                    font-size: var(--go-ui-font-size-sm);
-                }
-            }
         }
     }
 

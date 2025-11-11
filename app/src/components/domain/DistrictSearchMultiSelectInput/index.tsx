@@ -135,7 +135,7 @@ function DistrictSearchMultiSelectInput<const NAME>(
                     name={undefined}
                     onClick={handleSelectAllClick}
                     disabled={isNotDefined(countryId) || pendingSelectAll}
-                    variant="tertiary"
+                    styleVariant="action"
                     title={strings.selectAll}
                 >
                     <CheckDoubleFillIcon className={styles.icon} />

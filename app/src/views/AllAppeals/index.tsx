@@ -342,7 +342,6 @@ export function Component() {
             heading={heading}
         >
             <Container
-                contentViewType="vertical"
                 filters={(
                     <>
                         <DateInput
@@ -390,7 +389,7 @@ export function Component() {
                         />
                     </>
                 )}
-                actions={(
+                headerActions={(
                     <ExportButton
                         onClick={handleExportClick}
                         progress={progress}

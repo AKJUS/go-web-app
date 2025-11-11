@@ -92,7 +92,7 @@ function HeaderCell(props: HeaderCellProps) {
             {sortable && (
                 <Button
                     name={undefined}
-                    variant="tertiary"
+                    styleVariant="action"
                     onClick={handleSortClick}
                     title={strings.sortTableButtonTitle}
                     className={styles.sortButton}
@@ -106,7 +106,7 @@ function HeaderCell(props: HeaderCellProps) {
             <div className={_cs(titleClassName, styles.title)}>
                 {title}
             </div>
-            {infoTitle && infoDescription && (
+            {(infoTitle || infoDescription) && (
                 <InfoPopup
                     className={styles.infoPopupIcon}
                     title={infoTitle}

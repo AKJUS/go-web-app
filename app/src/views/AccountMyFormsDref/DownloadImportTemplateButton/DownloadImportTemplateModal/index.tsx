@@ -5,6 +5,8 @@ import {
 } from 'react';
 import {
     Button,
+    Description,
+    ListView,
     Modal,
     RadioInput,
 } from '@ifrc-go/ui';
@@ -95,28 +97,29 @@ function DownloadImportTemplateModal(props: Props) {
                     name={undefined}
                     onClick={handleDownloadClick}
                     disabled={generationPending || isNotDefined(drefFormSchema)}
+                    colorVariant="primary"
                 >
                     {strings.downloadButtonLabel}
                 </Button>
             )}
-            contentViewType="vertical"
-            spacing="comfortable"
             onClose={onComplete}
         >
-            <RadioInput
-                name={undefined}
-                label="Select type of DREF for template"
-                options={dref_dref_dref_type}
-                keySelector={typeOfDrefKeySelector}
-                labelSelector={stringValueSelector}
-                value={typeOfDref}
-                onChange={setTypeOfDref}
-                // Only response type is available for now
-                readOnly
-            />
-            <div>
-                {strings.description}
-            </div>
+            <ListView layout="block">
+                <RadioInput
+                    name={undefined}
+                    label="Select type of DREF for template"
+                    options={dref_dref_dref_type}
+                    keySelector={typeOfDrefKeySelector}
+                    labelSelector={stringValueSelector}
+                    value={typeOfDref}
+                    onChange={setTypeOfDref}
+                    // Only response type is available for now
+                    readOnly
+                />
+                <Description withLightText>
+                    {strings.description}
+                </Description>
+            </ListView>
         </Modal>
     );
 }

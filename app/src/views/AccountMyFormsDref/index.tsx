@@ -26,7 +26,7 @@ export function Component() {
             <div className={styles.drefFeedbackForm}>
                 <Link
                     href="https://forms.office.com/e/wFQsu0V7Zb"
-                    variant="tertiary"
+                    styleVariant="action"
                     external
                     withLinkIcon
                     withUnderline
@@ -43,8 +43,8 @@ export function Component() {
                         <Button
                             name="completed"
                             onClick={setCurrentView}
-                            variant="tertiary"
-                            actions={<ChevronRightLineIcon className={styles.icon} />}
+                            styleVariant="action"
+                            after={<ChevronRightLineIcon className={styles.icon} />}
                         >
                             {strings.showCompletedButtonLabel}
                         </Button>
@@ -57,8 +57,8 @@ export function Component() {
                         <Button
                             name="active"
                             onClick={setCurrentView}
-                            variant="tertiary"
-                            icons={<ChevronLeftLineIcon className={styles.icon} />}
+                            styleVariant="action"
+                            before={<ChevronLeftLineIcon className={styles.icon} />}
                         >
                             {strings.backToActiveButtonLabel}
                         </Button>

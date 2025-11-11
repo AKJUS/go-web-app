@@ -1,3 +1,21 @@
-.start-column {
-    min-width: 7rem;
+.surge-table {
+    .start {
+        min-width: 7rem;
+    }
+
+    .duration {
+        min-width: 8rem;
+    }
+
+    .event {
+        min-width: 14rem;
+    }
+
+    .country {
+        min-width: 8rem;
+    }
+
+    .status {
+        min-width: 7rem;
+    }
 }

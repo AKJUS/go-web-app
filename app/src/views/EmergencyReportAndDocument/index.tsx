@@ -3,10 +3,12 @@ import {
     useMemo,
 } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { DownloadLineIcon } from '@ifrc-go/icons';
+import { DownloadFillIcon } from '@ifrc-go/icons';
 import {
     Container,
+    Description,
     Image,
+    ListView,
     Pager,
     RawList,
     Table,
@@ -28,6 +30,7 @@ import {
 } from '@togglecorp/fujs';
 
 import Link, { type Props as LinkProps } from '#components/Link';
+import TabPage from '#components/TabPage';
 import { adminUrl } from '#config';
 import useRegion, { type Region } from '#hooks/domain/useRegion';
 import useFilterState from '#hooks/useFilterState';
@@ -42,7 +45,6 @@ import { useRequest } from '#utils/restRequest';
 import { type GoApiResponse } from '#utils/restRequest';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type SituationReportType = NonNullable<NonNullable<GoApiResponse<'/api/v2/situation_report/'>>['results']>[number];
 type FieldReportListItem = NonNullable<NonNullable<NonNullable<EmergencyOutletContext['emergencyResponse']>>['field_reports']>[number] & { regions: Region[] };
@@ -161,9 +163,6 @@ export function Component() {
                 'created_at',
                 strings.fieldReportsTableCreatedAt,
                 (item) => item.created_at,
-                {
-                    columnClassName: styles.date,
-                },
             ),
             createLinkColumn<FieldReportListItem, number>(
                 'summary',
@@ -172,10 +171,8 @@ export function Component() {
                 (item) => ({
                     to: 'fieldReportDetails',
                     urlParams: { fieldReportId: item.id },
+                    withLinkIcon: true,
                 }),
-                {
-                    columnClassName: styles.summary,
-                },
             ),
             createCountryListColumn<FieldReportListItem, number>(
                 'countries',
@@ -202,10 +199,7 @@ export function Component() {
                 'created_at',
                 strings.appealDocumentDate,
                 (item) => item.created_at,
-                {
-                    columnClassName: styles.date,
-                    sortable: true,
-                },
+                { sortable: true },
             ),
             createStringColumn<AppealDocumentType, number>(
                 'type',
@@ -223,18 +217,20 @@ export function Component() {
                 strings.appealDocumentDescription,
                 (item) => item.description,
             ),
-            createLinkColumn<AppealDocumentType, number>(
+            createStringColumn<AppealDocumentType, number>(
                 'name',
                 strings.appealDocumentLink,
                 (item) => item.name,
+                { sortable: true },
+            ),
+            createLinkColumn<AppealDocumentType, number>(
+                'action',
+                '',
+                () => <DownloadFillIcon />,
                 (item) => ({
                     external: true,
-                    withLinkIcon: true,
                     href: item.document ?? item.document_url ?? undefined,
                 }),
-                {
-                    sortable: true,
-                },
             ),
         ]),
         [
@@ -258,64 +254,77 @@ export function Component() {
 
     const situationReportsRendererParams = useCallback(
         (_: number, value: SituationReportType): LinkProps => ({
-            icons: <DownloadLineIcon className={styles.icon} />,
+            before: <DownloadFillIcon />,
             external: true,
             href: value.document ?? value.document_url,
             children: value.name,
+            withEllipsizedContent: true,
+            title: value.name,
+            styleVariant: 'translucent',
+            colorVariant: 'text',
         }),
         [],
     );
 
+    const hasFeaturedDocuments = isDefined(emergencyResponse?.featured_documents)
+        && emergencyResponse.featured_documents.length > 0;
+    const hasSituationReport = isDefined(situationReportsResponse?.results)
+        && situationReportsResponse.results?.length > 0;
+
     return (
-        <div className={styles.emergencyReportAndDocument}>
-            {isDefined(emergencyResponse)
-                && isDefined(emergencyResponse.featured_documents)
-                && emergencyResponse.featured_documents.length > 0 && (
+        <TabPage>
+            {hasFeaturedDocuments && (
                 <Container
                     heading={strings.featuredDocuments}
-                    childrenContainerClassName={styles.featuredDocumentList}
                     withHeaderBorder
                 >
-                    {/* FIXME: use Grid */}
-                    {emergencyResponse.featured_documents.map(
-                        (featuredDocument) => (
-                            <div
-                                className={styles.featuredDocument}
-                                key={featuredDocument.id}
+                    <ListView
+                        layout="grid"
+                        numPreferredGridColumns={4}
+                    >
+                        {emergencyResponse.featured_documents.map((featuredDocument) => (
+                            <Container
+                                withBackground
+                                withShadow
+                                withPadding
+                                withoutSpacingOpticalCorrection
+                                spacing="sm"
                             >
-                                <Image
-                                    className={styles.imageContainer}
-                                    imgElementClassName={styles.img}
-                                    src={featuredDocument.thumbnail}
-                                    alt={strings.emergencyReportAndDocumentImageAlt}
-                                />
-                                <div className={styles.details}>
+                                <ListView
+                                    layout="block"
+                                    spacing="sm"
+                                >
+                                    <Image
+                                        size="sm"
+                                        src={featuredDocument.thumbnail}
+                                        alt={strings.emergencyReportAndDocumentImageAlt}
+                                    />
                                     <Link
                                         href={featuredDocument.file}
                                         external
-                                        withLinkIcon
+                                        before={<DownloadFillIcon />}
                                     >
                                         {featuredDocument.title}
                                     </Link>
-                                    <div>
+                                    <Description
+                                        textSize="sm"
+                                        withLightText
+                                    >
                                         {featuredDocument.description}
-                                    </div>
-                                </div>
-                            </div>
-                        ),
-                    )}
+                                    </Description>
+                                </ListView>
+                            </Container>
+                        ))}
+                    </ListView>
                 </Container>
             )}
-            {isDefined(situationReportsResponse)
-                && isDefined(situationReportsResponse.results)
-                && situationReportsResponse.results?.length > 0 && (
+            {hasSituationReport && (
                 <Container
                     heading={strings.responseDocuments}
-                    childrenContainerClassName={styles.situationReportList}
-                    withHeaderBorder
-                    actions={(
+                    headerActions={(
                         <Link
-                            variant="secondary"
+                            colorVariant="primary"
+                            styleVariant="outline"
                             external
                             href={resolveUrl(adminUrl, `api/event/${emergencyResponse?.id}/change`)}
                             title={strings.addAReportLink}
@@ -323,26 +332,35 @@ export function Component() {
                             {strings.addAReportLink}
                         </Link>
                     )}
+                    withContentWell
                 >
-                    {/* FIXME: lets no use object.entries here, also Grid can be used */}
-                    {Object.entries(groupedSituationReports).map(([reportType, reports]) => (
-                        <Container
-                            className={styles.situationReport}
-                            key={reportType}
-                            heading={reportType}
-                            withHeaderBorder
-                            withInternalPadding
-                            childrenContainerClassName={styles.reports}
-                            headingLevel={4}
-                        >
-                            <RawList
-                                data={reports}
-                                keySelector={numericIdSelector}
-                                renderer={Link}
-                                rendererParams={situationReportsRendererParams}
-                            />
-                        </Container>
-                    ))}
+                    <ListView layout="block">
+                        {/* FIXME: lets no use object.entries here, also Grid can be used */}
+                        {Object.entries(groupedSituationReports).map(([reportType, reports]) => (
+                            <Container
+                                key={reportType}
+                                heading={reportType}
+                                headingLevel={6}
+                                withPadding
+                                withBackground
+                                withoutSpacingOpticalCorrection
+                                withHeaderBorder
+                            >
+                                <ListView
+                                    layout="grid"
+                                    numPreferredGridColumns={4}
+                                    withSpacingOpticalCorrection
+                                >
+                                    <RawList
+                                        data={reports}
+                                        keySelector={numericIdSelector}
+                                        renderer={Link}
+                                        rendererParams={situationReportsRendererParams}
+                                    />
+                                </ListView>
+                            </Container>
+                        ))}
+                    </ListView>
                 </Container>
             )}
             {isDefined(emergencyResponse)
@@ -366,7 +384,6 @@ export function Component() {
                     <Table
                         pending={false}
                         filtered={false}
-                        className={styles.table}
                         columns={columns}
                         keySelector={numericIdSelector}
                         data={fieldReports}
@@ -395,7 +412,6 @@ export function Component() {
                         <Table
                             pending={appealDocumentsPending}
                             filtered={false}
-                            className={styles.table}
                             columns={appealColumns}
                             keySelector={numericIdSelector}
                             data={appealDocumentsResponse?.results}
@@ -403,7 +419,7 @@ export function Component() {
                     </SortContext.Provider>
                 </Container>
             )}
-        </div>
+        </TabPage>
     );
 }
 

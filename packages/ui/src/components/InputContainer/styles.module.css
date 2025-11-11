@@ -7,10 +7,11 @@
         border-bottom: var(--go-ui-width-separator-thin) solid transparent;
         border-radius: var(--go-ui-border-radius-md);
         background-color: var(--go-ui-color-element-background);
-        padding: 0 var(--go-ui-spacing-sm);
+    }
 
-        .input {
-            padding: var(--go-ui-spacing-xs) 0;
+    &.changed {
+        .input-section {
+            background-color: var(--go-ui-color-semantic-yellow);
         }
     }
 
@@ -36,8 +37,10 @@
     }
 
     &.read-only {
-        .input-section {
-            background-color: var(--go-ui-color-readonly-element-background);
+        &:not(.changed) {
+            .input-section {
+                background-color: var(--go-ui-color-readonly-element-background);
+            }
         }
     }
 
@@ -56,8 +59,10 @@
     }
 
     .input-error {
-        position: absolute;
-        min-width: 10rem;
+        &.error-on-tooltip {
+            position: absolute;
+            min-width: 10rem;
+        }
     }
 
     &:not(.disabled):not(.read-only):hover:enabled {

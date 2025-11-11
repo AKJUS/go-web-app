@@ -656,7 +656,6 @@ function Operation(props: Props) {
                             <Button
                                 name={undefined}
                                 onClick={handleRiskSecurityAdd}
-                                variant="secondary"
                                 disabled={disabled || readOnly}
                             >
                                 {strings.drefFormRiskSecurityAddButton}
@@ -943,8 +942,6 @@ function Operation(props: Props) {
                                 disabled={disabled}
                             />
                             <Button
-                                className={styles.action}
-                                variant="secondary"
                                 name={selectedIntervention}
                                 onClick={handleInterventionAddButtonClick}
                                 disabled={isNotDefined(selectedIntervention)

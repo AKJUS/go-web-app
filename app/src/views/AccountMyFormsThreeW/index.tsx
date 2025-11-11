@@ -248,7 +248,7 @@ export function Component(props: Props) {
             <ThreeWDecommissionMessage />
             <Container
                 heading={strings.threeWActivities}
-                actions={(
+                headerActions={(
                     <Link
                         to="allThreeWActivity"
                         withLinkIcon

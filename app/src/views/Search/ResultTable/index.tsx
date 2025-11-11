@@ -80,7 +80,7 @@ function ResultTable(props: Props) {
     return (
         <Container
             heading={heading}
-            actions={actions}
+            headerActions={actions}
             withHeaderBorder
         >
             <Table

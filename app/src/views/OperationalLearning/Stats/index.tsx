@@ -5,16 +5,16 @@ import {
 } from 'react';
 import {
     BarChart,
-    BlockLoading,
+    ColorPreview,
     Container,
-    KeyFigure,
+    KeyFigureView,
     LegendItem,
+    ListView,
     TextOutput,
     TimeSeriesChart,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    formatDate,
     getDatesSeparatedByYear,
     getFormattedDateKey,
 } from '@ifrc-go/ui/utils';
@@ -101,9 +101,7 @@ interface Props {
 }
 
 function Stats(props: Props) {
-    const {
-        query,
-    } = props;
+    const { query } = props;
 
     const strings = useTranslation(i18n);
     const alert = useAlert();
@@ -135,13 +133,13 @@ function Stats(props: Props) {
 
     const dateList = useMemo(() => {
         if (isNotDefined(sourcesOverTimeData)) {
-            return undefined;
+            return [];
         }
 
         const dates = Object.keys(sourcesOverTimeData).map((year) => new Date(year));
 
         if (dates.length < 1) {
-            return undefined;
+            return [];
         }
 
         const oldestDate = new Date(Math.min(...dates.map((date) => date.getTime())));
@@ -184,154 +182,130 @@ function Stats(props: Props) {
         ? sourcesOverTimeData?.[activePointKey] : undefined;
 
     return (
-        <div className={styles.stats}>
-            {learningStatsPending && <BlockLoading />}
-            <Container
-                contentViewType="grid"
-                numPreferredGridContentColumns={4}
-                spacing="compact"
+        <Container pending={learningStatsPending}>
+            <ListView
+                layout="block"
+                spacing="lg"
             >
-                <KeyFigure
-                    className={styles.keyFigure}
-                    value={learningStatsResponse?.operations_included}
-                    label={strings.operationsIncluded}
-                    labelClassName={styles.keyFigureDescription}
-                />
-                <KeyFigure
-                    className={styles.keyFigure}
-                    value={learningStatsResponse?.sources_used}
-                    label={strings.sourcesUsed}
-                    labelClassName={styles.keyFigureDescription}
-                />
-                <KeyFigure
-                    className={styles.keyFigure}
-                    value={learningStatsResponse?.learning_extracts}
-                    label={strings.learningExtract}
-                    labelClassName={styles.keyFigureDescription}
-                />
-                <KeyFigure
-                    className={styles.keyFigure}
-                    value={learningStatsResponse?.sectors_covered}
-                    label={strings.sectorsCovered}
-                    labelClassName={styles.keyFigureDescription}
-                />
-            </Container>
-            <div className={styles.learningOverview}>
-                <OperationalLearningMap
-                    learningByCountry={learningStatsResponse?.learning_by_country}
-                />
-                <div className={styles.charts}>
-                    <Container
-                        heading={strings.learningBySector}
-                        className={styles.chart}
-                        withHeaderBorder
-                        withInternalPadding
-                        compactMessage
-                        pending={learningStatsPending}
-                        empty={isDefined(learningStatsResponse?.learning_by_sector) && (
-                            (learningStatsResponse?.learning_by_sector.length ?? 0) < 1
-                        )}
-                    >
-                        <BarChart
-                            barClassName={styles.bar}
-                            data={learningStatsResponse?.learning_by_sector}
-                            keySelector={sectorKeySelector}
-                            valueSelector={sectorValueSelector}
-                            labelSelector={sectorLabelSelector}
-                        />
-                    </Container>
-                    <Container
-                        heading={strings.learningByRegions}
-                        className={styles.chart}
-                        withHeaderBorder
-                        withInternalPadding
-                        compactMessage
-                        pending={learningStatsPending}
-                        empty={isDefined(learningStatsResponse?.learning_by_region) && (
-                            (learningStatsResponse?.learning_by_region.length ?? 0) < 1
-                        )}
-                    >
-                        <BarChart
-                            barClassName={styles.bar}
-                            data={learningStatsResponse?.learning_by_region}
-                            keySelector={regionKeySelector}
-                            valueSelector={regionValueSelector}
-                            labelSelector={regionLabelSelector}
-                        />
-                    </Container>
-                    <Container
-                        heading={strings.sourcesOverTime}
-                        className={styles.chart}
-                        withHeaderBorder
-                        withInternalPadding
-                        compactMessage
-                        pending={learningStatsPending}
-                        childrenContainerClassName={styles.chartContainer}
-                        empty={isDefined(learningStatsResponse?.sources_overtime) && (
-                            (learningStatsResponse?.sources_overtime.length ?? 0) < 1
-                        )}
-                    >
-                        {isDefined(dateList) && (
-                            <>
-                                <TimeSeriesChart
-                                    className={styles.timeSeriesChart}
-                                    xAxisTickClassName={styles.xAxisTick}
-                                    timePoints={dateList}
-                                    dataKeys={dataKeys}
-                                    valueSelector={sourcesOverTimeValueSelector}
-                                    classNameSelector={sourceClassNameSelector}
-                                    activePointKey={activePointKey}
-                                    onTimePointClick={setActivePointKey}
-                                    xAxisFormatter={xAxisFormatter}
-                                />
-                                {isDefined(activePointKey) ? (
-                                    <div
-                                        className={styles.legend}
-                                    >
-                                        <TextOutput
-                                            value={formatDate(activePointKey, 'yyyy') ?? '--'}
-                                            strongValue
-                                        />
-                                        <TextOutput
-                                            label={(
-                                                <LegendItem
-                                                    label={strings.sourceDREF}
-                                                    color="var(--color-source-dref)"
-                                                />
-                                            )}
-                                            withoutLabelColon
-                                            value={activePointData?.dref}
-                                            valueType="number"
-                                        />
-                                        <TextOutput
-                                            label={(
-                                                <LegendItem
-                                                    label={strings.sourceEmergencyAppeal}
-                                                    color="var(--color-source-emergency-appeal)"
-                                                />
-                                            )}
-                                            withoutLabelColon
-                                            value={activePointData?.emergencyAppeal}
-                                            valueType="number"
-                                        />
-                                        <TextOutput
-                                            label={(
-                                                <LegendItem
-                                                    label={strings.sourceOthers}
-                                                    color="var(--color-source-emergency-appeal)"
-                                                />
-                                            )}
-                                            withoutLabelColon
-                                            value={activePointData?.others}
-                                            valueType="number"
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className={styles.typeOfSourceLegend}>
-                                        <div className={styles.legendLabel}>
-                                            {strings.sourcesTypeLegendLabel}
-                                        </div>
-                                        <div className={styles.legendContent}>
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={4}
+                >
+                    <KeyFigureView
+                        value={learningStatsResponse?.operations_included}
+                        valueType="number"
+                        label={strings.operationsIncluded}
+                        withShadow
+                    />
+                    <KeyFigureView
+                        value={learningStatsResponse?.sources_used}
+                        valueType="number"
+                        label={strings.sourcesUsed}
+                        withShadow
+                    />
+                    <KeyFigureView
+                        value={learningStatsResponse?.learning_extracts}
+                        valueType="number"
+                        label={strings.learningExtract}
+                        withShadow
+                    />
+                    <KeyFigureView
+                        value={learningStatsResponse?.sectors_covered}
+                        valueType="number"
+                        label={strings.sectorsCovered}
+                        withShadow
+                    />
+                </ListView>
+                <ListView
+                    layout="grid"
+                    withSidebar
+                >
+                    <OperationalLearningMap
+                        learningByCountry={learningStatsResponse?.learning_by_country}
+                    />
+                    <ListView layout="block">
+                        <Container
+                            heading={strings.learningBySector}
+                            withHeaderBorder
+                            pending={learningStatsPending}
+                            empty={isNotDefined(learningStatsResponse?.learning_by_sector)
+                                || learningStatsResponse.learning_by_sector.length === 0}
+                            withPadding
+                            withShadow
+                            withBackground
+                        >
+                            <BarChart
+                                data={learningStatsResponse?.learning_by_sector}
+                                keySelector={sectorKeySelector}
+                                valueSelector={sectorValueSelector}
+                                labelSelector={sectorLabelSelector}
+                            />
+                        </Container>
+                        <Container
+                            heading={strings.learningByRegions}
+                            withHeaderBorder
+                            pending={learningStatsPending}
+                            empty={isNotDefined(learningStatsResponse?.learning_by_region)
+                                || learningStatsResponse?.learning_by_region.length === 0}
+                            withPadding
+                            withShadow
+                            withBackground
+                        >
+                            <BarChart
+                                data={learningStatsResponse?.learning_by_region}
+                                keySelector={regionKeySelector}
+                                valueSelector={regionValueSelector}
+                                labelSelector={regionLabelSelector}
+                            />
+                        </Container>
+                        <Container
+                            heading={strings.sourcesOverTime}
+                            withHeaderBorder
+                            pending={learningStatsPending}
+                            empty={dateList.length === 0}
+                            withPadding
+                            withShadow
+                            withBackground
+                            footer={isDefined(activePointKey) ? (
+                                <ListView
+                                    withWrap
+                                    spacing="sm"
+                                    withSpacingOpticalCorrection
+                                >
+                                    <TextOutput
+                                        value={activePointKey}
+                                        valueType="date"
+                                        format="yyyy"
+                                        strongValue
+                                    />
+                                    <TextOutput
+                                        icon={<ColorPreview value="var(--color-source-dref)" />}
+                                        label={strings.sourceDREF}
+                                        value={activePointData?.dref}
+                                        valueType="number"
+                                    />
+                                    <TextOutput
+                                        icon={<ColorPreview value="var(--color-source-emergency-appeal)" />}
+                                        label={strings.sourceEmergencyAppeal}
+                                        value={activePointData?.emergencyAppeal}
+                                        valueType="number"
+                                    />
+                                    <TextOutput
+                                        icon={<ColorPreview value="var(--color-source-emergency-appeal)" />}
+                                        label={strings.sourceOthers}
+                                        value={activePointData?.others}
+                                        valueType="number"
+                                    />
+                                </ListView>
+                            ) : (
+                                <TextOutput
+                                    label={strings.sourcesTypeLegendLabel}
+                                    value={(
+                                        <ListView
+                                            withWrap
+                                            spacing="sm"
+                                            withSpacingOpticalCorrection
+                                        >
                                             {sourceTypeOptions.map((source) => (
                                                 <LegendItem
                                                     key={source.key}
@@ -339,17 +313,27 @@ function Stats(props: Props) {
                                                     color={source.color}
                                                 />
                                             ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </>
-
-                        )}
-
-                    </Container>
-                </div>
-            </div>
-        </div>
+                                        </ListView>
+                                    )}
+                                />
+                            )}
+                        >
+                            <TimeSeriesChart
+                                className={styles.timeSeriesChart}
+                                xAxisTickClassName={styles.xAxisTick}
+                                timePoints={dateList}
+                                dataKeys={dataKeys}
+                                valueSelector={sourcesOverTimeValueSelector}
+                                classNameSelector={sourceClassNameSelector}
+                                activePointKey={activePointKey}
+                                onTimePointClick={setActivePointKey}
+                                xAxisFormatter={xAxisFormatter}
+                            />
+                        </Container>
+                    </ListView>
+                </ListView>
+            </ListView>
+        </Container>
     );
 }
 
