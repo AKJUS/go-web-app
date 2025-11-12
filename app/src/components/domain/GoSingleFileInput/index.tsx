@@ -1,7 +1,4 @@
-import {
-    useCallback,
-    useMemo,
-} from 'react';
+import { useCallback } from 'react';
 import { DeleteBinLineIcon } from '@ifrc-go/icons';
 import {
     type CommonRawFileInputProps,
@@ -50,7 +47,7 @@ type Props<NAME> = Omit<CommonRawFileInputProps<NAME>, 'value'> & {
 function GoSingleFileInput<const NAME>(props: Props<NAME>) {
     const {
         accept,
-        after: afterFromProps,
+        after,
         before,
         children,
         className,
@@ -155,19 +152,29 @@ function GoSingleFileInput<const NAME>(props: Props<NAME>) {
 
     const disabled = disabledFromProps || pending || readOnly;
     const selectedFileUrl = isDefined(value) ? fileIdToUrlMap?.[value] : undefined;
-    const after = useMemo(() => {
-        if (readOnly || disabled) {
-            return null;
-        }
 
-        if (!clearable || !value) {
-            return afterFromProps;
-        }
-
-        return (
-            <ListView spacing="xs">
-                {after}
-                {clearable && value && (
+    return (
+        <ListView
+            layout="block"
+            spacing="xs"
+            className={className}
+        >
+            <ListView spacing="3xs">
+                <RawFileInput
+                    name={name}
+                    onChange={handleChange}
+                    accept={accept}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    inputProps={inputProps}
+                    colorVariant={colorVariant}
+                    styleVariant={styleVariant}
+                    before={before}
+                    after={after}
+                >
+                    {children}
+                </RawFileInput>
+                {clearable && isDefined(value) && (
                     <IconButton
                         name={undefined}
                         onClick={handleClearButtonClick}
@@ -180,37 +187,6 @@ function GoSingleFileInput<const NAME>(props: Props<NAME>) {
                     </IconButton>
                 )}
             </ListView>
-        );
-    }, [
-        afterFromProps,
-        clearable,
-        disabled,
-        handleClearButtonClick,
-        readOnly,
-        strings.removeFileButtonTitle,
-        value,
-    ]);
-
-    return (
-        <ListView
-            layout="block"
-            spacing="xs"
-            className={className}
-        >
-            <RawFileInput
-                name={name}
-                onChange={handleChange}
-                accept={accept}
-                disabled={disabled}
-                readOnly={readOnly}
-                inputProps={inputProps}
-                colorVariant={colorVariant}
-                styleVariant={styleVariant}
-                before={before}
-                after={after}
-            >
-                {children}
-            </RawFileInput>
             {!withoutPreview && isDefined(selectedFileUrl) && (
                 <Link
                     href={selectedFileUrl}

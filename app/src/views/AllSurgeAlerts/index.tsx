@@ -276,6 +276,7 @@ export function Component() {
                         countryId: item.country?.id,
                     },
                 }),
+                { columnClassName: styles.countryColumn },
             ),
             createStringColumn<SurgeListItem, TableKey>(
                 'molnix_status',
