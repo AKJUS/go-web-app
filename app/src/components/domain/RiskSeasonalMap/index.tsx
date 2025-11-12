@@ -935,6 +935,7 @@ function RiskSeasonalMap(props: Props) {
 
                                 return (
                                     <CountryListItem
+                                        key={countryId}
                                         countryId={countryId}
                                         hazardList={dataItem.valueListByHazard}
                                         countryName={dataItem.country_details.name}

@@ -1,6 +1,5 @@
 import React, {
     useCallback,
-    useMemo,
     useRef,
 } from 'react';
 import {
@@ -70,7 +69,7 @@ type Props<NAME> = Omit<CommonRawFileInputProps<NAME>, 'value'> & {
 function GoMultiFileInput<T extends NameType>(props: Props<T>) {
     const {
         accept,
-        after: afterFromProps,
+        after,
         before,
         children,
         className,
@@ -175,46 +174,6 @@ function GoMultiFileInput<T extends NameType>(props: Props<T>) {
         value.map((fileId) => ({ id: fileId, url: fileIdToUrlMap?.[fileId] }))
     ) : undefined;
 
-    const after = useMemo(() => {
-        if (readOnly || disabled) {
-            return null;
-        }
-
-        if (!clearable || !value) {
-            return afterFromProps;
-        }
-
-        return (
-            <ListView spacing="xs">
-                {after}
-                {clearable && value && (
-                    <IconButton
-                        name={undefined}
-                        onClick={handleClearButtonClick}
-                        // FIXME: use translations
-                        title="Clear selected files"
-                        // FIXME: use translations
-                        ariaLabel="Clear selected files"
-                        // title={strings.removeFileButtonTitle}
-                        // ariaLabel={strings.removeFileButtonTitle}
-                        spacing="none"
-                        disabled={disabled}
-                    >
-                        <DeleteBinLineIcon />
-                    </IconButton>
-                )}
-            </ListView>
-        );
-    }, [
-        afterFromProps,
-        clearable,
-        disabled,
-        handleClearButtonClick,
-        readOnly,
-        // strings.removeFileButtonTitle,
-        value,
-    ]);
-
     const handleFileRemove = useCallback(
         (id: number) => {
             if (isNotDefined(value)) {
@@ -237,22 +196,40 @@ function GoMultiFileInput<T extends NameType>(props: Props<T>) {
             spacing="xs"
             className={className}
         >
-            <RawFileInput
-                name={name}
-                onChange={handleChange}
-                accept={accept}
-                disabled={disabled}
-                readOnly={readOnly}
-                inputProps={inputProps}
-                inputRef={inputRef}
-                colorVariant={colorVariant}
-                styleVariant={styleVariant}
-                before={before}
-                after={after}
-                multiple
-            >
-                {children}
-            </RawFileInput>
+            <ListView spacing="3xs">
+                <RawFileInput
+                    name={name}
+                    onChange={handleChange}
+                    accept={accept}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    inputProps={inputProps}
+                    inputRef={inputRef}
+                    colorVariant={colorVariant}
+                    styleVariant={styleVariant}
+                    before={before}
+                    after={after}
+                    multiple
+                >
+                    {children}
+                </RawFileInput>
+                {clearable && value && (
+                    <IconButton
+                        name={undefined}
+                        onClick={handleClearButtonClick}
+                        // FIXME: use translations
+                        title="Clear selected files"
+                        // FIXME: use translations
+                        ariaLabel="Clear selected files"
+                        // title={strings.removeFileButtonTitle}
+                        // ariaLabel={strings.removeFileButtonTitle}
+                        spacing="none"
+                        disabled={disabled}
+                    >
+                        <DeleteBinLineIcon />
+                    </IconButton>
+                )}
+            </ListView>
             {!withoutPreview && isDefined(valueUrls) && valueUrls.length > 0 && (
                 <ListView
                     layout="grid"

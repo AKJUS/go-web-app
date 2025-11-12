@@ -34,8 +34,6 @@
     }
 
     &.compact {
-        flex-direction: row;
-        flex-wrap: wrap;
         padding: var(--go-ui-spacing-sm);
         min-height: var(--go-ui-compact-content-min-height);
 

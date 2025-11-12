@@ -12,7 +12,10 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { sumSafe } from '@ifrc-go/ui/utils';
-import { isNotDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import SeverityIndicator from '#components/domain/SeverityIndicator';
 import Link from '#components/Link';
@@ -189,15 +192,17 @@ function OperationCard(props: Props) {
                     spacing="sm"
                     withSpaceBetweenContents
                 >
-                    <ButtonLayout
-                        // FIXME: we should use Tag component here
-                        textSize="sm"
-                        spacing="2xs"
-                        withEllipsizedContent
-                        readOnly
-                    >
-                        {appealTypes.join(', ')}
-                    </ButtonLayout>
+                    {isDefined(appealTypes) && appealTypes.length > 0 ? (
+                        <ButtonLayout
+                            // FIXME: we should use Tag component here
+                            textSize="sm"
+                            spacing="2xs"
+                            withEllipsizedContent
+                            readOnly
+                        >
+                            {appealTypes.join(', ')}
+                        </ButtonLayout>
+                    ) : <div />}
                     <TextOutput
                         className={styles.lastUpdated}
                         label={strings.operationCardLastUpdated}

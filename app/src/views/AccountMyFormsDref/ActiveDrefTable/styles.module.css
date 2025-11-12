@@ -28,10 +28,13 @@
             min-width: 9rem;
         }
 
-        .actions,
         .stage {
             width: 0%;
             min-width: 9rem;
+        }
+
+        .actions {
+            min-width: 10rem;
         }
 
         .sub-cell {
