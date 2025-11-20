@@ -76,7 +76,6 @@ function Navbar(props: Props) {
                     )}
                 </div>
                 <NavigationTabList
-                    className={styles.actions}
                     styleVariant="nav"
                 >
                     <LanguageDropdown />

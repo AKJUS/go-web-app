@@ -284,6 +284,7 @@ export function Component() {
                     >
                         {emergencyResponse.featured_documents.map((featuredDocument) => (
                             <Container
+                                key={featuredDocument.id}
                                 withBackground
                                 withShadow
                                 withPadding

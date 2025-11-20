@@ -69,10 +69,11 @@ function TabListLayout(props: Props) {
                     className={styles.content}
                     // spacing="none"
                     // withWrap={styleVariant !== 'tab'}
-                    spacing={(styleVariant === 'tab' || styleVariant === 'pill')
+                    spacing={(styleVariant === 'tab' || styleVariant === 'pill' || styleVariant === 'step')
                         ? 'none'
                         : spacing}
                     role="tablist"
+                    withWrap={styleVariant === 'nav'}
                 >
                     {children}
                 </ListView>

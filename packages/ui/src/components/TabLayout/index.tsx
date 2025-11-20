@@ -38,6 +38,8 @@ export interface Props extends Omit<InlineLayoutProps, 'withPadding'> {
 
     // FIXME: only for step variant
     stepCompleted?: boolean;
+    isFirstStep?: boolean;
+    isLastStep?: boolean;
 }
 
 function TabLayout(props: Props) {
@@ -53,6 +55,8 @@ function TabLayout(props: Props) {
         spacing,
         tabWrapperClassName,
         stepCompleted,
+        isFirstStep,
+        isLastStep,
         errored,
         ...inlineLayoutProps
     } = props;
@@ -111,13 +115,20 @@ function TabLayout(props: Props) {
                 className={_cs(
                     styles.stepWrapper,
                     active && styles.active,
+                    stepCompleted && styles.completed,
+                    isFirstStep && styles.firstStep,
+                    isLastStep && styles.lastStep,
                 )}
                 role="tab"
             >
-                <div className={styles.dot}>
-                    {stepCompleted && (
-                        <CheckFillIcon className={styles.icon} />
-                    )}
+                <div className={styles.dotWrapper}>
+                    <div className={styles.beforeDot} />
+                    <div className={styles.dot}>
+                        {stepCompleted && (
+                            <CheckFillIcon className={styles.icon} />
+                        )}
+                    </div>
+                    <div className={styles.afterDot} />
                 </div>
                 {tabContent}
             </div>
