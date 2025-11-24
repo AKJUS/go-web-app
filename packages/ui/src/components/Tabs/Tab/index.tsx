@@ -24,7 +24,10 @@ export default function Tab<NAME extends TabKey>(props: Props<NAME>) {
         unregisterTab,
         setStep,
         step: stepFromContext,
+        tabs,
     } = context;
+
+    const numTabs = tabs.length;
 
     const {
         className,
@@ -50,6 +53,8 @@ export default function Tab<NAME extends TabKey>(props: Props<NAME>) {
     }, [isActive, setStep, step]);
 
     const stepCompleted = isDefined(stepFromContext) && stepFromContext > step;
+    const isFirstTab = styleVariant === 'step' && step === 1;
+    const isLastTab = styleVariant === 'step' && step === numTabs;
 
     const disabled = disabledFromContext || disabledFromProps;
     return (
@@ -68,6 +73,8 @@ export default function Tab<NAME extends TabKey>(props: Props<NAME>) {
                 colorVariant={colorVariant}
                 errored={errored}
                 stepCompleted={stepCompleted}
+                isFirstStep={isFirstTab}
+                isLastStep={isLastTab}
                 disabled={disabled}
                 active={isActive}
             >

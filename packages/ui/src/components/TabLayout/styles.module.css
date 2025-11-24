@@ -8,7 +8,7 @@
     border: var(--go-ui-width-separator-thin) solid var(--outline-color);
     border-radius: var(--go-ui-border-radius-full);
     background-color: var(--background-color);
-    width: fit-content;
+    width: max-content;
     line-height: var(--go-ui-line-height-sm);
     color: var(--text-color);
     user-select: none;
@@ -143,7 +143,7 @@
 
 .step-wrapper {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     flex-direction: column;
 
     .dot {
@@ -161,9 +161,66 @@
         }
     }
 
+
+    .dot-wrapper {
+        display: flex;
+        align-items: center;
+
+        .before-dot {
+            flex-grow: 1;
+            border: var(--go-ui-width-separator-thin) solid var(--go-ui-color-separator);
+        }
+
+        .dot {
+            flex-shrink: 0;
+        }
+
+        .after-dot {
+            flex-grow: 1;
+            border: var(--go-ui-width-separator-thin) solid var(--go-ui-color-separator);
+        }
+    }
+
     &.active {
         .dot {
             background-color: var(--go-ui-color-primary-red);
+        }
+
+        .before-dot {
+            border-color: var(--go-ui-color-primary-blue);
+        }
+    }
+
+    &.completed {
+        .after-dot,
+        .before-dot {
+            border-color: var(--go-ui-color-primary-blue);
+        }
+    }
+
+    &.first-step {
+        .before-dot {
+            border-color: transparent;
+        }
+
+        &.completed,
+        &.active {
+            .before-dot {
+                border-color: transparent;
+            }
+        }
+    }
+
+    &.last-step {
+        .after-dot {
+            border-color: transparent;
+        }
+
+        &.completed,
+        &.active {
+            .after-dot {
+                border-color: transparent;
+            }
         }
     }
 }
