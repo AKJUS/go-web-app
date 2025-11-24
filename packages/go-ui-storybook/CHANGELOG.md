@@ -1,5 +1,13 @@
 # go-ui-storybook
 
+## 1.0.9-beta.0
+
+### Patch Changes
+
+- 09e2d2e: Fix failing stories from GO UI revamp
+- Updated dependencies [09e2d2e]
+  - @ifrc-go/ui@2.0.0-beta.0
+
 ## 1.0.8
 
 ### Patch Changes

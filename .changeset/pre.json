@@ -7,6 +7,12 @@
     "@ifrc-go/ui": "1.5.2"
   },
   "changesets": [
-    "angry-rings-shave"
+    "angry-rings-shave",
+    "four-facts-glow",
+    "khaki-dolls-begin",
+    "late-hornets-strive",
+    "tiny-ghosts-rule",
+    "twelve-ducks-glow",
+    "wet-eels-mix"
   ]
 }

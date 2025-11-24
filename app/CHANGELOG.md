@@ -1,5 +1,22 @@
 # go-web-app
 
+## 7.24.0-beta.1
+
+### Minor Changes
+
+- 09e2d2e: Accomodate changes from GO UI revamp
+
+### Patch Changes
+
+- 9b3121e: Add Risk Management section in Catalogue of Surge services
+  Reword unavailablity message in spark dashboard
+- b0905f1: Position and Keywords filter for all Surge Alerts (/alerts/all)
+- c1bde25: Add Prepare / Supply Chain / SPARK menu item to navigation
+  Remove Programmatic Partnerships menu from navigation
+  Change aboutHealthMapping PDF URL in /resources
+- Updated dependencies [09e2d2e]
+  - @ifrc-go/ui@2.0.0-beta.0
+
 ## 7.24.0-beta.0
 
 ### Minor Changes
