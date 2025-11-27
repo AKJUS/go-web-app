@@ -1,5 +1,13 @@
 # go-web-app
 
+## 7.24.0-beta.2
+
+### Patch Changes
+
+- 6bc2fe6: Update UI to accomodate GO UI changes
+- Updated dependencies [6bc2fe6]
+  - @ifrc-go/ui@2.0.0-beta.1
+
 ## 7.24.0-beta.1
 
 ### Minor Changes
