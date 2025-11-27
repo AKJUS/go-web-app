@@ -87,6 +87,10 @@
             >.grid-content {
                 &.with-sidebar {
                     grid-template-columns: 1fr;
+
+                    &.sidebar-position-start {
+                        grid-template-columns: 1fr;
+                    }
                 }
             }
         }
@@ -96,6 +100,10 @@
         &.grid-layout {
             >.grid-content {
                 grid-template-columns: 1fr;
+
+                &.sidebar-position-start {
+                    grid-template-columns: 1fr;
+                }
             }
         }
     }

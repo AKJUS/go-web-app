@@ -3,6 +3,7 @@ import { CopyLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     Container,
+    Description,
     ListView,
     TextOutput,
 } from '@ifrc-go/ui';
@@ -72,7 +73,14 @@ function TokenDetails(props: Props) {
             withPadding
             withShadow
         >
-            {isDefined(data?.token) && data?.token}
+            {isDefined(data?.token) && (
+                <Description
+                    textSize="sm"
+                    withLightText
+                >
+                    {data?.token}
+                </Description>
+            )}
         </Container>
     );
 }

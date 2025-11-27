@@ -18,6 +18,12 @@
         }
     }
 
+    &.style-variant-step {
+        .content {
+            width: fit-content;
+        }
+    }
+
     &.style-variant-pill {
         .content {
             border-radius: var(--go-ui-border-radius-full);

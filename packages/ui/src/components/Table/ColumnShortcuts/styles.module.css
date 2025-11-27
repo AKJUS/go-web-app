@@ -2,6 +2,10 @@
     color: inherit;
 }
 
+.actions-cell {
+    width: max-content;
+}
+
 .expansion-indicator-cell-container {
     position: relative;
 }

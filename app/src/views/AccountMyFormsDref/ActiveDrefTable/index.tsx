@@ -359,7 +359,6 @@ function ActiveDrefTable(props: Props) {
                         startingLanguage: starting_language as Language,
                     };
                 },
-                { columnClassName: styles.actions },
             ),
         ]),
         [

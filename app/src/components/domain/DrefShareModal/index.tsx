@@ -110,7 +110,6 @@ function DrefShareModal(props: Props) {
                 <Button
                     name={null}
                     onClick={triggerUpdate}
-                    colorVariant="primary"
                 >
                     {strings.drefShareUpdate}
                 </Button>

@@ -1,11 +1,17 @@
-import ButtonLayout, { Props as ButtonLayoutProps } from '#components/ButtonLayout';
+import { useMemo } from 'react';
+import { isDefined } from '@togglecorp/fujs';
+
+import ButtonLayout, {
+    ButtonColorVariant,
+    Props as ButtonLayoutProps,
+} from '#components/ButtonLayout';
 import RawButton, { Props as RawButtonProps } from '#components/RawButton';
 
 import styles from './styles.module.css';
 
 type PickedButtonLayoutProps =
-    | 'colorVariant'
     | 'styleVariant'
+    | 'colorVariant'
     | 'spacing'
     | 'spacingOffset'
     | 'withoutPadding'
@@ -23,7 +29,7 @@ export type Props<NAME> = Omit<RawButtonProps<NAME>, 'elementRef' | 'children'>
 
 function Button<const NAME>(props: Props<NAME>) {
     const {
-        colorVariant = 'primary',
+        colorVariant: colorVariantFromProps,
         styleVariant = 'outline',
         spacing,
         spacingOffset = -3,
@@ -45,6 +51,18 @@ function Button<const NAME>(props: Props<NAME>) {
 
         ...rawButtonProps
     } = props;
+
+    const colorVariant = useMemo<ButtonColorVariant>(() => {
+        if (isDefined(colorVariantFromProps)) {
+            return colorVariantFromProps;
+        }
+
+        if (styleVariant === 'action' || styleVariant === 'transparent') {
+            return 'text';
+        }
+
+        return 'primary';
+    }, [styleVariant, colorVariantFromProps]);
 
     return (
         <RawButton

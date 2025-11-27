@@ -100,7 +100,6 @@ export function Component() {
                         <Button
                             name
                             onClick={setShowChangePasswordModal}
-                            colorVariant="primary"
                         >
                             {strings.changePasswordButtonLabel}
                         </Button>
@@ -108,7 +107,6 @@ export function Component() {
                             name
                             after={(<PencilFillIcon />)}
                             onClick={setShowEditProfileModal}
-                            colorVariant="primary"
                             disabled={isNotDefined(meResponse)}
                         >
                             {strings.editProfileButtonLabel}
@@ -201,7 +199,6 @@ export function Component() {
                         <Button
                             name={undefined}
                             onClick={setShowGenerateMontandonTokenModalTrue}
-                            colorVariant="primary"
                         >
                             {strings.generateNewTokenLabel}
                         </Button>
@@ -220,6 +217,7 @@ export function Component() {
                     overlayPending
                     withPadding
                     withDarkBackground
+                    spacing="lg"
                 >
                     <ListView
                         layout="grid"

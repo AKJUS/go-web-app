@@ -32,11 +32,10 @@ import { type WrappedRoutes } from '../../App/routes';
 
 import styles from './styles.module.css';
 
-type CommonLinkProps = Omit<TabLayoutProps, 'styleVariant' | 'colorVariant'> & {
+type CommonProps = Omit<TabLayoutProps, 'styleVariant' | 'colorVariant'> & {
     withEllipsizedContent?: boolean;
     withLinkIcon?: boolean;
     withUnderline?: boolean;
-    stepCompleted?: boolean;
 };
 
 interface InternalLinkProps extends Omit<RouterLinkProps, 'to'> {
@@ -64,7 +63,7 @@ interface ExternalLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorEl
     parentRoute?: never;
 }
 
-type Props = CommonLinkProps & (InternalLinkProps | ExternalLinkProps);
+type Props = CommonProps & (InternalLinkProps | ExternalLinkProps);
 
 function NavigationTab(props: Props) {
     const {
@@ -77,6 +76,8 @@ function NavigationTab(props: Props) {
         after,
         disabled: disabledFromProps,
         stepCompleted,
+        isFirstStep,
+        isLastStep,
 
         external,
         to,
@@ -197,6 +198,8 @@ function NavigationTab(props: Props) {
                 </>
             )}
             stepCompleted={stepCompleted}
+            isFirstStep={isFirstStep}
+            isLastStep={isLastStep}
         >
             {children}
         </TabLayout>

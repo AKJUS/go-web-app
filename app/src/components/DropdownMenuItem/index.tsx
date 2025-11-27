@@ -99,7 +99,6 @@ function DropdownMenuItem<NAME>(props: Props<NAME>) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             type: _,
             styleVariant = 'transparent',
-            colorVariant = 'text',
             ...otherProps
         } = remainingProps;
 
@@ -108,7 +107,6 @@ function DropdownMenuItem<NAME>(props: Props<NAME>) {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...otherProps}
                 styleVariant={styleVariant}
-                colorVariant={colorVariant}
                 onClick={handleButtonClick}
                 withFullWidth={!withoutFullWidth}
             />
@@ -120,7 +118,6 @@ function DropdownMenuItem<NAME>(props: Props<NAME>) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             type: _,
             styleVariant = 'transparent',
-            colorVariant = 'text',
             ...otherProps
         } = remainingProps;
 
@@ -129,7 +126,6 @@ function DropdownMenuItem<NAME>(props: Props<NAME>) {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...otherProps}
                 styleVariant={styleVariant}
-                colorVariant={colorVariant}
                 onClick={handleButtonClick}
                 withFullWidth={!withoutFullWidth}
             />

@@ -56,7 +56,6 @@ function LanguageDropdown() {
         <DropdownMenu
             label={languageNameMapEn[currentLanguage]}
             labelStyleVariant="action"
-            labelColorVariant="text"
             persistent
             labelSpacing="sm"
         >

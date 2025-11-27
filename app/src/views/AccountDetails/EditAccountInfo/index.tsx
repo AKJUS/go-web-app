@@ -213,7 +213,6 @@ function EditAccountInfo(props: Props) {
                 <ListView spacing="sm">
                     <Button
                         name={undefined}
-                        colorVariant="primary"
                         onClick={handleModalCloseButton}
                     >
                         {strings.editProfileCancelButtonLabel}
@@ -222,7 +221,6 @@ function EditAccountInfo(props: Props) {
                         name={undefined}
                         onClick={handleFormSubmit}
                         disabled={updateAccountPending}
-                        colorVariant="primary"
                         styleVariant="filled"
                     >
                         {strings.editProfileConfirmButtonLabel}

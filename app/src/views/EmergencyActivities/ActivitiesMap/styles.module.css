@@ -1,9 +1,0 @@
-.activity-map {
-    display: grid;
-    grid-template-columns: 1fr calc(14vw + 16rem);
-    gap: var(--go-ui-spacing-lg);
-
-    @media screen and (max-width: 50rem) {
-        grid-template-columns: 1fr;
-    }
-}

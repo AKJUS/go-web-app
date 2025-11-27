@@ -1,0 +1,17 @@
+{
+    "parent": "000059-1763971087427.json",
+    "actions": [
+        {
+            "action": "update",
+            "key": "summaryExtractCount",
+            "namespace": "operationalLearning",
+            "newValue": "{count} extract"
+        },
+        {
+            "action": "update",
+            "key": "summaryExtractsCount",
+            "namespace": "operationalLearning",
+            "newValue": "{count} extracts"
+        }
+    ]
+}

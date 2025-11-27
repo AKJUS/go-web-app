@@ -7,7 +7,6 @@ import {
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
-    _cs,
     isDefined,
     isNotDefined,
     mapToList,
@@ -31,7 +30,6 @@ import { getCountryListBoundingBox } from '#utils/map';
 import type { EmergencyOutletContext } from '#utils/outletContext';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 const COLOR_SEVERITY_LOW = '#ccd2d9';
 const COLOR_SEVERITY_MEDIUM = '#99a5b4';
@@ -47,14 +45,12 @@ function getEmergencyCountryIdList(emergency: EmergencyOutletContext['emergencyR
 }
 
 interface Props {
-    className?: string;
     sidebarContent?: React.ReactNode;
     emergencyProjectCountByDistrict: Record<number, number>;
 }
 
 function ActivitiesMap(props: Props) {
     const {
-        className,
         sidebarContent,
         emergencyProjectCountByDistrict,
     } = props;
@@ -146,7 +142,10 @@ function ActivitiesMap(props: Props) {
     );
 
     return (
-        <div className={_cs(styles.activityMap, className)}>
+        <ListView
+            layout="grid"
+            withSidebar
+        >
             <BaseMap
                 baseLayers={(
                     <>
@@ -201,7 +200,7 @@ function ActivitiesMap(props: Props) {
                 )}
             </BaseMap>
             {sidebarContent}
-        </div>
+        </ListView>
     );
 }
 

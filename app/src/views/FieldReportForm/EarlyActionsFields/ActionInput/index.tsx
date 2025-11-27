@@ -101,6 +101,8 @@ function ActionInput(props: ActionInputProps) {
                                 value={value?.actions}
                                 error={listErrorToString(error?.actions)}
                                 disabled={disabled}
+                                checkListLayout="grid"
+                                checkListLayoutPreferredGridColumns={3}
                             />
                             {healthNotes}
                         </ListView>
@@ -121,6 +123,8 @@ function ActionInput(props: ActionInputProps) {
                                 value={value?.actions}
                                 error={listErrorToString(error?.actions)}
                                 disabled={disabled}
+                                checkListLayout="grid"
+                                checkListLayoutPreferredGridColumns={3}
                             />
                             {nsNotes}
                         </ListView>
@@ -141,6 +145,8 @@ function ActionInput(props: ActionInputProps) {
                                 value={value?.actions}
                                 error={listErrorToString(error?.actions)}
                                 disabled={disabled}
+                                checkListLayout="grid"
+                                checkListLayoutPreferredGridColumns={3}
                             />
                             {socioecoNotes}
                         </ListView>
@@ -158,6 +164,8 @@ function ActionInput(props: ActionInputProps) {
                     value={value?.actions}
                     error={listErrorToString(error?.actions)}
                     disabled={disabled}
+                    checkListLayout="grid"
+                    checkListLayoutPreferredGridColumns={3}
                 />
             )}
             <TextArea

@@ -61,7 +61,6 @@ function MapPopup(props: Props) {
                             className={styles.closeButton}
                             name={undefined}
                             styleVariant="action"
-                            colorVariant="text"
                             onClick={onCloseButtonClick}
                             title={strings.messagePopupClose}
                         >

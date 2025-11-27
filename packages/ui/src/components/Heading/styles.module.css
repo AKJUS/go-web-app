@@ -46,8 +46,7 @@
     &.level-six {
         --font-size: var(--go-ui-font-size-md);
         --line-height: var(--go-ui-line-height-md);
-        color: var(--go-ui-color-primary-blue);
-        font-weight: var(--go-ui-font-weight-medium);
+        font-weight: var(--go-ui-font-weight-semibold);
     }
 
     &.ellipsized {

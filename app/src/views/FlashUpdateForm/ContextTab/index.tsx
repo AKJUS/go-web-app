@@ -169,7 +169,6 @@ function ContextTab(props: Props) {
                     <div>
                         <Button
                             name={undefined}
-                            colorVariant="primary"
                             onClick={handleAddCountryDistrict}
                             disabled={disabled}
                         >

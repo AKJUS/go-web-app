@@ -103,6 +103,7 @@ export function Component() {
                     styleVariant="step"
                 >
                     <NavigationTab
+                        isFirstStep
                         stepCompleted={currentStep > PER_PHASE_OVERVIEW}
                         to={isDefined(perId) ? 'perOverviewForm' : 'newPerOverviewForm'}
                         urlParams={isDefined(perId) ? { perId } : undefined}
@@ -128,6 +129,7 @@ export function Component() {
                         {strings.perFormTabPrioritizationLabel}
                     </NavigationTab>
                     <NavigationTab
+                        isLastStep
                         stepCompleted={currentStep > PER_PHASE_WORKPLAN}
                         to={isDefined(perId) && currentStep >= PER_PHASE_WORKPLAN
                             ? 'perWorkPlanForm'
