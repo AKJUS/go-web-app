@@ -151,6 +151,7 @@ function CountryDropdown() {
                                     filtered={isTruthyString(countrySearch)}
                                     className={styles.regionDetailContent}
                                     withHeaderBorder
+                                    withContentOverflow
                                     heading={(
                                         <DropdownMenuItem
                                             type="link"

@@ -59,7 +59,6 @@ function Template(args:Args) {
         <>
             <Button
                 name={undefined}
-                colorVariant="primary"
                 styleVariant="outline"
                 onClick={handleClick}
             >
@@ -97,7 +96,6 @@ export const Default: Story = {
             <>
                 <Button
                     name={undefined}
-                    colorVariant="primary"
                     styleVariant="outline"
                     onClick={undefined}
                 >
@@ -105,7 +103,6 @@ export const Default: Story = {
                 </Button>
                 <Button
                     name={undefined}
-                    colorVariant="primary"
                     styleVariant="filled"
                     onClick={undefined}
                 >

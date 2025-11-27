@@ -95,37 +95,39 @@ function Sources(props: Props) {
     );
 
     return (
-        <Container
-            className={className}
-            footerActions={pager}
-            footer={(
-                <Button
-                    name="viewAll"
-                    before={<CopyLineIcon />}
-                    onClick={setShowExtractsModalTrue}
-                >
-                    {strings.viewAllExtracts}
-                </Button>
-            )}
-            empty={isNotDefined(appealDocumentResponse?.results)
-                || appealDocumentResponse.results.length === 0}
-            emptyMessage={strings.noSources}
-            errored={isDefined(appealDocumentError)}
-            pending={appealDocumentPending}
-            overlayPending
-        >
-            <ListView
-                layout="block"
-                withSpacingOpticalCorrection
-                spacing="sm"
+        <>
+            <Container
+                className={className}
+                footerActions={pager}
+                footer={(
+                    <Button
+                        name="viewAll"
+                        before={<CopyLineIcon />}
+                        onClick={setShowExtractsModalTrue}
+                    >
+                        {strings.viewAllExtracts}
+                    </Button>
+                )}
+                empty={isNotDefined(appealDocumentResponse?.results)
+                    || appealDocumentResponse.results.length === 0}
+                emptyMessage={strings.noSources}
+                errored={isDefined(appealDocumentError)}
+                pending={appealDocumentPending}
+                overlayPending
             >
-                <RawList
-                    data={appealDocumentResponse?.results}
-                    renderer={Emergency}
-                    keySelector={numericIdSelector}
-                    rendererParams={appealRendererParams}
-                />
-            </ListView>
+                <ListView
+                    layout="block"
+                    withSpacingOpticalCorrection
+                    spacing="sm"
+                >
+                    <RawList
+                        data={appealDocumentResponse?.results}
+                        renderer={Emergency}
+                        keySelector={numericIdSelector}
+                        rendererParams={appealRendererParams}
+                    />
+                </ListView>
+            </Container>
             {showExtractsModal && (
                 <AllExtractsModal
                     summaryType={summaryType}
@@ -133,7 +135,7 @@ function Sources(props: Props) {
                     onCancel={setShowExtractsModalFalse}
                 />
             )}
-        </Container>
+        </>
     );
 }
 

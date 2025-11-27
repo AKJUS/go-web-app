@@ -1,4 +1,6 @@
 .description {
+    overflow-wrap: anywhere;
+
     &.with-centered-content {
         margin: 0 auto;
         max-width: var(--go-ui-width-content-max);

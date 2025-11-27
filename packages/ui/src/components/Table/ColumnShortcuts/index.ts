@@ -455,7 +455,7 @@ export function createActionColumn<DATUM, KEY>(
         cellRendererClassName: options?.cellRendererClassName,
         columnClassName: options?.columnClassName,
         headerCellRendererClassName: options?.headerCellRendererClassName,
-        cellContainerClassName: options?.cellContainerClassName,
+        cellContainerClassName: _cs(styles.actionsCell, options?.cellContainerClassName),
         columnWidth: options?.columnWidth,
         columnStretch: options?.columnStretch,
         columnStyle: options?.columnStyle,

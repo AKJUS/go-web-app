@@ -133,7 +133,7 @@ function ExpandableContainer(props: Props) {
                     {!withToggleButtonOnFooter && toggleButton}
                 </>
             )}
-            footerActions={(
+            footerActions={(isDefined(footerActions) || withToggleButtonOnFooter) && (
                 <>
                     {footerActions}
                     {withToggleButtonOnFooter && toggleButton}

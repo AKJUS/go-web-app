@@ -3,6 +3,10 @@ import {
     useState,
 } from 'react';
 import {
+    ChevronDownLineIcon,
+    ChevronUpLineIcon,
+} from '@ifrc-go/icons';
+import {
     Button,
     ButtonLayout,
     Container,
@@ -61,8 +65,9 @@ function Activity({ activity }: ActivityProps) {
         <Container
             heading={activity.action_details?.title ?? activity.custom_action}
             headingLevel={6}
-            withBackground
+            withDarkBackground
             withPadding
+            spacing="xs"
         >
             <TextOutput
                 label={strings.peopleReached}
@@ -117,12 +122,12 @@ function ProjectListItem(props: ProjectListItemProps) {
         <Container
             heading={nsName}
             headingLevel={6}
+            // FIXME: use tag component
             headerActions={(
                 <ButtonLayout
                     textSize="sm"
-                    styleVariant="translucent"
-                    colorVariant="secondary"
-                    spacing="sm"
+                    spacing="3xs"
+                    readOnly
                 >
                     {project.status_display}
                 </ButtonLayout>
@@ -134,6 +139,7 @@ function ProjectListItem(props: ProjectListItemProps) {
                     name={undefined}
                     onClick={detailsShown ? hideDetails : showDetails}
                     textSize="sm"
+                    after={detailsShown ? <ChevronUpLineIcon /> : <ChevronDownLineIcon />}
                 >
                     {detailsShown ? strings.showLess : strings.showMore}
                 </Button>
@@ -161,9 +167,11 @@ function ProjectListItem(props: ProjectListItemProps) {
             withBackground
             withPadding
             spacing="sm"
-            withoutSpacingOpticalCorrection
         >
-            <ListView layout="block">
+            <ListView
+                layout="block"
+                spacing="xs"
+            >
                 {project.districts_details && (
                     <ReducedListDisplay
                         list={project.districts_details}
@@ -176,9 +184,7 @@ function ProjectListItem(props: ProjectListItemProps) {
                 {detailsShown && (
                     <ListView
                         layout="block"
-                        spacing="sm"
-                        withDarkBackground
-                        withPadding
+                        spacing="3xs"
                     >
                         <RawList
                             data={relatedActivities}
@@ -246,14 +252,12 @@ function ActivityDetail(props: Props) {
                 </InlineLayout>
             )}
             withPadding
-            withBackground
+            withDarkBackground
             spacing="sm"
-            withContentWell
-            withoutSpacingOpticalCorrection
         >
             <ListView
                 layout="block"
-                spacing="sm"
+                spacing="2xs"
             >
                 <RawList
                     data={projects}

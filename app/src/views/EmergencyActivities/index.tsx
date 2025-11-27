@@ -470,12 +470,13 @@ export function Component() {
                             emptyMessage={strings.dataNotAvailable}
                             headingLevel={4}
                             withContentOverflow
-                            withDarkBackground
+                            withBackground
+                            withShadow
                             withPadding
                             withoutSpacingOpticalCorrection
                         >
                             <ListView
-                                spacing="xs"
+                                spacing="2xs"
                                 layout="block"
                             >
                                 {/* FIXME: use List, add pending, filtered state */}

@@ -7,7 +7,6 @@ import { SearchLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     ButtonLayout,
-    Chip,
     Container,
     Description,
     DismissableListOutput,
@@ -331,9 +330,9 @@ export function Component() {
             heading={strings.operationalLearningHeading}
             actions={(
                 <ButtonLayout
-                    styleVariant="translucent"
-                    spacing="sm"
+                    spacing="2xs"
                     readOnly
+                    textSize="sm"
                 >
                     {strings.beta}
                 </ButtonLayout>
@@ -542,33 +541,32 @@ export function Component() {
                     value={activeTab}
                     styleVariant="nav"
                 >
-                    <Container
-                        headerDescription={(
-                            <ListView>
-                                <TabList>
-                                    <Tab name="sector">{strings.bySectorTitle}</Tab>
-                                    <Tab name="component">{strings.byComponentTitle}</Tab>
-                                </TabList>
-                                {extractsCount > 0 && (
-                                    <Chip
-                                        name="extractsCount"
-                                        label={((extractsCount) > 1) ? (
-                                            resolveToString(
-                                                strings.extractsCount,
-                                                { count: extractsCount },
-                                            )
-                                        ) : (
-                                            resolveToString(
-                                                strings.extractCount,
-                                                { count: extractsCount },
-                                            )
-                                        )}
-                                        variant="tertiary"
-                                    />
-                                )}
-                            </ListView>
-                        )}
-                    >
+                    <ListView layout="block">
+                        <ListView>
+                            <TabList>
+                                <Tab name="sector">{strings.bySectorTitle}</Tab>
+                                <Tab name="component">{strings.byComponentTitle}</Tab>
+                            </TabList>
+                            {extractsCount > 0 && (
+                                <ButtonLayout
+                                    spacing="2xs"
+                                    readOnly
+                                    textSize="sm"
+                                >
+                                    {((extractsCount) > 1) ? (
+                                        resolveToString(
+                                            strings.extractsCount,
+                                            { count: extractsCount },
+                                        )
+                                    ) : (
+                                        resolveToString(
+                                            strings.extractCount,
+                                            { count: extractsCount },
+                                        )
+                                    )}
+                                </ButtonLayout>
+                            )}
+                        </ListView>
                         <TabPanel name="sector">
                             <Container
                                 emptyMessage={strings.noSummariesAvailableForSector}
@@ -611,7 +609,7 @@ export function Component() {
                                 </ListView>
                             </Container>
                         </TabPanel>
-                    </Container>
+                    </ListView>
                 </Tabs>
             </Container>
         </Page>

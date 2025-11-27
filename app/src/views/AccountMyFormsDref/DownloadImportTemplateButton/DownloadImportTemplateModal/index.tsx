@@ -97,7 +97,6 @@ function DownloadImportTemplateModal(props: Props) {
                     name={undefined}
                     onClick={handleDownloadClick}
                     disabled={generationPending || isNotDefined(drefFormSchema)}
-                    colorVariant="primary"
                 >
                     {strings.downloadButtonLabel}
                 </Button>

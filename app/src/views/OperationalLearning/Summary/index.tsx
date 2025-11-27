@@ -1,7 +1,6 @@
 import {
-    Description,
+    ButtonLayout,
     ExpandableContainer,
-    ListView,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
@@ -32,28 +31,29 @@ function Summary(props: Props) {
     return (
         <ExpandableContainer
             heading={summaryTitle}
-            headerDescription={(
-                <ListView layout="block">
-                    {extractsCount > 1 ? (
-                        resolveToString(
+            headingLevel={4}
+            headerActions={(
+                <ButtonLayout
+                    spacing="2xs"
+                    textSize="sm"
+                    readOnly
+                >
+                    {extractsCount > 1
+                        ? resolveToString(
                             strings.summaryExtractsCount,
                             { count: extractsCount },
-                        )
-                    ) : (
-                        resolveToString(
+                        ) : resolveToString(
                             strings.summaryExtractCount,
                             { count: extractsCount },
-                        )
-                    )}
-                    <Description>
-                        {summaryContent}
-                    </Description>
-                </ListView>
+                        )}
+                </ButtonLayout>
             )}
+            headerDescription={summaryContent}
             withPadding
             withDarkBackground
             withToggleButtonOnFooter
             toggleButtonLabel={[strings.seeSources, strings.closeSources]}
+            spacing="lg"
         >
             <Sources
                 summaryId={id}

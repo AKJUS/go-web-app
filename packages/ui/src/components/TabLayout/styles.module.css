@@ -151,7 +151,7 @@
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        background-color: var(--go-ui-color-primary-blue);
+        background-color: var(--go-ui-color-text-light);
         width: 1rem;
         height: 1rem;
         line-height: 0;
@@ -165,6 +165,7 @@
     .dot-wrapper {
         display: flex;
         align-items: center;
+        padding: var(--go-ui-spacing-xs) 0;
 
         .before-dot {
             flex-grow: 1;
@@ -183,6 +184,8 @@
 
     &.active {
         .dot {
+            outline: var(--go-ui-width-separator-sm) solid var(--go-ui-color-primary-red);
+            outline-offset: calc(var(--go-ui-spacing-xs) / 2);
             background-color: var(--go-ui-color-primary-red);
         }
 
@@ -192,6 +195,12 @@
     }
 
     &.completed {
+        &:not(.active) {
+            .dot {
+                background-color: var(--go-ui-color-primary-blue);
+            }
+        }
+
         .after-dot,
         .before-dot {
             border-color: var(--go-ui-color-primary-blue);

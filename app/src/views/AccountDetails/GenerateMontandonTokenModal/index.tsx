@@ -86,7 +86,6 @@ function GenerateMontandonTokenModal(props: Props) {
                     ),
                 },
             )}
-            size="sm"
             footerActions={(
                 <ListView spacing="sm">
                     {!accepted && (

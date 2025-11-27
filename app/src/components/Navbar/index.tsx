@@ -226,8 +226,8 @@ function Navbar(props: Props) {
                                         <DropdownMenuItem
                                             type="link"
                                             to="perProcessLayout"
-                                            colorVariant="secondary"
-                                            styleVariant="outline"
+                                            colorVariant="primary"
+                                            styleVariant="action"
                                             withoutFullWidth
                                         >
                                             {strings.userMenuStartPER}
@@ -301,12 +301,13 @@ function Navbar(props: Props) {
                                         <ListView
                                             layout="block"
                                             spacing="sm"
+                                            withSpacingOpticalCorrection
                                         >
                                             <DropdownMenuItem
                                                 type="link"
                                                 to="fieldReportFormNew"
                                                 colorVariant="primary"
-                                                styleVariant="outline"
+                                                styleVariant="action"
                                                 withoutFullWidth
                                             >
                                                 {strings.userMenuCreateFieldReport}
@@ -315,7 +316,7 @@ function Navbar(props: Props) {
                                                 type="link"
                                                 to="newThreeWActivity"
                                                 colorVariant="primary"
-                                                styleVariant="outline"
+                                                styleVariant="action"
                                                 withoutFullWidth
                                             >
                                                 {strings.userMenuSubmit3WActivity}
@@ -334,12 +335,13 @@ function Navbar(props: Props) {
                                         <ListView
                                             layout="block"
                                             spacing="sm"
+                                            withSpacingOpticalCorrection
                                         >
                                             <DropdownMenuItem
                                                 type="link"
                                                 to="fieldReportFormNew"
-                                                colorVariant="secondary"
-                                                styleVariant="outline"
+                                                colorVariant="primary"
+                                                styleVariant="action"
                                                 state={{ earlyWarning: true }}
                                                 withoutFullWidth
                                             >
@@ -348,8 +350,8 @@ function Navbar(props: Props) {
                                             <DropdownMenuItem
                                                 type="link"
                                                 to="flashUpdateFormNew"
-                                                colorVariant="secondary"
-                                                styleVariant="outline"
+                                                colorVariant="primary"
+                                                styleVariant="action"
                                                 withoutFullWidth
                                             >
                                                 {strings.userMenuCreateFlashUpdate}
@@ -376,7 +378,7 @@ function Navbar(props: Props) {
                                         <DropdownMenuItem
                                             type="link"
                                             to="newDrefApplicationForm"
-                                            styleVariant="outline"
+                                            styleVariant="action"
                                             colorVariant="primary"
                                             withoutFullWidth
                                         >

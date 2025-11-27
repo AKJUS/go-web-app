@@ -397,7 +397,6 @@ export function Component() {
                                 name={undefined}
                                 onClick={setShowExportModalTrue}
                                 before={<DownloadTwoLineIcon />}
-                                colorVariant="primary"
                             >
                                 {strings.formExportLabel}
                             </Button>
@@ -542,7 +541,6 @@ export function Component() {
                                     name={prevStep ?? activeTab}
                                     onClick={handleTabChange}
                                     disabled={isNotDefined(prevStep)}
-                                    colorVariant="primary"
                                 >
                                     {strings.formBackButtonLabel}
                                 </Button>
@@ -550,7 +548,6 @@ export function Component() {
                                     <Button
                                         name={nextStep ?? activeTab}
                                         onClick={handleTabChange}
-                                        colorVariant="primary"
                                     >
                                         {strings.formContinueButtonLabel}
                                     </Button>

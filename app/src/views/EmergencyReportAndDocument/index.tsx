@@ -258,10 +258,7 @@ export function Component() {
             external: true,
             href: value.document ?? value.document_url,
             children: value.name,
-            withEllipsizedContent: true,
             title: value.name,
-            styleVariant: 'translucent',
-            colorVariant: 'text',
         }),
         [],
     );
@@ -322,6 +319,7 @@ export function Component() {
             {hasSituationReport && (
                 <Container
                     heading={strings.responseDocuments}
+                    withHeaderBorder
                     headerActions={(
                         <Link
                             colorVariant="primary"
@@ -333,19 +331,21 @@ export function Component() {
                             {strings.addAReportLink}
                         </Link>
                     )}
-                    withContentWell
                 >
-                    <ListView layout="block">
-                        {/* FIXME: lets no use object.entries here, also Grid can be used */}
+                    <ListView
+                        layout="block"
+                        spacing="sm"
+                    >
+                        {/* FIXME: lets no use object.entries here */}
                         {Object.entries(groupedSituationReports).map(([reportType, reports]) => (
                             <Container
                                 key={reportType}
                                 heading={reportType}
                                 headingLevel={6}
-                                withPadding
-                                withBackground
                                 withoutSpacingOpticalCorrection
                                 withHeaderBorder
+                                withDarkBackground
+                                withPadding
                             >
                                 <ListView
                                     layout="grid"

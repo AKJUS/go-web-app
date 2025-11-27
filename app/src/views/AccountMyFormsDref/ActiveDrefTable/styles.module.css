@@ -33,10 +33,6 @@
             min-width: 9rem;
         }
 
-        .actions {
-            min-width: 10rem;
-        }
-
         .sub-cell {
             border-bottom: unset;
             background-color: var(--go-ui-color-gray-20);

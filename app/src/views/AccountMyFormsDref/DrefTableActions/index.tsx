@@ -687,7 +687,7 @@ function DrefTableActions(props: Props) {
                     urlParams={{ drefId: id }}
                     colorVariant="primary"
                     styleVariant="outline"
-                    before={<PencilLineIcon className={styles.icon} />}
+                    before={<PencilLineIcon />}
                     spacing="sm"
                 >
                     {strings.dropdownActionEditLabel}
@@ -699,7 +699,7 @@ function DrefTableActions(props: Props) {
                     urlParams={{ opsUpdateId: id }}
                     colorVariant="primary"
                     styleVariant="outline"
-                    before={<PencilLineIcon className={styles.icon} />}
+                    before={<PencilLineIcon />}
                     spacing="sm"
                 >
                     {strings.dropdownActionEditLabel}
@@ -711,7 +711,7 @@ function DrefTableActions(props: Props) {
                     urlParams={{ finalReportId: id }}
                     colorVariant="primary"
                     styleVariant="outline"
-                    before={<PencilLineIcon className={styles.icon} />}
+                    before={<PencilLineIcon />}
                     spacing="sm"
                 >
                     {strings.dropdownActionEditLabel}

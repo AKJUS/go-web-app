@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { DownloadTwoLineIcon } from '@ifrc-go/icons';
 import {
     Button,
+    ListView,
     Message,
     Tab,
     TabList,
@@ -79,7 +80,6 @@ import drefSchema, {
 import Submission from './Submission';
 
 import i18n from './i18n.json';
-import styles from './styles.module.css';
 
 type GetDrefResponse = GoApiResponse<'/api/v2/dref/{id}/'>;
 
@@ -641,7 +641,6 @@ export function Component() {
         >
             <Page
                 elementRef={formContentRef}
-                className={styles.drefApplicationForm}
                 title={strings.formPageTitle}
                 heading={strings.formPageHeading}
                 description={(
@@ -681,7 +680,7 @@ export function Component() {
                     </>
                 )}
                 info={!shouldHideForm && (
-                    <TabList className={styles.tabList}>
+                    <TabList styleVariant="step">
                         <Tab
                             name="overview"
                             step={1}
@@ -729,7 +728,6 @@ export function Component() {
                     </TabList>
                 )}
                 withBackgroundColorInMainSection
-                mainSectionClassName={styles.content}
             >
                 {fetchingDref && (
                     <Message
@@ -815,33 +813,31 @@ export function Component() {
                                 disabled={disabled}
                             />
                         </TabPanel>
-                        <div className={styles.actions}>
-                            <div className={styles.pageActions}>
+                        <ListView withCenteredContents>
+                            <Button
+                                name={prevStep ?? activeTab}
+                                onClick={handleTabChange}
+                                disabled={isNotDefined(prevStep)}
+                            >
+                                {strings.formBackButtonLabel}
+                            </Button>
+                            {isDefined(nextStep) ? (
                                 <Button
-                                    name={prevStep ?? activeTab}
+                                    name={nextStep ?? activeTab}
                                     onClick={handleTabChange}
-                                    disabled={isNotDefined(prevStep)}
                                 >
-                                    {strings.formBackButtonLabel}
+                                    {strings.formContinueButtonLabel}
                                 </Button>
-                                {isDefined(nextStep) ? (
-                                    <Button
-                                        name={nextStep ?? activeTab}
-                                        onClick={handleTabChange}
-                                    >
-                                        {strings.formContinueButtonLabel}
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        name={undefined}
-                                        onClick={handleFormSubmit}
-                                        disabled={disabled}
-                                    >
-                                        {strings.formSaveButtonLabel}
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
+                            ) : (
+                                <Button
+                                    name={undefined}
+                                    onClick={handleFormSubmit}
+                                    disabled={disabled}
+                                >
+                                    {strings.formSaveButtonLabel}
+                                </Button>
+                            )}
+                        </ListView>
                     </>
                 )}
                 {isTruthyString(drefId) && showObsoletePayloadModal && (

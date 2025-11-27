@@ -14,6 +14,13 @@
         align-items: end;
     }
 
+    .after-content,
+    .before-content {
+        svg {
+            display: flex;
+        }
+    }
+
     .before-content:empty {
         display: none;
     }

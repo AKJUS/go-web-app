@@ -480,7 +480,6 @@ export function Component() {
                                             </Link>
                                             <Button
                                                 name={undefined}
-                                                colorVariant="primary"
                                                 styleVariant="filled"
                                                 onClick={handleClick}
                                             >
