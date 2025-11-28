@@ -285,9 +285,9 @@ export function Component() {
     );
 
     const handleSelectionChange = useCallback(
-        (checked: boolean, index: number, componentId: number) => {
+        (checked: boolean, index: number | undefined, componentId: number) => {
             if (!checked) {
-                removeComponentValue(index);
+                removeComponentValue(index!);
                 return;
             }
 
