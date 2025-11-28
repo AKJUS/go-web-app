@@ -1,15 +1,14 @@
 .dropdown {
     display: flex;
     flex-direction: row;
-    padding: var(--go-ui-spacing-md);
     max-width: 64rem;
     min-height: 16rem;
-    gap: var(--go-ui-spacing-md);
     overflow: auto;
 
     .region-list {
         flex-basis: 10rem;
         flex-shrink: 0;
+        padding: var(--go-ui-spacing-md) 0 0 var(--go-ui-spacing-md);
     }
 
     .region-border {

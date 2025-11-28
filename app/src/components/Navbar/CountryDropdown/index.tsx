@@ -176,6 +176,7 @@ function CountryDropdown() {
                                             icons={<SearchLineIcon />}
                                         />
                                     )}
+                                    withPadding
                                 >
                                     <ListView
                                         layout="grid"

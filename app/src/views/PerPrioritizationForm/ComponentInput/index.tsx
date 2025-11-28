@@ -49,7 +49,7 @@ interface Props {
     index: number | undefined;
     error: Error<Value> | undefined;
     component: NonNullable<PerFormComponentResponse['results']>[number];
-    onSelectionChange: (checked: boolean, index: number, componentId: number) => void;
+    onSelectionChange: (checked: boolean, index: number | undefined, componentId: number) => void;
     questionResponses: ComponentResponse['question_responses'];
     ratingDisplay?: string | undefined | null;
     readOnly?: boolean;
@@ -144,7 +144,7 @@ function ComponentInput(props: Props) {
     );
 
     const handleCheck = useCallback((checked: boolean, checkIndex: number | undefined) => {
-        if (!readOnly && isDefined(checkIndex)) {
+        if (!readOnly) {
             onSelectionChange(checked, checkIndex, component.id);
         }
     }, [component.id, readOnly, onSelectionChange]);
@@ -167,7 +167,7 @@ function ComponentInput(props: Props) {
             headerIcons={(
                 <Checkbox
                     name={index}
-                    value={isDefined(value)}
+                    value={!!value}
                     onChange={handleCheck}
                     readOnly={readOnly}
                 />
@@ -180,15 +180,16 @@ function ComponentInput(props: Props) {
                         spacing="sm"
                     >
                         <ButtonLayout
-                            spacing="sm"
+                            spacing="2xs"
+                            textSize="sm"
                             readOnly
-                            styleVariant="translucent"
                             // FIXME: use tag component
                         >
                             {ratingDisplay ?? strings.notReviewed}
                         </ButtonLayout>
                         <ButtonLayout
-                            spacing="sm"
+                            spacing="2xs"
+                            textSize="sm"
                             readOnly
                             styleVariant="translucent"
                             // FIXME: use tag component

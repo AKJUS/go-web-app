@@ -84,6 +84,7 @@ function TabLayout(props: Props) {
                 className,
             )}
             spacingOffset={spacingOffset}
+            withAdditionalInlinePadding={styleVariant === 'pill'}
         >
             {children}
             <span className={styles.visualFeedback} />

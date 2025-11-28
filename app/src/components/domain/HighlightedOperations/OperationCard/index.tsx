@@ -196,7 +196,7 @@ function OperationCard(props: Props) {
                         <ButtonLayout
                             // FIXME: we should use Tag component here
                             textSize="sm"
-                            spacing="2xs"
+                            spacing="3xs"
                             withEllipsizedContent
                             readOnly
                         >
