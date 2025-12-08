@@ -3,7 +3,10 @@ import {
     ChevronLeftLineIcon,
     ChevronRightLineIcon,
 } from '@ifrc-go/icons';
-import { Button } from '@ifrc-go/ui';
+import {
+    Button,
+    ListView,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
 import Link from '#components/Link';
@@ -23,7 +26,11 @@ export function Component() {
 
     return (
         <div className={styles.accountDrefApplications}>
-            <div className={styles.drefFeedbackForm}>
+            <ListView
+                layout="block"
+                withCenteredContents
+            >
+                <DownloadImportTemplateButton />
                 <Link
                     href="https://forms.office.com/e/wFQsu0V7Zb"
                     styleVariant="action"
@@ -33,10 +40,7 @@ export function Component() {
                 >
                     {strings.drefFeedbackForm}
                 </Link>
-            </div>
-            <div className={styles.actions}>
-                <DownloadImportTemplateButton />
-            </div>
+            </ListView>
             {currentView === 'active' && (
                 <ActiveDrefTable
                     actions={(

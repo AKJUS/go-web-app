@@ -135,10 +135,11 @@ function DrefShareModal(props: Props) {
                     // FIXME: use strings
                     heading="Already shared to"
                     withHeaderBorder
+                    empty={isNotDefined(selectedUsers) || selectedUsers.length === 0}
                 >
                     <ListView
                         withWrap
-                        spacing="sm"
+                        spacing="xs"
                     >
                         <RawList
                             data={selectedUsers}

@@ -116,12 +116,11 @@ function EmergencyResponseUnitTypeCard(props: Props) {
                     headerDescription={strings.eruReadinessInformationHeading}
                     onClose={setShowReadinessInfoFalse}
                     size="md"
-                    withContentWell
                     withoutSpacingOpticalCorrection
                 >
                     <ListView
                         layout="block"
-                        spacing="sm"
+                        spacing="2xs"
                     >
                         {readinessList?.map((readiness) => (
                             <Container
@@ -130,7 +129,7 @@ function EmergencyResponseUnitTypeCard(props: Props) {
                                     readiness.eruOwner.national_society_country_details.society_name
                                 }
                                 headingLevel={5}
-                                withBackground
+                                withDarkBackground
                                 withPadding
                             >
                                 <ListView

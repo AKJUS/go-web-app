@@ -233,7 +233,7 @@
     --go-ui-color-map-dot-fba: #ff6b00;
     --go-ui-color-map-dot-multiple-types: #4c5d9b;
 
-    --go-ui-width-content-max: 50rem;
+    --go-ui-width-content-max: 56rem;
     --go-ui-page-header-description-width-max: var(--go-ui-width-content-max);
     /* 1280px + 1.5rem padding on both sides */
     --go-ui-page-width-max: 83rem;

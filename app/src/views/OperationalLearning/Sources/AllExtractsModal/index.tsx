@@ -87,7 +87,7 @@ function AllExtractsModal(props: Props) {
             heading={strings.allExtractsModalHeading}
             onClose={onCancel}
             pending={opsLearningPending}
-            size="xl"
+            size="full"
             headerDescription={(
                 <ListView>
                     <Chip

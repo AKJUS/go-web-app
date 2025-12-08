@@ -71,6 +71,8 @@ function RawFileInput<NAME>(props: Props<NAME>) {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...buttonLayoutProps}
                 spacingOffset={spacingOffset}
+                disabled={disabled}
+                readOnly={readOnly}
             />
             <input
                 id={inputId}

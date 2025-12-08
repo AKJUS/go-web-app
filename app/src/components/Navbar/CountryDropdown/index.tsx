@@ -159,8 +159,9 @@ function CountryDropdown() {
                                             urlParams={{ regionId: region.key }}
                                             withLinkIcon
                                             colorVariant="primary"
-                                            withoutPadding
+                                            styleVariant="filled"
                                             withoutFullWidth
+                                            spacing="sm"
                                         >
                                             {/* FIXME: use translation */}
                                             {`${region.value} Region`}

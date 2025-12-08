@@ -75,9 +75,7 @@ function Navbar(props: Props) {
                         </div>
                     )}
                 </div>
-                <NavigationTabList
-                    styleVariant="nav"
-                >
+                <NavigationTabList styleVariant="nav">
                     <LanguageDropdown />
                     {!isAuthenticated && (
                         <>
@@ -133,7 +131,10 @@ function Navbar(props: Props) {
                     withWrap
                     withSpaceBetweenContents
                 >
-                    <NavigationTabList styleVariant="nav">
+                    <NavigationTabList
+                        styleVariant="nav"
+                        spacing="lg"
+                    >
                         <NavigationTab
                             to="home"
                             withoutPadding

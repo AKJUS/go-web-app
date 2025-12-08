@@ -105,7 +105,7 @@ export function Component() {
                         </Button>
                         <Button
                             name
-                            after={(<PencilFillIcon />)}
+                            before={<PencilFillIcon />}
                             onClick={setShowEditProfileModal}
                             disabled={isNotDefined(meResponse)}
                         >

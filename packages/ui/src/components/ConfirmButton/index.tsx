@@ -63,7 +63,7 @@ function ConfirmButton<NAME>(props: Props<NAME>) {
                     closeOnEscape={false}
                     size="sm"
                     footerActions={(
-                        <ListView>
+                        <ListView spacing="sm">
                             <Button
                                 name={false}
                                 onClick={setShowConfirmation}
