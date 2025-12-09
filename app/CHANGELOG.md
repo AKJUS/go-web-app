@@ -1,5 +1,18 @@
 # go-web-app
 
+## 7.24.0-beta.3
+
+### Patch Changes
+
+- 451a842: Fix Field Report form getting an error in Risk Analysis section
+- 9957c1d: Update DREF Final Report
+
+  - Remove option to add and remove indicators
+  - Update timeframe unit from "months" to days for imminent export
+
+- Updated dependencies [9957c1d]
+  - @ifrc-go/ui@2.0.0-beta.2
+
 ## 7.24.0-beta.2
 
 ### Patch Changes

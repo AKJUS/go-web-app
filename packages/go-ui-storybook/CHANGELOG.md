@@ -1,5 +1,12 @@
 # go-ui-storybook
 
+## 1.0.9-beta.2
+
+### Patch Changes
+
+- Updated dependencies [9957c1d]
+  - @ifrc-go/ui@2.0.0-beta.2
+
 ## 1.0.9-beta.1
 
 ### Patch Changes
