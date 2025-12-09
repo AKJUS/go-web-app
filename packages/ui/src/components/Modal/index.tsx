@@ -96,6 +96,7 @@ function Modal(props: Props) {
                         withPadding
                         withoutWrapInHeader
                         className={_cs(styles.modal, className)}
+                        withContentOverflow
                         headerActions={(!withoutCloseButton || headerActions) ? (
                             <>
                                 {headerActions}

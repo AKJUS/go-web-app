@@ -5,6 +5,7 @@ import {
 } from 'react';
 import {
     Container,
+    ListView,
     Pager,
     Table,
     TableBodyContent,
@@ -49,7 +50,7 @@ import Filters, { type FilterValue } from '../Filters';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-const NUM_ITEMS_PER_PAGE = 6;
+const NUM_ITEMS_PER_PAGE = 10;
 
 interface Props {
     className?: string;
@@ -74,7 +75,7 @@ function ActiveDrefTable(props: Props) {
         offset,
     } = useFilterState<FilterValue>({
         filter: {},
-        pageSize: 6,
+        pageSize: NUM_ITEMS_PER_PAGE,
     });
 
     const { dref_dref_status: drefStatus } = useGlobalEnums();
@@ -279,15 +280,21 @@ function ActiveDrefTable(props: Props) {
                     columnClassName: styles.status,
                     headerInfoTitle: strings.activeDrefTableStatusHeading,
                     headerInfoDescription: (
-                        statusDescription?.map((status) => (
-                            <TextOutput
-                                key={status.key}
-                                strongLabel
-                                withoutLabelColon
-                                label={status.status}
-                                value={status.description}
-                            />
-                        ))
+                        <ListView
+                            layout="block"
+                            withSpacingOpticalCorrection
+                        >
+                            {statusDescription?.map((status) => (
+                                <TextOutput
+                                    key={status.key}
+                                    strongLabel
+                                    withoutLabelColon
+                                    label={status.status}
+                                    value={status.description}
+                                    withBlockLayout
+                                />
+                            ))}
+                        </ListView>
                     ),
                 },
             ),
@@ -454,7 +461,7 @@ function ActiveDrefTable(props: Props) {
                 <Pager
                     activePage={page}
                     itemsCount={activeDrefResponse?.count ?? 0}
-                    maxItemsPerPage={NUM_ITEMS_PER_PAGE}
+                    maxItemsPerPage={limit}
                     onActivePageChange={setPage}
                 />
             )}

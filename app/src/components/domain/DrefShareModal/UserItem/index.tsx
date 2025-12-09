@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { DeleteBinFillIcon } from '@ifrc-go/icons';
+import { CloseLineIcon } from '@ifrc-go/icons';
 import {
     Button,
     ButtonLayout,
@@ -35,6 +35,8 @@ function UserItem(props: Props) {
         <ButtonLayout
             // FIXME: use appropriate component
             readOnly
+            spacingOffset={-2}
+            spacing="sm"
             after={(
                 <Button
                     name={userId}
@@ -42,7 +44,7 @@ function UserItem(props: Props) {
                     styleVariant="action"
                     title={strings.removeUser}
                 >
-                    <DeleteBinFillIcon />
+                    <CloseLineIcon />
                 </Button>
             )}
             styleVariant="translucent"

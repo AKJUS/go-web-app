@@ -6,6 +6,7 @@ import { DeleteBinLineIcon } from '@ifrc-go/icons';
 import {
     IconButton,
     Image,
+    InlineLayout,
     ListView,
     TextInput,
 } from '@ifrc-go/ui';
@@ -26,6 +27,7 @@ import GoMultiFileInput, { type SupportedPaths } from '#components/domain/GoMult
 import NonFieldError from '#components/NonFieldError';
 
 import i18n from './i18n.json';
+import styles from './styles.module.css';
 
 type Value = {
     client_id: string;
@@ -154,7 +156,11 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                 {label}
             </GoMultiFileInput>
             {value && value.length > 0 && (
-                <ListView withWrap>
+                <ListView
+                    layout="grid"
+                    numPreferredGridColumns={3}
+                    spacing="sm"
+                >
                     {value?.map((fileValue, index) => {
                         // NOTE: Not sure why this is here, need to
                         // TODO: talk with @frozenhelium
@@ -170,24 +176,30 @@ function MultiImageWithCaptionInput<const N extends string | number>(props: Prop
                                 layout="block"
                                 spacing="xs"
                                 withSpacingOpticalCorrection
+                                withDarkBackground
+                                withPadding
                             >
-                                <IconButton
-                                    name={index}
-                                    onClick={removeValue}
-                                    title={strings.removeImagesButtonTitle}
-                                    ariaLabel={strings.removeImagesButtonTitle}
-                                    variant="secondary"
-                                    spacing="none"
-                                    disabled={disabled || readOnly}
-                                >
-                                    <DeleteBinLineIcon />
-                                </IconButton>
-                                <NonFieldError
-                                    error={imageError}
+                                <InlineLayout
+                                    className={styles.deleteButton}
+                                    after={(
+                                        <IconButton
+                                            name={index}
+                                            onClick={removeValue}
+                                            title={strings.removeImagesButtonTitle}
+                                            ariaLabel={strings.removeImagesButtonTitle}
+                                            variant="secondary"
+                                            spacing="none"
+                                            disabled={disabled || readOnly}
+                                        >
+                                            <DeleteBinLineIcon />
+                                        </IconButton>
+                                    )}
                                 />
+                                <NonFieldError error={imageError} />
                                 <Image
                                     alt={strings.imagePreviewAlt}
                                     src={fileIdToUrlMap[fileValue.id]}
+                                    size="sm"
                                 />
                                 <TextInput
                                     name={index}

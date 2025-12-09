@@ -511,41 +511,48 @@ function ActiveOperationMap(props: Props) {
                         empty={isNotDefined(popupDetails) || popupDetails.length === 0}
                         emptyMessage={strings.operationPopoverEmpty}
                     >
-                        {popupDetails?.map(
-                            (appeal) => (
-                                <Container
-                                    key={appeal.id}
-                                    heading={appeal.name}
-                                    headingLevel={5}
-                                    spacing="sm"
-                                >
-                                    <ListView
-                                        layout="block"
-                                        spacing="sm"
-                                        withSpacingOpticalCorrection
+                        <ListView
+                            layout="block"
+                            spacing="sm"
+                            withSpacingOpticalCorrection
+                        >
+                            {popupDetails?.map(
+                                (appeal) => (
+                                    <Container
+                                        key={appeal.id}
+                                        heading={appeal.name}
+                                        headingLevel={6}
+                                        spacing="xs"
                                     >
-                                        <TextOutput
-                                            value={appeal.num_beneficiaries}
-                                            description={strings.operationPopoverPeopleAffected}
-                                            valueType="number"
-                                            textSize="sm"
-                                        />
-                                        <TextOutput
-                                            value={appeal.amount_requested}
-                                            description={strings.operationPopoverAmountRequested}
-                                            valueType="number"
-                                            textSize="sm"
-                                        />
-                                        <TextOutput
-                                            value={appeal.amount_funded}
-                                            description={strings.operationPopoverAmountFunded}
-                                            valueType="number"
-                                            textSize="sm"
-                                        />
-                                    </ListView>
-                                </Container>
-                            ),
-                        )}
+                                        <ListView
+                                            layout="block"
+                                            spacing="2xs"
+                                            withSpacingOpticalCorrection
+                                        >
+                                            <TextOutput
+                                                value={appeal.num_beneficiaries}
+                                                description={strings.operationPopoverPeopleAffected}
+                                                valueType="number"
+                                                textSize="sm"
+                                            />
+                                            <TextOutput
+                                                value={appeal.amount_requested}
+                                                description={strings
+                                                    .operationPopoverAmountRequested}
+                                                valueType="number"
+                                                textSize="sm"
+                                            />
+                                            <TextOutput
+                                                value={appeal.amount_funded}
+                                                description={strings.operationPopoverAmountFunded}
+                                                valueType="number"
+                                                textSize="sm"
+                                            />
+                                        </ListView>
+                                    </Container>
+                                ),
+                            )}
+                        </ListView>
                     </MapPopup>
                 )}
                 {isDefined(bbox) && (

@@ -487,7 +487,7 @@ function RiskImminentEventMap<
             >
                 <ListView
                     layout="block"
-                    spacing="sm"
+                    spacing="2xs"
                 >
                     <RawList
                         data={events}

@@ -6,6 +6,7 @@ import {
 import {
     Container,
     Description,
+    ListView,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -160,16 +161,18 @@ export function Component() {
                 withHeaderBorder
                 footerActions={<CountryRiskSourcesOutput />}
             >
-                <MultiMonthSelectInput
-                    name={undefined}
-                    value={selectedMonths}
-                    onChange={setSelectedMonths}
-                />
-                <RiskTable
-                    riskData={riskResponse}
-                    selectedMonths={selectedMonths}
-                    dataPending={pendingCountryRiskResponse}
-                />
+                <ListView layout="block">
+                    <MultiMonthSelectInput
+                        name={undefined}
+                        value={selectedMonths}
+                        onChange={setSelectedMonths}
+                    />
+                    <RiskTable
+                        riskData={riskResponse}
+                        selectedMonths={selectedMonths}
+                        dataPending={pendingCountryRiskResponse}
+                    />
+                </ListView>
             </Container>
             <Container
                 className={styles.eapContainer}

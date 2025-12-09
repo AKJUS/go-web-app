@@ -37,24 +37,24 @@ function TextArea<const N>(props: Props<N>) {
     );
 
     const handleInputFocus = React.useCallback((e: React.FocusEvent<HTMLTextAreaElement>) => {
-        if (isNotDefined(onChange)) {
+        if (isNotDefined(onChange) || disabled || readOnly) {
             return;
         }
 
         if (e.target.value === '') {
             onChange(`${BULLET} `, name);
         }
-    }, [onChange, name]);
+    }, [onChange, name, disabled, readOnly]);
 
     const handleKeyUp = React.useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (isNotDefined(onChange)) {
+        if (isNotDefined(onChange) || disabled || readOnly) {
             return;
         }
 
         if (e.key === KEY_ENTER) {
             onChange(`${e.currentTarget.value}${BULLET} `, name);
         }
-    }, [onChange, name]);
+    }, [onChange, name, disabled, readOnly]);
 
     return (
         <InputContainer

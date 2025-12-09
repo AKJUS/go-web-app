@@ -8,14 +8,17 @@ import {
     type TableActionsProps,
 } from '@ifrc-go/ui';
 import { numericIdSelector } from '@ifrc-go/ui/utils';
+import { _cs } from '@togglecorp/fujs';
 
 import Link, { type Props as LinkProps } from '#components/Link';
 import { type GoApiResponse } from '#utils/restRequest';
 
-import type { Props as CountryLinkProps } from './CountryLink';
-import CountryLink from './CountryLink';
-import type { Props as RegionLinkProps } from './RegionLink';
-import RegionLink from './RegionLink';
+import type { Props as CountryLinkProps } from '../CountryLink';
+import CountryLink from '../CountryLink';
+import type { Props as RegionLinkProps } from '../RegionLink';
+import RegionLink from '../RegionLink';
+
+import styles from './styles.module.css';
 
 type Options<D, K, CompProps, HeaderProps> = {
     sortable?: boolean,
@@ -121,7 +124,7 @@ export function createCountryListColumn<DATUM, KEY>(
             };
         },
         cellRendererClassName: options?.cellRendererClassName,
-        columnClassName: options?.columnClassName,
+        columnClassName: _cs(styles.countryList, options?.columnClassName),
         headerCellRendererClassName: options?.headerCellRendererClassName,
         cellContainerClassName: options?.cellContainerClassName,
         columnWidth: options?.columnWidth,

@@ -35,6 +35,8 @@ import Filters, { type FilterValue } from '../Filters';
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
+const NUM_ITEMS_PER_PAGE = 10;
+
 interface Props {
     className?: string;
     actions?: React.ReactNode;
@@ -58,7 +60,7 @@ function CompletedDrefTable(props: Props) {
         offset,
     } = useFilterState<FilterValue>({
         filter: {},
-        pageSize: 6,
+        pageSize: NUM_ITEMS_PER_PAGE,
     });
 
     const {

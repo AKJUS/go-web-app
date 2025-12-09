@@ -65,7 +65,7 @@ export type Props = CommonLinkProps & (InternalLinkProps | ExternalLinkProps);
 function Link(props: Props) {
     const {
         className,
-        colorVariant = 'secondary',
+        colorVariant = 'text',
         styleVariant = 'action',
         spacing,
         spacingOffset = -3,

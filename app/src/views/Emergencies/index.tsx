@@ -300,10 +300,15 @@ export function Component() {
                     )}
                 </Container>
             </ListView>
-            {eventsResponse && (
-                <Map eventList={eventsResponse.results} />
-            )}
-            <EmergenciesTable />
+            <ListView
+                layout="block"
+                spacing="sm"
+            >
+                {eventsResponse && (
+                    <Map eventList={eventsResponse.results} />
+                )}
+                <EmergenciesTable />
+            </ListView>
             {isIfrcAdmin && (
                 <FlashUpdateTable />
             )}

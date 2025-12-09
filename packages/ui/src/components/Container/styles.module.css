@@ -1,4 +1,9 @@
 .container {
+    &.with-fixed-height {
+        /* FIXME: use variable */
+        max-height: 18rem;
+    }
+
     &.with-shadow {
         box-shadow: var(--go-ui-box-shadow-md);
     }
@@ -37,6 +42,7 @@
                 display: contents;
 
                 .overflow-container {
+                    flex-grow: 1;
                     overflow-block: auto;
                 }
             }

@@ -333,8 +333,9 @@ export function Component() {
                     )}
                 >
                     <ListView
-                        layout="block"
+                        layout="grid"
                         spacing="sm"
+                        numPreferredGridColumns={3}
                     >
                         {/* FIXME: lets no use object.entries here */}
                         {Object.entries(groupedSituationReports).map(([reportType, reports]) => (
@@ -342,10 +343,13 @@ export function Component() {
                                 key={reportType}
                                 heading={reportType}
                                 headingLevel={6}
-                                withoutSpacingOpticalCorrection
                                 withHeaderBorder
-                                withDarkBackground
                                 withPadding
+                                withShadow
+                                withBackground
+                                withContentOverflow
+                                withFixedHeight
+                                spacing="sm"
                             >
                                 <ListView
                                     layout="grid"

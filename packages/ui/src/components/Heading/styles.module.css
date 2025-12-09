@@ -6,6 +6,8 @@
     font-size: var(--font-size);
     font-weight: var(--go-ui-font-weight-semibold);
 
+    /* FIXME: remove media print color */
+
     &.center-aligned {
         text-align: center;
     }

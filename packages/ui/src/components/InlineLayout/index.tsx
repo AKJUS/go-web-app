@@ -104,6 +104,7 @@ function InlineLayout(props: Props) {
                     {before}
                 </div>
             )}
+            {/* FIXME: remove unnecessary gap when children is empty */}
             <div
                 className={_cs(
                     styles.children,
