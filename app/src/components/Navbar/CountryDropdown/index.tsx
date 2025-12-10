@@ -152,37 +152,41 @@ function CountryDropdown() {
                                     className={styles.regionDetailContent}
                                     withHeaderBorder
                                     withContentOverflow
-                                    heading={(
-                                        <DropdownMenuItem
-                                            type="link"
-                                            to="regionsLayout"
-                                            urlParams={{ regionId: region.key }}
-                                            withLinkIcon
-                                            colorVariant="primary"
-                                            styleVariant="filled"
-                                            withoutFullWidth
-                                            spacing="sm"
+                                    headerDescription={(
+                                        <ListView
+                                            withWrap
+                                            withSpaceBetweenContents
                                         >
-                                            {/* FIXME: use translation */}
-                                            {`${region.value} Region`}
-                                        </DropdownMenuItem>
-                                    )}
-                                    headingLevel={4}
-                                    headerActions={(
-                                        <TextInput
-                                            name={undefined}
-                                            placeholder={strings.countryDropdownSearchPlaceholder}
-                                            value={countrySearch}
-                                            onChange={setCountrySearch}
-                                            icons={<SearchLineIcon />}
-                                        />
+                                            <DropdownMenuItem
+                                                type="link"
+                                                to="regionsLayout"
+                                                urlParams={{ regionId: region.key }}
+                                                withLinkIcon
+                                                colorVariant="primary"
+                                                styleVariant="filled"
+                                                withoutFullWidth
+                                                spacing="sm"
+                                            >
+                                                {/* FIXME: use translation */}
+                                                {`${region.value} Region`}
+                                            </DropdownMenuItem>
+                                            <TextInput
+                                                name={undefined}
+                                                placeholder={strings
+                                                    .countryDropdownSearchPlaceholder}
+                                                value={countrySearch}
+                                                onChange={setCountrySearch}
+                                                icons={<SearchLineIcon />}
+                                            />
+                                        </ListView>
                                     )}
                                     withPadding
                                 >
                                     <ListView
                                         layout="grid"
-                                        spacing="sm"
-                                        numPreferredGridColumns={3}
+                                        spacing="xs"
+                                        numPreferredGridColumns={4}
+                                        minGridColumnSize="10rem"
                                     >
                                         {/* TODO: use RawList */}
                                         {countriesInSelectedRegion?.map(
@@ -193,10 +197,10 @@ function CountryDropdown() {
                                                     to="countriesLayout"
                                                     urlParams={{ countryId: id }}
                                                     styleVariant="action"
-                                                    withLinkIcon
                                                     spacing="sm"
                                                     withoutFullWidth
                                                     withoutPadding
+                                                    textSize="sm"
                                                 >
                                                     {name}
                                                 </DropdownMenuItem>

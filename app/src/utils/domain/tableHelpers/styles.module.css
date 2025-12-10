@@ -1,3 +1,19 @@
 .country-list {
     min-width: 8rem;
 }
+
+.country {
+    min-width: 8rem;
+}
+
+.event {
+    min-width: 10rem;
+}
+
+.disaster-type {
+    min-width: 8rem;
+}
+
+.budget {
+    min-width: 8rem;
+}

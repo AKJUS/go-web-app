@@ -1,6 +1,7 @@
 import {
     HTMLProps,
     RefObject,
+    useMemo,
 } from 'react';
 import {
     _cs,
@@ -12,7 +13,7 @@ import BlockView from '#components/BlockView';
 import DefaultMessage from '#components/DefaultMessage';
 import Description from '#components/Description';
 import Heading, { type Props as HeadingProps } from '#components/Heading';
-import InlineView from '#components/InlineView';
+import InlineView, { Props as InlineViewProps } from '#components/InlineView';
 import ListView from '#components/ListView';
 import useSpacingToken from '#hooks/useSpacingToken';
 import {
@@ -78,7 +79,7 @@ function Container(props: Props) {
 
         heading,
         withEllipsizedHeading,
-        headingLevel,
+        headingLevel = 3,
         headerIcons,
         headerActions,
         headerDescription,
@@ -174,6 +175,18 @@ function Container(props: Props) {
         </>
     );
 
+    const wrapBreakpoint = useMemo<InlineViewProps['wrapBreakpoint']>(() => {
+        if (withoutWrapInHeader) {
+            return 'none';
+        }
+
+        if (headingLevel > 3) {
+            return 'sm';
+        }
+
+        return 'md';
+    }, [headingLevel, withoutWrapInHeader]);
+
     return (
         <BlockView
             // eslint-disable-next-line react/jsx-props-no-spreading
@@ -204,7 +217,7 @@ function Container(props: Props) {
                             spacing={spacing}
                             spacingOffset={spacingOffset - 1}
                             withoutSpacingOpticalCorrection={withoutSpacingOpticalCorrection}
-                            withoutWrap={withoutWrapInHeader}
+                            wrapBreakpoint={wrapBreakpoint}
                             before={headerIcons}
                             after={headerActions && (
                                 <ListView

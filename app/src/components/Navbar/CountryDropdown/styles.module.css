@@ -3,10 +3,11 @@
     flex-direction: row;
     max-width: 64rem;
     min-height: 16rem;
+    max-height: 70vh;
     overflow: auto;
 
     .region-list {
-        flex-basis: 10rem;
+        flex-basis: 9rem;
         flex-shrink: 0;
         padding: var(--go-ui-spacing-md) 0 0 var(--go-ui-spacing-md);
     }

@@ -96,7 +96,7 @@ export function createProgressColumn<D, K>(
     } = {
         id,
         title,
-        columnClassName: options?.columnClassName,
+        columnClassName: _cs(styles.progressColumn, options?.columnClassName),
         headerCellRenderer: HeaderCell,
         headerCellRendererClassName: options?.headerCellRendererClassName,
         headerContainerClassName: options?.headerContainerClassName,
@@ -421,7 +421,7 @@ export function createTimelineColumn<DATUM, KEY>(
         }),
         headerContainerClassName: options?.headerContainerClassName,
         cellRendererClassName: options?.cellRendererClassName,
-        columnClassName: options?.columnClassName,
+        columnClassName: _cs(styles.timelineColumn, options?.columnClassName),
         headerCellRendererClassName: options?.headerCellRendererClassName,
         cellContainerClassName: _cs(
             options?.cellContainerClassName,

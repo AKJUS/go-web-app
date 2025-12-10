@@ -74,6 +74,7 @@ function TabListLayout(props: Props) {
                         : spacing}
                     role="tablist"
                     withWrap={styleVariant === 'nav'}
+                    withSpacingOpticalCorrection
                 >
                     {children}
                 </ListView>

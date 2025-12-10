@@ -56,6 +56,7 @@ function PageHeader(props: Props) {
                             {wikiLink}
                         </ListView>
                     )}
+                    wrapBreakpoint="lg"
                 >
                     {breadCrumbs}
                 </InlineView>
