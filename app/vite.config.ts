@@ -68,6 +68,7 @@ export default defineConfig(({ mode }) => {
         envPrefix: 'APP_',
         server: {
             port: 3000,
+            allowedHosts: ["host.docker.internal"],
             strictPort: true,
         },
         build: {
