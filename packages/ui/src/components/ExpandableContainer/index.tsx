@@ -127,6 +127,7 @@ function ExpandableContainer(props: Props) {
             // elementRef={containerRef}
             className={_cs(styles.expandableContainer, className)}
             withHeaderBorder={withHeaderBorder && expanded}
+            withoutWrapInHeader={!withToggleButtonOnFooter}
             headerActions={(
                 <>
                     {headerActions}

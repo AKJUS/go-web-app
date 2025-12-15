@@ -78,7 +78,7 @@ function TabPage(props: Props) {
             )}
             <ListView
                 layout="block"
-                spacing="xl"
+                spacing="3xl"
             >
                 {mainContent}
             </ListView>

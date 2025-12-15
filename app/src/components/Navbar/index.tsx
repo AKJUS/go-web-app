@@ -61,72 +61,79 @@ function Navbar(props: Props) {
                 className={styles.top}
                 contentClassName={styles.topContent}
             >
-                <div className={styles.brand}>
-                    <Link to="home">
-                        <img
-                            className={styles.goIcon}
-                            src={goLogo}
-                            alt={strings.headerLogoAltText}
-                        />
-                    </Link>
-                    {environment !== 'production' && (
-                        <div className={styles.env}>
-                            {environment}
-                        </div>
-                    )}
-                </div>
-                <NavigationTabList styleVariant="nav">
-                    <LanguageDropdown />
-                    {!isAuthenticated && (
-                        <>
-                            <NavigationTab
-                                to="login"
-                                className={styles.actionItem}
+                <ListView
+                    withWrap
+                    withSpaceBetweenContents
+                >
+                    <div className={styles.brand}>
+                        <Link to="home">
+                            <img
+                                className={styles.goIcon}
+                                src={goLogo}
+                                alt={strings.headerLogoAltText}
+                            />
+                        </Link>
+                        {environment !== 'production' && (
+                            <div className={styles.env}>
+                                {environment}
+                            </div>
+                        )}
+                    </div>
+                    <NavigationTabList styleVariant="nav">
+                        <LanguageDropdown />
+                        {!isAuthenticated && (
+                            <>
+                                <NavigationTab
+                                    to="login"
+                                    className={styles.actionItem}
+                                >
+                                    {strings.userMenuLogin}
+                                </NavigationTab>
+                                <NavigationTab
+                                    to="register"
+                                    className={styles.actionItem}
+                                >
+                                    {strings.userMenuRegister}
+                                </NavigationTab>
+                            </>
+                        )}
+                        <AuthenticatedUserDropdown />
+                        <DropdownMenu
+                            label={strings.headerCreateAReportLabel}
+                            labelColorVariant="primary"
+                            labelSpacing="lg"
+                        >
+                            <DropdownMenuItem
+                                type="link"
+                                to="fieldReportFormNew"
                             >
-                                {strings.userMenuLogin}
-                            </NavigationTab>
-                            <NavigationTab
-                                to="register"
-                                className={styles.actionItem}
+                                {strings.headerDropdownNewFieldReport}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                type="link"
+                                to="newThreeWActivity"
                             >
-                                {strings.userMenuRegister}
-                            </NavigationTab>
-                        </>
-                    )}
-                    <AuthenticatedUserDropdown />
-                    <DropdownMenu
-                        label={strings.headerCreateAReportLabel}
-                        labelColorVariant="primary"
-                        labelSpacing="lg"
-                    >
-                        <DropdownMenuItem
-                            type="link"
-                            to="fieldReportFormNew"
-                        >
-                            {strings.headerDropdownNewFieldReport}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            type="link"
-                            to="newThreeWActivity"
-                        >
-                            {strings.headerDropdownNew3WActivity}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            type="link"
-                            to="newDrefApplicationForm"
-                        >
-                            {strings.headerDropdownNewDrefApplication}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            type="link"
-                            to="flashUpdateFormNew"
-                        >
-                            {strings.headerDropdownNewFlashUpdate}
-                        </DropdownMenuItem>
-                    </DropdownMenu>
-                </NavigationTabList>
+                                {strings.headerDropdownNew3WActivity}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                type="link"
+                                to="newDrefApplicationForm"
+                            >
+                                {strings.headerDropdownNewDrefApplication}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                type="link"
+                                to="flashUpdateFormNew"
+                            >
+                                {strings.headerDropdownNewFlashUpdate}
+                            </DropdownMenuItem>
+                        </DropdownMenu>
+                    </NavigationTabList>
+                </ListView>
             </PageContainer>
-            <PageContainer>
+            <PageContainer
+                contentClassName={styles.bottomContent}
+            >
                 <ListView
                     withWrap
                     withSpaceBetweenContents

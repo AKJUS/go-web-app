@@ -49,6 +49,10 @@ export interface Props extends Omit<HTMLProps<HTMLDivElement>, 'ref'>{
     footer?: React.ReactNode;
     withFooterBorder?: boolean;
 
+    // FIXME: these props should be merged
+    withoutWrapInFooter?: boolean;
+    withLargeBreakpointInHeader?: boolean,
+
     pending?: boolean;
     overlayPending?: boolean;
     empty?: boolean;
@@ -70,6 +74,8 @@ export interface Props extends Omit<HTMLProps<HTMLDivElement>, 'ref'>{
     spacingOffset?: number;
     withoutSpacingOpticalCorrection?: boolean;
     withFixedHeight?: boolean;
+
+    withCenteredContent?: boolean;
 }
 
 function Container(props: Props) {
@@ -87,6 +93,7 @@ function Container(props: Props) {
         withCenteredHeading,
         withCenteredHeaderDescription,
         withoutWrapInHeader,
+        withLargeBreakpointInHeader,
 
         filters,
 
@@ -94,6 +101,7 @@ function Container(props: Props) {
         footer,
         footerActions,
         withFooterBorder,
+        withoutWrapInFooter,
 
         children,
         withContentOverflow,
@@ -119,6 +127,8 @@ function Container(props: Props) {
         spacing,
         spacingOffset = 0,
         withoutSpacingOpticalCorrection,
+
+        withCenteredContent,
 
         ...divProps
     } = props;
@@ -175,7 +185,7 @@ function Container(props: Props) {
         </>
     );
 
-    const wrapBreakpoint = useMemo<InlineViewProps['wrapBreakpoint']>(() => {
+    const headerWrapBreakpoint = useMemo<InlineViewProps['wrapBreakpoint']>(() => {
         if (withoutWrapInHeader) {
             return 'none';
         }
@@ -184,8 +194,12 @@ function Container(props: Props) {
             return 'sm';
         }
 
+        if (withLargeBreakpointInHeader) {
+            return 'lg';
+        }
+
         return 'md';
-    }, [headingLevel, withoutWrapInHeader]);
+    }, [headingLevel, withLargeBreakpointInHeader, withoutWrapInHeader]);
 
     return (
         <BlockView
@@ -199,6 +213,7 @@ function Container(props: Props) {
                 withShadow && styles.withShadow,
                 withContentWell && styles.withContentWell,
                 withFixedHeight && styles.withFixedHeight,
+                withCenteredContent && styles.withCenteredContent,
                 className,
             )}
             spacing={spacing}
@@ -217,7 +232,7 @@ function Container(props: Props) {
                             spacing={spacing}
                             spacingOffset={spacingOffset - 1}
                             withoutSpacingOpticalCorrection={withoutSpacingOpticalCorrection}
-                            wrapBreakpoint={wrapBreakpoint}
+                            wrapBreakpoint={headerWrapBreakpoint}
                             before={headerIcons}
                             after={headerActions && (
                                 <ListView
@@ -252,12 +267,13 @@ function Container(props: Props) {
                     withoutSpacingOpticalCorrection={withoutSpacingOpticalCorrection}
                     before={footerIcons}
                     after={footerActions}
+                    wrapBreakpoint={withoutWrapInFooter ? 'none' : 'lg'}
                 >
                     {footer}
                 </InlineView>
             )}
-            withbeforeSeparator={withHeaderBorder}
-            withafterSeparator={withFooterBorder}
+            withBeforeSeparator={withHeaderBorder}
+            withAfterSeparator={withFooterBorder}
             childrenContainerClassName={_cs(
                 styles.content,
                 overlayPending && styles.pendingOverlaid,

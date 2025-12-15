@@ -2,13 +2,17 @@ import {
     type Column,
     HeaderCell,
     type HeaderCellProps,
+    type NumberOutputProps,
     ReducedListDisplay,
     type ReducedListDisplayProps,
     type SortDirection,
     type TableActionsProps,
-    NumberOutputProps,
 } from '@ifrc-go/ui';
-import { createNumberColumn, createStringColumn, numericIdSelector } from '@ifrc-go/ui/utils';
+import {
+    createNumberColumn,
+    createStringColumn,
+    numericIdSelector,
+} from '@ifrc-go/ui/utils';
 import { _cs } from '@togglecorp/fujs';
 
 import Link, { type Props as LinkProps } from '#components/Link';
@@ -20,7 +24,6 @@ import type { Props as RegionLinkProps } from '../RegionLink';
 import RegionLink from '../RegionLink';
 
 import styles from './styles.module.css';
-import { CellProps } from '../../../../../packages/ui/dist/components/Table/Cell';
 
 type Options<D, K, CompProps, HeaderProps> = {
     sortable?: boolean,
@@ -168,7 +171,7 @@ export function createRegionListColumn<DATUM, KEY>(
             };
         },
         cellRendererClassName: options?.cellRendererClassName,
-        columnClassName: options?.columnClassName,
+        columnClassName: _cs(styles.regionList, options?.columnClassName),
         headerCellRendererClassName: options?.headerCellRendererClassName,
         cellContainerClassName: options?.cellContainerClassName,
         columnWidth: options?.columnWidth,
@@ -221,7 +224,7 @@ export function createDisasterTypeColumn<D, K extends string | number>(
     id: string,
     title: string,
     accessor: (item: D) => string | undefined | null,
-    options?: Options<D, K, CellProps<string>, HeaderCellProps>,
+    options?: Options<D, K, { value: string }, HeaderCellProps>,
 ) {
     return createStringColumn<D, K>(
         id,
@@ -230,6 +233,40 @@ export function createDisasterTypeColumn<D, K extends string | number>(
         {
             ...options,
             columnClassName: _cs(styles.disasterType, options?.columnClassName),
+        },
+    );
+}
+
+export function createTitleColumn<D, K extends string | number>(
+    id: string,
+    title: string,
+    accessor: (item: D) => string | undefined | null,
+    options?: Options<D, K, { value: string }, HeaderCellProps>,
+) {
+    return createStringColumn<D, K>(
+        id,
+        title,
+        accessor,
+        {
+            ...options,
+            columnClassName: _cs(styles.title, options?.columnClassName),
+        },
+    );
+}
+
+export function createAppealCodeColumn<D, K extends string | number>(
+    id: string,
+    title: string,
+    accessor: (item: D) => string | undefined | null,
+    options?: Options<D, K, { value: string }, HeaderCellProps>,
+) {
+    return createStringColumn<D, K>(
+        id,
+        title,
+        accessor,
+        {
+            ...options,
+            columnClassName: _cs(styles.appealCode, options?.columnClassName),
         },
     );
 }

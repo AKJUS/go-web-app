@@ -31,6 +31,7 @@ import DistrictSearchMultiSelectInput, { type DistrictItem } from '#components/d
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import useFilterState from '#hooks/useFilterState';
 import {
+    createAppealCodeColumn,
     createBudgetColumn,
     createCountryColumn,
     createDisasterTypeColumn,
@@ -148,11 +149,10 @@ function AppealsTable(props: Props) {
                     columnClassName: styles.appealType,
                 },
             ),
-            createStringColumn<AppealListItem, string>(
+            createAppealCodeColumn<AppealListItem, string>(
                 'code',
                 strings.appealsTableCode,
                 (item) => item.code,
-                { columnClassName: styles.code },
             ),
             createEventColumn<AppealListItem, string>(
                 'operation',

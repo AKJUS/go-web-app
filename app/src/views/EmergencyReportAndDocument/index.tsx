@@ -16,6 +16,7 @@ import {
 import { SortContext } from '@ifrc-go/ui/contexts';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
+    createActionColumn,
     createDateColumn,
     createStringColumn,
     numericIdSelector,
@@ -35,9 +36,11 @@ import { adminUrl } from '#config';
 import useRegion, { type Region } from '#hooks/domain/useRegion';
 import useFilterState from '#hooks/useFilterState';
 import {
+    createAppealCodeColumn,
     createCountryListColumn,
-    createLinkColumn,
+    createEventColumn,
     createRegionListColumn,
+    createTitleColumn,
 } from '#utils/domain/tableHelpers';
 import { type EmergencyOutletContext } from '#utils/outletContext';
 import { resolveUrl } from '#utils/resolveUrl';
@@ -164,7 +167,7 @@ export function Component() {
                 strings.fieldReportsTableCreatedAt,
                 (item) => item.created_at,
             ),
-            createLinkColumn<FieldReportListItem, number>(
+            createEventColumn<FieldReportListItem, number>(
                 'summary',
                 strings.fieldReportsTableName,
                 (item) => item.summary,
@@ -207,29 +210,33 @@ export function Component() {
                 (item) => item.type,
                 { sortable: true },
             ),
-            createStringColumn<AppealDocumentType, number>(
+            createAppealCodeColumn<AppealDocumentType, number>(
                 'code',
                 strings.appealDocumentCode,
                 (item) => item.appeal.code,
             ),
-            createStringColumn<AppealDocumentType, number>(
+            createTitleColumn<AppealDocumentType, number>(
                 'description',
                 strings.appealDocumentDescription,
                 (item) => item.description,
             ),
-            createStringColumn<AppealDocumentType, number>(
+            createTitleColumn<AppealDocumentType, number>(
                 'name',
                 strings.appealDocumentLink,
                 (item) => item.name,
                 { sortable: true },
             ),
-            createLinkColumn<AppealDocumentType, number>(
+            createActionColumn<AppealDocumentType, number>(
                 'action',
-                '',
-                () => <DownloadFillIcon />,
                 (item) => ({
-                    external: true,
-                    href: item.document ?? item.document_url ?? undefined,
+                    children: (
+                        <Link
+                            external
+                            href={item.document ?? item.document_url ?? undefined}
+                        >
+                            <DownloadFillIcon />
+                        </Link>
+                    ),
                 }),
             ),
         ]),
