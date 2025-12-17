@@ -9,7 +9,6 @@ import {
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { isDefined } from '@togglecorp/fujs';
 
-import { type ManageResponse } from '../common';
 import LocalUnitsForm from './LocalUnitsForm';
 
 import i18n from './i18n.json';
@@ -20,7 +19,6 @@ interface Props {
     setReadOnly?: React.Dispatch<React.SetStateAction<boolean>>;
     onClose: (requestDone?: boolean) => void;
     onDeleteActionSuccess?: () => void;
-    manageResponse: ManageResponse;
 }
 
 function LocalUnitsFormModal(props: Props) {
@@ -30,7 +28,6 @@ function LocalUnitsFormModal(props: Props) {
         readOnly,
         setReadOnly,
         onDeleteActionSuccess,
-        manageResponse,
     } = props;
 
     const strings = useTranslation(i18n);
@@ -66,16 +63,15 @@ function LocalUnitsFormModal(props: Props) {
             headerActions={<ListView elementRef={actionsContainerRef} />}
             // FIXME: heading description
             headerDescription={(
-                <>
+                <ListView layout="block">
                     <div ref={headingDescriptionRef} />
                     <div ref={headerDescriptionRef} />
-                </>
+                </ListView>
             )}
             withFooterBorder={!readOnly}
             withContentOverflow
         >
             <LocalUnitsForm
-                manageResponse={manageResponse}
                 localUnitId={localUnitId}
                 onSuccess={handleSuccess}
                 readOnly={readOnly}

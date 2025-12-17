@@ -5,11 +5,13 @@ import {
 import { useOutletContext } from 'react-router-dom';
 import {
     Button,
+    ListView,
     Modal,
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import { resolveToString } from '@ifrc-go/ui/utils';
+import { isDefined } from '@togglecorp/fujs';
 
 import useAlert from '#hooks/useAlert';
 import { type CountryOutletContext } from '#utils/outletContext';
@@ -18,7 +20,7 @@ import { useLazyRequest } from '#utils/restRequest';
 import i18n from './i18n.json';
 
 export type ManageLocalUnitsValues = {
-    id: number;
+    id: number | undefined;
     country: number;
     local_unit_type: number;
     enabled: boolean;
@@ -91,7 +93,8 @@ function ConfirmationModal(props: Props) {
         url: '/api/v2/externally-managed-local-unit/{id}/',
         method: 'PUT',
         body: (values: ManageLocalUnitsValues) => values,
-        pathVariables: manageLocalUnitsValues && { id: manageLocalUnitsValues?.id },
+        pathVariables: isDefined(manageLocalUnitsValues?.id)
+            ? { id: manageLocalUnitsValues.id } : undefined,
         onSuccess: () => {
             alert.show(
                 manageLocalUnitsValues?.enabled
@@ -109,9 +112,11 @@ function ConfirmationModal(props: Props) {
     const handleConfirmButtonChange = useCallback(() => {
         if (isNewManageLocalUnit) {
             addManageLocalUnit(manageLocalUnitsValues);
+        } else {
+            updateManageLocalUnit(manageLocalUnitsValues);
         }
-        updateManageLocalUnit(manageLocalUnitsValues);
-    }, [isNewManageLocalUnit, addManageLocalUnit, manageLocalUnitsValues, updateManageLocalUnit]);
+    }, [isNewManageLocalUnit,
+        addManageLocalUnit, manageLocalUnitsValues, updateManageLocalUnit]);
 
     return (
         <Modal
@@ -127,7 +132,7 @@ function ConfirmationModal(props: Props) {
             }
             size="sm"
             footerActions={(
-                <>
+                <ListView>
                     <Button
                         name={undefined}
                         onClick={onClose}
@@ -141,7 +146,7 @@ function ConfirmationModal(props: Props) {
                     >
                         {strings.confirmButtonLabel}
                     </Button>
-                </>
+                </ListView>
             )}
         >
             <TextInput

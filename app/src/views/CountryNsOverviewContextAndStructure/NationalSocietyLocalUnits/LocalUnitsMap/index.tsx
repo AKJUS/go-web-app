@@ -64,7 +64,6 @@ import {
     useRequest,
 } from '#utils/restRequest';
 
-import { type ManageResponse } from '../common';
 import {
     AUTHENTICATED,
     PUBLIC,
@@ -131,14 +130,12 @@ function emailKeySelector(email: string) {
 interface Props {
     filter: FilterValue;
     localUnitsOptions: GoApiResponse<'/api/v2/local-units-options/'> | undefined;
-    manageResponse: ManageResponse;
 }
 
 function LocalUnitsMap(props: Props) {
     const {
         filter,
         localUnitsOptions,
-        manageResponse,
     } = props;
     const { countryResponse } = useOutletContext<CountryOutletContext>();
     const { isAuthenticated } = useAuth();
@@ -608,7 +605,6 @@ function LocalUnitsMap(props: Props) {
             </BaseMap>
             {(showLocalUnitModal && (
                 <LocalUnitsFormModal
-                    manageResponse={manageResponse}
                     onClose={handleLocalUnitsFormModalClose}
                     localUnitId={clickedPointProperties?.localUnitId}
                     readOnly={readOnlyLocalUnitModal}

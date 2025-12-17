@@ -157,7 +157,6 @@ function LocalUnitValidateModal(props: Props) {
     return (
         <Modal
             onClose={onClose}
-            size="lg"
             heading={
                 resolveToString(
                     strings.validateLocalUnitHeading,

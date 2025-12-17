@@ -19,7 +19,10 @@ import {
     numericIdSelector,
     resolveToString,
 } from '@ifrc-go/ui/utils';
-import { isDefined } from '@togglecorp/fujs';
+import {
+    isDefined,
+    isNotDefined,
+} from '@togglecorp/fujs';
 
 import { type CountryOutletContext } from '#utils/outletContext';
 import {
@@ -64,12 +67,13 @@ function ConfigureLocalUnitsModal(props: Props) {
 
     const handleLocalUnitSwitchChange = useCallback((value: boolean, name: number) => {
         setLocalUnitType(name);
-        if (isDefined(manageResponse)
-            && isDefined(manageResponse[name])
-            && isDefined(countryResponse)
-        ) {
+
+        if (isDefined(countryResponse)) {
+            const isNew = isNotDefined(manageResponse) || isNotDefined(manageResponse[name]);
+            const manageId = isNew ? undefined : manageResponse[name]?.externallyManagedId;
+
             setManageLocalUnitsValues({
-                id: manageResponse[name].externallyManagedId,
+                id: manageId,
                 country: countryResponse.id,
                 local_unit_type: name,
                 enabled: value,
@@ -84,11 +88,12 @@ function ConfigureLocalUnitsModal(props: Props) {
     ]);
 
     const isNewManageLocalUnit = useMemo(() => {
-        if (isDefined(manageResponse) && isDefined(manageLocalUnitsValues)) {
-            return !(manageLocalUnitsValues.local_unit_type in manageResponse);
+        if (isNotDefined(manageLocalUnitsValues)
+            || isNotDefined(manageLocalUnitsValues?.id)) {
+            return true;
         }
         return false;
-    }, [manageResponse, manageLocalUnitsValues]);
+    }, [manageLocalUnitsValues]);
 
     const {
         response: localUnitsOptions,

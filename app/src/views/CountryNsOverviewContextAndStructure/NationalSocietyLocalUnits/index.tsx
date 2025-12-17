@@ -1,5 +1,6 @@
 import {
     useCallback,
+    useMemo,
     useState,
 } from 'react';
 import { useOutletContext } from 'react-router-dom';
@@ -74,7 +75,6 @@ function NationalSocietyLocalUnits(props: Props) {
 
     // NOTE: key is used to refresh the page when local unit data is updated
     const [localUnitUpdateKey, setLocalUnitUpdateKey] = useState(0);
-    const [manageResponse, setManageResponse] = useState<ManageResponse>();
 
     const [showAddEditModal, {
         setTrue: setShowAddEditModalTrue,
@@ -116,21 +116,28 @@ function NationalSocietyLocalUnits(props: Props) {
 
     const {
         trigger: manageLocalUnits,
+        response: manageLocalUnitsResponse,
         pending: manageLocalUnitsPending,
     } = useLazyRequest({
         url: '/api/v2/externally-managed-local-unit/',
         query: {
             country__id: countryResponse?.id,
         },
-        onSuccess: (response) => {
-            const data = listToMap(
-                response.results,
+    });
+
+    const manageResponse: ManageResponse = useMemo(() => {
+        if (isDefined(manageLocalUnitsResponse)) {
+            if (manageLocalUnitsResponse.results.length === 0) {
+                return undefined;
+            }
+            return listToMap(
+                manageLocalUnitsResponse?.results,
                 (res) => res.local_unit_type_details.id,
                 (res) => ({ enabled: res.enabled, externallyManagedId: res.id }),
             );
-            setManageResponse(data);
-        },
-    });
+        }
+        return undefined;
+    }, [manageLocalUnitsResponse]);
 
     const pending = localUnitsOptionsPending || manageLocalUnitsPending;
 
@@ -276,7 +283,6 @@ function NationalSocietyLocalUnits(props: Props) {
                 )}
                 <TabPanel name="map">
                     <LocalUnitsMap
-                        manageResponse={manageResponse}
                         key={localUnitUpdateKey}
                         filter={filter}
                         localUnitsOptions={localUnitsOptions}
@@ -292,7 +298,6 @@ function NationalSocietyLocalUnits(props: Props) {
                 </TabPanel>
                 {showAddEditModal && (
                     <LocalUnitsFormModal
-                        manageResponse={manageResponse}
                         onClose={handleLocalUnitFormModalClose}
                     />
                 )}

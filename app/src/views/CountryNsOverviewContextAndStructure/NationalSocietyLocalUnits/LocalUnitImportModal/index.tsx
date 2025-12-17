@@ -11,9 +11,11 @@ import {
 import {
     Button,
     Container,
+    ListView,
     Modal,
     RawFileInput,
     SelectInput,
+    TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
@@ -49,7 +51,9 @@ import {
 import i18n from './i18n.json';
 import styles from './styles.module.css';
 
-type BulkUploadEnumsResponse = NonNullable<GoApiResponse<'/api/v2/global-enums/'>['local_units_bulk_upload_status']>[number];
+type BulkUploadEnumsResponse = NonNullable<
+    GoApiResponse<'/api/v2/global-enums/'>['local_units_bulk_upload_status']
+>[number];
 type BulkStatusKey = BulkUploadEnumsResponse['key'];
 
 const BULK_UPLOAD_PENDING = 3 satisfies BulkStatusKey;
@@ -88,7 +92,9 @@ function LocalUnitBulkUploadModal(props: Props) {
         || isLocalUnitCountryValidatorByType(countryResponse?.id, localUnitType)
         || isLocalUnitRegionValidatorByType(countryResponse?.region, localUnitType);
 
-    const { response: localUnitsOptions } = useRequest({ url: '/api/v2/local-units-options/' });
+    const { response: localUnitsOptions } = useRequest({
+        url: '/api/v2/local-units-options/',
+    });
 
     const { response: bulkUploadHealthTemplate } = useRequest({
         url: '/api/v2/bulk-upload-local-unit/get-bulk-upload-template/',
@@ -115,15 +121,14 @@ function LocalUnitBulkUploadModal(props: Props) {
         },
     });
 
-    const {
-        response: importSummaryResponse,
-        pending: importSummaryPending,
-    } = useRequest({
+    const { response: importSummaryResponse, pending: importSummaryPending } = useRequest({
         url: '/api/v2/bulk-upload-local-unit/{id}/',
         skip: isNotDefined(bulkUploadResponse?.id),
-        pathVariables: isDefined(bulkUploadResponse) ? {
-            id: bulkUploadResponse?.id,
-        } : undefined,
+        pathVariables: isDefined(bulkUploadResponse)
+            ? {
+                id: bulkUploadResponse?.id,
+            }
+            : undefined,
         shouldPoll: (poll) => {
             if (poll?.errored || poll?.value?.status !== BULK_UPLOAD_PENDING) {
                 return -1;
@@ -133,7 +138,10 @@ function LocalUnitBulkUploadModal(props: Props) {
         },
     });
 
-    const error = transformObjectError(bulkUploadError?.value.formErrors, () => undefined);
+    const error = transformObjectError(
+        bulkUploadError?.value.formErrors,
+        () => undefined,
+    );
 
     const handleStartUploadButtonClick = useCallback(() => {
         if (
@@ -176,125 +184,119 @@ function LocalUnitBulkUploadModal(props: Props) {
     // FIXME: update styling
     return (
         <Modal
-            heading={resolveToString(
-                strings.modalHeading,
-                { countryName: countryResponse?.name ?? '--' },
-            )}
+            heading={resolveToString(strings.modalHeading, {
+                countryName: countryResponse?.name ?? '--',
+            })}
             withHeaderBorder
             onClose={onClose}
-            headerDescription={!pending
-                ? strings.modalDescription
-                : strings.modalImportPendingDescription}
+            headerDescription={
+                !pending
+                    ? strings.modalDescription
+                    : strings.modalImportPendingDescription
+            }
             footerActions={(
-                <Button
-                    name={undefined}
-                    onClick={onClose}
-                    disabled={bulkUploadPending}
-                >
+                <Button name={undefined} onClick={onClose} disabled={bulkUploadPending}>
                     {strings.closeButtonLabel}
                 </Button>
             )}
         >
-            <SelectInput
-                required
-                nonClearable
-                label={strings.localUnitTypeInputLabel}
-                value={localUnitType}
-                onChange={setLocalUnitType}
-                name="local_unit_type"
-                disabled={pending || isDefined(importSummaryResponse)}
-                options={localUnitsOptions?.type}
-                keySelector={numericIdSelector}
-                labelSelector={stringNameSelector}
-            />
-            {isDefined(localUnitType) && isDefined(permissionError) && (
-                <NonFieldError
-                    error={permissionError}
+            <ListView layout="block" spacing="lg">
+                <SelectInput
+                    required
+                    nonClearable
+                    label={strings.localUnitTypeInputLabel}
+                    value={localUnitType}
+                    onChange={setLocalUnitType}
+                    name="local_unit_type"
+                    disabled={pending || isDefined(importSummaryResponse)}
+                    options={localUnitsOptions?.type}
+                    keySelector={numericIdSelector}
+                    labelSelector={stringNameSelector}
                 />
-            )}
-            <NonFieldError
-                className={styles.nonFieldError}
-                error={importSummaryResponse?.error_message}
-            />
-            {isNotDefined(importSummaryResponse) && (
-                <Container
-                    className={styles.uploadSummary}
-                    headingLevel={4}
-                    heading={strings.uploadFileSectionTitle}
-                    headerDescription={strings.uploadFileSectionDescription}
-                    footer={(
-                        <div className={styles.fileStructureDescription}>
-                            {resolveToComponent(
-                                strings.contentStructureDescription,
-                                {
-                                    templateLink: (
-                                        <Link
-                                            external
-                                            href={localUnitType === TYPE_HEALTH_CARE
-                                                ? bulkUploadHealthTemplate?.template_url
-                                                : bulkUploadDefaultTemplate?.template_url}
-                                            styleVariant="action"
-                                            withUnderline
-                                        >
-                                            {strings.templateLinkLabel}
-                                        </Link>
-                                    ),
-                                },
-                            )}
-                        </div>
-                    )}
-                >
-                    <NonFieldError
-                        className={styles.nonFieldError}
-                        error={error as Error<PartialLocalUnits>}
-                    />
-                    {isNotDefined(bulkUploadFile) && (
-                        <RawFileInput
-                            name="file"
-                            accept=".csv"
-                            onChange={setBulkUploadFile}
-                            styleVariant="outline"
-                            disabled={
-                                !hasBulkUploadPermission
-                                || !isExternallyManaged
-                                || pending
-                            }
-                            before={<DrefTwoIcon className={styles.icon} />}
-                        >
-                            {strings.selectFileButtonLabel}
-                        </RawFileInput>
-                    )}
-                    {isDefined(bulkUploadFile) && (
-                        <div className={styles.uploadSection}>
-                            <div className={styles.selectedFileName}>
+                {isDefined(localUnitType) && isDefined(permissionError) && (
+                    <NonFieldError error={permissionError} />
+                )}
+                <NonFieldError
+                    error={importSummaryResponse?.error_message}
+                />
+                {isNotDefined(importSummaryResponse) && (
+                    <Container
+                        headingLevel={4}
+                        heading={strings.uploadFileSectionTitle}
+                        headerDescription={strings.uploadFileSectionDescription}
+                        footer={(
+                            <ListView layout="block" spacing="xl">
+                                <span>
+                                    {resolveToComponent(strings.contentStructureDescription, {
+                                        templateLink: (
+                                            <Link
+                                                external
+                                                href={
+                                                    localUnitType === TYPE_HEALTH_CARE
+                                                        ? bulkUploadHealthTemplate?.template_url
+                                                        : bulkUploadDefaultTemplate?.template_url
+                                                }
+                                                styleVariant="action"
+                                                withUnderline
+                                            >
+                                                {strings.templateLinkLabel}
+                                            </Link>
+                                        ),
+                                    })}
+                                </span>
+                                <TextOutput
+                                    strongLabel
+                                    valueType="text"
+                                    label={strings.contentStructureNoteLabel}
+                                    value={strings.contentStructureNote}
+                                />
+                            </ListView>
+                        )}
+                    >
+                        <NonFieldError
+                            error={error as Error<PartialLocalUnits>}
+                        />
+                        {isNotDefined(bulkUploadFile) && (
+                            <RawFileInput
+                                name="file"
+                                accept=".xlsx, .xlsm"
+                                onChange={setBulkUploadFile}
+                                styleVariant="outline"
+                                disabled={
+                                    !hasBulkUploadPermission || !isExternallyManaged || pending
+                                }
+                                before={<DrefTwoIcon className={styles.icon} />}
+                            >
+                                {strings.selectFileButtonLabel}
+                            </RawFileInput>
+                        )}
+                        {isDefined(bulkUploadFile) && (
+                            <ListView>
                                 <ReportingIcon className={styles.fileIcon} />
                                 {bulkUploadFile.name}
-                            </div>
-                            <div className={styles.actions}>
-                                <Button
-                                    name={undefined}
-                                    onClick={setBulkUploadFile}
-                                >
-                                    {strings.cancelUploadButtonLabel}
-                                </Button>
-                                <Button
-                                    name={undefined}
-                                    onClick={handleStartUploadButtonClick}
-                                >
-                                    {strings.startUploadButtonLabel}
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-                </Container>
-            )}
-            {isDefined(importSummaryResponse) && (
-                <LocalUnitImportSummary
-                    value={importSummaryResponse}
-                    withBackground
-                    withPadding
-                />
-            )}
+                                <ListView>
+                                    <Button name={undefined} onClick={setBulkUploadFile}>
+                                        {strings.cancelUploadButtonLabel}
+                                    </Button>
+                                    <Button
+                                        name={undefined}
+                                        onClick={handleStartUploadButtonClick}
+                                    >
+                                        {strings.startUploadButtonLabel}
+                                    </Button>
+                                </ListView>
+                            </ListView>
+                        )}
+                    </Container>
+                )}
+                {isDefined(importSummaryResponse) && (
+                    <LocalUnitImportSummary
+                        value={importSummaryResponse}
+                        withBackground
+                        withPadding
+                    />
+                )}
+            </ListView>
         </Modal>
     );
 }

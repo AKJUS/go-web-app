@@ -1,8 +1,12 @@
 import {
     useCallback,
     useMemo,
+    useState,
 } from 'react';
-import { NumberInput } from '@ifrc-go/ui';
+import {
+    ListView,
+    NumberInput,
+} from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 import {
     _cs,
@@ -10,6 +14,7 @@ import {
     isNotDefined,
 } from '@togglecorp/fujs';
 import {
+    MapCenter,
     MapContainer,
     MapLayer,
     MapSource,
@@ -17,8 +22,11 @@ import {
 import { type ObjectError } from '@togglecorp/toggle-form';
 import getBbox from '@turf/bbox';
 import {
+    type AnySourceData,
     type CircleLayer,
     type FillLayer,
+    type FitBoundsOptions,
+    type FlyToOptions,
     type LngLat,
     type Map,
     type MapboxGeoJSONFeature,
@@ -36,14 +44,33 @@ import {
 import { localUnitMapStyle } from '#utils/map';
 
 import ActiveCountryBaseMapLayer from '../ActiveCountryBaseMapLayer';
+import LocationSearchInput, { type LocationSearchResult } from '../LocationSearchInput';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
+
+const centerOptions = {
+    zoom: 16,
+    duration: 1000,
+} satisfies FlyToOptions;
+
+const geoJsonSourceOptions = {
+    type: 'geojson',
+} satisfies AnySourceData;
 
 interface GeoPoint {
     lng: number;
     lat: number
 }
+
+const fitBoundsOptions = {
+    padding: {
+        left: 20,
+        top: 20,
+        bottom: 50,
+        right: 20,
+    },
+} satisfies FitBoundsOptions;
 
 type Value = Partial<GeoPoint>;
 
@@ -89,17 +116,6 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
 
     const countryDetails = useCountry({ id: country ?? -1 });
     const strings = useTranslation(i18n);
-
-    const bounds = useMemo(
-        () => {
-            if (isNotDefined(countryDetails)) {
-                return undefined;
-            }
-
-            return getBbox(countryDetails.bbox);
-        },
-        [countryDetails],
-    );
 
     const pointGeoJson = useMemo<GeoJSON.Feature | undefined>(
         () => {
@@ -189,9 +205,33 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
         [value, onChange, name],
     );
 
+    const bounds = useMemo(
+        () => {
+            if (isNotDefined(countryDetails)) {
+                return undefined;
+            }
+
+            return getBbox(countryDetails.bbox);
+        },
+        [countryDetails],
+    );
+
+    const [searchResult, setSearchResult] = useState<LocationSearchResult | undefined>();
+
+    const center = useMemo(() => {
+        if (isDefined(value?.lng) && isDefined(value?.lat)) {
+            return [value.lng, value.lat] satisfies [number, number];
+        }
+        if (isDefined(searchResult)) {
+            return [+searchResult.lon, +searchResult.lat] satisfies [number, number];
+        }
+
+        return undefined;
+    }, [searchResult, value?.lng, value?.lat]);
+
     return (
         <div className={_cs(styles.baseMapPointInput, className)}>
-            <div className={styles.locationInputs}>
+            <ListView spacing="xl">
                 <DiffWrapper
                     diffViewEnabled={showChanges}
                     showPreviousValue={showPreviousValue}
@@ -200,7 +240,7 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
                     className={diffWrapperClassName}
                 >
                     <NumberInput
-                        changed={hasChanged(value?.lat, previousValue?.lat)}
+                        changed={showChanges && hasChanged(value?.lat, previousValue?.lat)}
                         name="lat"
                         label={strings.latitude}
                         value={value?.lat}
@@ -218,7 +258,7 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
                     className={diffWrapperClassName}
                 >
                     <NumberInput
-                        changed={hasChanged(value?.lng, previousValue?.lng)}
+                        changed={showChanges && hasChanged(value?.lng, previousValue?.lng)}
                         name="lng"
                         label={strings.longitude}
                         value={value?.lng}
@@ -228,13 +268,23 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
                         required={required}
                     />
                 </DiffWrapper>
-            </div>
+            </ListView>
+            {isDefined(countryDetails) && (
+                <div className={styles.locationSearch}>
+                    <LocationSearchInput
+                        readOnly={readOnly}
+                        countryIso={countryDetails.iso}
+                        onResultSelect={setSearchResult}
+                    />
+                </div>
+            )}
             <BaseMap
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...otherProps}
                 mapOptions={{
                     zoom: 18,
                     bounds,
+                    fitBoundsOptions,
                     ...mapOptions,
                 }}
                 mapStyle={mapStyle}
@@ -261,13 +311,19 @@ function BaseMapPointInput<NAME extends string>(props: Props<NAME>) {
                     <MapSource
                         sourceKey="selected-point"
                         geoJson={pointGeoJson}
-                        sourceOptions={{ type: 'geojson' }}
+                        sourceOptions={geoJsonSourceOptions}
                     >
                         <MapLayer
                             layerKey="point-circle"
                             layerOptions={circleLayerOptions}
                         />
                     </MapSource>
+                )}
+                {center && (
+                    <MapCenter
+                        center={center}
+                        centerOptions={centerOptions}
+                    />
                 )}
                 {children}
             </BaseMap>
