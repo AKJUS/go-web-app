@@ -1,6 +1,6 @@
 .row {
     .cell {
-        padding: var(--go-ui-spacing-sm);
+        padding: var(--go-ui-spacing-xs);
         overflow: hidden;
         overflow-wrap: break-word;
     }

@@ -2,12 +2,17 @@ import {
     type Column,
     HeaderCell,
     type HeaderCellProps,
+    type NumberOutputProps,
     ReducedListDisplay,
     type ReducedListDisplayProps,
     type SortDirection,
     type TableActionsProps,
 } from '@ifrc-go/ui';
-import { numericIdSelector } from '@ifrc-go/ui/utils';
+import {
+    createNumberColumn,
+    createStringColumn,
+    numericIdSelector,
+} from '@ifrc-go/ui/utils';
 import { _cs } from '@togglecorp/fujs';
 
 import Link, { type Props as LinkProps } from '#components/Link';
@@ -166,7 +171,7 @@ export function createRegionListColumn<DATUM, KEY>(
             };
         },
         cellRendererClassName: options?.cellRendererClassName,
-        columnClassName: options?.columnClassName,
+        columnClassName: _cs(styles.regionList, options?.columnClassName),
         headerCellRendererClassName: options?.headerCellRendererClassName,
         cellContainerClassName: options?.cellContainerClassName,
         columnWidth: options?.columnWidth,
@@ -175,4 +180,111 @@ export function createRegionListColumn<DATUM, KEY>(
     };
 
     return item;
+}
+
+export function createCountryColumn<D, K>(
+    id: string,
+    title: string,
+    accessor: (item: D) => React.ReactNode,
+    rendererParams: (item: D) => LinkProps,
+    options?: Options<D, K, LinkProps, HeaderCellProps>,
+) {
+    return createLinkColumn<D, K>(
+        id,
+        title,
+        accessor,
+        rendererParams,
+        {
+            ...options,
+            columnClassName: _cs(styles.country, options?.columnClassName),
+        },
+    );
+}
+
+export function createEventColumn<D, K>(
+    id: string,
+    title: string,
+    accessor: (item: D) => React.ReactNode,
+    rendererParams: (item: D) => LinkProps,
+    options?: Options<D, K, LinkProps, HeaderCellProps>,
+) {
+    return createLinkColumn<D, K>(
+        id,
+        title,
+        accessor,
+        rendererParams,
+        {
+            ...options,
+            columnClassName: _cs(styles.event, options?.columnClassName),
+        },
+    );
+}
+
+export function createDisasterTypeColumn<D, K extends string | number>(
+    id: string,
+    title: string,
+    accessor: (item: D) => string | undefined | null,
+    options?: Options<D, K, { value: string }, HeaderCellProps>,
+) {
+    return createStringColumn<D, K>(
+        id,
+        title,
+        accessor,
+        {
+            ...options,
+            columnClassName: _cs(styles.disasterType, options?.columnClassName),
+        },
+    );
+}
+
+export function createTitleColumn<D, K extends string | number>(
+    id: string,
+    title: string,
+    accessor: (item: D) => string | undefined | null,
+    options?: Options<D, K, { value: string }, HeaderCellProps>,
+) {
+    return createStringColumn<D, K>(
+        id,
+        title,
+        accessor,
+        {
+            ...options,
+            columnClassName: _cs(styles.title, options?.columnClassName),
+        },
+    );
+}
+
+export function createAppealCodeColumn<D, K extends string | number>(
+    id: string,
+    title: string,
+    accessor: (item: D) => string | undefined | null,
+    options?: Options<D, K, { value: string }, HeaderCellProps>,
+) {
+    return createStringColumn<D, K>(
+        id,
+        title,
+        accessor,
+        {
+            ...options,
+            columnClassName: _cs(styles.appealCode, options?.columnClassName),
+        },
+    );
+}
+
+export function createBudgetColumn<D, K extends string | number>(
+    id: string,
+    title: string,
+    accessor: (item: D) => number | undefined | null,
+    options?: Options<D, K, NumberOutputProps, HeaderCellProps>,
+) {
+    return createNumberColumn<D, K>(
+        id,
+        title,
+        accessor,
+        {
+            suffix: ' CHF',
+            ...options,
+            columnClassName: _cs(styles.budget, options?.columnClassName),
+        },
+    );
 }

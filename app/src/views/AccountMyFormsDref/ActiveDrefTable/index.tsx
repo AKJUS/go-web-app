@@ -42,6 +42,11 @@ import {
     DREF_TYPE_LOAN,
     type TypeOfDrefEnum,
 } from '#utils/constants';
+import {
+    createAppealCodeColumn,
+    createCountryColumn,
+    createTitleColumn,
+} from '#utils/domain/tableHelpers';
 import { useRequest } from '#utils/restRequest';
 
 import DrefTableActions, { type Props as DrefTableActionsProps } from '../DrefTableActions';
@@ -240,19 +245,16 @@ function ActiveDrefTable(props: Props) {
                 'created_at',
                 strings.activeDrefTableCreatedHeading,
                 (item) => item.created_at,
-                { columnClassName: styles.date },
             ),
-            createStringColumn<LatestDref, Key>(
+            createAppealCodeColumn<LatestDref, Key>(
                 'appeal_code',
                 strings.activeDrefTableAppealCodeHeading,
                 (item) => item.appeal_code,
-                { columnClassName: styles.appealCode },
             ),
-            createStringColumn<LatestDref, Key>(
+            createTitleColumn<LatestDref, Key>(
                 'title',
                 strings.activeDrefTableTitleHeading,
                 (item) => item.title,
-                { columnClassName: styles.title },
             ),
             createStringColumn<LatestDref, Key>(
                 'type',
@@ -260,11 +262,14 @@ function ActiveDrefTable(props: Props) {
                 (item) => item.application_type_display,
                 { columnClassName: styles.stage },
             ),
-            createStringColumn<LatestDref, Key>(
+            createCountryColumn<LatestDref, Key>(
                 'country',
                 strings.activeDrefTableCountryHeading,
                 (item) => item.country_details?.name,
-                { columnClassName: styles.country },
+                (item) => ({
+                    to: 'countriesLayout',
+                    urlParams: { countryId: item.country },
+                }),
             ),
             createStringColumn<LatestDref, Key>(
                 'type_of_dref',

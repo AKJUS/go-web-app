@@ -23,3 +23,13 @@
     width: 0%;
     min-width: 3rem;
 }
+
+.progress-column {
+    width: 0%;
+    min-width: 8rem;
+}
+
+.timeline-column {
+    width: 0%;
+    min-width: 22rem;
+}

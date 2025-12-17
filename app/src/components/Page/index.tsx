@@ -138,7 +138,7 @@ function Page(props: Props) {
                 >
                     <ListView
                         layout="block"
-                        spacing="xl"
+                        spacing="4xl"
                     >
                         { children }
                     </ListView>

@@ -61,7 +61,6 @@ import {
     checkTabErrors,
     EARLY_ACTION,
     EARLY_RESPONSE,
-    TYPE_IMMINENT,
 } from './common';
 import EventDetail from './EventDetail';
 import ObsoletePayloadModal from './ObsoletePayloadModal';
@@ -77,43 +76,37 @@ type GetFinalReportResponse = GoApiResponse<'/api/v2/dref-final-report/{id}/'>;
 
 type TabKeys = 'overview' | 'eventDetail' | 'actions' | 'operation' | 'submission';
 
-function getNextStep(current: TabKeys, direction: 1 | -1, typeOfDref: TypeOfDrefEnum | '' | undefined) {
-    if (typeOfDref === TYPE_IMMINENT && direction === 1) {
-        const mapping: { [key in TabKeys]?: TabKeys } = {
-            overview: 'eventDetail',
-            eventDetail: 'operation',
-            operation: 'submission',
-        };
-        return mapping[current];
+function getTabKeyList(typeOfDref: TypeOfDrefEnum | undefined | null) {
+    if (typeOfDref === DREF_TYPE_IMMINENT) {
+        return [
+            'overview',
+            'eventDetail',
+            'operation',
+            'submission',
+        ] satisfies TabKeys[];
     }
-    if (typeOfDref === TYPE_IMMINENT && direction === -1) {
-        const mapping: { [key in TabKeys]?: TabKeys } = {
-            submission: 'operation',
-            operation: 'eventDetail',
-            eventDetail: 'overview',
-        };
-        return mapping[current];
-    }
-    if (direction === 1) {
-        const mapping: { [key in TabKeys]?: TabKeys } = {
-            overview: 'eventDetail',
-            eventDetail: 'actions',
-            actions: 'operation',
-            operation: 'submission',
-        };
-        return mapping[current];
-    }
-    if (direction === -1) {
-        const mapping: { [key in TabKeys]?: TabKeys } = {
-            submission: 'operation',
-            operation: 'actions',
-            actions: 'eventDetail',
-            eventDetail: 'overview',
-        };
-        return mapping[current];
-    }
-    return undefined;
+
+    return [
+        'overview',
+        'eventDetail',
+        'actions',
+        'operation',
+        'submission',
+    ] satisfies TabKeys[];
 }
+
+function getNextStep(
+    current: TabKeys,
+    direction: 1 | -1,
+    typeOfDref: TypeOfDrefEnum | undefined | null,
+) {
+    const tabKeyList = getTabKeyList(typeOfDref);
+
+    const currentIndex = tabKeyList.findIndex((key) => key === current);
+
+    return tabKeyList[currentIndex + direction];
+}
+
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
@@ -424,6 +417,20 @@ export function Component() {
     const shouldHideForm = fetchingFinalReport
         || isDefined(finalReportResponseError);
 
+    const tabNameMap: Record<TabKeys, string> = {
+        overview: strings.formTabOverviewLabel,
+        eventDetail: finalReportResponse?.type_of_dref === DREF_TYPE_IMMINENT
+            ? strings.formTabEventDevelopmentLabel
+            : strings.formTabEventDetailLabel,
+        actions: strings.formTabActionsLabel,
+        operation: finalReportResponse?.type_of_dref === DREF_TYPE_IMMINENT
+            ? strings.formTabImplementation
+            : strings.formTabOperationLabel,
+        submission: strings.formTabSubmissionLabel,
+    };
+
+    const tabKeyList = getTabKeyList(finalReportResponse?.type_of_dref);
+
     return (
         <Tabs
             value={activeTab}
@@ -468,48 +475,17 @@ export function Component() {
                     </>
                 )}
                 info={!shouldHideForm && (
-                    <TabList className={styles.tabList}>
-                        <Tab
-                            name="overview"
-                            step={1}
-                            errored={checkTabErrors(formError, 'overview')}
-                        >
-                            {strings.formTabOverviewLabel}
-                        </Tab>
-                        <Tab
-                            name="eventDetail"
-                            step={2}
-                            errored={checkTabErrors(formError, 'eventDetail')}
-                        >
-                            {finalReportResponse?.type_of_dref !== DREF_TYPE_IMMINENT
-                                ? strings.formTabEventDetailLabel
-                                : strings.formTabEventDevelopmentLabel}
-                        </Tab>
-                        {finalReportResponse?.type_of_dref !== DREF_TYPE_IMMINENT && (
+                    <TabList>
+                        {tabKeyList.map((tabKey, i) => (
                             <Tab
-                                name="actions"
-                                step={3}
-                                errored={checkTabErrors(formError, 'actions')}
+                                key={tabKey}
+                                name={tabKey}
+                                step={i + 1}
+                                errored={checkTabErrors(formError, tabKey)}
                             >
-                                {strings.formTabActionsLabel}
+                                {tabNameMap[tabKey]}
                             </Tab>
-                        )}
-                        <Tab
-                            name="operation"
-                            step={4}
-                            errored={checkTabErrors(formError, 'operation')}
-                        >
-                            {finalReportResponse?.type_of_dref !== DREF_TYPE_IMMINENT
-                                ? strings.formTabOperationLabel
-                                : strings.formTabImplementation}
-                        </Tab>
-                        <Tab
-                            name="submission"
-                            step={5}
-                            errored={checkTabErrors(formError, 'submission')}
-                        >
-                            {strings.formTabSubmissionLabel}
-                        </Tab>
+                        ))}
                     </TabList>
                 )}
                 withBackgroundColorInMainSection

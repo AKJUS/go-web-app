@@ -1,4 +1,10 @@
 .container {
+    &.with-centered-content {
+        margin: 0 auto;
+        width: 100%;
+        max-width: var(--go-ui-width-content-max);
+    }
+
     &.with-fixed-height {
         /* FIXME: use variable */
         max-height: 18rem;

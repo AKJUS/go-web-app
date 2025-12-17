@@ -32,8 +32,8 @@ export interface Props extends Omit<HTMLProps<HTMLDivElement>, 'ref' | 'before' 
     spacing?: SpacingType;
     spacingOffset?: number;
     withPadding?: boolean;
-    withbeforeSeparator?: boolean;
-    withafterSeparator?: boolean;
+    withBeforeSeparator?: boolean;
+    withAfterSeparator?: boolean;
 
     withoutSpacingOpticalCorrection?: boolean;
 }
@@ -51,8 +51,8 @@ function BlockView(props: Props) {
         spacing,
         spacingOffset,
         withPadding,
-        withbeforeSeparator,
-        withafterSeparator,
+        withBeforeSeparator,
+        withAfterSeparator,
         withoutSpacingOpticalCorrection,
 
         ...divProps
@@ -102,7 +102,7 @@ function BlockView(props: Props) {
                     {before}
                 </div>
             )}
-            {withbeforeSeparator && <hr className={styles.separator} />}
+            {withBeforeSeparator && <hr className={styles.separator} />}
             {isDefined(children) && (
                 <div
                     className={_cs(
@@ -114,7 +114,7 @@ function BlockView(props: Props) {
                     {children}
                 </div>
             )}
-            {withafterSeparator && <hr className={styles.separator} />}
+            {withAfterSeparator && <hr className={styles.separator} />}
             {after && (
                 <div
                     className={_cs(

@@ -63,11 +63,7 @@
         border-bottom: var(--go-ui-width-separator-thin) solid var(--go-ui-color-primary-red);
 
         .top-content {
-            display: flex;
-            align-items: center;
-            gap: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
-            flex-wrap: wrap;
-            padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
+            padding: var(--go-ui-spacing-sm) var(--go-ui-spacing-lg);
 
             .brand {
                 display: flex;
@@ -102,6 +98,10 @@
                 }
             }
         }
+    }
+
+    .bottom-content {
+        padding: var(--go-ui-spacing-md) var(--go-ui-spacing-lg);
     }
 
     .search-container {

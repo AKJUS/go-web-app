@@ -75,7 +75,6 @@ function ActivitiesInput(props: Props) {
                     title={strings.drefFormProposedActionRemoveSector}
                     ariaLabel={strings.drefFormProposedActionRemoveSector}
                     round={false}
-                    styleVariant="action"
                     disabled={disabled || readOnly}
                 >
                     <DeleteBinLineIcon />

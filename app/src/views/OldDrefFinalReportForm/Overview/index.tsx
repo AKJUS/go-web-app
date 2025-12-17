@@ -196,7 +196,7 @@ function Overview(props: Props) {
             <Container
                 heading={strings.drefFormSharingHeading}
             >
-                <ListView>
+                <ListView layout="block">
                     <InputSection
                         title={strings.drefOperationalShareApplicationLabel}
                         description={strings.drefOperationalShareApplicationDescription}

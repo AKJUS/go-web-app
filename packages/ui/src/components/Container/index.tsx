@@ -1,6 +1,7 @@
 import {
     HTMLProps,
     RefObject,
+    useMemo,
 } from 'react';
 import {
     _cs,
@@ -12,7 +13,7 @@ import BlockView from '#components/BlockView';
 import DefaultMessage from '#components/DefaultMessage';
 import Description from '#components/Description';
 import Heading, { type Props as HeadingProps } from '#components/Heading';
-import InlineView from '#components/InlineView';
+import InlineView, { Props as InlineViewProps } from '#components/InlineView';
 import ListView from '#components/ListView';
 import useSpacingToken from '#hooks/useSpacingToken';
 import {
@@ -48,6 +49,10 @@ export interface Props extends Omit<HTMLProps<HTMLDivElement>, 'ref'>{
     footer?: React.ReactNode;
     withFooterBorder?: boolean;
 
+    // FIXME: these props should be merged
+    withoutWrapInFooter?: boolean;
+    withLargeBreakpointInHeader?: boolean,
+
     pending?: boolean;
     overlayPending?: boolean;
     empty?: boolean;
@@ -69,6 +74,8 @@ export interface Props extends Omit<HTMLProps<HTMLDivElement>, 'ref'>{
     spacingOffset?: number;
     withoutSpacingOpticalCorrection?: boolean;
     withFixedHeight?: boolean;
+
+    withCenteredContent?: boolean;
 }
 
 function Container(props: Props) {
@@ -78,7 +85,7 @@ function Container(props: Props) {
 
         heading,
         withEllipsizedHeading,
-        headingLevel,
+        headingLevel = 3,
         headerIcons,
         headerActions,
         headerDescription,
@@ -86,6 +93,7 @@ function Container(props: Props) {
         withCenteredHeading,
         withCenteredHeaderDescription,
         withoutWrapInHeader,
+        withLargeBreakpointInHeader,
 
         filters,
 
@@ -93,6 +101,7 @@ function Container(props: Props) {
         footer,
         footerActions,
         withFooterBorder,
+        withoutWrapInFooter,
 
         children,
         withContentOverflow,
@@ -118,6 +127,8 @@ function Container(props: Props) {
         spacing,
         spacingOffset = 0,
         withoutSpacingOpticalCorrection,
+
+        withCenteredContent,
 
         ...divProps
     } = props;
@@ -174,6 +185,22 @@ function Container(props: Props) {
         </>
     );
 
+    const headerWrapBreakpoint = useMemo<InlineViewProps['wrapBreakpoint']>(() => {
+        if (withoutWrapInHeader) {
+            return 'none';
+        }
+
+        if (headingLevel > 3) {
+            return 'sm';
+        }
+
+        if (withLargeBreakpointInHeader) {
+            return 'lg';
+        }
+
+        return 'md';
+    }, [headingLevel, withLargeBreakpointInHeader, withoutWrapInHeader]);
+
     return (
         <BlockView
             // eslint-disable-next-line react/jsx-props-no-spreading
@@ -186,6 +213,7 @@ function Container(props: Props) {
                 withShadow && styles.withShadow,
                 withContentWell && styles.withContentWell,
                 withFixedHeight && styles.withFixedHeight,
+                withCenteredContent && styles.withCenteredContent,
                 className,
             )}
             spacing={spacing}
@@ -204,7 +232,7 @@ function Container(props: Props) {
                             spacing={spacing}
                             spacingOffset={spacingOffset - 1}
                             withoutSpacingOpticalCorrection={withoutSpacingOpticalCorrection}
-                            withoutWrap={withoutWrapInHeader}
+                            wrapBreakpoint={headerWrapBreakpoint}
                             before={headerIcons}
                             after={headerActions && (
                                 <ListView
@@ -239,12 +267,13 @@ function Container(props: Props) {
                     withoutSpacingOpticalCorrection={withoutSpacingOpticalCorrection}
                     before={footerIcons}
                     after={footerActions}
+                    wrapBreakpoint={withoutWrapInFooter ? 'none' : 'lg'}
                 >
                     {footer}
                 </InlineView>
             )}
-            withbeforeSeparator={withHeaderBorder}
-            withafterSeparator={withFooterBorder}
+            withBeforeSeparator={withHeaderBorder}
+            withAfterSeparator={withFooterBorder}
             childrenContainerClassName={_cs(
                 styles.content,
                 overlayPending && styles.pendingOverlaid,
