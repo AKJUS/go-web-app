@@ -218,6 +218,8 @@ export function Component() {
                     withPadding
                     withDarkBackground
                     spacing="lg"
+                    empty={isNotDefined(montandonTokenResponse)
+                        || montandonTokenResponse.results.length === 0}
                 >
                     <ListView
                         layout="grid"
