@@ -114,7 +114,7 @@ export function Component() {
     const additionalData: LinkData[] = [
         {
             title: strings.learnMore,
-            href: 'https://watsanmissionassistant.org/',
+            href: 'https://wash.ifrc.org/',
             external: true,
             withLinkIcon: true,
         },
@@ -186,9 +186,9 @@ export function Component() {
                 heading={strings.additionalResources}
             >
                 <CatalogueInfoCard
-                    title={strings.additionWatsan}
+                    title={strings.additionWashPortal}
                     data={additionalData}
-                    description={strings.additionWatsanDetail}
+                    description={strings.additionWashPortalDetail}
                 />
             </SurgeCardContainer>
         </SurgeCatalogueContainer>
