@@ -153,7 +153,7 @@ export function Component() {
                         parentRoute
                         before={<EmergencyTelecommunicationsIcon className={styles.icon} />}
                     >
-                        {strings.catalogueInformationTechnologyTelecom}
+                        {strings.catalogueDigitalSystems}
                     </NavigationTab>
                     <NavigationTab
                         to="surgeCatalogueOtherInternationalDisasterResponseLaw"
