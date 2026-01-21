@@ -7,19 +7,12 @@ on:
       - 'develop'
 
 env:
-  APP_ADMIN_URL: ${{ vars.APP_ADMIN_URL }}
-  APP_API_ENDPOINT: ${{ vars.APP_API_ENDPOINT }}
-  APP_ENVIRONMENT: ${{ vars.APP_ENVIRONMENT }}
-  APP_MAPBOX_ACCESS_TOKEN: ${{ vars.APP_MAPBOX_ACCESS_TOKEN }}
-  APP_RISK_ADMIN_URL: ${{ vars.APP_RISK_ADMIN_URL }}
-  APP_RISK_API_ENDPOINT: ${{ vars.APP_RISK_API_ENDPOINT }}
-  APP_SENTRY_DSN: ${{ vars.APP_SENTRY_DSN }}
-  APP_SENTRY_NORMALIZE_DEPTH: ${{ vars.APP_SENTRY_NORMALIZE_DEPTH }}
-  APP_SENTRY_TRACES_SAMPLE_RATE: ${{ vars.APP_SENTRY_TRACES_SAMPLE_RATE }}
-  APP_SHOW_ENV_BANNER: ${{ vars.APP_SHOW_ENV_BANNER }}
-  APP_TINY_API_KEY: ${{ vars.APP_TINY_API_KEY }}
-  APP_TITLE: ${{ vars.APP_TITLE }}
-  GITHUB_WORKFLOW: true
+  APP_API_ENDPOINT: 'https://goadmin-stage.ifrc.org/'
+  APP_ENVIRONMENT: 'development'
+  APP_MAPBOX_ACCESS_TOKEN: 'dummy-token'
+  APP_RISK_API_ENDPOINT: 'https://go-risk-staging.northeurope.cloudapp.azure.com/api/v1/'
+  APP_TINY_API_KEY: 'dummy-api-key'
+  APP_TITLE: 'IFRC Go Test'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -28,7 +21,6 @@ concurrency:
 jobs:
   ui:
     name: Build UI Library
-    environment: 'test'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -64,7 +56,6 @@ jobs:
 
   test:
     name: Run tests
-    environment: 'test'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -274,7 +265,6 @@ jobs:
 
   build:
     name: Build GO Web App
-    environment: 'test'
     runs-on: ubuntu-latest
     defaults:
       run:
