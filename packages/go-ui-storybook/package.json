@@ -1,6 +1,6 @@
 {
     "name": "go-ui-storybook",
-    "version": "1.0.9-beta.2",
+    "version": "1.0.9-beta.3",
     "private": true,
     "type": "module",
     "license": "MIT",

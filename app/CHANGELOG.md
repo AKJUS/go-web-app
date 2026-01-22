@@ -1,5 +1,26 @@
 # go-web-app
 
+## 7.24.0-beta.5
+
+### Minor Changes
+
+- 92b4a38: Update Local Units Externally Managed working mechanism
+
+  - Changing a local unit type to "Externally managed" will convert all "Validated" local unit type to "Externally Managed"
+  - Changing back from externally managed will convert all local units to "Validated" type
+  - Switching to "Externally managed" is disabled if there are "Unvalidated" or "Validation" local units.
+
+### Patch Changes
+
+- 44cbd06: Change Additional Resources on /surge/catalogue/wash (WASH)
+  Changes on /surge/catalogue/health (Health)
+  - Add ERU - MHPSS Officer
+  - Remove MHPS Community Outreach Officer and ERU Health facility MHPS Officer
+    Change contact names on /surge/catalogue/health/eru-psychosocial-support
+- 1cd68ee: Renaming IT to Digital Systems, Tools and Information Technology – Surge CoS
+- Updated dependencies [92b4a38]
+  - @ifrc-go/ui@2.0.0-beta.3
+
 ## 7.24.0-beta.4
 
 ### Patch Changes

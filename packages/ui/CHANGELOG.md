@@ -1,5 +1,16 @@
 # @ifrc-go/ui
 
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- 92b4a38: Update InputContainer and Heading
+
+  - Update InputContainer
+    - Add support for highlighting and previous value
+    - Update inputs to support the changes
+  - Rescale font size in heading
+
 ## 2.0.0-beta.2
 
 ### Patch Changes
