@@ -1,9 +1,6 @@
 import { type Language } from '@ifrc-go/ui/contexts';
 import { DEFAULT_INVALID_TEXT } from '@ifrc-go/ui/utils';
-import {
-    isNotDefined,
-    isTruthyString,
-} from '@togglecorp/fujs';
+import { isTruthyString } from '@togglecorp/fujs';
 
 import type { GoApiResponse } from '#utils/restRequest';
 
@@ -70,23 +67,4 @@ export function joinStrings(
     separator: string = ', ',
 ): string {
     return values.filter(Boolean).join(separator);
-}
-
-export function hasChanged(prevValue: unknown, newValue: unknown) {
-    // NOTE: we consider `null` and `undefined` as same for
-    // this scenario
-    if (isNotDefined(prevValue) && isNotDefined(newValue)) {
-        return false;
-    }
-
-    if (typeof newValue === 'string'
-        || typeof newValue === 'number'
-        || typeof newValue === 'boolean'
-        || typeof newValue === 'bigint'
-    ) {
-        return newValue !== prevValue;
-    }
-
-    // TODO: add better method to check the diff
-    return JSON.stringify(prevValue) !== JSON.stringify(newValue);
 }
