@@ -14,12 +14,24 @@ export function Component() {
     const roleProfiles: LinkData[] = [
         {
             title: strings.catalogueITCoordinator,
-            href: 'https://ifrcorg.sharepoint.com/:b:/s/IFRCSharing/IQDtrX8gMjdPQ4CMfMroIj9VAQgZdzBve91RXBjev0Ir7BY',
+            href: 'https://ifrcorg.sharepoint.com/:b:/s/IFRCSharing/EdRtpzYtoFhNnrXHDiEc74ABKv7njX3cz1-jPl1SxWqWSg',
             external: true,
             withLinkIcon: true,
         },
         {
             title: strings.catalogueITOfficer,
+            href: 'https://ifrcorg.sharepoint.com/:b:/s/IFRCSharing/ETEdR5wmWSdHqw2o2nJRMeYBN9M7VZBZJ5blIgn67vFdzQ',
+            external: true,
+            withLinkIcon: true,
+        },
+        {
+            title: strings.catalogueDSCoordinator,
+            href: 'https://ifrcorg.sharepoint.com/:b:/s/IFRCSharing/IQDtrX8gMjdPQ4CMfMroIj9VAQgZdzBve91RXBjev0Ir7BY',
+            external: true,
+            withLinkIcon: true,
+        },
+        {
+            title: strings.catalogueDSOfficer,
             href: 'https://ifrcorg.sharepoint.com/:b:/s/IFRCSharing/IQDoLWIUDOKdRIsqiiBaS_kLASSE6xwghl5ppP1WbXQJVeg',
             external: true,
             withLinkIcon: true,
@@ -58,12 +70,12 @@ export function Component() {
             description={strings.catalogueITIntro}
         >
             <p>
-                <b>{strings.catalogueITTDetail.slice(0, 34)}</b>
-                {strings.catalogueITTDetail.slice(34)}
+                <b>{strings.catalogueITTDetailBold}</b>
+                {strings.catalogueITTDetail}
             </p>
             <p>
-                <b>{strings.catalogueITDDetail.slice(0, 14)}</b>
-                {strings.catalogueITDDetail.slice(14)}
+                <b>{strings.catalogueITDDetailBold}</b>
+                {strings.catalogueITDDetail}
             </p>
             <SurgeCardContainer
                 heading={strings.catalogueITRoleHeading}
