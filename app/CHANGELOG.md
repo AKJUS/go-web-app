@@ -1,5 +1,66 @@
 # go-web-app
 
+## 7.24.0
+
+### Minor Changes
+
+- 3fbfeba: Enable editing of DREF forms in all languages
+
+  - Added new FINALIZING DREF status which indicates form is being finalized and the original language content is being translated into english.
+  - Added new FINALIZED DREF status which indicates for hase been finalized and the original language has been switched to english.
+  - Added new FAILED DREF status which indicates form finalization process has failed.
+  - Added final report and operational update confirmation modal.
+  - Added view mode for all DREF forms.
+  - Integrated finalize API in DREF table.
+  - Updated DREF status and publish APIs to support approval workflow.
+
+- 92b4a38: Update Local Units Externally Managed working mechanism
+
+  - Changing a local unit type to "Externally managed" will convert all "Validated" local unit type to "Externally Managed"
+  - Changing back from externally managed will convert all local units to "Validated" type
+  - Switching to "Externally managed" is disabled if there are "Unvalidated" or "Validation" local units.
+
+- 09e2d2e: Accomodate changes from GO UI revamp
+
+### Patch Changes
+
+- aaf44e1: Local Unit Form Improvements
+
+  - Improved the Local Unit form with location search, new fields, and better field ordering and layout.
+  - Updated map zoom behavior for more accurate location selection.
+  - Enhanced add, edit, and delete permissions, including organization-based edit access.
+  - Refined the import modal with updated file naming and descriptions.
+
+- 6bc2fe6: Update UI to accomodate GO UI changes
+- 451a842: Fix Field Report form getting an error in Risk Analysis section
+- 44cbd06: Change Additional Resources on /surge/catalogue/wash (WASH)
+  Changes on /surge/catalogue/health (Health)
+  - Add ERU - MHPSS Officer
+  - Remove MHPS Community Outreach Officer and ERU Health facility MHPS Officer
+    Change contact names on /surge/catalogue/health/eru-psychosocial-support
+- b6f7e91: Remove obsolete links in Montandon landing page
+- 9b3121e: Add Risk Management section in Catalogue of Surge services
+  Reword unavailablity message in spark dashboard
+- fc2c154: Update Catalogue of Surge / Digital Systems
+  - Update texts
+  - Add redirections from old url
+  - Update links
+- b0905f1: Position and Keywords filter for all Surge Alerts (/alerts/all)
+- 1cd68ee: Renaming IT to Digital Systems, Tools and Information Technology – Surge CoS
+- 9957c1d: Update DREF Final Report
+
+  - Remove option to add and remove indicators
+  - Update timeframe unit from "months" to days for imminent export
+
+- c1bde25: Add Prepare / Supply Chain / SPARK menu item to navigation
+  Remove Programmatic Partnerships menu from navigation
+  Change aboutHealthMapping PDF URL in /resources
+- Updated dependencies [9957c1d]
+- Updated dependencies [6bc2fe6]
+- Updated dependencies [92b4a38]
+- Updated dependencies [09e2d2e]
+  - @ifrc-go/ui@2.0.0
+
 ## 7.24.0-beta.5
 
 ### Minor Changes

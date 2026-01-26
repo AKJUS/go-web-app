@@ -1,5 +1,97 @@
 # @ifrc-go/ui
 
+## 2.0.0
+
+### Major Changes
+
+- 09e2d2e: Introduce new, more strict/opinionated layout system. Update components to reflect the new layout system.
+
+  - Add base layout components
+    - InlineLayout
+    - BlockLayout
+    - ButtonLayout
+    - TabLayout
+    - TabListLayout
+  - Add base views
+    - ListView
+    - Container (major restructure)
+    - InlineView
+  - Update useSpacingToken
+    - Add optical correction
+    - Add option to add additional inline spacing
+  - Update spacing tokens
+    - Add more tokens (5xs to 5xl)
+    - Re-scale tokens to consider optical correction
+  - Update components to use new layout and spacing system
+  - Remove outdated components
+    - BodyOverlay
+    - Grid
+    - Header
+    - Footer
+    - FilterBar
+    - Overlay
+  - Remove outdated hooks
+    - useBasicLayout
+    - useSpacingTokens (replace with useSpacingToken)
+  - Update eslint config
+
+### Patch Changes
+
+- 9957c1d: Make some minor improvements and adjustments
+
+  - Button
+    - Add custom hover behaviour for primary and text variant
+    - Update color for text variant
+  - ConfirmButton
+    - Add spacing for actions
+  - Container
+    - Add option for fixed height
+    - Fix content grow for overflow condition
+  - InlineFrame
+    - Adjust size
+  - KeyFigureView
+    - Reduce spacing between icon and figure
+  - Label
+    - Add option for uppercase transformation
+  - Modal
+    - Fix content overflow
+    - Adjust size
+  - Pager
+    - Reduce size and font-size to match the design
+  - RawFileInput
+    - Forward disabled and readOnly props to layout
+  - RawTextArea
+    - Adjust default min and max heights
+  - SelectInputContainer/GenericOption
+    - Adjust padding and gap
+    - Update hover color
+  - Table/TableBodyContent
+    - Remove hover effect from row
+  - Table/TableHeader
+    - Add background
+    - Remove bottom border
+  - Adjust --width-content-max to 56rem (to closely match UI design)
+
+- 6bc2fe6: Do minor improvements on some components
+
+  - Button: add default colorVariant according to the styleVariants
+  - Description: add overflow wrap
+  - ExpandableContainer: fix footer action rendering condition
+  - Heading: update styling for level 6
+  - InlineLayout: add a fallback fix for before, after component for go icons
+  - ListView: fix responsiveness for sidebar layout on start
+  - TabLayout: update styling for step tab
+  - TabListLayout: update styling for step tab
+  - ColumnShortcuts: update styling for action columns
+  - TableActions: update styling to avoid shrink
+
+- 92b4a38: Update InputContainer and Heading
+
+  - Update InputContainer
+    - Add support for highlighting and previous value
+    - Update inputs to support the changes
+  - Rescale font size in heading
+
 ## 2.0.0-beta.3
 
 ### Patch Changes
