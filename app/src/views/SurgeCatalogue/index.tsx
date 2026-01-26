@@ -93,6 +93,13 @@ export function Component() {
                         {strings.catalogueCommunityEngagement}
                     </NavigationTab>
                     <NavigationTab
+                        to="surgeCatalogueInformationTechnology"
+                        parentRoute
+                        before={<EmergencyTelecommunicationsIcon className={styles.icon} />}
+                    >
+                        {strings.catalogueDigitalSystems}
+                    </NavigationTab>
+                    <NavigationTab
                         to="surgeCatalogueOtherDisasterRiskReduction"
                         parentRoute
                         before={<DisasterRiskReductionIcon className={styles.icon} />}
@@ -147,13 +154,6 @@ export function Component() {
                         before={<AnalysisIcon className={styles.icon} />}
                     >
                         {strings.catalogueInformationManagement}
-                    </NavigationTab>
-                    <NavigationTab
-                        to="surgeCatalogueInformationTechnology"
-                        parentRoute
-                        before={<EmergencyTelecommunicationsIcon className={styles.icon} />}
-                    >
-                        {strings.catalogueDigitalSystems}
                     </NavigationTab>
                     <NavigationTab
                         to="surgeCatalogueOtherInternationalDisasterResponseLaw"
