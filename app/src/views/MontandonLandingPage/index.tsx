@@ -1,15 +1,7 @@
 import {
-    DrefTwoIcon,
-    MailIcon,
-    ShareLineIcon,
-} from '@ifrc-go/icons';
-import {
     Container,
     Description,
-    DropdownMenu,
-    Label,
     ListView,
-    TextOutput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
 
@@ -18,12 +10,6 @@ import Page from '#components/Page';
 
 import i18n from './i18n.json';
 import styles from './styles.module.css';
-
-// TODO: Does this need translation?
-const emailSubject = encodeURIComponent('Explore Montandon Data');
-const linkToMontandon = 'https://radiantearth.github.io/stac-browser/#/external/montandon-eoapi-stage.ifrc.org/stac/';
-const emailBody = encodeURIComponent(`Sharing with you a link to Montandon API: ${linkToMontandon}`);
-const mailtoLink = `mailto:?subject=${emailSubject}&body=${emailBody}`;
 
 /** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
@@ -36,98 +22,6 @@ export function Component() {
             heading={strings.montandonHeading}
             description={strings.montandonHeadingDescription}
             mainSectionClassName={styles.content}
-            actions={(
-                <>
-                    <DropdownMenu
-                        label={strings.sourcePopupTitle}
-                        labelBefore={<DrefTwoIcon />}
-                        labelColorVariant="primary"
-                        preferredPopupWidth={30}
-                        persistent
-                    >
-                        <Container
-                            heading={strings.sourcePopupTitle}
-                            withHeaderBorder
-                            headingLevel={5}
-                            withPadding
-                        >
-                            <ListView
-                                layout="block"
-                                withSpacingOpticalCorrection
-                                spacing="sm"
-                            >
-                                <TextOutput
-                                    strongLabel
-                                    label={strings.stacIdLabel}
-                                    value={strings.stacIdValue}
-                                />
-                                <TextOutput
-                                    strongLabel
-                                    label={strings.stacVersionLabel}
-                                    value={strings.stacVersionValue}
-                                />
-                                <TextOutput
-                                    strongLabel
-                                    label={strings.validLabel}
-                                    value={strings.validValue}
-                                />
-                                <div className={styles.separator} />
-                                <Label>
-                                    {strings.stacLocationText}
-                                </Label>
-                                <Link
-                                    external
-                                    href="https://montandon-eoapi-stage.ifrc.org/stac/"
-                                    withLinkIcon
-                                    withFullWidth
-                                    styleVariant="translucent"
-                                >
-                                    https://montandon-eoapi-stage.ifrc.org/stac/
-                                </Link>
-                            </ListView>
-                        </Container>
-                    </DropdownMenu>
-                    <DropdownMenu
-                        label={strings.sharePopupTitle}
-                        labelBefore={<ShareLineIcon className={styles.icon} />}
-                        labelColorVariant="primary"
-                        preferredPopupWidth={30}
-                        persistent
-                    >
-                        <Container
-                            heading={strings.sharePopupTitle}
-                            withHeaderBorder
-                            withFooterBorder
-                            withPadding
-                            headingLevel={5}
-                            footerActions={(
-                                <Link
-                                    href={mailtoLink}
-                                    before={<MailIcon className={styles.icon} />}
-                                    colorVariant="primary"
-                                    styleVariant="outline"
-                                    external
-                                    spacing="sm"
-                                >
-                                    {strings.emailLabel}
-                                </Link>
-                            )}
-                        >
-                            <Label>
-                                {strings.shareUrlLabel}
-                            </Label>
-                            <Link
-                                href="https://radiantearth.github.io/stac-browser/#/external/montandon-eoapi-stage.ifrc.org/stac/"
-                                external
-                                withEllipsizedContent
-                                withLinkIcon
-                            >
-                                https://radiantearth.github.io/stac-browser/#/external/montandon-eoapi-stage.ifrc.org/stac/
-                            </Link>
-                        </Container>
-                    </DropdownMenu>
-                </>
-            )}
             info={(
                 <iframe
                     className={styles.iframe}
@@ -150,6 +44,10 @@ export function Component() {
                             styleVariant="outline"
                             external
                             withLinkIcon
+                            // NOTE: This is temporary till this Montandon link
+                            // is up and running
+                            style={{ pointerEvents: 'none' }}
+                            disabled
                         >
                             {strings.accessAPILabel}
                         </Link>
@@ -159,6 +57,10 @@ export function Component() {
                             styleVariant="outline"
                             external
                             withLinkIcon
+                            // NOTE: This is temporary till this Montandon link
+                            // is up and running
+                            style={{ pointerEvents: 'none' }}
+                            disabled
                         >
                             {strings.exploreRadiantEarthLabel}
                         </Link>
