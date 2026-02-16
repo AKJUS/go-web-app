@@ -1,5 +1,17 @@
 # go-web-app
 
+## 7.25.0-beta.0
+
+### Minor Changes
+
+- 521c1b5: Fix event map being replace by cover image is DREF forms
+- 52aefd2: Fix Radio Inputs not allowing to clear the value
+
+### Patch Changes
+
+- Updated dependencies [52aefd2]
+  - @ifrc-go/ui@2.0.1-beta.0
+
 ## 7.24.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # @ifrc-go/ui
 
+## 2.0.1-beta.0
+
+### Patch Changes
+
+- 52aefd2: Fix RadioInput
+
+  - Update double onChange callback
+
 ## 2.0.0
 
 ### Major Changes
