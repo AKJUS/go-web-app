@@ -7,8 +7,11 @@
     "@ifrc-go/ui": "2.0.0"
   },
   "changesets": [
+    "fine-sloths-reply",
     "lemon-eggs-guess",
+    "quiet-views-try",
     "tame-cities-bet",
-    "true-canyons-bathe"
+    "true-canyons-bathe",
+    "warm-fans-add"
   ]
 }

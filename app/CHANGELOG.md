@@ -1,5 +1,17 @@
 # go-web-app
 
+## 7.25.0-beta.1
+
+### Patch Changes
+
+- e97709b: Update Catalogue of Surge Services
+
+  - Update WASH WSR NS service proveders
+  - Update Health ERU MHPSS NS service providers
+
+- 93f1c9b: Add country to account details page and edit form
+- becb909: Update Ops. Learning disclaimer to refer specific AI model being used (GPT 4o-mini)
+
 ## 7.25.0-beta.0
 
 ### Minor Changes
