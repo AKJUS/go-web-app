@@ -23,6 +23,7 @@ import {
 
 import Link from '#components/Link';
 import TabPage from '#components/TabPage';
+import useCountry from '#hooks/domain/useCountry';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
 import useUserMe from '#hooks/domain/useUserMe';
 import useFilterState from '#hooks/useFilterState';
@@ -58,6 +59,9 @@ export function Component() {
         api_profile_org_types,
         ({ key }) => key,
     );
+
+    // Resolve user's country name from numeric ID
+    const userCountry = useCountry({ id: meResponse?.profile?.country ?? -1 });
 
     const onEditProfileCancel = useCallback(() => {
         setShowEditProfileModal(false);
@@ -141,6 +145,11 @@ export function Component() {
                         label={strings.phoneNumberLabel}
                         value={meResponse?.profile?.phone_number}
                         strongLabel
+                    />
+                    <TextOutput
+                        strongLabel
+                        label={strings.countryLabel}
+                        value={userCountry?.name}
                     />
                     <TextOutput
                         strongLabel
