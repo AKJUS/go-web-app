@@ -28,7 +28,7 @@ type GetDeploymentsByNationalSocietyResponse = GoApiResponse<'/api/v2/deployment
 type DeploymentsByNationalSociety = GetDeploymentsByNationalSocietyResponse[number];
 
 const timeSeriesDataKeys = ['deployments'];
-
+const currentYear = new Date().getFullYear();
 const oneYearAgo = new Date();
 oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 oneYearAgo.setDate(1);
@@ -102,7 +102,10 @@ export function Component() {
                 minGridColumnSize="20rem"
             >
                 <Container
-                    heading={resolveToString(strings.topFiveNationalSociety, { year: '2025' })}
+                    heading={resolveToString(
+                        strings.topFiveNationalSociety,
+                        { year: String(currentYear) },
+                    )}
                     withHeaderBorder
                     pending={pending}
                     withPadding
