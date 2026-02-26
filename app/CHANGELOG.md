@@ -1,5 +1,13 @@
 # go-web-app
 
+## 7.25.0-beta.2
+
+### Patch Changes
+
+- 6aa37a7: Use current year in Surge overview Top 5 deployments
+- Updated dependencies [22038c4]
+  - @ifrc-go/ui@2.0.1-beta.1
+
 ## 7.25.0-beta.1
 
 ### Patch Changes

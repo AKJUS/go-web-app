@@ -1,5 +1,11 @@
 # @ifrc-go/ui
 
+## 2.0.1-beta.1
+
+### Patch Changes
+
+- 22038c4: Remove pointer events from Dropdown button children
+
 ## 2.0.1-beta.0
 
 ### Patch Changes
