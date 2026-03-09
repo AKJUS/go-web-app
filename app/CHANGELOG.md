@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.25.0-beta.3
+
+### Patch Changes
+
+- 53774e6: Fix Old DREF Final Reports not being able to update in languages other than English
+
 ## 7.25.0-beta.2
 
 ### Patch Changes
