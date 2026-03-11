@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.25.0-beta.4
+
+### Patch Changes
+
+- 25f062c: Make import template button label translatable in Account > DREF
+
 ## 7.25.0-beta.3
 
 ### Patch Changes
