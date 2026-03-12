@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.25.0-beta.6
+
+### Patch Changes
+
+- 47ab0c0: Remove Swagger API link from Montandon landing page
+
 ## 7.25.0-beta.5
 
 ### Patch Changes
