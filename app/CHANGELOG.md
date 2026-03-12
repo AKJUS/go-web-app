@@ -1,5 +1,13 @@
 # go-web-app
 
+## 7.25.0-beta.5
+
+### Patch Changes
+
+- 7a9514d: Update Montandon landing page
+  - Add 'Getting started' section
+  - Enable external links
+
 ## 7.25.0-beta.4
 
 ### Patch Changes
