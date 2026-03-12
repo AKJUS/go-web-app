@@ -144,15 +144,6 @@ export function Component() {
                         spacing="sm"
                     >
                         <Link
-                            href="https://montandon-eoapi-stage.ifrc.org/stac/api.html"
-                            colorVariant="primary"
-                            styleVariant="outline"
-                            external
-                            withLinkIcon
-                        >
-                            {strings.accessAPILabel}
-                        </Link>
-                        <Link
                             href={linkToMontandonStacBrowser}
                             colorVariant="primary"
                             styleVariant="outline"
