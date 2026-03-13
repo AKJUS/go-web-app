@@ -1,7 +1,9 @@
 .dropdown-menu {
     align-items: center;
 
-    >* {
+    .icons,
+    .content,
+    .actions {
         pointer-events: none;
     }
 
