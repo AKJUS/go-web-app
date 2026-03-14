@@ -12,7 +12,6 @@ import {
     Container,
     DropdownMenu,
     ListView,
-    Message,
     Tab,
     TabList,
     TabPanel,
@@ -30,6 +29,7 @@ import {
 } from '@togglecorp/fujs';
 
 import DropdownMenuItem from '#components/DropdownMenuItem';
+import DomainContext from '#contexts/domain';
 import RouteContext from '#contexts/route';
 import useCountry from '#hooks/domain/useCountry';
 import useGlobalEnums from '#hooks/domain/useGlobalEnums';
@@ -87,6 +87,10 @@ function CountryDropdown() {
     const [activeRegion, setActiveRegion] = useState<RegionKey>(regionIdFromMatch ?? 0);
     const [countrySearch, setCountrySearch] = useInputState<string | undefined>(undefined);
 
+    const {
+        countriesPending,
+        regionsPending,
+    } = useContext(DomainContext);
     const allCountries = useCountry();
     const countriesInSelectedRegion = useMemo(
         () => (
@@ -112,107 +116,108 @@ function CountryDropdown() {
             persistent
             preferredPopupWidth={56}
         >
-            {isEmpty && (
-                <Message
-                    description={strings.messageNotAvailable}
-                    compact
-                />
-            )}
-            {!isEmpty && (
-                <Tabs
-                    value={activeRegion}
-                    onChange={setActiveRegion}
-                    styleVariant="vertical-compact"
-                >
-                    <TabList className={styles.regionList}>
+            <Container
+                empty={isEmpty}
+                emptyMessage={strings.messageNotAvailable}
+                pending={regionsPending}
+            >
+                <div className={styles.content}>
+                    <Tabs
+                        value={activeRegion}
+                        onChange={setActiveRegion}
+                        styleVariant="vertical-compact"
+                    >
+                        <TabList className={styles.regionList}>
+                            {regionOptions?.map(
+                                (region) => (
+                                    <Tab
+                                        key={region.key}
+                                        name={region.key}
+                                    >
+                                        {region.value}
+                                    </Tab>
+                                ),
+                            )}
+                        </TabList>
+                        <div className={styles.regionBorder} />
                         {regionOptions?.map(
                             (region) => (
-                                <Tab
+                                <TabPanel
                                     key={region.key}
                                     name={region.key}
+                                    className={styles.regionDetail}
                                 >
-                                    {region.value}
-                                </Tab>
-                            ),
-                        )}
-                    </TabList>
-                    <div className={styles.regionBorder} />
-                    {regionOptions?.map(
-                        (region) => (
-                            <TabPanel
-                                key={region.key}
-                                name={region.key}
-                                className={styles.regionDetail}
-                            >
-                                <Container
-                                    pending={false}
-                                    empty={false}
-                                    errored={false}
-                                    filtered={isTruthyString(countrySearch)}
-                                    className={styles.regionDetailContent}
-                                    withHeaderBorder
-                                    withContentOverflow
-                                    headerDescription={(
-                                        <ListView
-                                            withWrap
-                                            withSpaceBetweenContents
-                                        >
-                                            <DropdownMenuItem
-                                                type="link"
-                                                to="regionsLayout"
-                                                urlParams={{ regionId: region.key }}
-                                                withLinkIcon
-                                                colorVariant="primary"
-                                                styleVariant="filled"
-                                                withoutFullWidth
-                                                spacing="sm"
+                                    <Container
+                                        errored={false}
+                                        filtered={isTruthyString(countrySearch)}
+                                        className={styles.regionDetailContent}
+                                        withHeaderBorder
+                                        withContentOverflow
+                                        headerDescription={(
+                                            <ListView
+                                                withWrap
+                                                withSpaceBetweenContents
                                             >
-                                                {/* FIXME: use translation */}
-                                                {`${region.value} Region`}
-                                            </DropdownMenuItem>
-                                            <TextInput
-                                                name={undefined}
-                                                placeholder={strings
-                                                    .countryDropdownSearchPlaceholder}
-                                                value={countrySearch}
-                                                onChange={setCountrySearch}
-                                                icons={<SearchLineIcon />}
-                                            />
-                                        </ListView>
-                                    )}
-                                    withPadding
-                                >
-                                    <ListView
-                                        layout="grid"
-                                        spacing="xs"
-                                        numPreferredGridColumns={4}
-                                        minGridColumnSize="10rem"
-                                    >
-                                        {/* TODO: use RawList */}
-                                        {countriesInSelectedRegion?.map(
-                                            ({ id, name }) => (
                                                 <DropdownMenuItem
                                                     type="link"
-                                                    key={id}
-                                                    to="countriesLayout"
-                                                    urlParams={{ countryId: id }}
-                                                    styleVariant="action"
-                                                    spacing="sm"
+                                                    to="regionsLayout"
+                                                    urlParams={{ regionId: region.key }}
+                                                    withLinkIcon
+                                                    colorVariant="primary"
+                                                    styleVariant="filled"
                                                     withoutFullWidth
-                                                    withoutPadding
-                                                    textSize="sm"
+                                                    spacing="sm"
                                                 >
-                                                    {name}
+                                                    {/* FIXME: use translation */}
+                                                    {`${region.value} Region`}
                                                 </DropdownMenuItem>
-                                            ),
+                                                <TextInput
+                                                    name={undefined}
+                                                    placeholder={strings
+                                                        .countryDropdownSearchPlaceholder}
+                                                    value={countrySearch}
+                                                    onChange={setCountrySearch}
+                                                    icons={<SearchLineIcon />}
+                                                />
+                                            </ListView>
                                         )}
-                                    </ListView>
-                                </Container>
-                            </TabPanel>
-                        ),
-                    )}
-                </Tabs>
-            )}
+                                        withPadding
+                                        empty={isNotDefined(countriesInSelectedRegion)
+                                            || countriesInSelectedRegion.length === 0}
+                                        pending={countriesPending}
+                                    >
+                                        <ListView
+                                            layout="grid"
+                                            spacing="xs"
+                                            numPreferredGridColumns={4}
+                                            minGridColumnSize="10rem"
+                                        >
+                                            {/* TODO: use RawList */}
+                                            {countriesInSelectedRegion?.map(
+                                                ({ id, name }) => (
+                                                    <DropdownMenuItem
+                                                        type="link"
+                                                        key={id}
+                                                        to="countriesLayout"
+                                                        urlParams={{ countryId: id }}
+                                                        styleVariant="action"
+                                                        spacing="sm"
+                                                        withoutFullWidth
+                                                        withoutPadding
+                                                        textSize="sm"
+                                                    >
+                                                        {name}
+                                                    </DropdownMenuItem>
+                                                ),
+                                            )}
+                                        </ListView>
+                                    </Container>
+                                </TabPanel>
+                            ),
+                        )}
+                    </Tabs>
+                </div>
+            </Container>
         </DropdownMenu>
     );
 }
