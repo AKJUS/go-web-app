@@ -124,6 +124,7 @@ function DropdownMenu(props: Props) {
             <Button
                 name={undefined}
                 className={_cs(
+                    styles.dropdownMenu,
                     showDropdown && activeClassName,
                     className,
                 )}
