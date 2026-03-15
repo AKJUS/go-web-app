@@ -36,6 +36,9 @@
     }
 
     .content {
+        display: flex;
+        flex-direction: column;
+
         &:empty {
             display: none;
         }
@@ -51,7 +54,7 @@
         }
 
         &.with-overflow {
-            &:not(:has(.with-padding-overflow)) {
+            &.without-padding-overflow {
                 overflow-block: auto;
             }
 

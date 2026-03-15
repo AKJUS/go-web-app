@@ -19,10 +19,11 @@ import {
     TextInput,
 } from '@ifrc-go/ui';
 import { useTranslation } from '@ifrc-go/ui/hooks';
-import { rankedSearchOnList } from '@ifrc-go/ui/utils';
 import {
-    _cs,
-    isDefined,
+    rankedSearchOnList,
+    resolveToString,
+} from '@ifrc-go/ui/utils';
+import {
     isFalsyString,
     isNotDefined,
     isTruthyString,
@@ -105,54 +106,64 @@ function CountryDropdown() {
 
     return (
         <DropdownMenu
-            className={_cs(
-                styles.regionDropdown,
-                isDefined(match) && styles.active,
-            )}
             label={strings.menuCountriesLabel}
             labelColorVariant="text"
             labelStyleVariant="action"
-            popupClassName={styles.dropdown}
+            popupClassName={styles.countryDropdown}
             persistent
             preferredPopupWidth={56}
+            withoutPopupPadding
         >
             <Container
                 empty={isEmpty}
                 emptyMessage={strings.messageNotAvailable}
                 pending={regionsPending}
+                withContentOverflow
+                withOverflow
             >
-                <div className={styles.content}>
-                    <Tabs
-                        value={activeRegion}
-                        onChange={setActiveRegion}
-                        styleVariant="vertical-compact"
+                <Tabs
+                    value={activeRegion}
+                    onChange={setActiveRegion}
+                    styleVariant="vertical-compact"
+                >
+                    <ListView
+                        layout="grid"
+                        withSidebar
+                        sidebarPosition="start"
+                        sidebarSize="xs"
+                        spacing="none"
+                        withOverflow
                     >
-                        <TabList className={styles.regionList}>
-                            {regionOptions?.map(
-                                (region) => (
-                                    <Tab
-                                        key={region.key}
-                                        name={region.key}
-                                    >
-                                        {region.value}
-                                    </Tab>
-                                ),
-                            )}
-                        </TabList>
-                        <div className={styles.regionBorder} />
+                        <ListView
+                            className={styles.tabList}
+                            layout="block"
+                            withPadding
+                        >
+                            <TabList>
+                                {regionOptions?.map(
+                                    (region) => (
+                                        <Tab
+                                            key={region.key}
+                                            name={region.key}
+                                        >
+                                            {region.value}
+                                        </Tab>
+                                    ),
+                                )}
+                            </TabList>
+                        </ListView>
                         {regionOptions?.map(
                             (region) => (
                                 <TabPanel
                                     key={region.key}
                                     name={region.key}
-                                    className={styles.regionDetail}
+                                    withContentsOnly
                                 >
                                     <Container
                                         errored={false}
                                         filtered={isTruthyString(countrySearch)}
-                                        className={styles.regionDetailContent}
-                                        withHeaderBorder
                                         withContentOverflow
+                                        withOverflow
                                         headerDescription={(
                                             <ListView
                                                 withWrap
@@ -166,18 +177,21 @@ function CountryDropdown() {
                                                     colorVariant="primary"
                                                     styleVariant="filled"
                                                     withoutFullWidth
-                                                    spacing="sm"
                                                 >
-                                                    {/* FIXME: use translation */}
-                                                    {`${region.value} Region`}
+                                                    {resolveToString(
+                                                        strings.regionalPageLinkLabel,
+                                                        { regionName: region.value ?? '--' },
+                                                    )}
                                                 </DropdownMenuItem>
                                                 <TextInput
+                                                    className={styles.searchInput}
                                                     name={undefined}
                                                     placeholder={strings
                                                         .countryDropdownSearchPlaceholder}
                                                     value={countrySearch}
                                                     onChange={setCountrySearch}
                                                     icons={<SearchLineIcon />}
+                                                    variant="general"
                                                 />
                                             </ListView>
                                         )}
@@ -190,7 +204,7 @@ function CountryDropdown() {
                                             layout="grid"
                                             spacing="xs"
                                             numPreferredGridColumns={4}
-                                            minGridColumnSize="10rem"
+                                            minGridColumnSize="9rem"
                                         >
                                             {/* TODO: use RawList */}
                                             {countriesInSelectedRegion?.map(
@@ -215,8 +229,8 @@ function CountryDropdown() {
                                 </TabPanel>
                             ),
                         )}
-                    </Tabs>
-                </div>
+                    </ListView>
+                </Tabs>
             </Container>
         </DropdownMenu>
     );

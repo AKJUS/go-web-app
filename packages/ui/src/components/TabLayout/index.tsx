@@ -1,4 +1,7 @@
-import { CloseLineIcon } from '@ifrc-go/icons';
+import {
+    ChevronRightLineIcon,
+    CloseLineIcon,
+} from '@ifrc-go/icons';
 import { _cs } from '@togglecorp/fujs';
 
 import InlineLayout, { type Props as InlineLayoutProps } from '#components/InlineLayout';
@@ -31,7 +34,7 @@ const styleVariantToSpacingOffset: Record<TabStyleVariant, number> = {
     step: -1,
     nav: 0,
     vertical: 0,
-    'vertical-compact': -1,
+    'vertical-compact': -2,
 };
 
 export interface Props extends Omit<InlineLayoutProps, 'withPadding'> {
@@ -67,6 +70,7 @@ function TabLayout(props: Props) {
         isFirstStep,
         isLastStep,
         errored,
+        after,
         ...inlineLayoutProps
     } = props;
 
@@ -96,8 +100,15 @@ function TabLayout(props: Props) {
             )}
             spacingOffset={spacingOffset}
             withAdditionalInlinePadding={styleVariant === 'pill'}
+            after={(
+                <>
+                    {after}
+                    {styleVariant === 'vertical-compact' && <ChevronRightLineIcon className={styles.forwardIcon} />}
+                </>
+            )}
         >
             {children}
+            <span className={styles.visualFeedback} />
         </InlineLayout>
     );
 

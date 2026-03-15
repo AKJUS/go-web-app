@@ -39,6 +39,8 @@ interface CommonProps extends Omit<React.HTMLProps<HTMLDivElement>, 'ref'> {
     withFullWidth?: boolean;
     withBackground?: boolean;
     withDarkBackground?: boolean;
+    withOverflow?: boolean;
+    withGrow?: boolean;
 }
 
 interface InlineLayoutProps {
@@ -53,6 +55,7 @@ interface InlineLayoutProps {
     gridContentClassName?: never;
     withSidebar?: never;
     sidebarPosition?: never;
+    sidebarSize?: never;
 }
 
 interface BlockLayoutProps {
@@ -66,6 +69,7 @@ interface BlockLayoutProps {
     gridContentClassName?: never;
     withSidebar?: never;
     sidebarPosition?: never;
+    sidebarSize?: never;
     withStartAlignment?: never;
 }
 
@@ -80,6 +84,7 @@ interface GridLayoutProps {
     withCenteredContents?: never;
     withSidebar?: never;
     sidebarPosition?: never;
+    sidebarSize?: never;
     withStartAlignment?: never;
 }
 
@@ -87,13 +92,14 @@ interface GridLayoutWithSidebarProps {
     layout: 'grid';
     withSidebar: true,
     sidebarPosition?: 'start' | 'end';
+    sidebarSize?: 'xs' | 'sm' | 'md' | 'lg';
+    gridContentClassName?: string;
 
     withWrap?: never;
     numPreferredGridColumns?: never;
     withSpaceBetweenContents?: never;
     withCenteredContents?: never;
     minGridColumnSize?: never;
-    gridContentClassName?: never;
     withStartAlignment?: never;
 }
 
@@ -122,10 +128,13 @@ function ListView(props: Props) {
         gridContentClassName,
         withSidebar,
         sidebarPosition = 'end',
+        sidebarSize = 'md',
         spacingOffset,
         withFullWidth,
         elementRef: elementRefFromProps,
         withSpacingOpticalCorrection = false,
+        withOverflow = false,
+        withGrow = false,
         ...divElementProps
     } = props;
 
@@ -178,6 +187,9 @@ function ListView(props: Props) {
                 withFullWidth && styles.withFullWidth,
                 withBackground && styles.withBackground,
                 withDarkBackground && styles.withDarkBackground,
+                withSidebar && styles.withSidebar,
+                withOverflow && styles.withOverflow,
+                withGrow && styles.withGrow,
                 className,
             )}
             role={layout !== 'grid' ? 'list' : undefined}
@@ -188,8 +200,12 @@ function ListView(props: Props) {
                         styles.gridContent,
                         spacingClassName,
                         gridContentClassName,
-                        withSidebar && styles.withSidebar,
+                        withSidebar && styles.gridContentWithSidebar,
                         sidebarPosition === 'start' && styles.sidebarPositionStart,
+                        sidebarSize === 'xs' && styles.xsSidebar,
+                        sidebarSize === 'sm' && styles.smSidebar,
+                        sidebarSize === 'md' && styles.mdSidebar,
+                        sidebarSize === 'lg' && styles.lgSidebar,
                     )}
                     role="grid"
                 >

@@ -79,6 +79,7 @@ export interface Props extends Omit<HTMLProps<HTMLDivElement>, 'ref'>{
     withFixedHeight?: boolean;
 
     withCenteredContent?: boolean;
+    withOverflow?: boolean;
 }
 
 function Container(props: Props) {
@@ -134,6 +135,7 @@ function Container(props: Props) {
         withoutSpacingOpticalCorrection,
 
         withCenteredContent,
+        withOverflow,
 
         ...divProps
     } = props;
@@ -290,8 +292,10 @@ function Container(props: Props) {
                 overlayPending && styles.pendingOverlaid,
                 withContentOverflow && styles.withOverflow,
                 withPadding && withContentOverflow && styles.withPaddingOverflow,
+                !withPadding && withContentOverflow && styles.withoutPaddingOverflow,
                 withContentWell && contentSpacingClassName,
             )}
+            withOverflow={withOverflow}
         >
             {isDefined(filters) && (
                 <ListView

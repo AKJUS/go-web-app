@@ -24,6 +24,7 @@ export interface Props {
     activeClassName?: string;
 
     popupClassName?: string;
+    withoutPopupPadding?: boolean;
     preferredPopupWidth?: number;
 
     label?: React.ReactNode;
@@ -67,6 +68,7 @@ function DropdownMenu(props: Props) {
 
         popupClassName,
         preferredPopupWidth,
+        withoutPopupPadding,
     } = props;
 
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -150,7 +152,11 @@ function DropdownMenu(props: Props) {
             {showDropdown && (
                 <Popup
                     elementRef={dropdownRef}
-                    className={_cs(styles.dropdownContent, popupClassName)}
+                    className={_cs(
+                        styles.dropdownContent,
+                        withoutPopupPadding && styles.withoutPadding,
+                        popupClassName,
+                    )}
                     parentRef={buttonRef}
                     preferredWidth={preferredPopupWidth}
                 >
