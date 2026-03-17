@@ -73,6 +73,7 @@ const eventDetailFields: (keyof PartialOpsUpdate)[] = [
     'changing_geographic_location',
     'request_for_second_allocation',
     'specified_trigger_met',
+    'source_information',
 ] satisfies (keyof PartialOpsUpdate)[];
 
 const actionsFields: (keyof PartialOpsUpdate)[] = [
