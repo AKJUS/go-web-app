@@ -25,6 +25,15 @@ const styleVariantToClassName: Record<TabStyleVariant, string> = {
     'vertical-compact': styles.styleVariantVerticalCompact,
 };
 
+const styleVariantToSpacingOffset: Record<TabStyleVariant, number> = {
+    tab: 1,
+    pill: 0,
+    step: -1,
+    nav: 0,
+    vertical: 0,
+    'vertical-compact': -1,
+};
+
 export interface Props extends Omit<InlineLayoutProps, 'withPadding'> {
     className?: string;
     tabWrapperClassName?: string;
@@ -46,7 +55,7 @@ function TabLayout(props: Props) {
     const {
         colorVariant = 'primary',
         styleVariant = 'nav',
-        spacingOffset = styleVariant === 'tab' ? 1 : 0,
+        spacingOffset = styleVariantToSpacingOffset[styleVariant],
         className,
         disabled,
         children,
@@ -71,7 +80,10 @@ function TabLayout(props: Props) {
         <InlineLayout
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...inlineLayoutProps}
-            withPadding={!(withoutPadding || styleVariant === 'vertical-compact' || styleVariant === 'nav')}
+            withPadding={!(withoutPadding
+                || styleVariant === 'vertical-compact'
+                || styleVariant === 'nav'
+            )}
             className={_cs(
                 styles.tabLayout,
                 colorVariantToClassName[colorVariant],

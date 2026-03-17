@@ -171,7 +171,8 @@
 
     .tab-layout {
         /* FIXME: use css variable */
-        max-width: 12.5rem;
+        max-width: 13rem;
+        overflow-wrap: break-word;
     }
 
     .dot-wrapper {
