@@ -1,5 +1,18 @@
 # go-web-app
 
+## 7.25.0-beta.7
+
+### Patch Changes
+
+- 728b388: Update the DREF forms
+
+  - Make forms view-only for approved and finalizing status
+  - Add a view-only banner
+  - Update language mismatch message title
+
+- Updated dependencies [e619fc8]
+  - @ifrc-go/ui@2.1.0-beta.2
+
 ## 7.25.0-beta.6
 
 ### Patch Changes
