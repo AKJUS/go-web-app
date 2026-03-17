@@ -268,7 +268,7 @@ function Overview(props: Props) {
                             <Button
                                 name={undefined}
                                 onClick={setShowShareModalTrue}
-                                disabled={isNotDefined(opsUpdateId) || readOnly}
+                                disabled={isNotDefined(opsUpdateId)}
                                 before={<ShareLineIcon />}
                             >
                                 {strings.formShareButtonLabel}

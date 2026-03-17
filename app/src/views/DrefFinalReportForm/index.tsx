@@ -514,7 +514,7 @@ export function Component() {
                 )}
                 withBackgroundColorInMainSection
                 mainSectionClassName={styles.content}
-                beforeHeaderContent={readOnly && (
+                beforeHeaderContent={!fetchingFinalReport && readOnly && (
                     <ViewOnlyModeBanner />
                 )}
             >
@@ -524,14 +524,14 @@ export function Component() {
                         title={strings.formLoadingMessage}
                     />
                 )}
-                {languageMismatch && (
+                {!fetchingFinalReport && languageMismatch && (
                     <LanguageMismatchMessage
                         title={strings.formNotAvailableInSelectedLanguageMessage}
                         originalLanguage={finalReportResponse?.translation_module_original_language}
                         selectedLanguage={currentLanguage}
                     />
                 )}
-                {isDefined(finalReportResponseError) && (
+                {!fetchingFinalReport && isDefined(finalReportResponseError) && (
                     <Message
                         variant="error"
                         title={strings.formLoadErrorTitle}
