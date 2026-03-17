@@ -36,6 +36,7 @@ import LanguageMismatchMessage from '#components/domain/LanguageMismatchMessage'
 import Link from '#components/Link';
 import NonFieldError from '#components/NonFieldError';
 import Page from '#components/Page';
+import ViewOnlyModeBanner from '#components/ViewOnlyModeBanner';
 import useCurrentLanguage from '#hooks/domain/useCurrentLanguage';
 import useAlert from '#hooks/useAlert';
 import {
@@ -452,6 +453,9 @@ export function Component() {
                 )}
                 withBackgroundColorInMainSection
                 mainSectionClassName={styles.content}
+                beforeHeaderContent={!fetchingFinalReport && readOnly && (
+                    <ViewOnlyModeBanner />
+                )}
             >
                 {fetchingFinalReport && (
                     <Message
@@ -459,14 +463,14 @@ export function Component() {
                         title={strings.formLoadingMessage}
                     />
                 )}
-                {languageMismatch && (
+                {!fetchingFinalReport && languageMismatch && (
                     <LanguageMismatchMessage
                         title={strings.formNotAvailableInSelectedLanguageMessage}
                         originalLanguage={finalReportResponse.translation_module_original_language}
                         selectedLanguage={currentLanguage}
                     />
                 )}
-                {isDefined(finalReportResponseError) && (
+                {!fetchingFinalReport && isDefined(finalReportResponseError) && (
                     <Message
                         variant="error"
                         title={strings.formLoadErrorTitle}

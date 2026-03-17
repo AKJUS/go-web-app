@@ -707,7 +707,7 @@ export function Component() {
                 )}
                 withBackgroundColorInMainSection
                 mainSectionClassName={styles.content}
-                beforeHeaderContent={readOnly && (
+                beforeHeaderContent={!fetchingOpsUpdate && readOnly && (
                     <ViewOnlyModeBanner />
                 )}
             >
@@ -717,7 +717,7 @@ export function Component() {
                         title={strings.formLoadingMessage}
                     />
                 )}
-                {languageMismatch && (
+                {!fetchingOpsUpdate && languageMismatch && (
                     <LanguageMismatchMessage
                         title={strings.formNotAvailableInSelectedLanguageMessage}
                         originalLanguage={opsUpdateResponse?.translation_module_original_language}

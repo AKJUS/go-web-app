@@ -769,7 +769,7 @@ export function Component() {
                     </TabList>
                 )}
                 withBackgroundColorInMainSection
-                beforeHeaderContent={readOnly && (
+                beforeHeaderContent={!fetchingDref && readOnly && (
                     <ViewOnlyModeBanner />
                 )}
             >
@@ -779,7 +779,7 @@ export function Component() {
                         title={strings.formLoadingMessage}
                     />
                 )}
-                {languageMismatch && (
+                {!fetchingDref && languageMismatch && (
                     <LanguageMismatchMessage
                         title={strings.formEditNotAvailableInSelectedLanguageMessage}
                         originalLanguage={drefResponse?.translation_module_original_language}
