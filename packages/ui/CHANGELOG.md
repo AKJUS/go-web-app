@@ -1,5 +1,16 @@
 # @ifrc-go/ui
 
+## 2.1.0-beta.3
+
+### Patch Changes
+
+- bd93064: Update TabLayout and Message component
+
+  - Add foreground color as background in message
+  - Increase max width of step tab
+  - Add overflow wrap to step tab
+  - Improve spacing of step & vertical compact tab
+
 ## 2.1.0-beta.2
 
 ### Minor Changes

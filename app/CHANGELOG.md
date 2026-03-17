@@ -1,5 +1,18 @@
 # go-web-app
 
+## 7.25.0-beta.8
+
+### Patch Changes
+
+- 2e50084: Update dref forms
+
+  - Hide view only and language mismatch banner in pending state
+  - Enable share functionality on read-only mode
+  - Fix UI for old final report form
+
+- Updated dependencies [bd93064]
+  - @ifrc-go/ui@2.1.0-beta.3
+
 ## 7.25.0-beta.7
 
 ### Patch Changes
