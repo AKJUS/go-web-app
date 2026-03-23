@@ -1,5 +1,54 @@
 # go-web-app
 
+## 7.25.0
+
+### Minor Changes
+
+- 521c1b5: Fix event map being replace by cover image is DREF forms
+- fb87ba5: Update DREF Application Forms and Exports
+
+  - Update Proposed Activities behavior in Imminent DREF Application & Final Report forms
+    - Make activities optional when budget is Zero for Early Response
+  - Update PDF export
+    - Remove duplicate display of risk regions
+    - Update PGA bank detail description
+
+- 52aefd2: Fix Radio Inputs not allowing to clear the value
+
+### Patch Changes
+
+- 6aa37a7: Use current year in Surge overview Top 5 deployments
+- 53774e6: Fix Old DREF Final Reports not being able to update in languages other than English
+- 25f062c: Make import template button label translatable in Account > DREF
+- 7a9514d: Update Montandon landing page
+  - Add 'Getting started' section
+  - Enable external links
+- e97709b: Update Catalogue of Surge Services
+
+  - Update WASH WSR NS service proveders
+  - Update Health ERU MHPSS NS service providers
+
+- 728b388: Update the DREF forms
+
+  - Make forms view-only for approved and finalizing status
+  - Add a view-only banner
+  - Update language mismatch message title
+
+- 47ab0c0: Remove Swagger API link from Montandon landing page
+- 93f1c9b: Add country to account details page and edit form
+- 2e50084: Update dref forms
+
+  - Hide view only and language mismatch banner in pending state
+  - Enable share functionality on read-only mode
+  - Fix UI for old final report form
+
+- becb909: Update Ops. Learning disclaimer to refer specific AI model being used (GPT 4o-mini)
+- Updated dependencies [22038c4]
+- Updated dependencies [bd93064]
+- Updated dependencies [52aefd2]
+- Updated dependencies [e619fc8]
+  - @ifrc-go/ui@2.1.0
+
 ## 7.25.0-beta.9
 
 ### Minor Changes
