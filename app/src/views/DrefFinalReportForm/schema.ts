@@ -607,6 +607,13 @@ const schema: FinalReportFormSchema = {
                                                 lessThanOrEqualToCondition(MAX_INT_LIMIT),
                                             ],
                                         },
+                                        total_expenditure: {
+                                            required: true,
+                                            validations: [
+                                                positiveIntegerCondition,
+                                                lessThanOrEqualToCondition(MAX_INT_LIMIT),
+                                            ],
+                                        },
                                         proposed_type: {
                                             required: true,
                                         },
