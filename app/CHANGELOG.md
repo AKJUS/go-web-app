@@ -1,5 +1,17 @@
 # go-web-app
 
+## 7.25.0-beta.9
+
+### Minor Changes
+
+- fb87ba5: Update DREF Application Forms and Exports
+
+  - Update Proposed Activities behavior in Imminent DREF Application & Final Report forms
+    - Make activities optional when budget is Zero for Early Response
+  - Update PDF export
+    - Remove duplicate display of risk regions
+    - Update PGA bank detail description
+
 ## 7.25.0-beta.8
 
 ### Patch Changes
