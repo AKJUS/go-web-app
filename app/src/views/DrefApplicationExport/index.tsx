@@ -848,9 +848,7 @@ export function Component() {
                 <TextOutput
                     className={styles.targetedAreas}
                     label={strings.targetedAreasLabel}
-                    value={district_details?.map(
-                        (district) => district.name,
-                    ).join(', ')}
+                    value={riskRegions}
                     strongValue
                 />
             </Container>
@@ -866,9 +864,6 @@ export function Component() {
                         <Container heading={strings.hazardDate}>
                             <DescriptionText>
                                 {hazard_date_and_location}
-                            </DescriptionText>
-                            <DescriptionText>
-                                {riskRegions}
                             </DescriptionText>
                         </Container>
                     )}
