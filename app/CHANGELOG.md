@@ -1,5 +1,16 @@
 # go-web-app
 
+## 7.26.0-beta.0
+
+### Minor Changes
+
+- 4b0cd41: Update navigation pop-up style
+
+### Patch Changes
+
+- Updated dependencies [4b0cd41]
+  - @ifrc-go/ui@2.2.0-beta.0
+
 ## 7.25.0
 
 ### Minor Changes
