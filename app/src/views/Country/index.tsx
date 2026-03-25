@@ -182,7 +182,6 @@ export function Component() {
                     external
                     href={resolveUrl(adminUrl, `api/country/${countryId}/change/`)}
                     before={<PencilFillIcon />}
-                    spacing="sm"
                     colorVariant="primary"
                     styleVariant="outline"
                 >

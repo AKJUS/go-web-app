@@ -3,8 +3,8 @@ import {
     type LinkProps as RouterLinkProps,
 } from 'react-router-dom';
 import {
+    ArrowRightUpLineIcon,
     ChevronRightLineIcon,
-    ExternalLinkLineIcon,
 } from '@ifrc-go/icons';
 import {
     ButtonLayout,
@@ -68,7 +68,7 @@ function Link(props: Props) {
         colorVariant = 'text',
         styleVariant = 'action',
         spacing,
-        spacingOffset = -3,
+        spacingOffset = styleVariant === 'action' ? -5 : -3,
         withoutPadding,
         withFullWidth,
         children,
@@ -121,10 +121,10 @@ function Link(props: Props) {
                 <>
                     {after}
                     {withLinkIcon && external && (
-                        <ExternalLinkLineIcon />
+                        <ArrowRightUpLineIcon className={styles.linkIcon} />
                     )}
                     {withLinkIcon && !external && (
-                        <ChevronRightLineIcon />
+                        <ChevronRightLineIcon className={styles.linkIcon} />
                     )}
                 </>
             )}
