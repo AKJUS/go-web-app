@@ -181,7 +181,8 @@ export const processGoOptions: GoContextInterface['transformOptions'] = (
     } = requestOptions;
 
     const {
-        apiType,
+        // FIXME: undefined type should only be applicable for the external requests
+        apiType = 'go',
         formData,
         isCsvRequest,
         isExcelRequest,
