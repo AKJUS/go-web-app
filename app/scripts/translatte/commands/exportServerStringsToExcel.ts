@@ -25,8 +25,8 @@ async function exportServerStringsToExcel(
     );
 
     worksheet.columns = [
-        { header: 'Namespace', key: 'namespace' },
-        { header: 'Key', key: 'key' },
+        { header: 'page', key: 'page' },
+        { header: 'key', key: 'key' },
         { header: 'EN', key: 'en' },
         { header: 'FR', key: 'fr' },
         { header: 'ES', key: 'es' },
@@ -52,7 +52,7 @@ async function exportServerStringsToExcel(
             const { key, page_name } = list[0];
 
             return {
-                namespace: page_name,
+                page: page_name,
                 key: key,
                 en: value.en,
                 fr: hash.fr === hash.en ? value.fr : undefined,

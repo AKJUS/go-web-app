@@ -422,54 +422,6 @@ export async function fetchServerState(apiUrl: string, authToken?: string) {
     return serverStrings;
 }
 
-/*
-export function getValueFromCellValue(cellValue: CellValue) {
-    if (isNotDefined(cellValue)) {
-        return undefined;
-    }
-
-    if (
-        typeof cellValue === 'number'
-        || typeof cellValue === 'string'
-        || typeof cellValue === 'boolean'
-    ) {
-        return cellValue;
-    }
-
-    if (cellValue instanceof Date) {
-        return encodeDate(cellValue);
-    }
-
-    if ('error' in cellValue) {
-        return undefined;
-    }
-
-    if ('richText' in cellValue) {
-        return cellValue.richText.map(({ text }) => text).join('');
-    }
-
-    if ('hyperlink' in cellValue) {
-        const MAIL_IDENTIFIER = 'mailto:';
-        if (cellValue.hyperlink.startsWith(MAIL_IDENTIFIER)) {
-            return cellValue.hyperlink.substring(MAIL_IDENTIFIER.length);
-        }
-
-        return cellValue.hyperlink;
-    }
-
-    if (isNotDefined(cellValue.result)) {
-        return undefined;
-    }
-
-    if (typeof cellValue.result === 'object' && 'error' in cellValue.result) {
-        return undefined;
-    }
-
-    // Formula result
-    return getValueFromCellValue(cellValue.result);
-}
-*/
-
 function getCanonicalKey(
     item: MigrationActionItem,
     opts: { useNewKey: boolean },

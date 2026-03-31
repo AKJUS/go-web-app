@@ -37,10 +37,7 @@ export function isTranslatedTemplateValid(
 }
 */
 
-// FIXME: get this from params
-const applicationId = 18;
-
-async function fetchTranslations(ifrcApiUrl: string, ifrcApiKey: string) {
+async function fetchTranslations(ifrcApiUrl: string, ifrcApiKey: string, applicationId: string) {
     const endpoint = resolveUrl(ifrcApiUrl, `api/Application/${applicationId}/Translation/export`);
 
     const headers: RequestInit['headers'] = {
@@ -60,7 +57,7 @@ async function fetchTranslations(ifrcApiUrl: string, ifrcApiKey: string) {
     return promise;
 }
 
-async function pushTranslations(blob: Blob, ifrcApiUrl: string, ifrcApiKey: string) {
+async function pushTranslations(blob: Blob, ifrcApiUrl: string, ifrcApiKey: string, applicationId: string) {
     const endpoint = resolveUrl(ifrcApiUrl, `api/Application/${applicationId}/Translation/fullappimport`);
 
     console.info('posting to', endpoint);
@@ -197,10 +194,11 @@ async function pushMigrationsToIfrc(
     migrationDirPath: string,
     apiUrl: string,
     apiKey: string,
+    applicationId: string,
 ) {
     const migrationFilesAttrs = await getMigrationFilesAttrs(projectPath, migrationDirPath);
 
-    const fetchResult = await fetchTranslations(apiUrl, apiKey);
+    const fetchResult = await fetchTranslations(apiUrl, apiKey, applicationId);
     const arrayBuffer = await fetchResult.arrayBuffer();
     const workbook= xlsx.read(arrayBuffer);
     const firstSheetData = xlsx.utils.sheet_to_json(
@@ -319,7 +317,7 @@ async function pushMigrationsToIfrc(
     const u8 = xlsx.write(newWorkbook, { bookType: 'xlsx', type: 'buffer' });
     const blob = new Blob([u8], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
 
-    const pushResult = await pushTranslations(blob, apiUrl, apiKey);
+    const pushResult = await pushTranslations(blob, apiUrl, apiKey, applicationId);
 
     console.info(await pushResult.text());
 }

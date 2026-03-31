@@ -1,10 +1,12 @@
 import { readFileSync } from "fs";
 import { resolveUrl } from "../utils";
 
-// FIXME: get this from params
-const applicationId = 18;
-
-async function fullAppImport(importFilePath: string, ifrcApiUrl: string, ifrcApiKey: string) {
+async function fullAppImport(
+    importFilePath: string,
+    ifrcApiUrl: string,
+    ifrcApiKey: string,
+    applicationId: string,
+) {
     const endpoint = resolveUrl(ifrcApiUrl, `Application/${applicationId}/Translation/fullappimport`);
     const translationFile = readFileSync(importFilePath);
     const uint8FileData = new Uint8Array(translationFile);
@@ -32,8 +34,18 @@ async function fullAppImport(importFilePath: string, ifrcApiUrl: string, ifrcApi
     return promise;
 }
 
-async function pushStringsFromExcelToIfrc(importFilePath: string, apiUrl: string, apiKey: string) {
-    const response = await fullAppImport(importFilePath, apiUrl, apiKey);
+async function pushStringsFromExcelToIfrc(
+    importFilePath: string,
+    apiUrl: string,
+    apiKey: string,
+    applicationId: string,
+) {
+    const response = await fullAppImport(
+        importFilePath,
+        apiUrl,
+        apiKey,
+        applicationId,
+    );
 
     try {
         const responseJson = await response.json();

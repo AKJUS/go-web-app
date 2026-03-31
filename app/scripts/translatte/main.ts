@@ -47,7 +47,7 @@ yargs(hideBin(process.argv))
     )
     .command(
         'lint-migrations <MIGRATION_DIR_PATH>',
-        'Lint migration files for divirging migrations',
+        'Lint migration files for diverging migrations',
         (yargs) => {
             yargs.positional('MIGRATION_DIR_PATH', {
                 type: 'string',
@@ -260,6 +260,11 @@ yargs(hideBin(process.argv))
                     type: 'string',
                     describe: 'URL for the API server',
                     require: true,
+                },
+                'application-id': {
+                    type: 'string',
+                    describe: 'Application ID in the translation service',
+                    require: true,
                 }
             });
         },
@@ -270,6 +275,7 @@ yargs(hideBin(process.argv))
                 importFilePath,
                 argv.apiUrl as string,
                 argv.apiKey as string,
+                argv.applicationId as string,
             );
         },
     )
@@ -323,6 +329,11 @@ yargs(hideBin(process.argv))
                     type: 'string',
                     describe: 'URL for the API server',
                     require: true,
+                },
+                'application-id': {
+                    type: 'string',
+                    describe: 'Application ID in the translation service',
+                    require: true,
                 }
             });
         },
@@ -334,6 +345,7 @@ yargs(hideBin(process.argv))
                 migrationDirPath,
                 argv.apiUrl as string,
                 argv.apiKey as string,
+                argv.applicationId as string,
             );
         },
     )

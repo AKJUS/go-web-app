@@ -19,10 +19,10 @@ async function lintMigrations(projectPath: string, path: string) {
 
         console.info(duplicateStr);
 
-        throw `Error: found divirging migrations!`;
+        throw `Error: found diverging migrations!`;
     }
 
-    console.info('All good! No divirging migrations!');
+    console.info('All good! No diverging migrations!');
 }
 
 export default lintMigrations;
