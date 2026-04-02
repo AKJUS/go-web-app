@@ -22,6 +22,7 @@
 
     &.level-one {
         --font-size: 2.5rem;
+        letter-spacing: .1rem;
 
         @media print {
             color: var(--go-ui-color-primary-blue);
