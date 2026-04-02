@@ -126,7 +126,7 @@ async function getExcelTranslations(excelFilePath: string) {
     firstSheet.spliceRows(1, 1);
 
     const KEY = 'key';
-    const NAMESPACE = 'namespace';
+    const NAMESPACE = 'page';
     const EN = 'en';
     const FR = 'fr';
     const ES = 'es';
@@ -178,6 +178,7 @@ async function pushStringsFromExcel(importFilePath: string, apiUrl: string, acce
 
     console.info(`Found ${translations.length} rows`);
 
+    // FIXME: this should come from params
     const applicableLanguages: Language[] = ['en', 'fr', 'es', 'ar'];
 
     const actionsByLanguage = listToMap(
