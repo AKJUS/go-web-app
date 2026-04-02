@@ -36,7 +36,7 @@ type PickedButtonLayoutProps =
     | 'textSize'
     | 'disabled';
 
-export type CommonLinkProps = Pick<ButtonLayoutProps, PickedButtonLayoutProps> & {
+type CommonLinkProps = Pick<ButtonLayoutProps, PickedButtonLayoutProps> & {
     withEllipsizedContent?: boolean;
     withLinkIcon?: boolean;
     withUnderline?: boolean;
@@ -51,7 +51,7 @@ interface InternalLinkProps extends Omit<RouterLinkProps, 'to'> {
     urlHash?: string;
 }
 
-export interface ExternalLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
+interface ExternalLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
     external: true;
     href: string | undefined | null;
     to?: never;
