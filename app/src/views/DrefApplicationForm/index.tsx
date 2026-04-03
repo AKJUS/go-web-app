@@ -1,5 +1,4 @@
 import {
-    type ElementRef,
     useCallback,
     useMemo,
     useRef,
@@ -150,7 +149,7 @@ export function Component() {
     const { navigate } = useRouting();
     const strings = useTranslation(i18n);
 
-    const tabListRef = useRef<ElementRef<'div'>>(null);
+    const tabListRef = useRef<HTMLDivElement>(null);
 
     const [activeTab, setActiveTab] = useState<DrefTabKey>('overview');
     const [fileIdToUrlMap, setFileIdToUrlMap] = useState<Record<number, string>>({});
@@ -165,7 +164,7 @@ export function Component() {
         setTrue: setShowExportModalTrue,
         setFalse: setShowExportModalFalse,
     }] = useBooleanState(false);
-    const lastModifiedAtRef = useRef<string | undefined>();
+    const lastModifiedAtRef = useRef<string | undefined>(undefined);
 
     const [districtOptions, setDistrictOptions] = useState<
         DistrictItem[] | undefined | null

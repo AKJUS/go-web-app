@@ -82,7 +82,7 @@ export function Component() {
         languageNamespaceStatus,
     } = useContext(LanguageContext);
 
-    const languageRequestTimeoutRef = useRef<number | undefined>();
+    const languageRequestTimeoutRef = useRef<number | undefined>(undefined);
 
     const registerDomainData = useCallback(
         (name: CacheKey) => {

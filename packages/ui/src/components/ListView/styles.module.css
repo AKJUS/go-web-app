@@ -22,7 +22,7 @@
             --sidebar-size: 0;
 
             &:not(.grid-content-with-sidebar) {
-                /* stylelint-disable-next-line csstools/value-no-unknown-custom-properties */
+                /* stylelint-disable csstools/value-no-unknown-custom-properties */
                 grid-template-columns: repeat(
                     auto-fill,
                     minmax(
@@ -33,6 +33,7 @@
                         1fr
                     )
                 );
+                /* stylelint-enable csstools/value-no-unknown-custom-properties */
             }
 
             &.xs-sidebar {

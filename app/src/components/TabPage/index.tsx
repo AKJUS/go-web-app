@@ -9,7 +9,7 @@ import WikiLink from '#components/WikiLink';
 import styles from './styles.module.css';
 
 interface Props {
-    elementRef?: React.RefObject<HTMLDivElement>;
+    elementRef?: React.RefObject<HTMLDivElement | null>;
     children?: React.ReactNode;
     wikiLinkPathName?: string;
 

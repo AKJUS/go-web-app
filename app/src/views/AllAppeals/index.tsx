@@ -1,7 +1,4 @@
-import {
-    useCallback,
-    useMemo,
-} from 'react';
+import { useMemo } from 'react';
 import {
     Container,
     DateInput,
@@ -315,7 +312,8 @@ export function Component() {
         },
     });
 
-    const handleExportClick = useCallback(() => {
+    // FIXME(frozenhelium): useCallback removed for React Compiler compatibility
+    const handleExportClick = () => {
         if (!appealsResponse?.count) {
             return;
         }
@@ -324,11 +322,7 @@ export function Component() {
             appealsResponse.count,
             query,
         );
-    }, [
-        query,
-        triggerExportStart,
-        appealsResponse?.count,
-    ]);
+    };
 
     const isFilterApplied = isDefined(filterDisasterType)
         || isDefined(filterAppealType)

@@ -16,8 +16,8 @@ import styles from './styles.module.css';
 
 export interface Props {
     className?: string;
-    containerRef?: React.RefObject<HTMLDivElement>;
-    inputSectionRef?: React.RefObject<HTMLDivElement>;
+    containerRef?: React.RefObject<HTMLDivElement | null>;
+    inputSectionRef?: React.RefObject<HTMLDivElement | null>;
 
     label?: React.ReactNode;
 

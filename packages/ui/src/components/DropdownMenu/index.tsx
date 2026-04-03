@@ -38,10 +38,10 @@ export interface Props {
     children?: React.ReactNode;
 
     withoutDropdownIcon?: boolean;
-    componentRef?: React.MutableRefObject<{
+    componentRef?: React.RefObject<{
         setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
     } | null>;
-    elementRef?: React.RefObject<HTMLDivElement>;
+    elementRef?: React.RefObject<HTMLDivElement | null>;
     persistent?: boolean;
 }
 

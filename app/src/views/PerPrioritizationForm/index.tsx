@@ -1,5 +1,4 @@
 import {
-    type ElementRef,
     useCallback,
     useMemo,
     useRef,
@@ -75,7 +74,7 @@ export function Component() {
     const alert = useAlert();
     const strings = useTranslation(i18n);
     const [sortBy, setSortBy] = useState<SortKey>('component');
-    const formContentRef = useRef<ElementRef<'div'>>(null);
+    const formContentRef = useRef<HTMLDivElement>(null);
 
     const {
         fetchingStatus,
@@ -326,16 +325,21 @@ export function Component() {
         formContentRef.current?.scrollIntoView();
     }, []);
 
+    // FIXME(frozenhelium): toggle-form submit callbacks are ref-backed
     const handleFormSubmit = createSubmitHandler(
         validate,
         setError,
+        // eslint-disable-next-line react-hooks/refs
         handleSubmit,
+        // eslint-disable-next-line react-hooks/refs
         handleFormError,
     );
     const handleFormFinalSubmit = createSubmitHandler(
         validate,
         setError,
+        // eslint-disable-next-line react-hooks/refs
         handleFinalSubmit,
+        // eslint-disable-next-line react-hooks/refs
         handleFormError,
     );
 
@@ -423,7 +427,11 @@ export function Component() {
 
     return (
         <TabPage>
+            {/* eslint-disable-next-line max-len */}
+            {/* FIXME(frozenhelium): actionDivRef.current read in render to conditionally mount a Portal — valid DOM pattern */}
+            {/* eslint-disable-next-line react-hooks/refs */}
             {actionDivRef.current && (
+                // eslint-disable-next-line react-hooks/refs
                 <Portal container={actionDivRef?.current}>
                     {value.is_draft === false ? (
                         <ConfirmButton

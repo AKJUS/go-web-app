@@ -1,5 +1,4 @@
 import {
-    type ElementRef,
     useCallback,
     useMemo,
     useRef,
@@ -118,7 +117,7 @@ export function Component() {
     const alert = useAlert();
     const strings = useTranslation(i18n);
 
-    const tabListRef = useRef<ElementRef<'div'>>(null);
+    const tabListRef = useRef<HTMLDivElement>(null);
 
     const [activeTab, setActiveTab] = useState<TabKeys>('overview');
     const [isPreviousImminent, setIsPreviousImminent] = useState(false);
@@ -135,7 +134,7 @@ export function Component() {
         setTrue: setShowExportModalTrue,
         setFalse: setShowExportModalFalse,
     }] = useBooleanState(false);
-    const lastModifiedAtRef = useRef<string | undefined>();
+    const lastModifiedAtRef = useRef<string | undefined>(undefined);
 
     const {
         value,
