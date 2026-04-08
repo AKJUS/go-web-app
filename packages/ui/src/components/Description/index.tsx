@@ -6,7 +6,7 @@ export interface Props extends Omit<React.HTMLProps<HTMLDivElement>, 'ref'> {
     className?: string;
     children?: React.ReactNode;
     withCenteredContent?: boolean;
-    elementRef?: React.RefObject<HTMLDivElement>;
+    elementRef?: React.RefObject<HTMLDivElement | null>;
     textSize?: 'xs' | 'sm' | 'md' | 'lg';
     withLightText?: boolean;
 }

@@ -1,7 +1,4 @@
-import React, {
-    useCallback,
-    useRef,
-} from 'react';
+import React, { useRef } from 'react';
 import {
     ArrowDownSmallFillIcon,
     ArrowUpSmallFillIcon,
@@ -145,100 +142,70 @@ function SelectInputContainer<
     const inputElementRef = useRef<HTMLInputElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
 
-    const handleSearchInputChange = useCallback(
-        (value: string | undefined) => {
-            if (!dropdownShown) {
-                onDropdownShownChange(true);
-            }
-            onSearchTextChange(value);
-        },
-        [
-            dropdownShown,
-            onDropdownShownChange,
-            onSearchTextChange,
-        ],
-    );
+    // FIXME(frozenhelium): useCallback removed for React Compiler compatibility
+    const handleSearchInputChange = (value: string | undefined) => {
+        if (!dropdownShown) {
+            onDropdownShownChange(true);
+        }
+        onSearchTextChange(value);
+    };
 
-    const handleToggleDropdown: NonNullable<ButtonProps<undefined>['onClick']> = useCallback(
-        (_, e) => {
-            e.stopPropagation();
-            onDropdownShownChange(!dropdownShown);
-        },
-        [dropdownShown, onDropdownShownChange],
-    );
+    // FIXME(frozenhelium): useCallback removed for React Compiler compatibility
+    const handleToggleDropdown: NonNullable<ButtonProps<undefined>['onClick']> = (_, e) => {
+        e.stopPropagation();
+        onDropdownShownChange(!dropdownShown);
+    };
 
-    const handleShowDropdown = useCallback(
-        () => {
-            // FIXME: this is not atomic. Call only once
-            if (!dropdownShown) {
-                onDropdownShownChange(true);
-            }
-        },
-        [
-            dropdownShown,
-            onDropdownShownChange,
-        ],
-    );
+    // FIXME(frozenhelium): useCallback removed for React Compiler compatibility
+    const handleShowDropdown = () => {
+        // FIXME: this is not atomic. Call only once
+        if (!dropdownShown) {
+            onDropdownShownChange(true);
+        }
+    };
 
-    const handleHideDropdown = useCallback(
-        () => {
-            onDropdownShownChange(false);
-        },
-        [onDropdownShownChange],
-    );
+    // FIXME(frozenhelium): useCallback removed for React Compiler compatibility
+    const handleHideDropdown = () => {
+        onDropdownShownChange(false);
+    };
 
-    const handleSearchInputClick = useCallback(
-        () => {
-            if (readOnly) {
-                return;
-            }
-            handleShowDropdown();
-        },
-        [readOnly, handleShowDropdown],
-    );
+    // FIXME(frozenhelium): useCallback removed for React Compiler compatibility
+    const handleSearchInputClick = () => {
+        if (readOnly) {
+            return;
+        }
+        handleShowDropdown();
+    };
 
-    const handlePopupBlur = useCallback(
-        (clickedInside: boolean, clickedInParent: boolean) => {
-            const isClickedWithin = clickedInside || clickedInParent;
-            if (!isClickedWithin) {
-                handleHideDropdown();
-            } else if (persistentOptionPopup && inputElementRef.current) {
-                inputElementRef.current.focus();
-            }
-        },
-        [handleHideDropdown, persistentOptionPopup],
-    );
+    // FIXME(frozenhelium): useCallback removed for React Compiler compatibility
+    const handlePopupBlur = (clickedInside: boolean, clickedInParent: boolean) => {
+        const isClickedWithin = clickedInside || clickedInParent;
+        if (!isClickedWithin) {
+            handleHideDropdown();
+        } else if (persistentOptionPopup && inputElementRef.current) {
+            inputElementRef.current.focus();
+        }
+    };
 
-    const handleOptionClick = useCallback(
-        (valueKey: OPTION_KEY, value: OPTION) => {
-            onOptionClick(valueKey, value, name);
-            if (!persistentOptionPopup) {
-                handleHideDropdown();
-            }
-        },
-        [onOptionClick, handleHideDropdown, persistentOptionPopup, name],
-    );
+    // FIXME(frozenhelium): useCallback removed for React Compiler compatibility
+    const handleOptionClick = (valueKey: OPTION_KEY, value: OPTION) => {
+        onOptionClick(valueKey, value, name);
+        if (!persistentOptionPopup) {
+            handleHideDropdown();
+        }
+    };
 
-    const optionListRendererParams = useCallback(
-        (key: OPTION_KEY, option: OPTION) => ({
-            contentRendererParam: optionRendererParams,
-            option,
-            optionKey: key,
-            focusedKey,
-            contentRenderer: optionRenderer,
-            onClick: handleOptionClick,
-            onFocus: onFocusedKeyChange,
-            optionContainerClassName: _cs(optionContainerClassName, styles.listItem),
-        }),
-        [
-            focusedKey,
-            handleOptionClick,
-            onFocusedKeyChange,
-            optionContainerClassName,
-            optionRenderer,
-            optionRendererParams,
-        ],
-    );
+    // FIXME(frozenhelium): useCallback removed for React Compiler compatibility
+    const optionListRendererParams = (key: OPTION_KEY, option: OPTION) => ({
+        contentRendererParam: optionRendererParams,
+        option,
+        optionKey: key,
+        focusedKey,
+        contentRenderer: optionRenderer,
+        onClick: handleOptionClick,
+        onFocus: onFocusedKeyChange,
+        optionContainerClassName: _cs(optionContainerClassName, styles.listItem),
+    });
 
     useBlurEffect(
         dropdownShown,

@@ -11,7 +11,7 @@ import { SpacingType } from '#utils/style';
 import styles from './styles.module.css';
 
 export interface Props extends React.HTMLProps<HTMLDivElement> {
-    elementRef?: React.RefObject<HTMLDivElement>;
+    elementRef?: React.RefObject<HTMLDivElement | null>;
     className?: string;
     spacing?: SpacingType;
     children: React.ReactNode;

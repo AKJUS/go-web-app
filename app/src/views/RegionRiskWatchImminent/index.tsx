@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import getBbox from '@turf/bbox';
 
 import RiskImminentEvents from '#components/domain/RiskImminentEvents';
 import TabPage from '#components/TabPage';
+import { getGeoJsonBounds } from '#utils/geo';
 import { type RegionOutletContext } from '#utils/outletContext';
 
 // TODO: Add historic data chart
@@ -13,7 +13,9 @@ export function Component() {
     const { regionResponse } = useOutletContext<RegionOutletContext>();
 
     const bbox = useMemo(
-        () => (regionResponse ? getBbox(regionResponse.bbox) : undefined),
+        () => (regionResponse
+            ? getGeoJsonBounds(regionResponse.bbox)
+            : undefined),
         [regionResponse],
     );
 

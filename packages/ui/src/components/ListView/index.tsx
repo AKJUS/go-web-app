@@ -20,7 +20,7 @@ function useFallbackRef<T>(ref?: React.Ref<T>) {
     const localRef = useRef<T>(null);
 
     if (ref && typeof ref !== 'function') {
-        return ref as React.MutableRefObject<T | null>;
+        return ref as React.RefObject<T | null>;
     }
 
     return localRef;
@@ -28,7 +28,7 @@ function useFallbackRef<T>(ref?: React.Ref<T>) {
 
 interface CommonProps extends Omit<React.HTMLProps<HTMLDivElement>, 'ref'> {
     className?: string;
-    elementRef?: RefObject<HTMLDivElement>;
+    elementRef?: RefObject<HTMLDivElement | null>;
 
     spacing?: SpacingType;
     spacingOffset?: number;

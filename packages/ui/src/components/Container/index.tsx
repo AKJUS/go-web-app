@@ -25,7 +25,7 @@ import {
 import styles from './styles.module.css';
 
 export interface Props extends Omit<HTMLProps<HTMLDivElement>, 'ref'>{
-    elementRef?: RefObject<HTMLDivElement>;
+    elementRef?: RefObject<HTMLDivElement | null>;
     className?: string;
 
     heading?: React.ReactNode;

@@ -15,7 +15,7 @@ type InheritedProps<NAME> = Omit<InputContainerProps, 'input'>
 & Omit<RawTextAreaProps<NAME>, 'type' | 'className' | 'elementRef'>;
 
 export interface Props<NAME> extends InheritedProps<NAME> {
-    inputElementRef?: React.RefObject<HTMLInputElement>;
+    inputElementRef?: React.RefObject<HTMLInputElement | null>;
     autoBullets?: boolean;
     inputClassName?: string;
     withDiffView?: boolean;

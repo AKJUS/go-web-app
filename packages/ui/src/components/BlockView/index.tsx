@@ -19,7 +19,7 @@ import {
 import styles from './styles.module.css';
 
 export interface Props extends Omit<HTMLProps<HTMLDivElement>, 'ref' | 'before' | 'after'> {
-    elementRef?: RefObject<HTMLDivElement>;
+    elementRef?: RefObject<HTMLDivElement | null>;
     className?: string;
 
     before?: React.ReactNode;
