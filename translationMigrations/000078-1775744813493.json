@@ -1,0 +1,11 @@
+{
+    "parent": "000077-1774412801025.json",
+    "actions": [
+        {
+            "action": "update",
+            "key": "specificationNSValue",
+            "namespace": "surgeCatalogueWashKitMsm20Eru",
+            "newValue": "Austrian, German, Spanish, Swedish."
+        }
+    ]
+}
