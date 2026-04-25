@@ -70,6 +70,7 @@ interface SelectInputContainerProps<
     onSelectAllButtonClick?: () => void;
     onEnterWithoutOption?: () => void;
     dropdownHidden?: boolean;
+    withoutDropdownIcon?: boolean;
 }
 
 export type Props<
@@ -132,6 +133,7 @@ function SelectInputContainer<
         autoFocus,
         onEnterWithoutOption,
         dropdownHidden,
+        withoutDropdownIcon,
     } = selectInputContainerProps;
 
     const options = optionsFromProps ?? (emptyList as OPTION[]);
@@ -272,7 +274,7 @@ function SelectInputContainer<
                                 <CloseLineIcon className={styles.icon} />
                             </Button>
                         )}
-                        {!readOnly && (
+                        {!readOnly && !withoutDropdownIcon && (
                             <Button
                                 onClick={handleToggleDropdown}
                                 colorVariant="text"

@@ -3,7 +3,7 @@
     background-color: var(--go-ui-color-foreground);
 
     .top {
-        border-bottom: var(--go-ui-width-separator-thin) solid var(--go-ui-color-primary-red);
+        border-bottom: var(--go-ui-width-separator-md) solid var(--go-ui-color-primary-red);
 
         .top-content {
             padding: var(--go-ui-spacing-sm) var(--go-ui-spacing-lg);
