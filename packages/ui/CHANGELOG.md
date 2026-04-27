@@ -1,5 +1,11 @@
 # @ifrc-go/ui
 
+## 2.2.0-beta.1
+
+### Patch Changes
+
+- cf73a97: Update DateInput to support month input
+
 ## 2.2.0-beta.0
 
 ### Minor Changes

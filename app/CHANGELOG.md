@@ -1,5 +1,28 @@
 # go-web-app
 
+## 7.26.0-beta.1
+
+### Minor Changes
+
+- fd26ab5: Implement Early Action Protocol (EAP) forms & exports
+
+      - Add forms for EAP registration, Simplified EAP & Full EAP
+      - Add pdf exports
+          - With and without track change for Simplified EAP
+          - With and without track change for Full EAP
+          - Summary for Full EAP
+      - Add EAP Application tab in account > my forms to list and track status of EAP
+      - Create a workflow to maintain EAP lifecycle from registration to approval
+
+### Patch Changes
+
+- c82582c: Surge Catalogue of Services
+  - Fix NS list providing WASH M20: /surge/catalogue/wash/msm20-eru
+  - Add Service catalogue and Job aids to Digital Surge: /surge/catalogue/digital-systems
+- abd1c9c: Fix links in the PDF export
+- Updated dependencies [cf73a97]
+  - @ifrc-go/ui@2.2.0-beta.1
+
 ## 7.26.0-beta.0
 
 ### Minor Changes
