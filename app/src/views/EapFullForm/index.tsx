@@ -817,7 +817,8 @@ export function Component() {
 
     const isLatestVersion = currentFullEapId === latestFullEapId;
 
-    const fullEapFormAccess = (isNotDefined(eapDetailResponse?.eap_type)
+    const fullEapFormAccess = (fetchingEap
+        || isNotDefined(eapDetailResponse?.eap_type)
         || eapDetailResponse?.eap_type === EAP_TYPE_FULL)
         && isNotDefined(fullEapResponseError);
 
