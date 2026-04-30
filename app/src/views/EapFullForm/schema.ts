@@ -637,8 +637,7 @@ export const formSchema: EapFullFormSchema = {
             },
 
             key_actors: {
-                required: isSubmit,
-                validation: requiredListCondition,
+                validation: isSubmit ? requiredListCondition : undefined,
                 keySelector: (item) => item.client_id,
                 member: () => ({
                     fields: (): KeyActorsFormFields => ({
@@ -721,6 +720,7 @@ export const formSchema: EapFullFormSchema = {
             },
             prioritized_impacts: {
                 keySelector: (item) => item.client_id,
+                validation: isSubmit ? requiredListCondition : undefined,
                 member: () => ({
                     fields: (): PrioritizedImpactsFields => ({
                         client_id: {},
