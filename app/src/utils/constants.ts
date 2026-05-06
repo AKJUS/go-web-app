@@ -65,6 +65,7 @@ export const COLOR_DARK_GREY = '#a5a5a5';
 export const COLOR_BLACK = '#000000';
 // const COLOR_LIGHT_YELLOW = '#ffd470';
 export const COLOR_YELLOW = '#ff9e00';
+export const COLOR_DREF_YELLOW = '#FFF939';
 export const COLOR_BLUE = '#4c5d9b';
 export const COLOR_LIGHT_BLUE = '#c7d3e0';
 export const COLOR_ORANGE = '#ff8000';
@@ -175,6 +176,10 @@ type SurgeAlertTypeEnum = components<'read'>['schemas']['NotificationsSurgeAlert
 export const SURGE_ALERT_STATUS_OPEN = 0 satisfies SurgeAlertTypeEnum;
 export const SURGE_ALERT_STATUS_STOOD_DOWN = 1 satisfies SurgeAlertTypeEnum;
 export const SURGE_ALERT_STATUS_CLOSED = 2 satisfies SurgeAlertTypeEnum;
+
+type TypeOfNsContributionEnum = components<'read'>['schemas']['DeploymentsEruReadinessNsContributionEnumKey'];
+export const NS_CONTRIBUTION_HOLDS_ERU = 1 satisfies TypeOfNsContributionEnum;
+export const NS_CONTRIBUTION_SUPPORTS_ERU = 2 satisfies TypeOfNsContributionEnum;
 
 export const NUM_X_AXIS_TICKS_MIN = 3;
 export const NUM_X_AXIS_TICKS_MAX = 12;
