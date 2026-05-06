@@ -1,5 +1,14 @@
 # go-web-app
 
+## 7.26.0-beta.2
+
+### Patch Changes
+
+- c22a7a7: Update Active Operation Map in homepage
+
+  - Display map data based on emergency severity levels
+  - Update legend and map to reflect crisis and appeals types
+
 ## 7.26.0-beta.1
 
 ### Minor Changes
