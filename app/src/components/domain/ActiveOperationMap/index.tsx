@@ -128,10 +128,8 @@ function ActiveOperationMap(props: Props) {
                 dtype: filter.displacement,
                 district: hasSomeDefinedValue(filter.district) ? filter.district : undefined,
                 end_date__gt: now,
-                // NOTE: Filtering only those appeals that has not been confirmed
-                // and does not contain event
-                has_event: true,
-                needs_confirmation: false,
+                has_event: activeTab === 'crisis' ? true : undefined,
+                needs_confirmation: activeTab === 'crisis' ? false : undefined,
                 start_date__gte: filter.startDateAfter,
                 start_date__lte: filter.startDateBefore,
                 limit,
@@ -147,7 +145,7 @@ function ActiveOperationMap(props: Props) {
                 country: isDefined(countryId) ? [countryId] : undefined,
             };
         },
-        [variant, regionId, filter, limit, countryId],
+        [variant, regionId, filter, limit, countryId, activeTab],
     );
 
     const strings = useTranslation(i18n);
