@@ -41,7 +41,7 @@ export function Component() {
     const technicalData: LinkData[] = [
         {
             title: strings.catalogueShelterAndSettlement,
-            href: 'https://ifrcorg.sharepoint.com/:b:/s/IFRCSharing/EXP0VQ7Tpn1Er_QH8bOk-IYBdqlK7oVvx470Vi9v-7YNAg',
+            href: 'https://ifrcorg.sharepoint.com/:b:/s/IFRCSharing/IQASE04__XmuSKuLSbOfLkpxAajYZB4gIwT9fLvbNTUVrfE',
             external: true,
             withLinkIcon: true,
         },
