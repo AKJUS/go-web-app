@@ -1,5 +1,35 @@
 # @ifrc-go/ui
 
+## 2.2.0
+
+### Minor Changes
+
+- 4b0cd41: Improve various components
+
+  - BlockView: Add support for overflow
+  - ButtonLayout: Add 'xs' text size
+  - Container
+    - Fix content overflow not working in absence of withPadding
+    - Add support for overflow
+  - Description: Add 'xs' text size
+  - DropdownMenu: Add option to remove popup padding
+  - ListView
+    - Add support for different sidebar sizes
+    - Add support for overflow
+    - Add suport for grow
+  - TabLayout
+    - Improve spacing for vertical compact variant
+    - Add an active indicator icon for vertical compact variant
+    - Add visual feedback
+  - TabListLayout: Improve spacing for vertical compact variant
+  - TabPanel: Add support for contents only display
+  - Update default line height to 1.5
+  - Update optical correction factor to match the new line height
+
+### Patch Changes
+
+- cf73a97: Update DateInput to support month input
+
 ## 2.2.0-beta.1
 
 ### Patch Changes

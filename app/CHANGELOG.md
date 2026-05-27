@@ -1,5 +1,38 @@
 # go-web-app
 
+## 7.26.0
+
+### Minor Changes
+
+- 4b0cd41: Update navigation pop-up style
+- fd26ab5: Implement EAP (Early Action Protocol) forms & exports (Only available in Staging)
+
+      - Add forms for EAP registration, Simplified EAP & Full EAP
+      - Add pdf exports
+          - With and without track change for Simplified EAP
+          - With and without track change for Full EAP
+          - Summary for Full EAP
+      - Add EAP Application tab in account > my forms to list and track status of EAP
+      - Create a workflow to maintain EAP lifecycle from registration to approval
+
+- 518d2c6: Update Active Operations Map show Crisis Categorization
+  - Add a toggle to select between "Appeal Types" and "Crisis Categorization"
+
+### Patch Changes
+
+- c82582c: Surge Catalogue of Services
+  - Fix NS list providing WASH M20: /surge/catalogue/wash/msm20-eru
+  - Add Service catalogue and Job aids to Digital Surge: /surge/catalogue/digital-systems
+- abd1c9c: Fix links in the PDF export
+- d056029: Update Catalogue of Surge Services:
+
+  - Change Personnel composition on Water Supply Rehabilitation
+  - Fix link of Shelter and Settlements on Shelter
+
+- Updated dependencies [cf73a97]
+- Updated dependencies [4b0cd41]
+  - @ifrc-go/ui@2.2.0
+
 ## 7.26.0-beta.2
 
 ### Patch Changes
