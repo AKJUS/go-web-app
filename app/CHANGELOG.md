@@ -1,5 +1,11 @@
 # go-web-app
 
+## 7.27.0-beta.0
+
+### Minor Changes
+
+- b8e7c9a: Add notification preferences for email alerts under account settings
+
 ## 7.26.0
 
 ### Minor Changes
