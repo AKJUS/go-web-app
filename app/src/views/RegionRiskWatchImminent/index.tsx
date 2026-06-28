@@ -7,7 +7,6 @@ import { getGeoJsonBounds } from '#utils/geo';
 import { type RegionOutletContext } from '#utils/outletContext';
 
 // TODO: Add historic data chart
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { regionResponse } = useOutletContext<RegionOutletContext>();

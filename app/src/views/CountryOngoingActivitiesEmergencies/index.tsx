@@ -111,7 +111,6 @@ interface ClickedPoint {
     lngLat: mapboxgl.LngLatLike;
 }
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { countryOngoingActivitiesEmergencies } = useContext(RouteContext);

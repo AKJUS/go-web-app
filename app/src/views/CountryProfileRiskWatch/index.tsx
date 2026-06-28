@@ -38,7 +38,6 @@ function getCurrentMonth() {
     return new Date().getMonth();
 }
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { countryResponse } = useOutletContext<CountryOutletContext>();

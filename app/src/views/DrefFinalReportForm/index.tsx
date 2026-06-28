@@ -109,7 +109,6 @@ function getNextStep(
     return tabKeyList[currentIndex + direction];
 }
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { finalReportId } = useParams<{ finalReportId: string }>();

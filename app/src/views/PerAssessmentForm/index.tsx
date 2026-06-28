@@ -75,7 +75,6 @@ type PerFormArea = NonNullable<PerFormQuestionResponse['results']>[number]['comp
 
 const defaultFormAreas: PerFormArea[] = [];
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { perId } = useParams<{ perId: string }>();
