@@ -66,7 +66,6 @@ import styles from './styles.module.css';
 
 type SortKey = 'component' | 'rating' | 'benchmark';
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { perId } = useParams<{ perId: string }>();

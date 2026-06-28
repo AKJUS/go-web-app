@@ -115,7 +115,6 @@ function getNextStep(current: TabKeys, direction: 1 | -1) {
 
 const defaultFormValue: PartialSimplifiedEapType = {};
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);

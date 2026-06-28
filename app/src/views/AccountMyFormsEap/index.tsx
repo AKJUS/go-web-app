@@ -54,7 +54,6 @@ import styles from './styles.module.css';
 type Key = EapListItem['id'];
 const ITEM_PER_PAGE = 6;
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);

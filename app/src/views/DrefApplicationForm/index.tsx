@@ -140,7 +140,6 @@ function getNextStep(current: DrefTabKey, direction: 1 | -1, typeOfDref: TypeOfD
     return undefined;
 }
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const { drefId } = useParams<{ drefId: string }>();

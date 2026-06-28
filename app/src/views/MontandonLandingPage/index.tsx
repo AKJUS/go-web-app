@@ -28,7 +28,6 @@ const emailBody = encodeURIComponent(`Sharing with you a link to Montandon API: 
 const mailtoLink = `mailto:?subject=${emailSubject}&body=${emailBody}`;
 const linkToMontandonNotebooks = 'https://ifrcgo.org/montandon-notebooks/';
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const strings = useTranslation(i18n);

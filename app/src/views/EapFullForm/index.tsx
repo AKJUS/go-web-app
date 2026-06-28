@@ -114,7 +114,6 @@ function getNextStep(current: TabKeys, direction: 1 | -1) {
 
 const defaultFormValue: PartialEapFullFormType = {};
 
-/** @knipignore */
 // eslint-disable-next-line import/prefer-default-export
 export function Component() {
     const [activeTab, setActiveTab] = useState<TabKeys>('overview');
