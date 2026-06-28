@@ -27,7 +27,7 @@
         "chromatic": "pnpm -F go-ui-storybook chromatic"
     },
     "engines": {
-        "node": "20",
+        "node": "22",
         "pnpm": "10.6.1"
     },
     "devDependencies": {

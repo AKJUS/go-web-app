@@ -51,7 +51,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
@@ -80,7 +80,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
@@ -112,7 +112,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
           cache: 'pnpm'
       - uses: actions/download-artifact@v4
         with:
